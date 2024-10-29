@@ -2,6 +2,8 @@ using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Runtime.Caching;
 using System.Text;
+using System.Text.Json;
+using System.IO;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
@@ -44,6 +46,8 @@ internal sealed class Worker(
     private readonly UserManager _userManager = userManager;
     private readonly BadMessageManager _badMessageManager = badMessageManager;
     private User _me = default!;
+    private readonly PeriodicTimer _saveTimer = new(TimeSpan.FromMinutes(15));
+    private const string MessageCountFilePath = "data/message_counts.txt";
 
     private async Task CaptchaLoop(CancellationToken token)
     {
@@ -58,6 +62,7 @@ internal sealed class Worker(
     {
         _ = CaptchaLoop(stoppingToken);
         _ = ReportStatistics(stoppingToken);
+        _ = SaveMessageCounts(stoppingToken);
         _classifier.Touch();
         const string offsetPath = "data/offset.txt";
         var offset = 0;
@@ -66,6 +71,27 @@ internal sealed class Worker(
             var lines = await System.IO.File.ReadAllLinesAsync(offsetPath, stoppingToken);
             if (lines.Length > 0 && int.TryParse(lines[0], out offset))
                 _logger.LogDebug("offset read ok");
+        }
+
+        if (System.IO.File.Exists(MessageCountFilePath))
+        {
+            try
+            {
+                var json = await System.IO.File.ReadAllTextAsync(MessageCountFilePath, stoppingToken);
+                var restoredData = JsonSerializer.Deserialize<ConcurrentDictionary<long, int>>(json);
+                if (restoredData != null)
+                {
+                    foreach (var kvp in restoredData)
+                    {
+                        _goodUserMessages[kvp.Key] = kvp.Value;
+                    }
+                    _logger.LogInformation("Restored message counts from file.");
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Failed to restore message counts from file.");
+            }
         }
 
         _me = await _bot.GetMeAsync(cancellationToken: stoppingToken);
@@ -306,6 +332,23 @@ internal sealed class Worker(
             );
             await _userManager.Approve(user.Id);
             _goodUserMessages.TryRemove(user.Id, out _);
+        }
+    }
+
+    private async Task SaveMessageCounts(CancellationToken token)
+    {
+        while (await _saveTimer.WaitForNextTickAsync(token))
+        {
+            try
+            {
+                var data = JsonSerializer.Serialize(_goodUserMessages);
+                await System.IO.File.WriteAllTextAsync(MessageCountFilePath, data, token);
+                _logger.LogInformation("Message counts saved to file.");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Failed to save message counts to file.");
+            }
         }
     }
 
