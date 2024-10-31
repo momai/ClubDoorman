@@ -17,7 +17,9 @@ RUN dotnet publish "./ClubDoorman.csproj" -c $BUILD_CONFIGURATION -o /app/publis
 RUN mv /app/publish/data /app/publish/data_init
 
 FROM base AS final
+USER root
 WORKDIR /app
 COPY --from=publish /app/publish .
 RUN mkdir /app/data && chown -R app:app /app/data
+USER app
 ENTRYPOINT ["dotnet", "ClubDoorman.dll"]
