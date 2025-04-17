@@ -33,6 +33,7 @@ internal sealed class Worker(
         public int StoppedCaptcha;
         public int BlacklistBanned;
         public int KnownBadMessage;
+        public int LongNameBanned;
     }
 
     private readonly ConcurrentDictionary<string, CaptchaInfo> _captchaNeededUsers = new();
@@ -434,8 +435,71 @@ internal sealed class Worker(
 
     private readonly List<string> _namesBlacklist = ["p0rn", "porn", "порн", "п0рн", "pоrn", "пoрн", "bot"];
 
+    private async Task BanUserForLongName(
+        Message? userJoinMessage,
+        User user,
+        string fullName,
+        TimeSpan? banDuration,
+        string banType,
+        string nameDescription,
+        Chat? chat = default)
+    {
+        try
+        {
+            chat = userJoinMessage?.Chat ?? chat;
+            Debug.Assert(chat != null);
+            
+            // Баним пользователя (если banDuration null - бан навсегда)
+            await _bot.BanChatMember(
+                chat.Id, 
+                user.Id,
+                banDuration.HasValue ? DateTime.UtcNow + banDuration.Value : null,
+                revokeMessages: true  // Удаляем все сообщения пользователя
+            );
+            
+            // Удаляем сообщение о входе
+            if (userJoinMessage != null)
+            {
+                await _bot.DeleteMessage(userJoinMessage.Chat.Id, (int)userJoinMessage.MessageId);
+            }
+
+            // Логируем для статистики
+            var stats = _stats.GetOrAdd(chat.Id, new Stats(chat.Title));
+            Interlocked.Increment(ref stats.LongNameBanned);
+
+            // Уведомляем админов
+            await _bot.SendMessage(
+                Config.AdminChatId,
+                $"{banType} в чате {chat.Title} за {nameDescription} длинное имя пользователя ({fullName.Length} символов): {fullName}"
+            );
+        }
+        catch (Exception e)
+        {
+            _logger.LogWarning(e, "Unable to ban user with long username");
+        }
+    }
+
     private async ValueTask IntroFlow(Message? userJoinMessage, User user, Chat? chat = default)
     {
+        // Проверяем длину имени
+        var fullName = $"{user.FirstName} {user.LastName}".Trim();
+        
+        // Проверяем длину имени для обоих случаев
+        if (fullName.Length > 40)
+        {
+            var isPermanent = fullName.Length > 75;
+            await BanUserForLongName(
+                userJoinMessage,
+                user,
+                fullName,
+                isPermanent ? null : TimeSpan.FromMinutes(10),
+                isPermanent ? "Перманентный бан" : "Автобан на 10 минут",
+                isPermanent ? "экстремально" : "подозрительно",
+                chat
+            );
+            return;
+        }
+
         _logger.LogDebug("Intro flow {@User}", user);
         if (_userManager.Approved(user.Id))
             return;
@@ -475,16 +539,16 @@ internal sealed class Worker(
         if (userJoinMessage != null)
             replyParams = userJoinMessage;
 
-        var fullName = FullName(user.FirstName, user.LastName);
-        var fullNameLower = fullName.ToLowerInvariant();
+        var fullNameForDisplay = FullName(user.FirstName, user.LastName);
+        var fullNameLower = fullNameForDisplay.ToLowerInvariant();
         var username = user.Username?.ToLower();
         if (_namesBlacklist.Any(fullNameLower.Contains) || username?.Contains("porn") == true || username?.Contains("p0rn") == true)
-            fullName = "новый участник чата";
+            fullNameForDisplay = "новый участник чата";
 
         var del =
                  await _bot.SendMessage(
                     chatId,
-                    $"Привет, [{Markdown.Escape(fullName)}](tg://user?id={user.Id})! Антиспам: на какой кнопке {Captcha.CaptchaList[correctAnswer].Description}?",
+                    $"Привет, [{Markdown.Escape(fullNameForDisplay)}](tg://user?id={user.Id})! Антиспам: на какой кнопке {Captcha.CaptchaList[correctAnswer].Description}?",
                     parseMode: ParseMode.Markdown,
                     replyParameters: replyParams,
                     replyMarkup: new InlineKeyboardMarkup(keyboard)
