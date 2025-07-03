@@ -15,6 +15,10 @@ namespace ClubDoorman
             long.Parse(
                 Environment.GetEnvironmentVariable("DOORMAN_ADMIN_CHAT") ?? throw new Exception("DOORMAN_ADMIN_CHAT variable not set")
             );
+        public static long LogAdminChatId { get; } =
+            long.Parse(
+                Environment.GetEnvironmentVariable("DOORMAN_LOG_ADMIN_CHAT") ?? throw new Exception("DOORMAN_LOG_ADMIN_CHAT variable not set")
+            );
         public static string? ClubServiceToken { get; } = Environment.GetEnvironmentVariable("DOORMAN_CLUB_SERVICE_TOKEN");
         public static string ClubUrl { get; } = GetClubUrlOrDefault();
         public static HashSet<long> DisabledChats { get; } =

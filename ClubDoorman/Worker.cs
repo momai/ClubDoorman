@@ -314,26 +314,17 @@ internal sealed class Worker(
         }
         if (await _userManager.InBanlist(user.Id))
         {
-            if (Config.BlacklistAutoBan)
-            {
-                var stats = _stats.GetOrAdd(chat.Id, new Stats(chat.Title));
-                Interlocked.Increment(ref stats.BlacklistBanned);
-                await _bot.BanChatMember(chat.Id, user.Id, revokeMessages: true, cancellationToken: stoppingToken);
-                
-                // Удаляем текущее сообщение пользователя
-                await _bot.DeleteMessage(chat.Id, message.MessageId, stoppingToken);
-                
-                // Проверяем, является ли сообщение о входе в чат
-                if (message.NewChatMembers != null)
-                {
-                    _logger.LogDebug("Удаляем сообщение о входе в чат пользователя из блэклиста");
-                }
-            }
-            else
-            {
-                const string reason = "Пользователь в блеклисте спамеров";
-                await DeleteAndReportMessage(message, reason, stoppingToken);
-            }
+            var reason = "Пользователь в блеклисте спамеров";
+            // Сначала форвардим сообщение в лог-админ-чат
+            await LogBlacklistedUserMessage(message, user, reason, stoppingToken);
+            _logger.LogInformation("Сообщение пользователя {UserId} из блэклиста форварднуто в лог-админ-чат", user.Id);
+            // Затем баним и удаляем
+            var stats = _stats.GetOrAdd(chat.Id, new Stats(chat.Title));
+            Interlocked.Increment(ref stats.BlacklistBanned);
+            await _bot.BanChatMember(chat.Id, user.Id, revokeMessages: true, cancellationToken: stoppingToken);
+            _logger.LogInformation("Пользователь {UserId} забанен в чате {ChatId}", user.Id, chat.Id);
+            await _bot.DeleteMessage(chat.Id, message.MessageId, stoppingToken);
+            _logger.LogInformation("Сообщение пользователя {UserId} удалено в чате {ChatId}", user.Id, chat.Id);
             return;
         }
 
@@ -891,6 +882,25 @@ internal sealed class Worker(
             // );
             _logger.LogInformation("Пользователь {User} (id={UserId}) из блэклиста забанен на 4 часа в чате {ChatTitle} (id={ChatId})", FullName(user.FirstName, user.LastName), user.Id, chat.Title, chat.Id);
             _globalStatsManager.IncBan(chat.Id, chat.Title ?? "");
+
+            // Форвард сообщения о входе (если есть) в лог-админ-чат
+            if (userJoinMessage != null)
+            {
+                try
+                {
+                    await _bot.ForwardMessage(Config.LogAdminChatId, chat.Id, userJoinMessage.MessageId);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogWarning(ex, "Не удалось форвардить сообщение о входе пользователя в лог-админ-чат");
+                }
+            }
+            // Отправка текстового уведомления в лог-админ-чат
+            await _bot.SendMessage(
+                Config.LogAdminChatId,
+                $"Пользователь [{Markdown.Escape(FullName(user.FirstName, user.LastName))}](tg://user?id={user.Id}) был в блеклисте спамеров, сообщение удалено и пользователь забанен.",
+                parseMode: ParseMode.Markdown
+            );
             return true;
         }
         catch (Exception e)
@@ -1367,5 +1377,40 @@ internal sealed class Worker(
         return !string.IsNullOrEmpty(user.Username)
             ? user.Username
             : FullName(user.FirstName, user.LastName);
+    }
+
+    // Логирование сообщения блэклист-юзера в лог-админ-чат
+    private async Task LogBlacklistedUserMessage(Message message, User user, string reason, CancellationToken stoppingToken)
+    {
+        try
+        {
+            // Форвард сообщения в лог-админ-чат
+            await _bot.ForwardMessage(Config.LogAdminChatId, message.Chat.Id, message.MessageId, cancellationToken: stoppingToken);
+            _logger.LogInformation("Сообщение пользователя {UserId} форварднуто в лог-админ-чат", user.Id);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Не удалось форвардить сообщение блэклист-юзера в лог-админ-чат");
+        }
+        try
+        {
+            // Баним пользователя
+            await _bot.BanChatMember(message.Chat.Id, user.Id, revokeMessages: true, cancellationToken: stoppingToken);
+            _logger.LogInformation("Пользователь {UserId} забанен в чате {ChatId}", user.Id, message.Chat.Id);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Не удалось забанить пользователя {UserId} в чате {ChatId}", user.Id, message.Chat.Id);
+        }
+        try
+        {
+            // Удаляем сообщение
+            await _bot.DeleteMessage(message.Chat.Id, message.MessageId, cancellationToken: stoppingToken);
+            _logger.LogInformation("Сообщение пользователя {UserId} удалено в чате {ChatId}", user.Id, message.Chat.Id);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Не удалось удалить сообщение пользователя {UserId} в чате {ChatId}", user.Id, message.Chat.Id);
+        }
     }
 }
