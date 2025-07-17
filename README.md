@@ -2,6 +2,8 @@
 
 Это форк [ClubDoorman](https://github.com/TiraelSedai/ClubDoorman) — антиспам-бот для Telegram чатов с улучшенной защитой.
 
+> **⚠️ Для разработчиков:** Эта ветка (develop) больше не поддерживается. Активная разработка ведется в ветке [next](https://github.com/momai/ClubDoorman/tree/next).
+
 ## Хотите просто рабочий антиспам-бот?
 
 ### Для русскоязычных чатов
