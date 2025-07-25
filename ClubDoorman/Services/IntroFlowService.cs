@@ -107,8 +107,15 @@ public class IntroFlowService
         // Если капча отключена для этой группы, отправляем приветствие сразу
         if (captchaInfo == null)
         {
-            _logger.LogInformation("[NO_CAPTCHA] Капча отключена для чата {ChatId} - отправляем приветствие сразу после проверок", chat.Id);
-            await _messageService.SendWelcomeMessageAsync(user, chat, "приветствие без капчи", cancellationToken);
+            if (Config.DisableWelcome)
+            {
+                _logger.LogInformation("[NO_CAPTCHA] Капча отключена для чата {ChatId}, но приветствия отключены (DOORMAN_DISABLE_WELCOME=true)", chat.Id);
+            }
+            else
+            {
+                _logger.LogInformation("[NO_CAPTCHA] Капча отключена для чата {ChatId} - отправляем приветствие сразу после проверок", chat.Id);
+                await _messageService.SendWelcomeMessageAsync(user, chat, "приветствие без капчи", cancellationToken);
+            }
         }
         else
         {

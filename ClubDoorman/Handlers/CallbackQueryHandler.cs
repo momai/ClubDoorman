@@ -188,12 +188,20 @@ public class CallbackQueryHandler : IUpdateHandler
     private async Task HandleSuccessfulCaptcha(User user, Chat chat, Models.CaptchaInfo captchaInfo, CancellationToken cancellationToken)
     {
         _logger.LogInformation("==================== КАПЧА ПРОЙДЕНА ====================\n" +
-            "Пользователь {User} (id={UserId}) успешно прошёл капчу в группе '{ChatTitle}' (id={ChatId}) — показываем приветствие\n" +
+            "Пользователь {User} (id={UserId}) успешно прошёл капчу в группе '{ChatTitle}' (id={ChatId})\n" +
             "========================================================", 
             Utils.FullName(user), user.Id, chat.Title ?? "-", chat.Id);
 
-        // Используем новый метод для отправки приветствия (null если приветствия отключены)
-        await _messageService.SendWelcomeMessageAsync(user, chat, "приветствие после капчи", cancellationToken);
+        // Отправляем приветствие если они не отключены
+        if (Config.DisableWelcome)
+        {
+            _logger.LogInformation("Приветствие после капчи пропущено - приветствия отключены (DOORMAN_DISABLE_WELCOME=true)");
+        }
+        else
+        {
+            _logger.LogInformation("Отправляем приветствие после успешного прохождения капчи");
+            await _messageService.SendWelcomeMessageAsync(user, chat, "приветствие после капчи", cancellationToken);
+        }
     }
 
     private async Task HandleAdminCallback(CallbackQuery callbackQuery, CancellationToken cancellationToken)
