@@ -192,7 +192,7 @@ public class CallbackQueryHandler : IUpdateHandler
             "========================================================", 
             Utils.FullName(user), user.Id, chat.Title ?? "-", chat.Id);
 
-        // Используем новый метод для отправки приветствия
+        // Используем новый метод для отправки приветствия (null если приветствия отключены)
         await _messageService.SendWelcomeMessageAsync(user, chat, "приветствие после капчи", cancellationToken);
     }
 
@@ -364,16 +364,28 @@ public class CallbackQueryHandler : IUpdateHandler
             // Полная очистка из всех списков
             _moderationService.CleanupUserFromAllLists(userId, chatId);
             
-            // НЕ пересылаем фото профиля повторно - оно уже было отправлено
-            // При бане по профилю пересылаем только сообщение пользователя из кэша
+            // ФИКС: ВСЕГДА пытаемся переслать сообщение при ручном бане
+            // Проверка на удаление происходит в try-catch - если удалено, получим ошибку
             if (aiProfileData?.MessageId != null)
             {
-                await _bot.ForwardMessage(
-                    chatId: Config.AdminChatId,
-                    fromChatId: aiProfileData.Chat.Id,
-                    messageId: (int)aiProfileData.MessageId.Value,
-                    cancellationToken: cancellationToken
-                );
+                try
+                {
+                    await _bot.ForwardMessage(
+                        chatId: Config.AdminChatId,
+                        fromChatId: aiProfileData.Chat.Id,
+                        messageId: (int)aiProfileData.MessageId.Value,
+                        cancellationToken: cancellationToken
+                    );
+                    _logger.LogDebug("🤖 При ручном бане переслано сообщение пользователя {UserId}", userId);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogWarning(ex, "Не удалось переслать сообщение пользователя {UserId} при ручном бане - вероятно, уже удалено", userId);
+                }
+            }
+            else
+            {
+                _logger.LogDebug("🤖 При ручном бане сообщение пользователя {UserId} не пересылается - MessageId отсутствует", userId);
             }
             
             // Обновляем сообщение с результатом действия

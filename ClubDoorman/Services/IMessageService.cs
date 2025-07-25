@@ -31,8 +31,9 @@ public interface IMessageService
 
     /// <summary>
     /// Отправляет приветственное сообщение и автоматически удаляет его через 20 секунд
+    /// Возвращает null если приветствия отключены
     /// </summary>
-    Task<Message> SendWelcomeMessageAsync(User user, Chat chat, string reason = "приветствие", CancellationToken cancellationToken = default);
+    Task<Message?> SendWelcomeMessageAsync(User user, Chat chat, string reason = "приветствие", CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Отправляет сообщение капчи с кнопками

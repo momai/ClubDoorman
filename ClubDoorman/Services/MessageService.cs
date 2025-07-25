@@ -213,9 +213,16 @@ public class MessageService : IMessageService
 
     /// <summary>
     /// Отправляет приветственное сообщение и автоматически удаляет его через 20 секунд
+    /// Возвращает null если приветствия отключены
     /// </summary>
-    public async Task<Message> SendWelcomeMessageAsync(User user, Chat chat, string reason = "приветствие", CancellationToken cancellationToken = default)
+    public async Task<Message?> SendWelcomeMessageAsync(User user, Chat chat, string reason = "приветствие", CancellationToken cancellationToken = default)
     {
+        // Проверяем, отключены ли приветствия
+        if (Config.DisableWelcome)
+        {
+            _logger.LogDebug("Приветственные сообщения отключены (DOORMAN_DISABLE_WELCOME=true)");
+            return null;
+        }
         // Создаем приветственное сообщение (логика перенесена из CallbackQueryHandler)
         var displayName = !string.IsNullOrEmpty(user.FirstName)
             ? System.Net.WebUtility.HtmlEncode(Utils.FullName(user))
@@ -232,12 +239,12 @@ public class MessageService : IMessageService
         if (ChatSettingsManager.GetChatType(chat.Id) == "announcement")
         {
             mediaWarning = "";
-            greetMsg = $"👋 {mention}\n\n<b>Внимание:</b> первые три сообщения проходят антиспам-проверку, сообщения со стоп-словами и спамом будут удалены. Не просите писать в ЛС!{vpnAd}";
+            greetMsg = $"👋 {mention}\n\n<b>Внимание:</b> первые три сообщения проходят антиспам-проверку, сообщения со стоп-словами и спамом будут удалены.\n\n⚠️ <b>Важно:</b> банальные приветствия без цели удаляются автоматически. Пишите конкретные вопросы!\n\nНе просите писать в ЛС!{vpnAd}";
         }
         else
         {
             mediaWarning = Config.IsMediaFilteringDisabledForChat(chat.Id) ? ", стикеры, документы" : ", изображения, стикеры, документы";
-            greetMsg = $"👋 {mention}\n\n<b>Внимание!</b> первые три сообщения проходят антиспам-проверку, эмодзи{mediaWarning} и реклама запрещены — они могут удаляться автоматически. Не просите писать в ЛС!{vpnAd}";
+            greetMsg = $"👋 {mention}\n\n<b>Внимание!</b> первые три сообщения проходят антиспам-проверку, эмодзи{mediaWarning} и реклама запрещены — они могут удаляться автоматически.\n\n⚠️ <b>Важно:</b> банальные приветствия без цели удаляются автоматически. Пишите конкретные вопросы!\n\nНе просите писать в ЛС!{vpnAd}";
         }
 
         var captchaWelcomeData = new CaptchaWelcomeNotificationData(
