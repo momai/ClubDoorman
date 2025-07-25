@@ -135,7 +135,7 @@ public class CaptchaService : ICaptchaService
                     {
                         // Баним пользователя на 20 минут
                         await _bot.BanChatMemberAsync(expiredCaptcha.ChatId, expiredCaptcha.User.Id, 
-                            untilDate: DateTime.UtcNow + TimeSpan.FromMinutes(20), revokeMessages: false);
+                            untilDate: DateTime.UtcNow + TimeSpan.FromMinutes(20), revokeMessages: true);
                         
                         // Удаляем сообщения
                         await _bot.DeleteMessageAsync(chat.Id, captchaMessage.MessageId);
@@ -265,7 +265,7 @@ public class CaptchaService : ICaptchaService
                 try
                 {
                     await _bot.BanChatMemberAsync(captchaInfo.ChatId, captchaInfo.User.Id, 
-                        untilDate: now + TimeSpan.FromMinutes(20), revokeMessages: false);
+                        untilDate: now + TimeSpan.FromMinutes(20), revokeMessages: true);
                     
                     if (captchaInfo.UserJoinedMessage != null)
                         await _bot.DeleteMessageAsync(captchaInfo.ChatId, captchaInfo.UserJoinedMessage.MessageId);
