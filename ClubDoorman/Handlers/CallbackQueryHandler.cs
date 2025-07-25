@@ -266,13 +266,12 @@ public class CallbackQueryHandler : IUpdateHandler
         var adminName = GetAdminDisplayName(callbackQuery.From);
         
         // Обновляем сообщение с результатом действия
-        var approveMessage = $"{callbackQuery.Message.Text}\n\n✅ *Одобрен администратором {adminName}*\n👤 Пользователь добавлен в список доверенных";
+        var approveMessage = $"{callbackQuery.Message.Text}\n\n✅ Одобрен администратором {adminName}\n👤 Пользователь добавлен в список доверенных";
         
         await _bot.EditMessageText(
             callbackQuery.Message!.Chat.Id,
             callbackQuery.Message.MessageId,
             approveMessage,
-            parseMode: ParseMode.Markdown,
             cancellationToken: cancellationToken
         );
         
@@ -315,13 +314,12 @@ public class CallbackQueryHandler : IUpdateHandler
             }
             
             // Обновляем сообщение с результатом действия
-            var banMessage = $"{callbackQuery.Message.Text}\n\n🚫 *Забанен администратором {adminName}*\n🧹 Пользователь очищен из всех списков\n📝 Сообщение добавлено в список авто-бана";
+            var banMessage = $"{callbackQuery.Message.Text}\n\n🚫 Забанен администратором {adminName}\n🧹 Пользователь очищен из всех списков\n📝 Сообщение добавлено в список авто-бана";
             
             await _bot.EditMessageText(
                 callbackQuery.Message!.Chat.Id,
                 callbackQuery.Message.MessageId,
                 banMessage,
-                parseMode: ParseMode.Markdown,
                 cancellationToken: cancellationToken
             );
             
@@ -332,13 +330,12 @@ public class CallbackQueryHandler : IUpdateHandler
             _logger.LogWarning(e, "Не удалось забанить пользователя через админский callback");
             
             // Обновляем сообщение с ошибкой
-            var errorMessage = $"{callbackQuery.Message.Text}\n\n❌ *Ошибка при бане администратором {adminName}*\nНе могу забанить. Не хватает могущества? Сходите забаньте руками";
+            var errorMessage = $"{callbackQuery.Message.Text}\n\n❌ Ошибка при бане администратором {adminName}\nНе могу забанить. Не хватает могущества? Сходите забаньте руками";
             
             await _bot.EditMessageText(
                 callbackQuery.Message!.Chat.Id,
                 callbackQuery.Message.MessageId,
                 errorMessage,
-                parseMode: ParseMode.Markdown,
                 cancellationToken: cancellationToken
             );
         }
@@ -397,13 +394,12 @@ public class CallbackQueryHandler : IUpdateHandler
             }
             
             // Обновляем сообщение с результатом действия
-            var banMessage = $"{callbackQuery.Message.Text}\n\n🚫 *Забанен за спам-профиль администратором {adminName}*\n🧹 Пользователь очищен из всех списков\n⚠️ Сообщение НЕ добавлено в автобан (проблема в профиле)";
+            var banMessage = $"{callbackQuery.Message.Text}\n\n🚫 Забанен за спам-профиль администратором {adminName}\n🧹 Пользователь очищен из всех списков\n⚠️ Сообщение НЕ добавлено в автобан (проблема в профиле)";
             
             await _bot.EditMessageText(
                 callbackQuery.Message!.Chat.Id,
                 callbackQuery.Message.MessageId,
                 banMessage,
-                parseMode: ParseMode.Markdown,
                 cancellationToken: cancellationToken
             );
             
@@ -414,13 +410,12 @@ public class CallbackQueryHandler : IUpdateHandler
             _logger.LogWarning(e, "Не удалось забанить пользователя через админский callback (бан по профилю)");
             
             // Обновляем сообщение с ошибкой
-            var errorMessage = $"{callbackQuery.Message.Text}\n\n❌ *Ошибка при бане администратором {adminName}*\nНе могу забанить. Не хватает могущества? Сходите забаньте руками";
+            var errorMessage = $"{callbackQuery.Message.Text}\n\n❌ Ошибка при бане администратором {adminName}\nНе могу забанить. Не хватает могущества? Сходите забаньте руками";
             
             await _bot.EditMessageText(
                 callbackQuery.Message!.Chat.Id,
                 callbackQuery.Message.MessageId,
                 errorMessage,
-                parseMode: ParseMode.Markdown,
                 cancellationToken: cancellationToken
             );
         }
