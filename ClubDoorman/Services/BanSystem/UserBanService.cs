@@ -10,13 +10,6 @@ namespace ClubDoorman.Services.BanSystem;
 
 /// <summary>
 /// Сервис для управления банами пользователей
-/// 
-/// ПРИМЕЧАНИЕ: CaptchaService НЕ мигрирован на UserBanService по следующим причинам:
-/// - Автоматический разбан критически важен для капчи (через 20 минут)
-/// - UserBanService не поддерживает автоматический разбан
-/// - Логика капчи тесно связана с баном за неудачу
-/// - Принцип единственной ответственности не нарушается
-/// - CaptchaService остается самодостаточным
 /// </summary>
 public class UserBanService : IUserBanService
 {
@@ -30,7 +23,6 @@ public class UserBanService : IUserBanService
     private readonly IStatisticsService _statisticsService;
     private readonly GlobalStatsManager _globalStatsManager;
     private readonly IUserManager _userManager;
-    private readonly IUserStateManager _userStateManager;
 
     public UserBanService(
         ITelegramBotClientWrapper bot,
@@ -42,8 +34,7 @@ public class UserBanService : IUserBanService
         IAppConfig appConfig,
         IStatisticsService statisticsService,
         GlobalStatsManager globalStatsManager,
-        IUserManager userManager,
-        IUserStateManager userStateManager)
+        IUserManager userManager)
     {
         _bot = bot;
         _messageService = messageService;
@@ -55,7 +46,6 @@ public class UserBanService : IUserBanService
         _statisticsService = statisticsService;
         _globalStatsManager = globalStatsManager;
         _userManager = userManager;
-        _userStateManager = userStateManager;
     }
 
     public async Task BanUserForLongNameAsync(Message? userJoinMessage, User user, string reason, TimeSpan? banDuration, CancellationToken cancellationToken)
@@ -90,35 +80,14 @@ public class UserBanService : IUserBanService
             if (!await ValidateBanOperationAsync(chat, user, "Бан из блэклиста", cancellationToken))
                 return;
             
-            // Баним пользователя на 4 часа с revokeMessages: true
-            await BanUserAsync(chat, user, TimeSpan.FromMinutes(240), revokeMessages: true, cancellationToken: cancellationToken);
-            
-            // Удаляем сообщение о входе в чат
+            await BanUserAsync(chat, user, TimeSpan.FromMinutes(240), cancellationToken: cancellationToken);
             await DeleteMessageAsync(userJoinMessage, cancellationToken: cancellationToken);
-            
-            // Удаляем из списка одобренных (как в старом коде)
-            if (_userManager.RemoveApproval(user.Id, chat.Id, removeAll: true))
-            {
-                await _messageService.SendAdminNotificationAsync(
-                    AdminNotificationType.UserCleanup,
-                    new UserCleanupNotificationData(user, chat, $"Пользователь {FullName(user.FirstName, user.LastName)} удален из списка одобренных после бана по блеклисту")
-                );
-            }
-            
-            // Логируем успех
-            _logger.LogInformation("Пользователь {User} (id={UserId}) из блэклиста забанен на 4 часа в чате {ChatTitle} (id={ChatId})", 
-                FullName(user.FirstName, user.LastName), user.Id, chat.Title, chat.Id);
-            
-            // Обновляем статистику
-            _statisticsService.IncrementBlacklistBan(chat.Id);
-            _globalStatsManager.IncBan(chat.Id, chat.Title ?? "");
             
             _userFlowLogger.LogUserBanned(user, chat, "Пользователь в блэклисте");
         }
         catch (Exception e)
         {
             _logger.LogWarning(e, "Не удалось забанить пользователя из блэклиста");
-            throw; // Re-throw для сохранения оригинального поведения
         }
     }
 
@@ -245,43 +214,6 @@ public class UserBanService : IUserBanService
         catch (Exception e)
         {
             _logger.LogWarning(e, "Не удалось забанить пользователя типа {BanTypeEnum}", banType);
-            throw; // Re-throw для сохранения оригинального поведения
-        }
-    }
-
-    public async Task BanUserAsync(
-        Chat chat, 
-        User user, 
-        BanTypeEnum banType, 
-        string? customReason = null,
-        long? messageIdToDelete = null,
-        long? chatIdForMessage = null,
-        CancellationToken cancellationToken = default)
-    {
-        try
-        {
-            var (duration, reason) = GetBanConfiguration(banType, customReason);
-            
-            if (!await ValidateBanOperationAsync(chat, user, reason, cancellationToken))
-                return;
-
-            await BanUserAsync(chat, user, duration, cancellationToken: cancellationToken);
-            
-            // Удаляем сообщение по ID, если указано
-            if (messageIdToDelete.HasValue && chatIdForMessage.HasValue)
-            {
-                await DeleteMessageByIdAsync(chatIdForMessage.Value, (int)messageIdToDelete.Value, withErrorHandling: false, cancellationToken);
-            }
-            
-            var banData = new AutoBanNotificationData(user, chat, GetBanTypeDescription(banType), reason, messageIdToDelete);
-            await SendNotificationAsync(banData, GetNotificationType(banType), null, cancellationToken: cancellationToken);
-            
-            _userFlowLogger.LogUserBanned(user, chat, reason);
-        }
-        catch (Exception e)
-        {
-            _logger.LogWarning(e, "Не удалось забанить пользователя типа {BanTypeEnum}", banType);
-            throw; // Re-throw для сохранения оригинального поведения
         }
     }
 
@@ -336,18 +268,6 @@ public class UserBanService : IUserBanService
         catch (Exception ex) when (withErrorHandling)
         {
             _logger.LogWarning(ex, "Не удалось удалить сообщение {MessageId} из чата {ChatId} (возможно, уже удалено)", message.MessageId, message.Chat.Id);
-        }
-    }
-
-    private async Task DeleteMessageByIdAsync(long chatId, int messageId, bool withErrorHandling = false, CancellationToken cancellationToken = default)
-    {
-        try
-        {
-            await _bot.DeleteMessage(chatId, messageId, cancellationToken: cancellationToken);
-        }
-        catch (Exception ex) when (withErrorHandling)
-        {
-            _logger.LogWarning(ex, "Не удалось удалить сообщение {MessageId} из чата {ChatId} (возможно, уже удалено)", messageId, chatId);
         }
     }
 
@@ -421,7 +341,7 @@ public class UserBanService : IUserBanService
 
     private async Task CleanupUserDataAsync(User user, Chat chat, CancellationToken cancellationToken)
     {
-        _userStateManager.CleanupUserFromAllLists(user.Id, chat.Id);
+        _moderationService.CleanupUserFromAllLists(user.Id, chat.Id);
         _violationTracker.ResetViolations(user.Id, chat.Id, ViolationType.MlSpam);
         _violationTracker.ResetViolations(user.Id, chat.Id, ViolationType.StopWords);
         _violationTracker.ResetViolations(user.Id, chat.Id, ViolationType.TooManyEmojis);
@@ -567,10 +487,5 @@ public class UserBanService : IUserBanService
             BanTypeEnum.RepeatedViolation => LogNotificationType.RepeatedViolation,
             _ => LogNotificationType.AutoBan
         };
-    }
-
-    public async Task DeleteMessageByIdAsync(long chatId, int messageId)
-    {
-        await DeleteMessageByIdAsync(chatId, messageId, withErrorHandling: true);
     }
 } 

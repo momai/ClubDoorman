@@ -31,7 +31,7 @@ public class ChatMemberHandlerTestFactory
             BotMock.Object,
             UserManagerMock.Object,
             LoggerMock.Object,
-            new IntroFlowService(BotMock.Object, new Mock<ILogger<IntroFlowService>>().Object, new Mock<ICaptchaService>().Object, UserManagerMock.Object, new AiChecks(BotMock.Object, new Mock<ILogger<AiChecks>>().Object, AppConfigTestFactory.CreateDefault()), new Mock<IStatisticsService>().Object, new Mock<GlobalStatsManager>().Object, new Mock<IModerationService>().Object, new Mock<IMessageService>().Object, new Mock<IUserBanService>().Object, AppConfigMock.Object),
+            new IntroFlowService(BotMock.Object, new Mock<ILogger<IntroFlowService>>().Object, new Mock<ICaptchaService>().Object, UserManagerMock.Object, new AiChecks(BotMock.Object, new Mock<ILogger<AiChecks>>().Object, AppConfigTestFactory.CreateDefault()), new Mock<IStatisticsService>().Object, new Mock<GlobalStatsManager>().Object, new Mock<IModerationService>().Object, new Mock<IMessageService>().Object, AppConfigMock.Object),
             MessageServiceMock.Object,
             AppConfigMock.Object
         );
@@ -82,7 +82,6 @@ public class ChatMemberHandlerTestFactory
             new Mock<ISuspiciousUsersStorage>().Object,
             new Mock<ITelegramBotClient>().Object,
             new Mock<IMessageService>().Object,
-            new Mock<IUserBanService>().Object,
             new Mock<ILogger<ModerationService>>().Object
         );
     }

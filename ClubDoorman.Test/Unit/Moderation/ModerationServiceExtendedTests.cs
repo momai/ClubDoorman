@@ -198,8 +198,8 @@ public class ModerationServiceExtendedTests
     public async Task BanAndCleanupUserAsync_TelegramApiError_ReturnsFalse()
     {
         // Arrange
-        _factory.WithUserBanServiceSetup(mock => 
-            mock.Setup(x => x.BanUserAsync(It.IsAny<Chat>(), It.IsAny<User>(), It.IsAny<BanTypeEnum>(), It.IsAny<string>(), It.IsAny<Message>(), It.IsAny<CancellationToken>()))
+        _factory.WithBotClientSetup(mock => 
+            mock.Setup(x => x.SendRequest(It.IsAny<Telegram.Bot.Requests.BanChatMemberRequest>(), It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new Exception("Telegram API error")));
         
         var service = _factory.CreateModerationService();

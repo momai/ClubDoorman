@@ -3,7 +3,6 @@ using System.Runtime.Caching;
 using ClubDoorman.Models;
 using ClubDoorman.Models.Notifications;
 using ClubDoorman.Infrastructure;
-using ClubDoorman.Services.BanSystem;
 using Telegram.Bot.Types;
 using Telegram.Bot;
 
@@ -12,7 +11,7 @@ namespace ClubDoorman.Services;
 /// <summary>
 /// Сервис модерации сообщений
 /// </summary>
-public class ModerationService : IModerationService, IUserStateManager
+public class ModerationService : IModerationService
 {
     private readonly ISpamHamClassifier _classifier;
     private readonly IMimicryClassifier _mimicryClassifier;
@@ -22,7 +21,6 @@ public class ModerationService : IModerationService, IUserStateManager
     private readonly ISuspiciousUsersStorage _suspiciousUsersStorage;
     private readonly ITelegramBotClient _botClient;
     private readonly IMessageService _messageService;
-    private readonly IUserBanService _userBanService;
     private readonly ILogger<ModerationService> _logger;
 
     // Счетчики хороших сообщений для новой системы
@@ -47,7 +45,6 @@ public class ModerationService : IModerationService, IUserStateManager
         ISuspiciousUsersStorage suspiciousUsersStorage,
         ITelegramBotClient botClient,
         IMessageService messageService,
-        IUserBanService userBanService,
         ILogger<ModerationService> logger)
     {
         _classifier = classifier;
@@ -58,7 +55,6 @@ public class ModerationService : IModerationService, IUserStateManager
         _suspiciousUsersStorage = suspiciousUsersStorage;
         _botClient = botClient;
         _messageService = messageService;
-        _userBanService = userBanService;
         _logger = logger;
         
         // Логируем статус системы мимикрии
@@ -386,19 +382,12 @@ public class ModerationService : IModerationService, IUserStateManager
     {
         try
         {
-            // Создаем объекты для UserBanService
-            var user = new User { Id = userId };
-            var chat = new Chat { Id = chatId };
-            
-            // Используем UserBanService для централизованного бана
-            await _userBanService.BanUserAsync(chat, user, BanTypeEnum.AutoBan, "Автобан", null, CancellationToken.None);
-            
-            // Удаляем сообщение если указано (используем перегрузку с messageId)
+            // Удаляем сообщение если указано
             if (messageIdToDelete.HasValue)
             {
                 try
                 {
-                    await _userBanService.DeleteMessageByIdAsync(chatId, messageIdToDelete.Value);
+                    await _botClient.DeleteMessage(chatId, messageIdToDelete.Value);
                     _logger.LogInformation("Удалено сообщение {MessageId} из чата {ChatId}", messageIdToDelete.Value, chatId);
                 }
                 catch (Exception ex)
@@ -406,6 +395,12 @@ public class ModerationService : IModerationService, IUserStateManager
                     _logger.LogWarning(ex, "Не удалось удалить сообщение {MessageId} из чата {ChatId}", messageIdToDelete.Value, chatId);
                 }
             }
+            
+            // Баним пользователя
+            await _botClient.BanChatMember(chatId, userId);
+            
+            // Полностью очищаем из всех списков
+            CleanupUserFromAllLists(userId, chatId);
             
             _logger.LogInformation("🚫 Пользователь {UserId} забанен и очищен из всех списков для чата {ChatId}", userId, chatId);
             return true;

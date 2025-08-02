@@ -24,7 +24,6 @@ public class ModerationServiceTestFactory
     public Mock<ISuspiciousUsersStorage> SuspiciousUsersStorageMock { get; } = new();
     public Mock<ITelegramBotClient> BotClientMock { get; } = new();
     public Mock<IMessageService> MessageServiceMock { get; } = new();
-    public Mock<IUserBanService> UserBanServiceMock { get; } = new();
     public Mock<ILogger<ModerationService>> LoggerMock { get; } = new();
 
     public ModerationService CreateModerationService()
@@ -38,7 +37,6 @@ public class ModerationServiceTestFactory
             SuspiciousUsersStorageMock.Object,
             BotClientMock.Object,
             MessageServiceMock.Object,
-            UserBanServiceMock.Object,
             LoggerMock.Object
         );
     }
@@ -90,12 +88,6 @@ public class ModerationServiceTestFactory
     public ModerationServiceTestFactory WithMessageServiceSetup(Action<Mock<IMessageService>> setup)
     {
         setup(MessageServiceMock);
-        return this;
-    }
-
-    public ModerationServiceTestFactory WithUserBanServiceSetup(Action<Mock<IUserBanService>> setup)
-    {
-        setup(UserBanServiceMock);
         return this;
     }
 

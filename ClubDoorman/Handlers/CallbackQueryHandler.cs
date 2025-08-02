@@ -1,7 +1,6 @@
 using System.Runtime.Caching;
 using ClubDoorman.Infrastructure;
 using ClubDoorman.Services;
-using ClubDoorman.Services.BanSystem;
 using ClubDoorman.Models.Notifications;
 using ClubDoorman.Models.Requests;
 using Telegram.Bot;
@@ -25,7 +24,6 @@ public class CallbackQueryHandler : IUpdateHandler
     private readonly IModerationService _moderationService;
     private readonly IMessageService _messageService;
     private readonly IViolationTracker _violationTracker;
-    private readonly IUserBanService _userBanService;
     private readonly ILogger<CallbackQueryHandler> _logger;
 
     public CallbackQueryHandler(
@@ -38,7 +36,6 @@ public class CallbackQueryHandler : IUpdateHandler
         IModerationService moderationService,
         IMessageService messageService,
         IViolationTracker violationTracker,
-        IUserBanService userBanService,
         ILogger<CallbackQueryHandler> logger)
     {
         _bot = bot;
@@ -50,7 +47,6 @@ public class CallbackQueryHandler : IUpdateHandler
         _moderationService = moderationService;
         _messageService = messageService;
         _violationTracker = violationTracker;
-        _userBanService = userBanService;
         _logger = logger;
     }
 
@@ -302,12 +298,25 @@ public class CallbackQueryHandler : IUpdateHandler
 
         try
         {
-            // Создаем объекты для UserBanService
-            var user = new User { Id = userId };
-            var chat = new Chat { Id = chatId };
+            // Банируем пользователя и полностью очищаем из всех списков
+            await _bot.BanChatMember(new ChatId(chatId), userId, cancellationToken: cancellationToken);
             
-            // Используем UserBanService для централизованного бана
-            await _userBanService.BanUserAsync(chat, user, BanTypeEnum.ManualBan, "Ручной бан", userMessage, cancellationToken);
+            // Полная очистка из всех списков
+            _moderationService.CleanupUserFromAllLists(userId, chatId);
+            
+            // Удаляем оригинальное сообщение пользователя
+            if (userMessage != null)
+            {
+                try
+                {
+                    await _bot.DeleteMessage(userMessage.Chat.Id, userMessage.MessageId, cancellationToken);
+                    _logger.LogDebug("Удалено оригинальное сообщение пользователя {UserId} после бана", userId);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogWarning(ex, "Не удалось удалить оригинальное сообщение пользователя {UserId} после бана", userId);
+                }
+            }
             
             // Обновляем сообщение с результатом действия
             var banMessage = $"{callbackQuery.Message.Text}\n\n🚫 Забанен администратором {adminName}\n🧹 Пользователь очищен из всех списков\n📝 Сообщение добавлено в список авто-бана";
@@ -335,6 +344,17 @@ public class CallbackQueryHandler : IUpdateHandler
                 cancellationToken: cancellationToken
             );
         }
+
+        // Удаляем оригинальное сообщение пользователя
+        try
+        {
+            if (userMessage != null)
+                await _bot.DeleteMessage(userMessage.Chat, userMessage.MessageId, cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Не удалось удалить оригинальное сообщение пользователя");
+        }
     }
 
     private async Task HandleBanUserByProfile(CallbackQuery callbackQuery, long chatId, long userId, CancellationToken cancellationToken)
@@ -348,20 +368,11 @@ public class CallbackQueryHandler : IUpdateHandler
 
         try
         {
-            // Создаем объекты для UserBanService
-            var user = new User { Id = userId };
-            var chat = new Chat { Id = chatId };
+            // Банируем пользователя и полностью очищаем из всех списков
+            await _bot.BanChatMember(new ChatId(chatId), userId, cancellationToken: cancellationToken);
             
-            // Используем UserBanService для централизованного бана по профилю с удалением сообщения по ID
-            await _userBanService.BanUserAsync(
-                chat, 
-                user, 
-                BanTypeEnum.ProfileBan, 
-                "Бан по профилю", 
-                aiProfileData?.MessageId, 
-                aiProfileData?.Chat.Id, 
-                cancellationToken
-            );
+            // Полная очистка из всех списков
+            _moderationService.CleanupUserFromAllLists(userId, chatId);
             
             // ФИКС: ВСЕГДА пытаемся переслать сообщение при ручном бане
             // Проверка на удаление происходит в try-catch - если удалено, получим ошибку
@@ -412,6 +423,17 @@ public class CallbackQueryHandler : IUpdateHandler
                 errorMessage,
                 cancellationToken: cancellationToken
             );
+        }
+
+        // Удаляем оригинальное сообщение пользователя
+        try
+        {
+            if (aiProfileData?.MessageId != null)
+                await _bot.DeleteMessage(aiProfileData.Chat.Id, (int)aiProfileData.MessageId.Value, cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Не удалось удалить оригинальное сообщение пользователя");
         }
     }
 

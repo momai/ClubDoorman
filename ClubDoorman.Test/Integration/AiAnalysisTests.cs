@@ -106,10 +106,9 @@ public class AiAnalysisTests
         var statisticsService = new Mock<IStatisticsService>().Object;
         var moderationService = new Mock<IModerationService>().Object;
         var messageService = new Mock<IMessageService>().Object;
-        var userBanService = new Mock<IUserBanService>().Object;
         
         var violationTrackerLogger = LoggerFactory.Create(builder => builder.AddConsole()).CreateLogger<ViolationTracker>();
-        _callbackHandler = new CallbackQueryHandler(_fakeBot, captchaService, _userManager, badMessageManager, statisticsService, _aiChecks, moderationService, messageService, new ViolationTracker(violationTrackerLogger, _appConfig), userBanService, _callbackLogger);
+        _callbackHandler = new CallbackQueryHandler(_fakeBot, captchaService, _userManager, badMessageManager, statisticsService, _aiChecks, moderationService, messageService, new ViolationTracker(violationTrackerLogger, _appConfig), _callbackLogger);
     }
 
     [TearDown]

@@ -1,7 +1,6 @@
 using System.Diagnostics;
 using ClubDoorman.Infrastructure;
 using ClubDoorman.Services;
-using ClubDoorman.Services.BanSystem;
 using ClubDoorman.Models.Notifications;
 using ClubDoorman.Models.Requests;
 using Telegram.Bot;
@@ -25,7 +24,6 @@ public class IntroFlowService
     private readonly GlobalStatsManager _globalStatsManager;
     private readonly IModerationService _moderationService;
     private readonly IMessageService _messageService;
-    private readonly IUserBanService _userBanService;
     private readonly IAppConfig _appConfig;
 
     public IntroFlowService(
@@ -38,7 +36,6 @@ public class IntroFlowService
         GlobalStatsManager globalStatsManager,
         IModerationService moderationService,
         IMessageService messageService,
-        IUserBanService userBanService,
         IAppConfig appConfig)
     {
         _bot = bot;
@@ -50,7 +47,6 @@ public class IntroFlowService
         _globalStatsManager = globalStatsManager;
         _moderationService = moderationService;
         _messageService = messageService;
-        _userBanService = userBanService;
         _appConfig = appConfig;
     }
 
@@ -140,20 +136,34 @@ public class IntroFlowService
             chat = userJoinMessage?.Chat ?? chat;
             Debug.Assert(chat != null);
             
-            // Определяем тип бана на основе длительности
-            var banTypeEnum = banDuration.HasValue ? BanTypeEnum.LongName : BanTypeEnum.LongName;
-            var reason = $"{nameDescription} длинное имя пользователя ({fullName.Length} символов): {fullName}";
+            // Баним пользователя (если banDuration null - бан навсегда)
+            await _bot.BanChatMember(
+                chat.Id, 
+                user.Id,
+                banDuration.HasValue ? DateTime.UtcNow + banDuration.Value : null,
+                revokeMessages: true  // Удаляем все сообщения пользователя
+            );
             
-            // Используем UserBanService для централизованного бана
-            await _userBanService.BanUserAsync(chat, user, banTypeEnum, reason, userJoinMessage, CancellationToken.None);
+            // Полная очистка из всех списков при перманентном бане
+            if (!banDuration.HasValue)
+            {
+                _moderationService.CleanupUserFromAllLists(user.Id, chat.Id);
+                _logger.LogInformation("🧹 Пользователь {UserId} очищен из всех списков после бана в IntroFlow", user.Id);
+            }
             
+            // Удаляем сообщение о входе
+            if (userJoinMessage != null)
+            {
+                await _bot.DeleteMessage(userJoinMessage.Chat.Id, (int)userJoinMessage.MessageId);
+            }
+
             // Логируем для статистики
             _statisticsService.IncrementLongNameBan(chat.Id);
 
             // Уведомляем админов
             await _messageService.SendAdminNotificationAsync(
                 AdminNotificationType.AutoBan,
-                new AutoBanNotificationData(user, chat, banType, reason)
+                new AutoBanNotificationData(user, chat, banType, $"{nameDescription} длинное имя пользователя ({fullName.Length} символов): {fullName}")
             );
             _globalStatsManager.IncBan(chat.Id, chat.Title ?? "");
         }
@@ -170,17 +180,37 @@ public class IntroFlowService
 
         try
         {
-            // Используем UserBanService для централизованного бана из блэклиста
+            _statisticsService.IncrementBlacklistBan(chat.Id);
+            
+            // Баним пользователя на 4 часа с параметром revokeMessages: true чтобы удалить все сообщения
+            var banUntil = DateTime.UtcNow + TimeSpan.FromMinutes(240);
+            await _bot.BanChatMember(chat.Id, user.Id, banUntil, revokeMessages: true);
+            
+            // Явно удаляем сообщение о входе в чат, если оно есть
             if (userJoinMessage != null)
             {
-                await _userBanService.BanBlacklistedUserAsync(userJoinMessage, user, CancellationToken.None);
-            }
-            else
-            {
-                // Если нет сообщения о входе, используем BanUserAsync с BanTypeEnum.Blacklist
-                await _userBanService.BanUserAsync(chat, user, BanTypeEnum.Blacklist, "Пользователь в блэклисте", null, CancellationToken.None);
+                try
+                {
+                    await _bot.DeleteMessage(chat.Id, userJoinMessage.MessageId);
+                    _logger.LogDebug("Удалено сообщение о входе пользователя из блэклиста");
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogWarning(ex, "Не удалось удалить сообщение о входе пользователя из блэклиста");
+                }
             }
             
+            // Удаляем из списка одобренных
+            if (_userManager.RemoveApproval(user.Id, chat.Id, removeAll: true))
+            {
+                await _messageService.SendAdminNotificationAsync(
+                    AdminNotificationType.UserCleanup,
+                    new UserCleanupNotificationData(user, chat, $"Пользователь {FullName(user.FirstName, user.LastName)} удален из списка одобренных после бана по блеклисту")
+                );
+            }
+            
+            _logger.LogInformation("Пользователь {User} (id={UserId}) из блэклиста забанен на 4 часа в чате {ChatTitle} (id={ChatId})", FullName(user.FirstName, user.LastName), user.Id, chat.Title, chat.Id);
+            _globalStatsManager.IncBan(chat.Id, chat.Title ?? "");
             return true;
         }
         catch (Exception e)

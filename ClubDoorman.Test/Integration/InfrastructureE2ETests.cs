@@ -71,7 +71,6 @@ public class InfrastructureE2ETests : TestBase
             suspiciousStorage,
             mockBotClient.Object,
             mockMessageService.Object,
-            CreateMockUserBanService().Object,
             _moderationLogger
         );
     }

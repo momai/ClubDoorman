@@ -36,19 +36,4 @@ public interface IUserBanService
     /// Отслеживает нарушение и банит пользователя при достижении лимита
     /// </summary>
     Task TrackViolationAndBanIfNeededAsync(Message message, User user, string reason, CancellationToken cancellationToken);
-
-    /// <summary>
-    /// Централизованный метод для бана пользователя с указанием типа бана
-    /// </summary>
-    Task BanUserAsync(Chat chat, User user, BanTypeEnum banType, string? customReason = null, Message? messageToDelete = null, CancellationToken cancellationToken = default);
-
-    /// <summary>
-    /// Централизованный метод для бана пользователя с указанием типа бана и удалением сообщения по ID
-    /// </summary>
-    Task BanUserAsync(Chat chat, User user, BanTypeEnum banType, string? customReason = null, long? messageIdToDelete = null, long? chatIdForMessage = null, CancellationToken cancellationToken = default);
-
-    /// <summary>
-    /// Удаляет сообщение по ID в указанном чате
-    /// </summary>
-    Task DeleteMessageByIdAsync(long chatId, int messageId);
 } 

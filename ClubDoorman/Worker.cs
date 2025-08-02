@@ -10,7 +10,6 @@ using Telegram.Bot.Types.ReplyMarkups;
 using System.Text.Json;
 using ClubDoorman.Infrastructure;
 using ClubDoorman.Services;
-using ClubDoorman.Services.BanSystem;
 using ClubDoorman.Models;
 using ClubDoorman.Models.Notifications;
 
@@ -28,8 +27,7 @@ internal sealed class Worker(
     IChatLinkFormatter chatLinkFormatter,
     ITelegramBotClientWrapper bot,
     IMessageService messageService,
-    IAppConfig appConfig,
-    IUserBanService userBanService
+    IAppConfig appConfig
 ) : BackgroundService
 {
     // Классы CaptchaInfo и Stats перенесены в Models
@@ -49,7 +47,6 @@ internal sealed class Worker(
     private readonly IChatLinkFormatter _chatLinkFormatter = chatLinkFormatter;
     private readonly IMessageService _messageService = messageService;
     private readonly IAppConfig _appConfig = appConfig;
-    private readonly IUserBanService _userBanService = userBanService;
     private readonly GlobalStatsManager _globalStatsManager = new();
     private User _me = default!;
     
@@ -215,16 +212,75 @@ internal sealed class Worker(
     {
         var user = message.From;
         
-        // Используем UserBanService для централизованного бана
-        await _userBanService.BanUserAsync(message.Chat, user, BanTypeEnum.AutoBan, reason, message, stoppingToken);
+        // Форвардим сообщение в лог-чат с уведомлением
+        var autoBanData = new AutoBanNotificationData(user, message.Chat, "Автобан", reason, message.MessageId, LinkToMessage(message.Chat, message.MessageId));
+        
+        // Выбираем правильный тип уведомления в зависимости от причины
+        var logNotificationType = reason.Contains("Известное спам-сообщение") 
+            ? LogNotificationType.AutoBanKnownSpam 
+            : LogNotificationType.AutoBanBlacklist;
+            
+        await _messageService.ForwardToLogWithNotificationAsync(
+            message, 
+            logNotificationType,
+            autoBanData,
+            stoppingToken
+        );
+        await _bot.DeleteMessage(message.Chat, message.MessageId, cancellationToken: stoppingToken);
+        await _bot.BanChatMember(message.Chat, user.Id, revokeMessages: false, cancellationToken: stoppingToken);
+        _globalStatsManager.IncBan(message.Chat.Id, message.Chat.Title ?? "");
+        // Удаляем из списка одобренных без уведомления
+        _userManager.RemoveApproval(user.Id, message.Chat.Id, removeAll: true);
     }
 
     private async Task AutoBanWithLogging(Message message, string reason, CancellationToken stoppingToken)
     {
         var user = message.From;
         
-        // Используем UserBanService для централизованного бана из блэклиста
-        await _userBanService.BanUserAsync(message.Chat, user, BanTypeEnum.Blacklist, reason, message, stoppingToken);
+        // Пересылаем сообщение в лог-чат с уведомлением
+        try
+        {
+            await _messageService.ForwardToLogWithNotificationAsync(
+                message,
+                LogNotificationType.AutoBanFromBlacklist,
+                new AutoBanNotificationData(user, message.Chat, "Автобан из блэклиста", reason, message.MessageId, LinkToMessage(message.Chat, message.MessageId)),
+                stoppingToken
+            );
+        }
+        catch (Exception e)
+        {
+            _logger.LogWarning(e, "Не удалось переслать сообщение в лог-чат");
+        }
+        
+        // Удаляем сообщение
+        try
+        {
+            await _bot.DeleteMessage(message.Chat, message.MessageId, cancellationToken: stoppingToken);
+        }
+        catch (Exception e)
+        {
+            _logger.LogWarning(e, "Не удалось удалить сообщение пользователя из блэклиста");
+        }
+        
+        // Баним пользователя
+        try
+        {
+            await _bot.BanChatMember(message.Chat, user.Id, revokeMessages: false, cancellationToken: stoppingToken);
+        }
+        catch (Exception e)
+        {
+            _logger.LogWarning(e, "Не удалось забанить пользователя из блэклиста");
+        }
+        
+        // Обновляем статистику
+        _statisticsService.IncrementBlacklistBan(message.Chat.Id);
+        _globalStatsManager.IncBan(message.Chat.Id, message.Chat.Title ?? "");
+        
+        // Удаляем из списка одобренных без уведомления
+        _userManager.RemoveApproval(user.Id);
+        
+        _logger.LogInformation("Автобан по блэклисту: пользователь {User} (id={UserId}) забанен в чате {ChatTitle} (id={ChatId})", 
+            FullName(user.FirstName, user.LastName), user.Id, message.Chat.Title, message.Chat.Id);
     }
 
     private async Task HandleBadMessage(Message message, User user, CancellationToken stoppingToken)
@@ -233,9 +289,11 @@ internal sealed class Worker(
         {
             var chat = message.Chat;
             _statisticsService.IncrementKnownBadMessage(chat.Id);
-            
-            // Используем UserBanService для централизованного бана
-            await _userBanService.BanUserAsync(chat, user, BanTypeEnum.AutoBan, "Известное спам-сообщение", message, stoppingToken);
+            await _bot.DeleteMessage(chat, message.MessageId, stoppingToken);
+            await _bot.BanChatMember(chat, user.Id, cancellationToken: stoppingToken);
+            _globalStatsManager.IncBan(chat.Id, chat.Title ?? "");
+            // Удаляем из списка одобренных без уведомления
+            _userManager.RemoveApproval(user.Id, message.Chat.Id, removeAll: true);
         }
         catch (Exception e)
         {
