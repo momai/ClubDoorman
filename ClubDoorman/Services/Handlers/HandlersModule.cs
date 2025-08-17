@@ -1,11 +1,13 @@
 using Microsoft.Extensions.DependencyInjection;
 using ClubDoorman.Handlers;
 using ClubDoorman.Services.Dispatcher;
+using ClubDoorman.Services.Moderation;
+using ClubDoorman.Services.UserJoin;
 
 namespace ClubDoorman.Services.Handlers;
 
 /// <summary>
-/// Модуль для регистрации Handlers сервисов
+/// Модуль для регистрации Handlers сервисов - упрощенная версия
 /// </summary>
 public static class HandlersModule
 {
@@ -20,9 +22,12 @@ public static class HandlersModule
         services.AddSingleton<IntroFlowService>();
         services.AddSingleton<IBotPermissionsService, BotPermissionsService>();
 
-        // Регистрируем MessageHandler только один раз для каждого интерфейса
+        // Регистрируем прямые сервисы вместо фасадов
+        services.AddSingleton<IModerationPolicy, ModerationPolicy>();
+        services.AddSingleton<IUserJoinPolicy, UserJoinPolicy>();
+
+        // Регистрируем MessageHandler
         services.AddSingleton<IUpdateHandler, MessageHandler>();
-        //   services.AddSingleton<IMessageHandler, MessageHandler>();
 
         services.AddSingleton<IUpdateHandler, CallbackQueryHandler>();
         services.AddSingleton<CallbackQueryHandler>();
