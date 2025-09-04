@@ -20,7 +20,11 @@ public interface IUserBanService
     /// <summary>
     /// Автоматически банит пользователя за нарушение
     /// </summary>
-    Task AutoBanAsync(Message message, string reason, CancellationToken cancellationToken);
+    /// <param name="message">Сообщение пользователя</param>
+    /// <param name="reason">Причина бана</param>
+    /// <param name="suppressNotifications">Отключить уведомления в лог-чат (по умолчанию false)</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    Task AutoBanAsync(Message message, string reason, bool suppressNotifications = false, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Автоматически банит канал

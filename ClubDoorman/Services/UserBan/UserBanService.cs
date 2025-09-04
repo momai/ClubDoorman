@@ -128,7 +128,7 @@ public class UserBanService : IUserBanService
         }
     }
 
-    public async Task AutoBanAsync(Message message, string reason, CancellationToken cancellationToken)
+    public async Task AutoBanAsync(Message message, string reason, bool suppressNotifications = false, CancellationToken cancellationToken = default)
     {
         var user = message.From;
         var chat = message.Chat;
@@ -139,7 +139,11 @@ public class UserBanService : IUserBanService
         var autoBanData = CreateAutoBanData(user, message, reason);
         var logNotificationType = DetermineLogNotificationType(reason);
 
-        await SendNotificationAsync(autoBanData, logNotificationType, withErrorHandling: true, cancellationToken: cancellationToken);
+        // Отправляем уведомления только если они не отключены
+        if (!suppressNotifications)
+        {
+            await SendNotificationAsync(autoBanData, logNotificationType, withErrorHandling: true, cancellationToken: cancellationToken);
+        }
         await DeleteMessageAsync(message, withErrorHandling: true, cancellationToken: cancellationToken);
         await BanUserPermanentlyAsync(message, user, cancellationToken);
         await CleanupUserDataAsync(user, chat, cancellationToken);
@@ -214,7 +218,7 @@ public class UserBanService : IUserBanService
 
                 // Баним пользователя за повторные нарушения
                 var banReason = $"Повторные нарушения: {ViolationTracker.GetViolationTypeName(violationType.Value)}";
-                await AutoBanAsync(message, banReason, cancellationToken);
+                await AutoBanAsync(message, banReason, suppressNotifications: false, cancellationToken);
             }
         }
         catch (Exception ex)

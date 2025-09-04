@@ -40,6 +40,6 @@ public class BanUserEffect : IEffect
     public async Task ExecuteAsync(CancellationToken ct)
     {
         _userFlowLogger.LogUserBanned(_user, _chat, _reason);
-        await _userBanService.AutoBanAsync(_message, _reason, ct);
+        await _userBanService.AutoBanAsync(_message, _reason, suppressNotifications: false, ct);
     }
 }

@@ -85,37 +85,29 @@ public class FolderInviteService : IFolderInviteService
 
         try
         {
-            // Проверяем, отключены ли уведомления о банах за вход через папки
-            if (_appConfig.BanFolderInviteNotificationsDisable)
+            // Баним пользователя через AutoBanAsync с параметром suppressNotifications
+            var fakeMessage = new Message
             {
-                // Если уведомления отключены, баним без уведомлений
-                await _bot.BanChatMember(chat, user.Id, cancellationToken: cancellationToken);
-                
-                _logger.LogInformation("✅ Пользователь {User} (id={UserId}) забанен за вход через папку в группе '{ChatTitle}' (без уведомления)",
-                    (user.FirstName + (string.IsNullOrEmpty(user.LastName) ? "" : " " + user.LastName)),
-                    user.Id,
-                    chat.Title ?? "-");
-            }
-            else
-            {
-                // Баним пользователя через AutoBanAsync с уведомлениями
-                var fakeMessage = new Message
-                {
-                    From = user,
-                    Chat = chat,
-                    Date = DateTime.UtcNow
-                };
+                From = user,
+                Chat = chat,
+                Date = DateTime.UtcNow
+            };
 
-                await _userBanService.AutoBanAsync(
-                    fakeMessage,
-                    "Автоматический бан за вход через папку",
-                    cancellationToken);
+            // Используем новый параметр для управления уведомлениями
+            await _userBanService.AutoBanAsync(
+                fakeMessage,
+                "Автоматический бан за вход через папку",
+                suppressNotifications: _appConfig.BanFolderInviteNotificationsDisable,
+                cancellationToken);
 
-                _logger.LogInformation("✅ Пользователь {User} (id={UserId}) забанен за вход через папку в группе '{ChatTitle}'",
-                    (user.FirstName + (string.IsNullOrEmpty(user.LastName) ? "" : " " + user.LastName)),
-                    user.Id,
-                    chat.Title ?? "-");
-            }
+            var logMessage = _appConfig.BanFolderInviteNotificationsDisable 
+                ? "✅ Пользователь {User} (id={UserId}) забанен за вход через папку в группе '{ChatTitle}' (без уведомления)"
+                : "✅ Пользователь {User} (id={UserId}) забанен за вход через папку в группе '{ChatTitle}'";
+
+            _logger.LogInformation(logMessage,
+                (user.FirstName + (string.IsNullOrEmpty(user.LastName) ? "" : " " + user.LastName)),
+                user.Id,
+                chat.Title ?? "-");
 
             return true;
         }
