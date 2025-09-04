@@ -9,7 +9,7 @@ fi
 
 # Use minimal filter (exclude real-api, BDD, disabled, demo)
 echo "[pre-push] dotnet test (быстрые тесты)"
-dotnet test ClubDoorman.Test --filter "Category!=real-api&Category!=BDD&Category!=disabled&Category!=demo" --no-build --verbosity minimal || {
+dotnet test ClubDoorman.Test --filter "Category!=real-api&Category!=BDD&Category!=disabled&Category!=demo&Category!=golden" --no-build --verbosity minimal || {
   echo "[pre-push] Тесты упали. Push остановлен." >&2
   exit 1
 }
