@@ -46,7 +46,7 @@ public class LogChatService : ILogChatService
         try
         {
             // Создаем кнопки реакции для лог-чата (без добавления в автобан)
-            var callbackDataBan = $"logban_{message.Chat.Id}_{user.Id}";
+            var callbackDataBan = $"logban_{message.Chat.Id}_{user?.Id}";
             MemoryCache.Default.Add(callbackDataBan, message, new CacheItemPolicy { AbsoluteExpiration = DateTimeOffset.UtcNow.AddHours(12) });
 
             var keyboard = new InlineKeyboardMarkup(new[]

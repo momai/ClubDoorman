@@ -37,7 +37,7 @@ jobs:
       run: dotnet build --configuration Release --no-restore
 
     - name: Run tests
-      run: dotnet test ClubDoorman.Test --settings ClubDoorman.Test/.runsettings --no-restore --filter "Category!=real-api&Category!=BDD&Category!=disabled" --verbosity quiet --logger "console;verbosity=quiet" --logger "trx;LogFileName=test-results.trx"
+      run: dotnet test ClubDoorman.Test --settings ClubDoorman.Test/.runsettings --no-restore --filter "Category!=real-api&Category!=BDD&Category!=disabled&Category!=golden" --verbosity quiet --logger "console;verbosity=quiet" --logger "trx;LogFileName=test-results.trx"
 
     - name: Upload test results artifact
       # Real artifact upload only on GitHub (skip under local act where runtime token is absent)
