@@ -138,6 +138,11 @@ public interface IAppConfig
     /// </summary>
     bool RepeatedViolationsBanToAdminChat { get; }
 
+    /// <summary>
+    /// Отключить уведомления о банах за вход через папки в лог-чате
+    /// </summary>
+    bool BanFolderInviteNotificationsDisable { get; }
+
     // === НОВЫЕ СВОЙСТВА ИЗ STRONGLY-TYPED OPTIONS ===
 
     /// <summary>

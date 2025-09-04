@@ -181,6 +181,11 @@ public class AppConfig : IAppConfig
     /// </summary>
     public bool RepeatedViolationsBanToAdminChat => _featureToggleOptions.Value.RepeatedViolationsBanToAdminChat;
 
+    /// <summary>
+    /// Отключить уведомления о банах за вход через папки в лог-чате
+    /// </summary>
+    public bool BanFolderInviteNotificationsDisable => _featureToggleOptions.Value.BanFolderInviteNotificationsDisable;
+
     // === НОВЫЕ СВОЙСТВА ИЗ STRONGLY-TYPED OPTIONS ===
 
     /// <summary>

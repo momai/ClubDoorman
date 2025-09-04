@@ -96,7 +96,8 @@ public static class ConfigurationHelper
             DisableWelcome = GetEnvironmentBool("DOORMAN_DISABLE_WELCOME"),
             DisableMediaFiltering = GetEnvironmentBool("DOORMAN_DISABLE_MEDIA_FILTERING"),
             GlobalApprovalMode = !GetEnvironmentBool("DOORMAN_GROUP_APPROVAL_MODE"),
-            RepeatedViolationsBanToAdminChat = GetEnvironmentBool("DOORMAN_REPEATED_VIOLATIONS_BAN_TO_ADMIN_CHAT")
+            RepeatedViolationsBanToAdminChat = GetEnvironmentBool("DOORMAN_REPEATED_VIOLATIONS_BAN_TO_ADMIN_CHAT"),
+            BanFolderInviteNotificationsDisable = GetEnvironmentBool("DOORMAN_BAN_FOLDER_INVITE_NOTIFICATIONS_DISABLE")
         };
     }
 

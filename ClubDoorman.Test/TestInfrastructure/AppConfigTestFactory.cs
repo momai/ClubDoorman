@@ -38,6 +38,38 @@ public static class AppConfigTestFactory
         mock.Setup(x => x.NoVpnAdGroups).Returns(new HashSet<long>());
         mock.Setup(x => x.NoCaptchaGroups).Returns(new HashSet<long>());
 
+        // Группа 3: Feature Toggles и настройки бана
+        mock.Setup(x => x.BanFolderInviteUsers).Returns(false);
+        mock.Setup(x => x.BanFolderInviteNotificationsDisable).Returns(false);
+        mock.Setup(x => x.RepeatedViolationsBanToAdminChat).Returns(false);
+        mock.Setup(x => x.TextMentionFilterEnabled).Returns(false);
+        mock.Setup(x => x.DeleteForwardedMessages).Returns(false);
+        mock.Setup(x => x.DisableWelcome).Returns(false);
+        mock.Setup(x => x.DisableMediaFiltering).Returns(false);
+        mock.Setup(x => x.GlobalApprovalMode).Returns(true);
+        mock.Setup(x => x.MediaFilteringDisabledChats).Returns(new HashSet<long>());
+        mock.Setup(x => x.IsMediaFilteringDisabledForChat(It.IsAny<long>())).Returns(false);
+
+        // Группа 4: Автобан настройки
+        mock.Setup(x => x.BlacklistAutoBan).Returns(true);
+        mock.Setup(x => x.ChannelAutoBan).Returns(true);
+        mock.Setup(x => x.LookAlikeAutoBan).Returns(true);
+        mock.Setup(x => x.ButtonAutoBan).Returns(true);
+        mock.Setup(x => x.HighConfidenceAutoBan).Returns(true);
+        mock.Setup(x => x.LowConfidenceHamForward).Returns(false);
+        mock.Setup(x => x.ApproveButtonEnabled).Returns(false);
+
+        // Группа 5: Пороговые значения
+        mock.Setup(x => x.MlViolationsBeforeBan).Returns(0);
+        mock.Setup(x => x.StopWordsViolationsBeforeBan).Returns(0);
+        mock.Setup(x => x.EmojiViolationsBeforeBan).Returns(0);
+        mock.Setup(x => x.LookalikeViolationsBeforeBan).Returns(0);
+        mock.Setup(x => x.BoringGreetingsViolationsBeforeBan).Returns(0);
+        mock.Setup(x => x.CaptchaViolationsBeforeBan).Returns(0);
+
+        // Эффекты модерации
+        mock.Setup(x => x.Effects).Returns(new ClubDoorman.Infrastructure.EffectsConfiguration());
+
         // Методы
         mock.Setup(x => x.IsAiEnabledForChat(It.IsAny<long>())).Returns(true);
         mock.Setup(x => x.IsChatAllowed(It.IsAny<long>())).Returns(true);
@@ -72,6 +104,38 @@ public static class AppConfigTestFactory
         mock.Setup(x => x.WhitelistChats).Returns(new HashSet<long>());
         mock.Setup(x => x.NoVpnAdGroups).Returns(new HashSet<long>());
         mock.Setup(x => x.NoCaptchaGroups).Returns(new HashSet<long>());
+
+        // Группа 3: Feature Toggles и настройки бана
+        mock.Setup(x => x.BanFolderInviteUsers).Returns(false);
+        mock.Setup(x => x.BanFolderInviteNotificationsDisable).Returns(false);
+        mock.Setup(x => x.RepeatedViolationsBanToAdminChat).Returns(false);
+        mock.Setup(x => x.TextMentionFilterEnabled).Returns(false);
+        mock.Setup(x => x.DeleteForwardedMessages).Returns(false);
+        mock.Setup(x => x.DisableWelcome).Returns(false);
+        mock.Setup(x => x.DisableMediaFiltering).Returns(false);
+        mock.Setup(x => x.GlobalApprovalMode).Returns(true);
+        mock.Setup(x => x.MediaFilteringDisabledChats).Returns(new HashSet<long>());
+        mock.Setup(x => x.IsMediaFilteringDisabledForChat(It.IsAny<long>())).Returns(false);
+
+        // Группа 4: Автобан настройки
+        mock.Setup(x => x.BlacklistAutoBan).Returns(true);
+        mock.Setup(x => x.ChannelAutoBan).Returns(true);
+        mock.Setup(x => x.LookAlikeAutoBan).Returns(true);
+        mock.Setup(x => x.ButtonAutoBan).Returns(true);
+        mock.Setup(x => x.HighConfidenceAutoBan).Returns(true);
+        mock.Setup(x => x.LowConfidenceHamForward).Returns(false);
+        mock.Setup(x => x.ApproveButtonEnabled).Returns(false);
+
+        // Группа 5: Пороговые значения
+        mock.Setup(x => x.MlViolationsBeforeBan).Returns(0);
+        mock.Setup(x => x.StopWordsViolationsBeforeBan).Returns(0);
+        mock.Setup(x => x.EmojiViolationsBeforeBan).Returns(0);
+        mock.Setup(x => x.LookalikeViolationsBeforeBan).Returns(0);
+        mock.Setup(x => x.BoringGreetingsViolationsBeforeBan).Returns(0);
+        mock.Setup(x => x.CaptchaViolationsBeforeBan).Returns(0);
+
+        // Эффекты модерации
+        mock.Setup(x => x.Effects).Returns(new ClubDoorman.Infrastructure.EffectsConfiguration());
 
         // Методы
         mock.Setup(x => x.IsAiEnabledForChat(It.IsAny<long>())).Returns(false);
@@ -116,6 +180,38 @@ public static class AppConfigTestFactory
         mock.Setup(x => x.WhitelistChats).Returns(new HashSet<long>());
         mock.Setup(x => x.NoVpnAdGroups).Returns(new HashSet<long>());
         mock.Setup(x => x.NoCaptchaGroups).Returns(new HashSet<long>());
+
+        // Группа 3: Feature Toggles и настройки бана
+        mock.Setup(x => x.BanFolderInviteUsers).Returns(false);
+        mock.Setup(x => x.BanFolderInviteNotificationsDisable).Returns(false);
+        mock.Setup(x => x.RepeatedViolationsBanToAdminChat).Returns(false);
+        mock.Setup(x => x.TextMentionFilterEnabled).Returns(false);
+        mock.Setup(x => x.DeleteForwardedMessages).Returns(false);
+        mock.Setup(x => x.DisableWelcome).Returns(false);
+        mock.Setup(x => x.DisableMediaFiltering).Returns(false);
+        mock.Setup(x => x.GlobalApprovalMode).Returns(true);
+        mock.Setup(x => x.MediaFilteringDisabledChats).Returns(new HashSet<long>());
+        mock.Setup(x => x.IsMediaFilteringDisabledForChat(It.IsAny<long>())).Returns(false);
+
+        // Группа 4: Автобан настройки
+        mock.Setup(x => x.BlacklistAutoBan).Returns(true);
+        mock.Setup(x => x.ChannelAutoBan).Returns(true);
+        mock.Setup(x => x.LookAlikeAutoBan).Returns(true);
+        mock.Setup(x => x.ButtonAutoBan).Returns(true);
+        mock.Setup(x => x.HighConfidenceAutoBan).Returns(true);
+        mock.Setup(x => x.LowConfidenceHamForward).Returns(false);
+        mock.Setup(x => x.ApproveButtonEnabled).Returns(false);
+
+        // Группа 5: Пороговые значения
+        mock.Setup(x => x.MlViolationsBeforeBan).Returns(0);
+        mock.Setup(x => x.StopWordsViolationsBeforeBan).Returns(0);
+        mock.Setup(x => x.EmojiViolationsBeforeBan).Returns(0);
+        mock.Setup(x => x.LookalikeViolationsBeforeBan).Returns(0);
+        mock.Setup(x => x.BoringGreetingsViolationsBeforeBan).Returns(0);
+        mock.Setup(x => x.CaptchaViolationsBeforeBan).Returns(0);
+
+        // Эффекты модерации
+        mock.Setup(x => x.Effects).Returns(new ClubDoorman.Infrastructure.EffectsConfiguration());
 
         mock.Setup(x => x.IsAiEnabledForChat(It.IsAny<long>())).Returns(isAiEnabledForChat);
         mock.Setup(x => x.IsChatAllowed(It.IsAny<long>())).Returns(isChatAllowed);

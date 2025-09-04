@@ -85,23 +85,37 @@ public class FolderInviteService : IFolderInviteService
 
         try
         {
-            // Баним пользователя через AutoBanAsync
-            var fakeMessage = new Message
+            // Проверяем, отключены ли уведомления о банах за вход через папки
+            if (_appConfig.BanFolderInviteNotificationsDisable)
             {
-                From = user,
-                Chat = chat,
-                Date = DateTime.UtcNow
-            };
+                // Если уведомления отключены, баним без уведомлений
+                await _bot.BanChatMember(chat, user.Id, cancellationToken: cancellationToken);
+                
+                _logger.LogInformation("✅ Пользователь {User} (id={UserId}) забанен за вход через папку в группе '{ChatTitle}' (без уведомления)",
+                    (user.FirstName + (string.IsNullOrEmpty(user.LastName) ? "" : " " + user.LastName)),
+                    user.Id,
+                    chat.Title ?? "-");
+            }
+            else
+            {
+                // Баним пользователя через AutoBanAsync с уведомлениями
+                var fakeMessage = new Message
+                {
+                    From = user,
+                    Chat = chat,
+                    Date = DateTime.UtcNow
+                };
 
-            await _userBanService.AutoBanAsync(
-                fakeMessage,
-                "Автоматический бан за вход через папку",
-                cancellationToken);
+                await _userBanService.AutoBanAsync(
+                    fakeMessage,
+                    "Автоматический бан за вход через папку",
+                    cancellationToken);
 
-            _logger.LogInformation("✅ Пользователь {User} (id={UserId}) забанен за вход через папку в группе '{ChatTitle}'",
-                (user.FirstName + (string.IsNullOrEmpty(user.LastName) ? "" : " " + user.LastName)),
-                user.Id,
-                chat.Title ?? "-");
+                _logger.LogInformation("✅ Пользователь {User} (id={UserId}) забанен за вход через папку в группе '{ChatTitle}'",
+                    (user.FirstName + (string.IsNullOrEmpty(user.LastName) ? "" : " " + user.LastName)),
+                    user.Id,
+                    chat.Title ?? "-");
+            }
 
             return true;
         }

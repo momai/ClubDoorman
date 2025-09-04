@@ -46,4 +46,9 @@ public class FeatureToggleOptions
     /// Отправлять уведомления о банах за повторные нарушения в админ-чат вместо лог-чата
     /// </summary>
     public bool RepeatedViolationsBanToAdminChat { get; set; } = false;
+
+    /// <summary>
+    /// Отключить уведомления о банах за вход через папки в лог-чате
+    /// </summary>
+    public bool BanFolderInviteNotificationsDisable { get; set; } = false;
 }

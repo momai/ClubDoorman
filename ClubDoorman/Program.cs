@@ -156,6 +156,7 @@ public class Program
         Console.WriteLine($"   • DOORMAN_BLACKLIST_AUTOBAN_DISABLE: {!appConfig.BlacklistAutoBan}");
         Console.WriteLine($"   • DOORMAN_CHANNELS_AUTOBAN_DISABLE: {!appConfig.ChannelAutoBan}");
         Console.WriteLine($"   • DOORMAN_BAN_FOLDER_INVITE_USERS: {appConfig.BanFolderInviteUsers}");
+        Console.WriteLine($"   • DOORMAN_BAN_FOLDER_INVITE_NOTIFICATIONS_DISABLE: {appConfig.BanFolderInviteNotificationsDisable}");
         Console.WriteLine($"   • DOORMAN_BUTTON_AUTOBAN_DISABLE: {!appConfig.ButtonAutoBan}");
         Console.WriteLine($"   • DOORMAN_HIGH_CONFIDENCE_AUTOBAN_DISABLE: {!appConfig.HighConfidenceAutoBan}");
         Console.WriteLine($"   • DOORMAN_LOW_CONFIDENCE_HAM_ENABLE: {appConfig.LowConfidenceHamForward}");
