@@ -209,7 +209,7 @@ public class FakeModerationService : IModerationPolicy
                 return result;
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             // Пробрасываем исключение как есть, без оборачивания в AggregateException
             throw;

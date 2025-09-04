@@ -331,7 +331,7 @@ public class ServiceChatDispatcher : IServiceChatDispatcher
             await _bot.ForwardMessage(
                 new ChatId(_appConfig.AdminChatId),
                 data.Chat.Id,
-                (int)data.MessageId,
+                (int)data.MessageId!,
                 cancellationToken: cancellationToken
             );
             _logger.LogDebug("🔄 Подозрительное сообщение переслано в админ-чат для пользователя {UserId}", data.User.Id);

@@ -46,7 +46,7 @@ public static class ConfigurationHelper
             .Split(',', StringSplitOptions.RemoveEmptyEntries)
             .Select(x => long.TryParse(x.Trim(), out var id) ? id : (long?)null)
             .Where(x => x.HasValue)
-            .Select(x => x.Value)
+            .Select(x => x!.Value)
             .ToHashSet();
     }
 
