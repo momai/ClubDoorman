@@ -253,7 +253,7 @@ public class CallbackQueryHandler : IUpdateHandler
         }
         if (gmCorrelation != null)
         {
-            _events.Publish(gmCorrelation, new ModerationEvent("captcha_fail", RuleCode: Models.Logging.RuleCode.CaptchaFail));
+            _events.Publish(gmCorrelation, new ModerationEvent("captcha_fail", Action: "Ban", RuleCode: Models.Logging.RuleCode.CaptchaFail));
         }
     }
 
@@ -276,7 +276,7 @@ public class CallbackQueryHandler : IUpdateHandler
         }
         if (gmCorrelation != null)
         {
-            _events.Publish(gmCorrelation, new ModerationEvent("captcha_success", RuleCode: Models.Logging.RuleCode.CaptchaSuccess));
+            _events.Publish(gmCorrelation, new ModerationEvent("captcha_success", Action: "Allow", RuleCode: Models.Logging.RuleCode.CaptchaSuccess));
         }
     }
 

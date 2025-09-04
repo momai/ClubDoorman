@@ -43,7 +43,7 @@ public class LeftMemberCleanupStep : IMessageStep
             _logger.LogWarning(ex, "LeftMemberCleanupStep: failed to delete left-member system message {MessageId} in chat {ChatId}", msg.MessageId, msg.Chat.Id);
         }
         context.LeftMemberCleanupHandled = true;
-        _events.Publish(context.GmCorrelation, new ModerationEvent("left_member_cleanup", Action: null, RuleCode: RuleCode.LeftMemberCleanup));
+        _events.Publish(context.GmCorrelation, new ModerationEvent("left_member_cleanup", Action: "Delete", RuleCode: RuleCode.LeftMemberCleanup));
         return StepResult.StopOk("left-member-cleanup");
     }
 }
