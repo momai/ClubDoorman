@@ -267,6 +267,26 @@ Next recommended target: audit `MessageHandlerMutationCoverageTests.cs` or `Mess
   - suite total reduced from `914 passed / 12 skipped` to `903 passed / 12 skipped`
   - no production code changed
 
+### Slice 13: Trim Wrong-Seam New-Member Cases From `MessageHandlerBanTests`
+
+- Audited `ClubDoorman.Test/Integration/MessageHandlerBanTests.cs`.
+- Deleted only the first obvious low-value group:
+  - `BanUserForLongName_PrivateChat_LogsWarningAndSendsAdminNotification`
+  - `BanUserForLongName_GroupChat_BansUserAndSendsNotification`
+  - `BanBlacklistedUser_WhenUserInBlacklist_BansUser`
+- Reasons:
+  - test names claim ban behavior, but assertions only verify `UserJoinFacade.HandleNewMembersAsync`
+  - ban-specific setup is not asserted
+  - new-member routing is already covered by `MessageHandlerFakeTests`, `MessageHandlerExtendedTests`, and `UserJoinFacadeIntegrationTests`
+  - keeping these in a ban integration file makes future ban changes pay for unrelated routing tests
+- Verification:
+  - `dotnet test --no-restore --filter "FullyQualifiedName~MessageHandlerBanTests"`: `10 passed / 1 skipped`
+  - `dotnet test --no-restore`: `900 passed / 12 skipped / 0 failed`
+- Net effect:
+  - removed 3 wrong-seam tests
+  - suite total reduced from `903 passed / 12 skipped` to `900 passed / 12 skipped`
+  - no production code changed
+
 ## Risks / Unknowns
 
 - `ClubDoorman.Test/README.md` existed before this work and may be untracked in git state; preserve user intent.

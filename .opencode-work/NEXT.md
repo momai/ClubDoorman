@@ -13,17 +13,17 @@ Continue value-based deletion/rewrite audit. Do not add shared harness yet.
 - The current owner pain is test maintenance cost, not missing test helpers.
 - Deleted `MessageHandlerGoldenMasterTests.cs`, `MessageHandlerBanExceptionTests.cs`, `MessageHandlerMutationCoverageTests.cs`, and `MessageHandlerBanAdvancedTests.cs` after audit.
 - Focused seam tests passed after each deletion.
-- Current full suite: `903 passed / 12 skipped / 0 failed`.
+- Current full suite: `900 passed / 12 skipped / 0 failed`.
 - The suite can shrink safely when brittle broad tests duplicate seam tests.
 - A shared harness now still risks creating another construction path instead of reducing test tax.
 
 ## Candidate Next Slice
 
-Title: Audit `MessageHandlerBanTests.cs` before touching it.
+Title: Continue `MessageHandlerBanTests.cs` audit by grouped behavior.
 
 Mode: read first, classify, then delete only obvious low-value cases.
 
-Goal: split decisions by test group, because this file mixes real routing checks, mocked side-effect checks, ignored AI tests, and repeated-violation scenarios.
+Goal: keep only cases that protect real MessageHandler/pipeline routing behavior; delete mock-choreography cases with seam coverage elsewhere.
 
 Allowed:
 
