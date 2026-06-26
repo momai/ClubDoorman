@@ -208,6 +208,26 @@ Default for brittle legacy tests is now classify, then delete/quarantine unless 
 
 Next recommended target: audit `MessageHandlerMutationCoverageTests.cs` or `MessageHandlerBanExceptionTests.cs` with the same delete/rewrite/quarantine lens.
 
+### Slice 10: Delete `MessageHandlerBanExceptionTests`
+
+- Read-only audited `ClubDoorman.Test/Unit/Handlers/MessageHandlerMutationCoverageTests.cs` first.
+- Did not edit it because it had pre-existing dirty changes before this session.
+- Audited clean file `ClubDoorman.Test/Integration/MessageHandlerBanExceptionTests.cs`.
+- Decision: delete the whole file.
+- Reasons:
+  - file used a large manual `MessageHandler` setup with only a partial 2-step pipeline
+  - `_messageServiceMock` and `_userBanServiceMock` were configured but not actually wired into the handler path being asserted
+  - each test asserted only `logger.Log(...).Times.AtLeastOnce`, which can pass for unrelated logging
+  - scenarios claimed exception coverage but did not reliably prove the exception path being named
+  - neighboring ban integration tests and `UserBanService` seam tests provide more meaningful coverage
+- Verification:
+  - `dotnet test --no-restore --filter "FullyQualifiedName~MessageHandlerBanTests|FullyQualifiedName~MessageHandlerBanBasicTests"`: `14 passed / 1 skipped`
+  - `dotnet test --no-restore`: `920 passed / 12 skipped / 0 failed`
+- Net effect:
+  - removed 7 brittle exception/choreography tests
+  - suite total reduced from `927 passed / 12 skipped` to `920 passed / 12 skipped`
+  - no production code changed
+
 ## Risks / Unknowns
 
 - `ClubDoorman.Test/README.md` existed before this work and may be untracked in git state; preserve user intent.

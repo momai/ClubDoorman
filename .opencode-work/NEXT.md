@@ -19,11 +19,11 @@ Continue value-based deletion/rewrite audit. Do not add shared harness yet.
 
 ## Candidate Next Slice
 
-Title: Audit `MessageHandlerMutationCoverageTests.cs` for delete/rewrite/quarantine.
+Title: Continue audit of dirty `MessageHandlerMutationCoverageTests.cs`, but do not edit until current owner of those changes is clear.
 
 Mode: read first, classify, then delete only obvious low-value cases.
 
-Goal: remove tests that duplicate seam coverage, assert implementation details, or only protect mutation-score artifacts.
+Goal: decide whether to delete, rewrite into `UserBanService` seam tests, or leave because user changes are in progress.
 
 Allowed:
 
@@ -31,6 +31,7 @@ Allowed:
 - Classify tests as keep/rewrite/delete/quarantine.
 - Delete a small batch only when coverage is clearly duplicated or low-value.
 - Prefer no replacement unless the behavior protects a real regression.
+- If the file remains dirty from someone else, ask before editing or choose another clean target.
 
 Not allowed:
 
@@ -39,6 +40,7 @@ Not allowed:
 - Change production code.
 - Make `WithMessageId` obsolete-true.
 - Preserve mutation-only tests by default.
+- Touch `MessageHandlerMutationCoverageTests.cs` while it has unrelated dirty changes without explicit approval.
 
 Suggested verification:
 
