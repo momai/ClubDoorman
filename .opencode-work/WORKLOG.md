@@ -4,7 +4,7 @@ Purpose: durable handoff context for test infrastructure reset work. Keep factua
 
 ## Current Epic
 
-Test Infrastructure Reset: canonical harness, pipeline-first testing, legacy construction cleanup.
+Test Cleanup: reduce test maintenance tax by deleting, quarantining, or rewriting brittle low-value tests around clear seams.
 
 ## Operating Model
 
@@ -181,9 +181,32 @@ Test Infrastructure Reset: canonical harness, pipeline-first testing, legacy con
 
 ## Current Recommendation
 
-Do not add shared harness yet.
+Do not add shared harness yet. Do not continue mechanical MessageId cleanup blindly.
 
-Shared harness still should not be added by default. Add it only after another concrete migration shows the same setup pain repeats and the API can stay tiny.
+Default for brittle legacy tests is now classify, then delete/quarantine unless value is clear. Rewrite only when the behavior is worth preserving.
+
+### Slice 9: Delete `MessageHandlerGoldenMasterTests`
+
+- Committed previous work first:
+  - commit `b9cf9df test: document cleanup strategy`
+- Audited `ClubDoorman.Test/Unit/Handlers/MessageHandlerGoldenMasterTests.cs`.
+- Decision: delete the whole file.
+- Reasons:
+  - file name says `MessageHandler`, but tests directly call `UserBanService`
+  - `_messageHandler` setup exists but is unused by the tests
+  - most assertions are brittle mock choreography and log-string checks
+  - many delete assertions use `message.MessageId`, which is unreliable in this repo
+  - main behaviors are already covered by `Unit/Services/UserBanServiceTests.cs` and `Unit/Services/UserBanServiceTests.Modern.cs`
+  - missing unique coverage was mostly error/log choreography, not worth preserving before deletion
+- Verification:
+  - `dotnet test --no-restore --filter "FullyQualifiedName~UserBanServiceTests"`: `24 passed`
+  - `dotnet test --no-restore`: `927 passed / 12 skipped / 0 failed`
+- Net effect:
+  - removed 15 brittle golden-master tests
+  - suite total reduced from `942 passed / 12 skipped` to `927 passed / 12 skipped`
+  - no production code changed
+
+Next recommended target: audit `MessageHandlerMutationCoverageTests.cs` or `MessageHandlerBanExceptionTests.cs` with the same delete/rewrite/quarantine lens.
 
 ## Risks / Unknowns
 

@@ -2,50 +2,49 @@
 
 ## Question
 
-Should the next implementation step add a shared harness or continue with targeted local/id-sensitive cleanup?
+What is the next cleanup target after deleting `MessageHandlerGoldenMasterTests.cs`?
 
 ## Current Answer
 
-Continue with targeted cleanup. Do not add shared harness yet.
+Continue value-based deletion/rewrite audit. Do not add shared harness yet.
 
 ## Why
 
-- Repo rules warn against editing shared `TestInfrastructure` / `TestKit` unless the seam contract changes or current pain proves it.
-- `MessageHandlerSemanticsTests` cleanup succeeded without shared harness.
-- `MessageHandlerDeleteMessageLaterTests` MessageId assertion hardening succeeded with existing fake-client/envelope APIs.
-- `MessageHandlerHandleUserMessageTests` captcha delete assertion hardening succeeded, but needed local `BotMock.DeleteMessage` pass-through because `CreateMessageHandlerWithFake` only covered some fake paths.
-- `MessageHandlerBanBasicTests` delete assertion hardening succeeded with `_factory.CreateMessageHandlerWithFake(fakeClient)`.
-- A delegated larger batch against `MessageHandlerGoldenMasterTests` was rejected because it crossed into `UserBanService` seam semantics and changed ban/forward/exception assertions.
-- We still do not have enough repeated setup pain for a shared API.
-- A shared harness now still risks creating another construction path.
+- The current owner pain is test maintenance cost, not missing test helpers.
+- `MessageHandlerGoldenMasterTests.cs` was deleted successfully after audit.
+- Focused `UserBanServiceTests` passed after deletion.
+- Full suite passed after deletion: `927 passed / 12 skipped / 0 failed`.
+- The suite can shrink safely when brittle broad tests duplicate seam tests.
+- A shared harness now still risks creating another construction path instead of reducing test tax.
 
 ## Candidate Next Slice
 
-Title: Plan a UserBanService-specific MessageId cleanup.
+Title: Audit `MessageHandlerMutationCoverageTests.cs` for delete/rewrite/quarantine.
 
-Mode: plan/review first; no implementation until the seam approach is explicit.
+Mode: read first, classify, then delete only obvious low-value cases.
 
-Goal: decide how to harden delete assertions in `MessageHandlerGoldenMasterTests` without changing the `UserBanService` seam semantics or replacing all `BotMock` assertions with fake-client state.
+Goal: remove tests that duplicate seam coverage, assert implementation details, or only protect mutation-score artifacts.
 
 Allowed:
 
-- Treat `MessageHandlerGoldenMasterTests` as `UserBanService` seam tests despite the filename.
-- Keep ban/forward/exception assertions on `BotMock` unless explicitly changing that seam test style.
-- Consider whether delete assertions should remain mock-based with an explicit expected id source, or whether this file should be deferred.
-- If delegating, use read-only inventory or one exact test only.
+- Read the file and nearby seam tests before editing.
+- Classify tests as keep/rewrite/delete/quarantine.
+- Delete a small batch only when coverage is clearly duplicated or low-value.
+- Prefer no replacement unless the behavior protects a real regression.
 
 Not allowed:
 
 - Add shared harness.
 - Edit `TestInfrastructure` or `TestKit`.
-- Delete tests.
 - Change production code.
 - Make `WithMessageId` obsolete-true.
+- Preserve mutation-only tests by default.
 
 Suggested verification:
 
-- Planning only: no tests required.
-- Implementation follow-up: focused `MessageHandlerGoldenMasterTests`, then full suite.
+- Focused target file/class if still present.
+- Relevant seam tests for replacements.
+- Full suite after deletion/rewrite batch.
 
 ## Alternative Later Slice
 
