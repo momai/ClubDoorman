@@ -38,8 +38,25 @@ dotnet test ClubDoorman.Test --collect:"XPlat Code Coverage"
 
 ## 🔧 Ключевые компоненты
 
+### Правило для новых тестов
+Новые тесты должны идти через ближайший seam, а не через самый широкий helper:
+
+- `MessageHandler` проверяет тонкую маршрутизацию и orchestration, не branch coverage всего pipeline.
+- Pipeline steps проверяются отдельно на своих контрактах.
+- Command behavior проверяется через `CommandRouter` / command handlers.
+- Ban/delete/report side effects проверяются через соответствующие service seams или `FakeTelegramClient`.
+- Для сценариев, где важен `MessageId`, используйте `MessageEnvelope` + `FakeTelegramClient.RegisterMessageEnvelope` + `WasMessageDeleted`.
+
+Legacy construction paths не использовать в новых тестах без причины:
+
+- `MessageHandlerTestFactory` — legacy helper для существующих тестов под миграцией.
+- `FakeServicesFactory` — legacy broad integration helper.
+- `MessageHandlerBuilder` — transitional helper.
+- `TestKitAutoFixture.CreateMessageHandler` — hidden construction path.
+- `MessageBuilder.WithMessageId` не задает реальный `Message.MessageId`; для id-sensitive сценариев используйте `MessageEnvelope`.
+
 ### MessageHandlerTestFactory
-Централизованная фабрика для создания тестовых объектов:
+Legacy-фабрика для существующих тестов. Не используйте как default path для новых тестов:
 ```csharp
 var factory = new MessageHandlerTestFactory();
 var handler = factory.CreateMessageHandlerWithFake(fakeClient);
@@ -180,4 +197,4 @@ MessageServiceMock.Verify(x => x.SendUserNotificationWithReplyAsync(
 
 ---
 
-**Помните:** Хороший тест - это не только проверка функциональности, но и документирование поведения системы. 
+**Помните:** Хороший тест - это не только проверка функциональности, но и документирование поведения системы.
