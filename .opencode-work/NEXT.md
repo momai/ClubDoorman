@@ -2,7 +2,7 @@
 
 ## Question
 
-What is the next cleanup target after deleting the three weakest MessageHandler-named ban files?
+What is the next cleanup target after deleting weak MessageHandler-named ban/demo files?
 
 ## Current Answer
 
@@ -11,19 +11,19 @@ Continue value-based deletion/rewrite audit. Do not add shared harness yet.
 ## Why
 
 - The current owner pain is test maintenance cost, not missing test helpers.
-- Deleted `MessageHandlerGoldenMasterTests.cs`, `MessageHandlerBanExceptionTests.cs`, and `MessageHandlerMutationCoverageTests.cs` after audit.
+- Deleted `MessageHandlerGoldenMasterTests.cs`, `MessageHandlerBanExceptionTests.cs`, `MessageHandlerMutationCoverageTests.cs`, and `MessageHandlerBanAdvancedTests.cs` after audit.
 - Focused seam tests passed after each deletion.
-- Current full suite: `914 passed / 12 skipped / 0 failed`.
+- Current full suite: `903 passed / 12 skipped / 0 failed`.
 - The suite can shrink safely when brittle broad tests duplicate seam tests.
 - A shared harness now still risks creating another construction path instead of reducing test tax.
 
 ## Candidate Next Slice
 
-Title: Audit remaining `MessageHandlerBan*Tests.cs` and `MessageHandler*` files for wrong-seam tests.
+Title: Audit `MessageHandlerBanTests.cs` before touching it.
 
 Mode: read first, classify, then delete only obvious low-value cases.
 
-Goal: find more tests that are named for `MessageHandler` but only assert mocked side effects or another seam.
+Goal: split decisions by test group, because this file mixes real routing checks, mocked side-effect checks, ignored AI tests, and repeated-violation scenarios.
 
 Allowed:
 

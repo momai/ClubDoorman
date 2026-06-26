@@ -249,6 +249,24 @@ Next recommended target: audit `MessageHandlerMutationCoverageTests.cs` or `Mess
   - suite total reduced from `920 passed / 12 skipped` to `914 passed / 12 skipped`
   - no production code changed
 
+### Slice 12: Delete `MessageHandlerBanAdvancedTests`
+
+- Audited `ClubDoorman.Test/Integration/MessageHandlerBanAdvancedTests.cs`.
+- Decision: delete the whole file.
+- Reasons:
+  - file name/category says MessageHandler ban integration, but tests mostly exercise TestKit/demo helpers
+  - tests assert builders, Bogus data, smart mocks, facade construction, and object creation speed
+  - no meaningful production bot behavior or ban behavior is protected
+  - helper coverage belongs in `TestKit/*Tests`, not MessageHandler ban integration
+  - includes a performance threshold test that adds CI variance without production signal
+- Verification:
+  - `dotnet test --no-restore --filter "FullyQualifiedName~TestKit"`: `17 passed`
+  - `dotnet test --no-restore`: `903 passed / 12 skipped / 0 failed`
+- Net effect:
+  - removed 11 TestKit/demo integration tests
+  - suite total reduced from `914 passed / 12 skipped` to `903 passed / 12 skipped`
+  - no production code changed
+
 ## Risks / Unknowns
 
 - `ClubDoorman.Test/README.md` existed before this work and may be untracked in git state; preserve user intent.
