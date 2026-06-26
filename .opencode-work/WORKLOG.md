@@ -228,6 +228,27 @@ Next recommended target: audit `MessageHandlerMutationCoverageTests.cs` or `Mess
   - suite total reduced from `927 passed / 12 skipped` to `920 passed / 12 skipped`
   - no production code changed
 
+### Slice 11: Delete `MessageHandlerMutationCoverageTests`
+
+- User explicitly approved proceeding on the previously dirty file.
+- Audited `ClubDoorman.Test/Unit/Handlers/MessageHandlerMutationCoverageTests.cs`.
+- Decision: delete the whole file.
+- Reasons:
+  - file name says `MessageHandler`, but tests directly call `UserBanService`
+  - setup creates a `MessageHandler`, but tests do not exercise it
+  - tests are mutation-score artifacts, not stable behavior contracts
+  - main scenarios duplicate `Unit/Services/UserBanServiceTests.cs` and `Unit/Services/UserBanServiceTests.Modern.cs`
+  - one test no longer tested its claimed exception path
+  - remaining unique assertions were brittle log/notification string checks
+  - the local MessageId hardening in this file duplicated existing `UserBanService` delete coverage
+- Verification:
+  - `dotnet test --no-restore --filter "FullyQualifiedName~UserBanServiceTests"`: `24 passed`
+  - `dotnet test --no-restore`: `914 passed / 12 skipped / 0 failed`
+- Net effect:
+  - removed 6 mutation-only UserBanService tests from the wrong namespace/seam
+  - suite total reduced from `920 passed / 12 skipped` to `914 passed / 12 skipped`
+  - no production code changed
+
 ## Risks / Unknowns
 
 - `ClubDoorman.Test/README.md` existed before this work and may be untracked in git state; preserve user intent.
