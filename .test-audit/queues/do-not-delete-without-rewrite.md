@@ -10,14 +10,6 @@ Purpose: files where delete candidates are adjacent to rewrite/quarantine-heavy 
 - Classification: `requires-rewrite-first`.
 - Why: file has multiple rewrite/quarantine AI E2E behaviors; deleting isolated ignored real-API tests is plausible but should wait for an AI seam replacement plan.
 
-## `ClubDoorman.Test/Integration/InfrastructureE2ETests.cs`
-
-- Delete candidates: `E2E_FakeTelegramClient_ShouldSupportUserBanning`, `E2E_FakeTelegramClient_ShouldTrackCallbackQueries`, `E2E_FakeTelegramClient_ShouldTrackSentMessages`, `E2E_Infrastructure_ShouldSupportAsyncOperations`, `E2E_ModerationResult_ShouldHaveCorrectProperties`, `E2E_TestDataFactory_ShouldGenerateValidData`.
-- Human-review overlap: `E2E_FakeTelegramClient_ShouldTrackCallbackQueries`, `E2E_ModerationResult_ShouldHaveCorrectProperties`, `E2E_TestDataFactory_ShouldGenerateValidData`.
-- Safe split: mechanically possible, but not recommended before replacement.
-- Classification: `requires-rewrite-first`.
-- Why: same file still contains rewrite candidates for fake Telegram deletion and moderation flow. This is broad integration coverage, so cleanup should wait for replacement coverage.
-
 ## `ClubDoorman.Test/Integration/MessageHandlerBanTests.cs`
 
 - Delete candidates: `WhenModerationReturnsBan_ShouldLogUserBanned`.
