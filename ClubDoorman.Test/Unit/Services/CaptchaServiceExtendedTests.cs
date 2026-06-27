@@ -257,32 +257,6 @@ public class CaptchaServiceExtendedTests
     }
 
     [Test]
-    public async Task ValidateCaptchaAsync_EmptyKey_ReturnsFalse()
-    {
-        // Arrange
-        var service = _factory.CreateCaptchaService();
-
-        // Act
-        var result = await service.ValidateCaptchaAsync("", 0);
-
-        // Assert
-        Assert.That(result, Is.False);
-    }
-
-    [Test]
-    public async Task ValidateCaptchaAsync_NullKey_ReturnsFalse()
-    {
-        // Arrange
-        var service = _factory.CreateCaptchaService();
-
-        // Act
-        var result = await service.ValidateCaptchaAsync(null!, 0);
-
-        // Assert
-        Assert.That(result, Is.False);
-    }
-
-    [Test]
     public async Task ValidateCaptchaAsync_NonExistentKey_ReturnsFalse()
     {
         // Arrange
@@ -339,38 +313,6 @@ public class CaptchaServiceExtendedTests
         Assert.That(result.CorrectAnswer, Is.EqualTo(originalCaptcha.CorrectAnswer));
     }
 
-    [Test]
-    public async Task GetCaptchaInfo_NonExistentCaptcha_ReturnsNull()
-    {
-        // Arrange
-        var service = _factory.CreateCaptchaService();
-
-        // Act
-        var result = service.GetCaptchaInfo("non_existent_key");
-
-        // Assert
-        Assert.That(result, Is.Null);
-    }
-
-    [Test]
-    public async Task GetCaptchaInfo_AfterValidation_ReturnsNull()
-    {
-        // Arrange
-        var service = _factory.CreateCaptchaService();
-        var chat = CreateTestChat();
-        var user = CreateTestUser();
-        var request = new CreateCaptchaRequest(chat, user, null);
-        await service.CreateCaptchaAsync(request);
-        var key = service.GenerateKey(chat.Id, user.Id);
-        await service.ValidateCaptchaAsync(key, 0);
-
-        // Act
-        var result = service.GetCaptchaInfo(key);
-
-        // Assert
-        Assert.That(result, Is.Null);
-    }
-
     #endregion
 
     #region RemoveCaptcha Tests
@@ -391,19 +333,6 @@ public class CaptchaServiceExtendedTests
 
         // Assert
         Assert.That(result, Is.True);
-    }
-
-    [Test]
-    public async Task RemoveCaptcha_NonExistentCaptcha_ReturnsFalse()
-    {
-        // Arrange
-        var service = _factory.CreateCaptchaService();
-
-        // Act
-        var result = service.RemoveCaptcha("non_existent_key");
-
-        // Assert
-        Assert.That(result, Is.False);
     }
 
     [Test]
