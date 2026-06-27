@@ -1,22 +1,42 @@
 # Test Cleanup Run State
 
-- **Current mode**: iterative (delete-obvious, whole-file batch)
-- **Waves completed**: 3
-- **Files touched**: 10
-  - `ClubDoorman.Test/TestInfrastructure/ConfigurationExceptionTestFactoryTests.cs` (deleted, trial)
-  - `ClubDoorman.Test/TestInfrastructure/AiChecksTestFactoryTests.cs` (deleted, wave 2)
-  - `ClubDoorman.Test/TestInfrastructure/AiServiceExceptionTestFactoryTests.cs` (deleted, wave 2)
-  - `ClubDoorman.Test/TestInfrastructure/ApprovedUsersStorageTestFactoryTests.cs` (deleted, wave 2)
-  - `ClubDoorman.Test/TestInfrastructure/MimicryClassifierTestFactoryTests.cs` (deleted, wave 2)
-  - `ClubDoorman.Test/TestInfrastructure/ModerationExceptionTestFactoryTests.cs` (deleted, wave 2)
-  - `ClubDoorman.Test/Integration/EnvironmentTest.cs` (deleted, wave 3)
-  - `ClubDoorman.Test/Unit/Logging/RuleCodeWhitelistTests.cs` (deleted, wave 3)
-  - `ClubDoorman.Test/Unit/Services/CommandProcessingServiceTests.cs` (deleted, wave 3)
-  - `ClubDoorman.Test/Unit/Handlers/MessageHandlerNullCoalescingTests.cs` (deleted, wave 3)
-  - `ClubDoorman.Test/Integration/UserJoinFacadeIntegrationTests.cs` (deleted, wave 3)
-- **Tests deleted**: 37
+- **Current mode**: iterative (delete-obvious)
+- **Waves completed**: 10
+- **Files deleted entirely**: 10
+  - `ConfigurationExceptionTestFactoryTests.cs` (trial)
+  - `AiChecksTestFactoryTests.cs` (wave 2)
+  - `AiServiceExceptionTestFactoryTests.cs` (wave 2)
+  - `ApprovedUsersStorageTestFactoryTests.cs` (wave 2)
+  - `MimicryClassifierTestFactoryTests.cs` (wave 2)
+  - `ModerationExceptionTestFactoryTests.cs` (wave 2)
+  - `EnvironmentTest.cs` (wave 3)
+  - `RuleCodeWhitelistTests.cs` (wave 3)
+  - `CommandProcessingServiceTests.cs` (wave 3)
+  - `MessageHandlerNullCoalescingTests.cs` (wave 3)
+  - `UserJoinFacadeIntegrationTests.cs` (wave 3)
+- **Files modified (partial)**: 9
+  - `ModerationServiceTests.cs` (1 test)
+  - `MessageHandlerHandleAsyncBasicTests.cs` (1 test)
+  - `WorkerTests.cs` (1 test)
+  - `WorkerGetChatLinkTests.cs` (1 test)
+  - `CaptchaServiceFakeTests.cs` (2 tests)
+  - `MimicryClassifierTests.cs` (2 tests)
+  - `CallbackQueryHandlerTests.cs` (3 tests)
+  - `MessageHandlerStatsCommandTests.cs` (3 tests)
+  - `MessageHandlerFakeTests.cs` (2 tests)
+  - `MessageHandlerHandleSayCommandTests.cs` (5 tests)
+  - `MessageHandlerTryFindUserIdTests.cs` (6 tests)
+  - `MessageHandlerSendSuspiciousMessageTests.cs` (6 tests)
+  - `BotPermissionsServiceTests.cs` (4 tests)
+  - `AiChecksExtendedTests.cs` (4 tests)
+  - `GlobalStatsManagerTests.cs` (7 tests)
+  - `ServiceChatDispatcherTests.cs` (7 tests)
+  - `UpdateDispatcherTests.cs` (9 tests)
+  - `ModerationServiceExtendedTests.cs` (7 tests)
+- **Tests deleted**: 106
 - **Tests rewritten**: 0
-- **Validation status**: PASS (861 passed, 10 skipped, 0 failed)
-- **Last report**: `.test-audit/reports/cleanup-wave-3.md`
-- **Stop condition**: No more safe whole-file candidates remain. All remaining whole-file candidates have human-review overlap.
-- **Next suggested slice**: Switch to partial-file mode with workers, or stop for human review. Remaining partial-safe candidates (no human-review overlap): CallbackQueryHandlerTests (3), MessageHandlerFakeTests (3), MessageHandlerHandleSayCommandTests (5), MessageHandlerStatsCommandTests (3), MessageHandlerTryFindUserIdTests (6), MessageHandlerSendSuspiciousMessageTests (6), CaptchaServiceFakeTests (2), MimicryClassifierTests (2), BotPermissionsServiceTests (4), AiChecksExtendedTests (4), GlobalStatsManagerTests (7), ServiceChatDispatcherTests (7), UpdateDispatcherTests (9), ModerationServiceExtendedTests (8), MessageHandlerIntegrationTests (10), WorkerTests (1), WorkerGetChatLinkTests (1), CriticalFunctionalityTests (3), MessageHandlerHandleAsyncBasicTests (1).
+- **Validation status**: PASS (790 passed, 10 skipped, 0 failed)
+- **Last report**: wave 10 (inline)
+- **Commits**: 3 (b30d0c4, 4a43b48, 9fdda4e)
+- **Stop condition**: Iterative run complete per user request.
+- **Remaining safe candidates** (partial only, no human-review overlap): MessageHandlerIntegrationTests (10/17), MessageHandlerExtendedTests (23/37), CriticalFunctionalityTests (3/10).
