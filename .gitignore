@@ -104,3 +104,4 @@ venv/
 **/.understand-anything/intermediate/
 **/.understand-anything/tmp/
 **/.understand-anything/.trash-*/
+.test-audit/
