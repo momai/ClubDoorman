@@ -5,11 +5,6 @@ Purpose: files with remaining delete candidates and human-review overlap that ca
 ## Safe whole-file delete
 
 - `ClubDoorman.Test/Integration/Effects/EffectsConfigurationIntegrationTest.cs`
-- `ClubDoorman.Test/TestInfrastructure/TelegramBotClientWrapperTestFactoryTests.cs`
-- `ClubDoorman.Test/TestInfrastructure/UpdateDispatcherTestFactoryTests.cs`
-- `ClubDoorman.Test/TestInfrastructure/UserCleanupServiceTestFactoryTests.cs`
-- `ClubDoorman.Test/TestInfrastructure/UserManagementExceptionTestFactoryTests.cs`
-- `ClubDoorman.Test/TestKit/TestKit.BuilderTests.cs`
 - `ClubDoorman.Test/Unit/Moderation/SpamHamClassifierTests.cs`
 - `ClubDoorman.Test/Unit/Services/AIModuleTests.cs`
 - `ClubDoorman.Test/Unit/Services/CaptchaModuleTests.cs`
