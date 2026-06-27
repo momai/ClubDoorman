@@ -10,10 +10,6 @@ Reason: current audited test methods in these files are delete-only. Human-revie
 
 ## Safe partial delete
 
-- `ClubDoorman.Test/ErrorHandlingTests.cs`
-- `ClubDoorman.Test/ModerationServiceSimpleTests.cs`
-- `ClubDoorman.Test/Unit/Infrastructure/TelegramBotClientWrapperTests.cs`
-- `ClubDoorman.Test/Unit/Moderation/ModerationServiceTests.cs`
-- `ClubDoorman.Test/Unit/Services/UserCleanupServiceTests.cs`
+- None remaining.
 
 Reason: delete candidates are separable low-value tests. Remaining keep/rewrite tests should be left untouched.
