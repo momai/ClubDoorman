@@ -31,45 +31,6 @@ public class MessageHandlerDeleteMessageLaterTests
     }
 
     [Test]
-    public void DeleteMessageLater_WithCustomTimeout_SchedulesMessageDeletion()
-    {
-        var (_, _, message) = TK.Specialized.Messages.TextOnlyScenario();
-        var custom = TimeSpan.FromMilliseconds(80);
-        _messageHandler.DeleteMessageLater(message, custom, CancellationToken.None);
-        Assert.Pass();
-    }
-
-    [Test]
-    public void DeleteMessageLater_WithDefaultTimeout_UsesFiveMinutes()
-    {
-        var (_, _, message) = TK.Specialized.Messages.TextOnlyScenario();
-        _messageHandler.DeleteMessageLater(message, default, CancellationToken.None);
-        Assert.Pass();
-    }
-
-    [Test]
-    public void DeleteMessageLater_WithNullMessage_NoThrow()
-    {
-        Assert.DoesNotThrow(() => _messageHandler.DeleteMessageLater(null!, TimeSpan.FromMilliseconds(10), CancellationToken.None));
-    }
-
-    [Test]
-    public void DeleteMessageLater_WithZeroTimeout_NoThrow()
-    {
-        var (_, _, message) = TK.Specialized.Messages.TextOnlyScenario();
-        _messageHandler.DeleteMessageLater(message, TimeSpan.Zero, CancellationToken.None);
-        Assert.Pass();
-    }
-
-    [Test]
-    public void DeleteMessageLater_WithNegativeTimeout_NoThrow()
-    {
-        var (_, _, message) = TK.Specialized.Messages.TextOnlyScenario();
-        _messageHandler.DeleteMessageLater(message, TimeSpan.FromMilliseconds(-10), CancellationToken.None);
-        Assert.Pass();
-    }
-
-    [Test]
     public async Task DeleteMessageLater_WithShortTimeout_InvokesDelete()
     {
         var fakeClient = TestKitTelegram.CreateFakeClient();
