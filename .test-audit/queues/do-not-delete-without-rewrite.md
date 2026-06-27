@@ -44,8 +44,8 @@ Purpose: files where delete candidates are adjacent to rewrite/quarantine-heavy 
 
 ## `ClubDoorman.Test/Unit/Services/ModerationServiceBusinessLogicTests.cs`
 
-- Delete candidates: `CheckMessageAsync_MimicryDetected_ReturnsBanAction`, `CheckUserNameAsync_ValidUsername_ReturnsAllowAction`, `GetSuspiciousUsersStats_EmptyStorage_ReturnsZeroCounts`, `IsUserApproved_UserNotInLists_ReturnsFalse`, `SetAiDetectForSuspiciousUser_ValidUser_ReturnsTrue`.
-- Human-review overlap: `CheckMessageAsync_MimicryDetected_ReturnsBanAction`.
+- Delete candidates: `CheckUserNameAsync_ValidUsername_ReturnsAllowAction`, `GetSuspiciousUsersStats_EmptyStorage_ReturnsZeroCounts`, `IsUserApproved_UserNotInLists_ReturnsFalse`, `SetAiDetectForSuspiciousUser_ValidUser_ReturnsTrue`.
+- Human-review overlap: None remaining.
 - Safe split: no.
 - Classification: `requires-rewrite-first`.
-- Why: file contains high-value moderation decisions and rewrite candidates; do not thin this file before replacement coverage is agreed.
+- Why: incorrect mimicry test removed in `1499801`; remaining candidates touch moderation/user-management adapter behavior and should be checked against seam coverage before further deletion.
