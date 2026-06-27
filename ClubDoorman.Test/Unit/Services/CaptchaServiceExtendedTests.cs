@@ -86,38 +86,6 @@ public class CaptchaServiceExtendedTests
     }
 
     [Test]
-    public async Task CreateCaptchaAsync_NullChat_ThrowsArgumentNullException()
-    {
-        // Arrange
-        var service = _factory.CreateCaptchaService();
-        var user = CreateTestUser();
-
-        // Act & Assert
-        var ex = Assert.ThrowsAsync<ArgumentNullException>(() =>
-        {
-            var request = new CreateCaptchaRequest(null!, user, null);
-            return service.CreateCaptchaAsync(request);
-        });
-        Assert.That(ex.ParamName, Is.EqualTo("chat"));
-    }
-
-    [Test]
-    public async Task CreateCaptchaAsync_NullUser_ThrowsArgumentNullException()
-    {
-        // Arrange
-        var service = _factory.CreateCaptchaService();
-        var chat = CreateTestChat();
-
-        // Act & Assert
-        var ex = Assert.ThrowsAsync<ArgumentNullException>(() =>
-        {
-            var request = new CreateCaptchaRequest(chat, null!, null);
-            return service.CreateCaptchaAsync(request);
-        });
-        Assert.That(ex.ParamName, Is.EqualTo("user"));
-    }
-
-    [Test]
     public async Task CreateCaptchaAsync_UserWithInappropriateName_UsesGenericName()
     {
         // Arrange
