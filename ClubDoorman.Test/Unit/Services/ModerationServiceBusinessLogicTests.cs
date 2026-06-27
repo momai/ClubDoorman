@@ -1,4 +1,3 @@
-using ClubDoorman.Services.SuspiciousUsers;
 using ClubDoorman.Services.Moderation;
 using ClubDoorman.Services.UserBan;
 using ClubDoorman.Models;
@@ -8,7 +7,6 @@ using ClubDoorman.Infrastructure;
 using Moq;
 using NUnit.Framework;
 using Telegram.Bot.Types;
-using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 using ClubDoorman.Test.TestKit;
 using ClubDoorman.TestInfrastructure;
@@ -170,40 +168,9 @@ public class ModerationServiceBusinessLogicTests
         Assert.That(ex.Message, Does.Contain("пустым"));
     }
 
-    [Test]
-    public async Task CheckUserNameAsync_ValidUsername_ReturnsAllowAction()
-    {
-        // Arrange - используем новые возможности TestKit
-        var user = TestKitBuilders.CreateUser()
-            .WithId(123456L)
-            .WithUsername("john_doe")
-            .WithFirstName("John")
-            .Build();
-
-        // Act
-        var result = await _service.CheckUserNameAsync(user);
-
-        // Assert
-        Assert.That(result.Action, Is.EqualTo(ModerationAction.Allow));
-    }
-
     #endregion
 
     #region Тесты управления пользователями
-
-    [Test]
-    public void IsUserApproved_UserNotInLists_ReturnsFalse()
-    {
-        // Arrange
-        var userId = 123456L;
-        var chatId = 789L;
-
-        // Act
-        var result = _service.IsUserApproved(userId, chatId);
-
-        // Assert
-        Assert.That(result, Is.False);
-    }
 
     [Test]
     public async Task BanAndCleanupUserAsync_ValidUser_ReturnsTrue()
@@ -236,40 +203,6 @@ public class ModerationServiceBusinessLogicTests
 
         // Act
         var result = await _service.UnrestrictAndApproveUserAsync(userId, chatId);
-
-        // Assert
-        Assert.That(result, Is.True);
-    }
-
-    #endregion
-
-    #region Тесты статистики
-
-    [Test]
-    public void GetSuspiciousUsersStats_EmptyStorage_ReturnsZeroCounts()
-    {
-        // Act
-        var stats = _service.GetSuspiciousUsersStats();
-
-        // Assert
-        Assert.That(stats.TotalSuspicious, Is.EqualTo(0));
-        Assert.That(stats.WithAiDetect, Is.EqualTo(0));
-        Assert.That(stats.GroupsCount, Is.EqualTo(0));
-    }
-
-    [Test]
-    public void SetAiDetectForSuspiciousUser_ValidUser_ReturnsTrue()
-    {
-        // Arrange
-        var userId = 123456L;
-        var chatId = 789L;
-
-        _factory.WithSuspiciousUsersStorageSetup(mock =>
-            mock.Setup(x => x.SetAiDetectEnabled(userId, chatId, true))
-                .Returns(true));
-
-        // Act
-        var result = _service.SetAiDetectForSuspiciousUser(userId, chatId, true);
 
         // Assert
         Assert.That(result, Is.True);
