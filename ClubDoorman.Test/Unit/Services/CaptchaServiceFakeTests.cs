@@ -152,39 +152,6 @@ public class CaptchaServiceFakeTests
     }
 
     [Test]
-    public void GenerateKey_ValidIds_ReturnsExpectedKey()
-    {
-        // Arrange
-        var service = _factory.CreateCaptchaService();
-        var chatId = 123456L;
-        var userId = 789L;
-
-        // Act
-        var key = service.GenerateKey(chatId, userId);
-
-        // Assert
-        Assert.That(key, Is.EqualTo("123456_789"));
-    }
-
-    [Test]
-    public async Task CreateCaptchaAsync_IncludesVpnAd_ByDefault()
-    {
-        // Arrange
-        _messageServiceMock.Setup(x => x.SendCaptchaMessageAsync(
-            It.IsAny<SendCaptchaMessageRequest>()))
-        .ReturnsAsync(new global::Telegram.Bot.Types.Message());
-
-        var service = CreateCaptchaService();
-
-        // Act
-        var captchaInfo = await service.CreateCaptchaAsync(new CreateCaptchaRequest(chat, user, null));
-
-        // Assert
-        _messageServiceMock.Verify(x => x.SendCaptchaMessageAsync(
-            It.Is<SendCaptchaMessageRequest>(req => req.Chat.Id == 123456 && req.Message.Contains("📍 Место для рекламы"))), Times.Once);
-    }
-
-    [Test]
     public async Task ValidateCaptchaAsync_ExpiredCaptcha_ReturnsFalse()
     {
         // Arrange

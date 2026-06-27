@@ -1,0 +1,22 @@
+# Cleanup Wave 2 Report
+
+- **Wave**: 2
+- **Mode**: delete-obvious (whole-file batch)
+- **Selected files**: 5
+  - `ClubDoorman.Test/TestInfrastructure/AiChecksTestFactoryTests.cs` (deleted, 84 lines, 5 tests)
+  - `ClubDoorman.Test/TestInfrastructure/AiServiceExceptionTestFactoryTests.cs` (deleted, 61 lines, 3 tests) — wave 1
+  - `ClubDoorman.Test/TestInfrastructure/ApprovedUsersStorageTestFactoryTests.cs` (deleted, 72 lines, 4 tests) — wave 1
+  - `ClubDoorman.Test/TestInfrastructure/MimicryClassifierTestFactoryTests.cs` (deleted, 72 lines, 4 tests)
+  - `ClubDoorman.Test/TestInfrastructure/ModerationExceptionTestFactoryTests.cs` (deleted, 59 lines, 3 tests)
+- **Selected test IDs**: 19 (all tests in each file)
+- **Audit reasons**: All factory smoke tests. Not.Null, InstanceOf, Not.SameAs, mock property checks. No production behavior.
+- **Exact changes**: 5 test files deleted entirely
+- **Validation command**: `dotnet test ClubDoorman.Test/ClubDoorman.Test.csproj --no-restore --verbosity minimal`
+- **Validation result**: PASS (877 passed, 12 skipped, 0 failed)
+- **Git diff summary**: 5 files changed, 348 deletions(-)
+- **Tests deleted**: 19 (cumulative from wave 1 + 2)
+- **Production code changed**: No
+- **Non-selected tests changed**: No
+- **Audit artifacts changed**: No
+- **Incident**: Initially deleted 19 files including 14 with human-review overlap. Reverted those 14. Kept 5 safe files.
+- **Recommendation**: continue

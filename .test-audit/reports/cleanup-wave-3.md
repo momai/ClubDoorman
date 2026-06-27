@@ -1,0 +1,21 @@
+# Cleanup Wave 3 Report
+
+- **Wave**: 3
+- **Mode**: delete-obvious (whole-file batch)
+- **Selected files**: 5
+  - `ClubDoorman.Test/Integration/EnvironmentTest.cs` (deleted, 100 lines, 2 tests)
+  - `ClubDoorman.Test/Unit/Logging/RuleCodeWhitelistTests.cs` (deleted, 63 lines, 1 test)
+  - `ClubDoorman.Test/Unit/Services/CommandProcessingServiceTests.cs` (deleted, 53 lines, 1 test)
+  - `ClubDoorman.Test/Unit/Handlers/MessageHandlerNullCoalescingTests.cs` (deleted, 351 lines, 10 tests)
+  - `ClubDoorman.Test/Integration/UserJoinFacadeIntegrationTests.cs` (deleted, 113 lines, 4 tests)
+- **Selected test IDs**: 18 (all tests in each file)
+- **Audit reasons**: Factory smoke tests, trivial DTO tests, mutation coverage artifacts, env file tests, POC facade tests. No production behavior.
+- **Exact changes**: 5 test files deleted entirely
+- **Validation command**: `dotnet test ClubDoorman.Test/ClubDoorman.Test.csproj --no-restore --verbosity minimal`
+- **Validation result**: PASS (861 passed, 10 skipped, 0 failed)
+- **Git diff summary**: 10 files changed, 1028 deletions(-) (cumulative)
+- **Tests deleted**: 37 cumulative (19 wave 1-2 + 18 wave 3)
+- **Production code changed**: No
+- **Non-selected tests changed**: No
+- **Audit artifacts changed**: No
+- **Recommendation**: continue

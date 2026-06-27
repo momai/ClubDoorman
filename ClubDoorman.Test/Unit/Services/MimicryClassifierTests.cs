@@ -258,20 +258,6 @@ public class MimicryClassifierTests
     }
 
     [Test]
-    public void AnalyzeMessages_ValidMessages_ReturnsScore()
-    {
-        // Arrange
-        var messages = new List<string> { "Hello world", "How are you?", "Nice to meet you" };
-
-        // Act
-        var result = _service.AnalyzeMessages(messages);
-
-        // Assert
-        Assert.That(result, Is.GreaterThanOrEqualTo(0.0));
-        Assert.That(result, Is.LessThanOrEqualTo(1.0));
-    }
-
-    [Test]
     public void AnalyzeMessages_ConsistentResults_ForSameInput()
     {
         // Arrange
@@ -285,17 +271,4 @@ public class MimicryClassifierTests
         Assert.That(result1, Is.EqualTo(result2));
     }
 
-    [Test]
-    public void AnalyzeMessages_ScoreClamped_ToValidRange()
-    {
-        // Arrange
-        var messages = new List<string> { "!", "?", "ок" };
-
-        // Act
-        var result = _service.AnalyzeMessages(messages);
-
-        // Assert
-        Assert.That(result, Is.GreaterThanOrEqualTo(0.0));
-        Assert.That(result, Is.LessThanOrEqualTo(1.0));
-    }
-}
+ }

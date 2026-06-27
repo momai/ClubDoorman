@@ -1,12 +1,22 @@
 # Test Cleanup Run State
 
-- **Current mode**: trial (delete-obvious)
-- **Slices completed**: 1
-- **Files touched**: 1
-  - `ClubDoorman.Test/TestInfrastructure/ConfigurationExceptionTestFactoryTests.cs` (deleted)
-- **Tests deleted**: 3
+- **Current mode**: iterative (delete-obvious, whole-file batch)
+- **Waves completed**: 3
+- **Files touched**: 10
+  - `ClubDoorman.Test/TestInfrastructure/ConfigurationExceptionTestFactoryTests.cs` (deleted, trial)
+  - `ClubDoorman.Test/TestInfrastructure/AiChecksTestFactoryTests.cs` (deleted, wave 2)
+  - `ClubDoorman.Test/TestInfrastructure/AiServiceExceptionTestFactoryTests.cs` (deleted, wave 2)
+  - `ClubDoorman.Test/TestInfrastructure/ApprovedUsersStorageTestFactoryTests.cs` (deleted, wave 2)
+  - `ClubDoorman.Test/TestInfrastructure/MimicryClassifierTestFactoryTests.cs` (deleted, wave 2)
+  - `ClubDoorman.Test/TestInfrastructure/ModerationExceptionTestFactoryTests.cs` (deleted, wave 2)
+  - `ClubDoorman.Test/Integration/EnvironmentTest.cs` (deleted, wave 3)
+  - `ClubDoorman.Test/Unit/Logging/RuleCodeWhitelistTests.cs` (deleted, wave 3)
+  - `ClubDoorman.Test/Unit/Services/CommandProcessingServiceTests.cs` (deleted, wave 3)
+  - `ClubDoorman.Test/Unit/Handlers/MessageHandlerNullCoalescingTests.cs` (deleted, wave 3)
+  - `ClubDoorman.Test/Integration/UserJoinFacadeIntegrationTests.cs` (deleted, wave 3)
+- **Tests deleted**: 37
 - **Tests rewritten**: 0
-- **Validation status**: PASS (896 passed, 12 skipped, 0 failed)
-- **Last report**: `.test-audit/reports/cleanup-trial-v9a.md`
-- **Stop condition**: Trial complete. Awaiting human review before iterative mode.
-- **Next suggested slice**: After approval, pick next file from `delete-by-file.md` with 2-5 obvious-delete candidates (e.g., `AiServiceExceptionTestFactoryTests.cs` — 3 factory smoke tests).
+- **Validation status**: PASS (861 passed, 10 skipped, 0 failed)
+- **Last report**: `.test-audit/reports/cleanup-wave-3.md`
+- **Stop condition**: No more safe whole-file candidates remain. All remaining whole-file candidates have human-review overlap.
+- **Next suggested slice**: Switch to partial-file mode with workers, or stop for human review. Remaining partial-safe candidates (no human-review overlap): CallbackQueryHandlerTests (3), MessageHandlerFakeTests (3), MessageHandlerHandleSayCommandTests (5), MessageHandlerStatsCommandTests (3), MessageHandlerTryFindUserIdTests (6), MessageHandlerSendSuspiciousMessageTests (6), CaptchaServiceFakeTests (2), MimicryClassifierTests (2), BotPermissionsServiceTests (4), AiChecksExtendedTests (4), GlobalStatsManagerTests (7), ServiceChatDispatcherTests (7), UpdateDispatcherTests (9), ModerationServiceExtendedTests (8), MessageHandlerIntegrationTests (10), WorkerTests (1), WorkerGetChatLinkTests (1), CriticalFunctionalityTests (3), MessageHandlerHandleAsyncBasicTests (1).

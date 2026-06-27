@@ -1,0 +1,28 @@
+# Cleanup Wave 1 Report
+
+- **Wave**: 1
+- **Mode**: delete-obvious
+- **Selected files**: 2
+  - `ClubDoorman.Test/TestInfrastructure/AiServiceExceptionTestFactoryTests.cs` (deleted, 61 lines)
+  - `ClubDoorman.Test/TestInfrastructure/ApprovedUsersStorageTestFactoryTests.cs` (deleted, 72 lines)
+- **Selected test IDs**: 7
+  - `AiServiceExceptionTestFactoryTests::CreateAiServiceException_ReturnsWorkingInstance`
+  - `AiServiceExceptionTestFactoryTests::CreateAiServiceException_ConfiguresAllDependencies`
+  - `AiServiceExceptionTestFactoryTests::CreateAiServiceException_CreatesFreshInstanceEachTime`
+  - `ApprovedUsersStorageTestFactoryTests::CreateApprovedUsersStorage_ReturnsWorkingInstance`
+  - `ApprovedUsersStorageTestFactoryTests::CreateApprovedUsersStorage_ConfiguresAllDependencies`
+  - `ApprovedUsersStorageTestFactoryTests::CreateApprovedUsersStorage_CreatesFreshInstanceEachTime`
+  - `ApprovedUsersStorageTestFactoryTests::LoggerMock_IsProperlyConfigured`
+- **Audit reasons**: All factory smoke tests. Only assert Not.Null, InstanceOf, or Not.SameAs on factory-created objects. Compile-time guarantees. No production behavior protected.
+- **Worker task IDs**:
+  - `ses_0f7c0a1d4ffeqqpnbe5JYm5w59` (AiServiceExceptionTestFactoryTests)
+  - `ses_0f7c0888affevqyUadWc2IH74K` (ApprovedUsersStorageTestFactoryTests)
+- **Exact changes**: 2 test files deleted entirely (all tests in each file were selected)
+- **Validation command**: `dotnet test ClubDoorman.Test/ClubDoorman.Test.csproj --no-restore --verbosity minimal`
+- **Validation result**: PASS (889 passed, 12 skipped, 0 failed)
+- **Git diff summary**: 2 files changed, 133 deletions(-)
+- **Tests deleted**: 7
+- **Production code changed**: No
+- **Non-selected tests changed**: No
+- **Audit artifacts changed**: No
+- **Recommendation**: continue
