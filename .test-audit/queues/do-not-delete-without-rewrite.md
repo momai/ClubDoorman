@@ -36,11 +36,11 @@ Purpose: files where delete candidates are adjacent to rewrite/quarantine-heavy 
 
 ## `ClubDoorman.Test/Unit/Services/CaptchaServiceExtendedTests.cs`
 
-- Delete candidates: `BanExpiredCaptchaUsersAsync_NoExpiredCaptchas_CompletesSuccessfully`, `CreateCaptchaAsync_CancellationToken_RespectsCancellation`, `CreateCaptchaAsync_LargeBatch_HandlesCorrectly`, `CreateCaptchaAsync_NullChat_ThrowsArgumentNullException`, `CreateCaptchaAsync_NullUser_ThrowsArgumentNullException`, `GenerateKey_ValidParameters_ReturnsExpectedKey`, `GetCaptchaInfo_AfterValidation_ReturnsNull`, `GetCaptchaInfo_NonExistentCaptcha_ReturnsNull`, `RemoveCaptcha_NonExistentCaptcha_ReturnsFalse`, `ValidateCaptchaAsync_EmptyKey_ReturnsFalse`, `ValidateCaptchaAsync_LargeBatch_HandlesCorrectly`, `ValidateCaptchaAsync_NullKey_ReturnsFalse`.
-- Human-review overlap: `CreateCaptchaAsync_CancellationToken_RespectsCancellation`, `GenerateKey_ValidParameters_ReturnsExpectedKey`.
+- Delete candidates: `CreateCaptchaAsync_NullChat_ThrowsArgumentNullException`, `CreateCaptchaAsync_NullUser_ThrowsArgumentNullException`, `GetCaptchaInfo_AfterValidation_ReturnsNull`, `GetCaptchaInfo_NonExistentCaptcha_ReturnsNull`, `RemoveCaptcha_NonExistentCaptcha_ReturnsFalse`, `ValidateCaptchaAsync_EmptyKey_ReturnsFalse`, `ValidateCaptchaAsync_NullKey_ReturnsFalse`.
+- Human-review overlap: None remaining.
 - Safe split: no.
 - Classification: `requires-rewrite-first`.
-- Why: many keep/rewrite captcha-flow tests remain; deletion touches the same captcha lifecycle/key/validation behavior area.
+- Why: low-value no-op/load/key-format slice removed in `8763310`; remaining candidates touch null/invalid-key lifecycle behavior and should be checked against seam coverage before further deletion.
 
 ## `ClubDoorman.Test/Unit/Services/ModerationServiceBusinessLogicTests.cs`
 
