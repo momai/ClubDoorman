@@ -5,7 +5,6 @@ using ClubDoorman.Models;
 using ClubDoorman.Services;
 using ClubDoorman.Test.TestInfrastructure;
 using ClubDoorman.Infrastructure;
-using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using Telegram.Bot.Types;
@@ -122,27 +121,6 @@ public class ModerationServiceBusinessLogicTests
         // Assert
         Assert.That(result.Action, Is.EqualTo(ModerationAction.Delete));
         Assert.That(result.Reason, Does.Contain("спам"));
-    }
-
-    [Test]
-    public async Task CheckMessageAsync_MimicryDetected_ReturnsBanAction()
-    {
-        // Arrange
-        var message = CreateTestMessage(123456L, "Это нормальное сообщение с полезной информацией");
-
-        _factory.WithClassifierSetup(mock =>
-            mock.Setup(x => x.IsSpam(It.IsAny<string>()))
-                .ReturnsAsync((false, -1.5f))); // Уверенный ham (не спам)
-
-        // Мимикрия проверяется только для подозрительных пользователей
-        // и только в AnalyzeMimicryAndMarkSuspicious, не в CheckMessageAsync
-        // Поэтому этот тест не корректен - убираем его
-
-        // Act
-        var result = await _service.CheckMessageAsync(message);
-
-        // Assert
-        Assert.That(result.Action, Is.EqualTo(ModerationAction.Allow));
     }
 
     [Test]
@@ -322,36 +300,6 @@ public class ModerationServiceBusinessLogicTests
             await _service.CheckMessageAsync(message));
 
         Assert.That(ex.Message, Does.Contain("пользователе"));
-    }
-
-    #endregion
-
-    #region Вспомогательные методы
-
-    private static Message CreateTestMessage(long userId, string text, bool hasButtons = false, bool hasStory = false)
-    {
-        var message = new Message
-        {
-            From = new User { Id = userId, Username = "testuser", FirstName = "Test" },
-            Chat = new Chat { Id = 123, Type = ChatType.Group },
-            Text = text,
-            Date = DateTime.UtcNow
-        };
-
-        if (hasButtons)
-        {
-            message.ReplyMarkup = new InlineKeyboardMarkup(new[]
-            {
-                new[] { new InlineKeyboardButton("Button 1") { CallbackData = "test" } }
-            });
-        }
-
-        if (hasStory)
-        {
-            message.Story = new Story { Id = 1 };
-        }
-
-        return message;
     }
 
     #endregion
