@@ -4,10 +4,7 @@ Purpose: files with remaining delete candidates and human-review overlap that ca
 
 ## Safe whole-file delete
 
-- `ClubDoorman.Test/Unit/Services/StatisticsModuleTests.cs`
-- `ClubDoorman.Test/Unit/Services/TelegramModuleTests.cs`
-- `ClubDoorman.Test/Unit/Services/UserManagementModuleTests.cs`
-- `ClubDoorman.Test/Unit/Services/UserManagerExtendedTests.cs`
+- None remaining.
 
 Reason: current audited test methods in these files are delete-only. Human-review overlap is delete/anomaly or delete/duplicate only. No remaining keep/rewrite/quarantine/high-value audited tests in the same files.
 
