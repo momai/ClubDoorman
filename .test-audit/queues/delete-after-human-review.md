@@ -4,11 +4,6 @@ Purpose: files with remaining delete candidates and human-review overlap that ca
 
 ## Safe whole-file delete
 
-- `ClubDoorman.Test/Integration/Effects/EffectsConfigurationIntegrationTest.cs`
-- `ClubDoorman.Test/Unit/Moderation/SpamHamClassifierTests.cs`
-- `ClubDoorman.Test/Unit/Services/AIModuleTests.cs`
-- `ClubDoorman.Test/Unit/Services/CaptchaModuleTests.cs`
-- `ClubDoorman.Test/Unit/Services/CommandsModuleTests.cs`
 - `ClubDoorman.Test/Unit/Services/StatisticsModuleTests.cs`
 - `ClubDoorman.Test/Unit/Services/TelegramModuleTests.cs`
 - `ClubDoorman.Test/Unit/Services/UserManagementModuleTests.cs`
