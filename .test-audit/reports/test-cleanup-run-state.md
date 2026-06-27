@@ -1,42 +1,13 @@
 # Test Cleanup Run State
 
 - **Current mode**: iterative (delete-obvious)
-- **Waves completed**: 10
+- **Waves completed**: 12
 - **Files deleted entirely**: 10
-  - `ConfigurationExceptionTestFactoryTests.cs` (trial)
-  - `AiChecksTestFactoryTests.cs` (wave 2)
-  - `AiServiceExceptionTestFactoryTests.cs` (wave 2)
-  - `ApprovedUsersStorageTestFactoryTests.cs` (wave 2)
-  - `MimicryClassifierTestFactoryTests.cs` (wave 2)
-  - `ModerationExceptionTestFactoryTests.cs` (wave 2)
-  - `EnvironmentTest.cs` (wave 3)
-  - `RuleCodeWhitelistTests.cs` (wave 3)
-  - `CommandProcessingServiceTests.cs` (wave 3)
-  - `MessageHandlerNullCoalescingTests.cs` (wave 3)
-  - `UserJoinFacadeIntegrationTests.cs` (wave 3)
-- **Files modified (partial)**: 9
-  - `ModerationServiceTests.cs` (1 test)
-  - `MessageHandlerHandleAsyncBasicTests.cs` (1 test)
-  - `WorkerTests.cs` (1 test)
-  - `WorkerGetChatLinkTests.cs` (1 test)
-  - `CaptchaServiceFakeTests.cs` (2 tests)
-  - `MimicryClassifierTests.cs` (2 tests)
-  - `CallbackQueryHandlerTests.cs` (3 tests)
-  - `MessageHandlerStatsCommandTests.cs` (3 tests)
-  - `MessageHandlerFakeTests.cs` (2 tests)
-  - `MessageHandlerHandleSayCommandTests.cs` (5 tests)
-  - `MessageHandlerTryFindUserIdTests.cs` (6 tests)
-  - `MessageHandlerSendSuspiciousMessageTests.cs` (6 tests)
-  - `BotPermissionsServiceTests.cs` (4 tests)
-  - `AiChecksExtendedTests.cs` (4 tests)
-  - `GlobalStatsManagerTests.cs` (7 tests)
-  - `ServiceChatDispatcherTests.cs` (7 tests)
-  - `UpdateDispatcherTests.cs` (9 tests)
-  - `ModerationServiceExtendedTests.cs` (7 tests)
-- **Tests deleted**: 106
+- **Files modified (partial)**: 20
+- **Tests deleted**: 119 tracked cleanup deletions
+- **Test runner cases**: 764 current (754 passed, 10 skipped, 0 failed)
 - **Tests rewritten**: 0
-- **Validation status**: PASS (790 passed, 10 skipped, 0 failed)
-- **Last report**: wave 10 (inline)
-- **Commits**: 3 (b30d0c4, 4a43b48, 9fdda4e)
-- **Stop condition**: Iterative run complete per user request.
-- **Remaining safe candidates** (partial only, no human-review overlap): MessageHandlerIntegrationTests (10/17), MessageHandlerExtendedTests (23/37), CriticalFunctionalityTests (3/10).
+- **Validation status**: PASS (754 passed, 10 skipped, 0 failed)
+- **Commits**: 5 (b30d0c4, 4a43b48, 9fdda4e, 4df8905, a55a2eb)
+- **Stop condition**: No more safe partial candidates. All remaining files with delete candidates have human-review overlap.
+- **Remaining candidates**: All have human-review overlap. Requires human review before proceeding.
