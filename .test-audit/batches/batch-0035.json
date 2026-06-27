@@ -1,0 +1,493 @@
+{
+  "schema_version": "test-audit-batch-v1",
+  "batch_no": 35,
+  "purpose": "local LLM audit input",
+  "instructions": "Return JSONL only. One audit object per input test. No markdown. No code edits.",
+  "tests": [
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/ModerationServiceBusinessLogicTests.cs::ModerationServiceBusinessLogicTests::SetAiDetectForSuspiciousUser_ValidUser_ReturnsTrue",
+        "file": "Unit/Services/ModerationServiceBusinessLogicTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "ModerationServiceBusinessLogicTests",
+        "test_name": "SetAiDetectForSuspiciousUser_ValidUser_ReturnsTrue",
+        "line": 282,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 15,
+        "declared_area_from_path": "Unit",
+        "construction_path": "testkit_autofixture",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": true,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": true,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "testkit_autofixture"
+        ],
+        "_source_lineno": 707
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/ModerationServiceBusinessLogicTests.cs\n# Lines 252-312 (test starts at line 282)\n        var userId = 123456L;\n        var chatId = 789L;\n\n        _factory.WithBotClientSetup(mock =>\n            mock.Setup(x => x.SendRequest(It.IsAny<global::Telegram.Bot.Requests.RestrictChatMemberRequest>(), It.IsAny<CancellationToken>()))\n                .ReturnsAsync(true));\n\n        // Act\n        var result = await _service.UnrestrictAndApproveUserAsync(userId, chatId);\n\n        // Assert\n        Assert.That(result, Is.True);\n    }\n\n    #endregion\n\n    #region Тесты статистики\n\n    [Test]\n    public void GetSuspiciousUsersStats_EmptyStorage_ReturnsZeroCounts()\n    {\n        // Act\n        var stats = _service.GetSuspiciousUsersStats();\n\n        // Assert\n        Assert.That(stats.TotalSuspicious, Is.EqualTo(0));\n        Assert.That(stats.WithAiDetect, Is.EqualTo(0));\n        Assert.That(stats.GroupsCount, Is.EqualTo(0));\n    }\n\n    [Test]\n    public void SetAiDetectForSuspiciousUser_ValidUser_ReturnsTrue()\n    {\n        // Arrange\n        var userId = 123456L;\n        var chatId = 789L;\n\n        _factory.WithSuspiciousUsersStorageSetup(mock =>\n            mock.Setup(x => x.SetAiDetectEnabled(userId, chatId, true))\n                .Returns(true));\n\n        // Act\n        var result = _service.SetAiDetectForSuspiciousUser(userId, chatId, true);\n\n        // Assert\n        Assert.That(result, Is.True);\n    }\n\n    #endregion\n\n    #region Тесты исключений\n\n    [Test]\n    public void CheckMessageAsync_NullMessage_ThrowsArgumentNullException()\n    {\n        // Act & Assert\n        var ex = Assert.ThrowsAsync<ArgumentNullException>(async () =>\n            await _service.CheckMessageAsync(null!));\n\n        Assert.That(ex.ParamName, Is.EqualTo(\"message\"));\n    }\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/ModerationServiceBusinessLogicTests.cs::ModerationServiceBusinessLogicTests::CheckMessageAsync_NullMessage_ThrowsArgumentNullException",
+        "file": "Unit/Services/ModerationServiceBusinessLogicTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "ModerationServiceBusinessLogicTests",
+        "test_name": "CheckMessageAsync_NullMessage_ThrowsArgumentNullException",
+        "line": 304,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 7,
+        "declared_area_from_path": "Unit",
+        "construction_path": "testkit_autofixture",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": true,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": true,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": true,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "testkit_autofixture"
+        ],
+        "_source_lineno": 708
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/ModerationServiceBusinessLogicTests.cs\n# Lines 274-334 (test starts at line 304)\n        var stats = _service.GetSuspiciousUsersStats();\n\n        // Assert\n        Assert.That(stats.TotalSuspicious, Is.EqualTo(0));\n        Assert.That(stats.WithAiDetect, Is.EqualTo(0));\n        Assert.That(stats.GroupsCount, Is.EqualTo(0));\n    }\n\n    [Test]\n    public void SetAiDetectForSuspiciousUser_ValidUser_ReturnsTrue()\n    {\n        // Arrange\n        var userId = 123456L;\n        var chatId = 789L;\n\n        _factory.WithSuspiciousUsersStorageSetup(mock =>\n            mock.Setup(x => x.SetAiDetectEnabled(userId, chatId, true))\n                .Returns(true));\n\n        // Act\n        var result = _service.SetAiDetectForSuspiciousUser(userId, chatId, true);\n\n        // Assert\n        Assert.That(result, Is.True);\n    }\n\n    #endregion\n\n    #region Тесты исключений\n\n    [Test]\n    public void CheckMessageAsync_NullMessage_ThrowsArgumentNullException()\n    {\n        // Act & Assert\n        var ex = Assert.ThrowsAsync<ArgumentNullException>(async () =>\n            await _service.CheckMessageAsync(null!));\n\n        Assert.That(ex.ParamName, Is.EqualTo(\"message\"));\n    }\n\n    [Test]\n    public void CheckMessageAsync_MessageWithoutUser_ThrowsModerationException()\n    {\n        // Arrange\n        var message = new Message { Text = \"Hello\", Chat = new Chat { Id = 123 } };\n\n        // Act & Assert\n        var ex = Assert.ThrowsAsync<ModerationException>(async () =>\n            await _service.CheckMessageAsync(message));\n\n        Assert.That(ex.Message, Does.Contain(\"пользователе\"));\n    }\n\n    #endregion\n\n    #region Вспомогательные методы\n\n    private static Message CreateTestMessage(long userId, string text, bool hasButtons = false, bool hasStory = false)\n    {\n        var message = new Message\n        {\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/ModerationServiceBusinessLogicTests.cs::ModerationServiceBusinessLogicTests::CheckMessageAsync_MessageWithoutUser_ThrowsModerationException",
+        "file": "Unit/Services/ModerationServiceBusinessLogicTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "ModerationServiceBusinessLogicTests",
+        "test_name": "CheckMessageAsync_MessageWithoutUser_ThrowsModerationException",
+        "line": 314,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 10,
+        "declared_area_from_path": "Unit",
+        "construction_path": "testkit_autofixture",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": true,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": true,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": true,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "testkit_autofixture"
+        ],
+        "_source_lineno": 709
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/ModerationServiceBusinessLogicTests.cs\n# Lines 284-344 (test starts at line 314)\n    {\n        // Arrange\n        var userId = 123456L;\n        var chatId = 789L;\n\n        _factory.WithSuspiciousUsersStorageSetup(mock =>\n            mock.Setup(x => x.SetAiDetectEnabled(userId, chatId, true))\n                .Returns(true));\n\n        // Act\n        var result = _service.SetAiDetectForSuspiciousUser(userId, chatId, true);\n\n        // Assert\n        Assert.That(result, Is.True);\n    }\n\n    #endregion\n\n    #region Тесты исключений\n\n    [Test]\n    public void CheckMessageAsync_NullMessage_ThrowsArgumentNullException()\n    {\n        // Act & Assert\n        var ex = Assert.ThrowsAsync<ArgumentNullException>(async () =>\n            await _service.CheckMessageAsync(null!));\n\n        Assert.That(ex.ParamName, Is.EqualTo(\"message\"));\n    }\n\n    [Test]\n    public void CheckMessageAsync_MessageWithoutUser_ThrowsModerationException()\n    {\n        // Arrange\n        var message = new Message { Text = \"Hello\", Chat = new Chat { Id = 123 } };\n\n        // Act & Assert\n        var ex = Assert.ThrowsAsync<ModerationException>(async () =>\n            await _service.CheckMessageAsync(message));\n\n        Assert.That(ex.Message, Does.Contain(\"пользователе\"));\n    }\n\n    #endregion\n\n    #region Вспомогательные методы\n\n    private static Message CreateTestMessage(long userId, string text, bool hasButtons = false, bool hasStory = false)\n    {\n        var message = new Message\n        {\n            From = new User { Id = userId, Username = \"testuser\", FirstName = \"Test\" },\n            Chat = new Chat { Id = 123, Type = ChatType.Group },\n            Text = text,\n            Date = DateTime.UtcNow\n        };\n\n        if (hasButtons)\n        {\n            message.ReplyMarkup = new InlineKeyboardMarkup(new[]\n            {\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/StatisticsModuleTests.cs::StatisticsModuleTests::AddStatisticsServices_ShouldRegisterIStatisticsService",
+        "file": "Unit/Services/StatisticsModuleTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services.Statistics",
+        "class": "StatisticsModuleTests",
+        "test_name": "AddStatisticsServices_ShouldRegisterIStatisticsService",
+        "line": 11,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 12,
+        "declared_area_from_path": "Unit",
+        "construction_path": "service_collection_di",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": true,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 732
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/StatisticsModuleTests.cs\n# Lines 1-41 (test starts at line 11)\nusing ClubDoorman.Services.UserBan;\nusing Microsoft.Extensions.DependencyInjection;\nusing NUnit.Framework;\nusing ClubDoorman.Services.Statistics;\n\nnamespace ClubDoorman.Test.Unit.Services.Statistics;\n\n[TestFixture]\npublic class StatisticsModuleTests\n{\n    [Test]\n    public void AddStatisticsServices_ShouldRegisterIStatisticsService()\n    {\n        // Arrange\n        var services = new ServiceCollection();\n\n        // Act\n        services.AddStatisticsServices();\n\n        // Assert\n        var descriptor = services.FirstOrDefault(s => s.ServiceType == typeof(IStatisticsService));\n        Assert.That(descriptor, Is.Not.Null);\n        Assert.That(descriptor!.ImplementationType, Is.EqualTo(typeof(StatisticsService)));\n    }\n\n    [Test]\n    public void AddStatisticsServices_ShouldRegisterGlobalStatsManager()\n    {\n        // Arrange\n        var services = new ServiceCollection();\n\n        // Act\n        services.AddStatisticsServices();\n\n        // Assert\n        var descriptor = services.FirstOrDefault(s => s.ServiceType == typeof(GlobalStatsManager));\n        Assert.That(descriptor, Is.Not.Null);\n        Assert.That(descriptor!.ImplementationType, Is.EqualTo(typeof(GlobalStatsManager)));\n    }\n\n    [Test]\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/StatisticsModuleTests.cs::StatisticsModuleTests::AddStatisticsServices_ShouldRegisterGlobalStatsManager",
+        "file": "Unit/Services/StatisticsModuleTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services.Statistics",
+        "class": "StatisticsModuleTests",
+        "test_name": "AddStatisticsServices_ShouldRegisterGlobalStatsManager",
+        "line": 26,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 12,
+        "declared_area_from_path": "Unit",
+        "construction_path": "service_collection_di",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": true,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 733
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/StatisticsModuleTests.cs\n# Lines 1-53 (test starts at line 26)\nusing ClubDoorman.Services.UserBan;\nusing Microsoft.Extensions.DependencyInjection;\nusing NUnit.Framework;\nusing ClubDoorman.Services.Statistics;\n\nnamespace ClubDoorman.Test.Unit.Services.Statistics;\n\n[TestFixture]\npublic class StatisticsModuleTests\n{\n    [Test]\n    public void AddStatisticsServices_ShouldRegisterIStatisticsService()\n    {\n        // Arrange\n        var services = new ServiceCollection();\n\n        // Act\n        services.AddStatisticsServices();\n\n        // Assert\n        var descriptor = services.FirstOrDefault(s => s.ServiceType == typeof(IStatisticsService));\n        Assert.That(descriptor, Is.Not.Null);\n        Assert.That(descriptor!.ImplementationType, Is.EqualTo(typeof(StatisticsService)));\n    }\n\n    [Test]\n    public void AddStatisticsServices_ShouldRegisterGlobalStatsManager()\n    {\n        // Arrange\n        var services = new ServiceCollection();\n\n        // Act\n        services.AddStatisticsServices();\n\n        // Assert\n        var descriptor = services.FirstOrDefault(s => s.ServiceType == typeof(GlobalStatsManager));\n        Assert.That(descriptor, Is.Not.Null);\n        Assert.That(descriptor!.ImplementationType, Is.EqualTo(typeof(GlobalStatsManager)));\n    }\n\n    [Test]\n    public void AddStatisticsServices_ShouldReturnServiceCollection()\n    {\n        // Arrange\n        var services = new ServiceCollection();\n\n        // Act\n        var result = services.AddStatisticsServices();\n\n        // Assert\n        Assert.That(result, Is.SameAs(services));\n    }\n}"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/TelegramModuleTests.cs::TelegramModuleTests::AddTelegramServices_ShouldRegisterITelegramBotClientWrapper",
+        "file": "Unit/Services/TelegramModuleTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services.Telegram",
+        "class": "TelegramModuleTests",
+        "test_name": "AddTelegramServices_ShouldRegisterITelegramBotClientWrapper",
+        "line": 11,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 12,
+        "declared_area_from_path": "Unit",
+        "construction_path": "service_collection_di",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": true,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "real_env_or_api"
+        ],
+        "_source_lineno": 756
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/TelegramModuleTests.cs\n# Lines 1-38 (test starts at line 11)\nusing ClubDoorman.Services.UserBan;\nusing Microsoft.Extensions.DependencyInjection;\nusing NUnit.Framework;\nusing ClubDoorman.Services.Telegram;\n\nnamespace ClubDoorman.Test.Unit.Services.Telegram;\n\n[TestFixture]\npublic class TelegramModuleTests\n{\n    [Test]\n    public void AddTelegramServices_ShouldRegisterITelegramBotClientWrapper()\n    {\n        // Arrange\n        var services = new ServiceCollection();\n\n        // Act\n        services.AddTelegramServices();\n\n        // Assert\n        var descriptor = services.FirstOrDefault(s => s.ServiceType == typeof(ITelegramBotClientWrapper));\n        Assert.That(descriptor, Is.Not.Null);\n        Assert.That(descriptor!.ImplementationType, Is.EqualTo(typeof(TelegramBotClientWrapper)));\n    }\n\n    [Test]\n    public void AddTelegramServices_ShouldReturnServiceCollection()\n    {\n        // Arrange\n        var services = new ServiceCollection();\n\n        // Act\n        var result = services.AddTelegramServices();\n\n        // Assert\n        Assert.That(result, Is.SameAs(services));\n    }\n}"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/UserManagementModuleTests.cs::UserManagementModuleTests::AddUserManagementServices_ShouldRegisterIUserManager",
+        "file": "Unit/Services/UserManagementModuleTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services.UserManagement",
+        "class": "UserManagementModuleTests",
+        "test_name": "AddUserManagementServices_ShouldRegisterIUserManager",
+        "line": 13,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 12,
+        "declared_area_from_path": "Unit",
+        "construction_path": "service_collection_di",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": true,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 807
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/UserManagementModuleTests.cs\n# Lines 1-43 (test starts at line 13)\nusing ClubDoorman.Services.UserBan;\nusing Microsoft.Extensions.DependencyInjection;\nusing NUnit.Framework;\nusing ClubDoorman.Services.UserManagement;\nusing ClubDoorman.Services.UserJoin;\nusing ClubDoorman.Features.UserJoin;\n\nnamespace ClubDoorman.Test.Unit.Services.UserManagement;\n\n[TestFixture]\npublic class UserManagementModuleTests\n{\n    [Test]\n    public void AddUserManagementServices_ShouldRegisterIUserManager()\n    {\n        // Arrange\n        var services = new ServiceCollection();\n\n        // Act\n        services.AddUserManagementServices();\n\n        // Assert\n        var descriptor = services.FirstOrDefault(s => s.ServiceType == typeof(IUserManager));\n        Assert.That(descriptor, Is.Not.Null);\n        Assert.That(descriptor!.ImplementationType, Is.EqualTo(typeof(UserManager)));\n    }\n\n    [Test]\n    public void AddUserManagementServices_ShouldRegisterApprovedUsersStorage()\n    {\n        // Arrange\n        var services = new ServiceCollection();\n\n        // Act\n        services.AddUserManagementServices();\n\n        // Assert\n        var descriptor = services.FirstOrDefault(s => s.ServiceType == typeof(ApprovedUsersStorage));\n        Assert.That(descriptor, Is.Not.Null);\n        Assert.That(descriptor!.ImplementationType, Is.EqualTo(typeof(ApprovedUsersStorage)));\n    }\n\n    [Test]\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/UserManagementModuleTests.cs::UserManagementModuleTests::AddUserManagementServices_ShouldRegisterApprovedUsersStorage",
+        "file": "Unit/Services/UserManagementModuleTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services.UserManagement",
+        "class": "UserManagementModuleTests",
+        "test_name": "AddUserManagementServices_ShouldRegisterApprovedUsersStorage",
+        "line": 28,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 12,
+        "declared_area_from_path": "Unit",
+        "construction_path": "service_collection_di",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": true,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 808
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/UserManagementModuleTests.cs\n# Lines 1-58 (test starts at line 28)\nusing ClubDoorman.Services.UserBan;\nusing Microsoft.Extensions.DependencyInjection;\nusing NUnit.Framework;\nusing ClubDoorman.Services.UserManagement;\nusing ClubDoorman.Services.UserJoin;\nusing ClubDoorman.Features.UserJoin;\n\nnamespace ClubDoorman.Test.Unit.Services.UserManagement;\n\n[TestFixture]\npublic class UserManagementModuleTests\n{\n    [Test]\n    public void AddUserManagementServices_ShouldRegisterIUserManager()\n    {\n        // Arrange\n        var services = new ServiceCollection();\n\n        // Act\n        services.AddUserManagementServices();\n\n        // Assert\n        var descriptor = services.FirstOrDefault(s => s.ServiceType == typeof(IUserManager));\n        Assert.That(descriptor, Is.Not.Null);\n        Assert.That(descriptor!.ImplementationType, Is.EqualTo(typeof(UserManager)));\n    }\n\n    [Test]\n    public void AddUserManagementServices_ShouldRegisterApprovedUsersStorage()\n    {\n        // Arrange\n        var services = new ServiceCollection();\n\n        // Act\n        services.AddUserManagementServices();\n\n        // Assert\n        var descriptor = services.FirstOrDefault(s => s.ServiceType == typeof(ApprovedUsersStorage));\n        Assert.That(descriptor, Is.Not.Null);\n        Assert.That(descriptor!.ImplementationType, Is.EqualTo(typeof(ApprovedUsersStorage)));\n    }\n\n    [Test]\n    public void AddUserManagementServices_ShouldRegisterIUserCleanupService()\n    {\n        // Arrange\n        var services = new ServiceCollection();\n\n        // Act\n        services.AddUserManagementServices();\n\n        // Assert\n        var descriptor = services.FirstOrDefault(s => s.ServiceType == typeof(IUserCleanupService));\n        Assert.That(descriptor, Is.Not.Null);\n        Assert.That(descriptor!.ImplementationType, Is.EqualTo(typeof(UserCleanupService)));\n    }\n\n    [Test]\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/UserManagementModuleTests.cs::UserManagementModuleTests::AddUserManagementServices_ShouldRegisterIUserCleanupService",
+        "file": "Unit/Services/UserManagementModuleTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services.UserManagement",
+        "class": "UserManagementModuleTests",
+        "test_name": "AddUserManagementServices_ShouldRegisterIUserCleanupService",
+        "line": 43,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 12,
+        "declared_area_from_path": "Unit",
+        "construction_path": "service_collection_di",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": true,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 809
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/UserManagementModuleTests.cs\n# Lines 13-73 (test starts at line 43)\n    [Test]\n    public void AddUserManagementServices_ShouldRegisterIUserManager()\n    {\n        // Arrange\n        var services = new ServiceCollection();\n\n        // Act\n        services.AddUserManagementServices();\n\n        // Assert\n        var descriptor = services.FirstOrDefault(s => s.ServiceType == typeof(IUserManager));\n        Assert.That(descriptor, Is.Not.Null);\n        Assert.That(descriptor!.ImplementationType, Is.EqualTo(typeof(UserManager)));\n    }\n\n    [Test]\n    public void AddUserManagementServices_ShouldRegisterApprovedUsersStorage()\n    {\n        // Arrange\n        var services = new ServiceCollection();\n\n        // Act\n        services.AddUserManagementServices();\n\n        // Assert\n        var descriptor = services.FirstOrDefault(s => s.ServiceType == typeof(ApprovedUsersStorage));\n        Assert.That(descriptor, Is.Not.Null);\n        Assert.That(descriptor!.ImplementationType, Is.EqualTo(typeof(ApprovedUsersStorage)));\n    }\n\n    [Test]\n    public void AddUserManagementServices_ShouldRegisterIUserCleanupService()\n    {\n        // Arrange\n        var services = new ServiceCollection();\n\n        // Act\n        services.AddUserManagementServices();\n\n        // Assert\n        var descriptor = services.FirstOrDefault(s => s.ServiceType == typeof(IUserCleanupService));\n        Assert.That(descriptor, Is.Not.Null);\n        Assert.That(descriptor!.ImplementationType, Is.EqualTo(typeof(UserCleanupService)));\n    }\n\n    [Test]\n    public void AddUserManagementServices_ShouldRegisterUserIndex()\n    {\n        // Arrange\n        var services = new ServiceCollection();\n\n        // Act\n        services.AddUserManagementServices();\n\n        // Assert\n        var descriptor = services.FirstOrDefault(s => s.ServiceType == typeof(IUserIndex));\n        Assert.That(descriptor, Is.Not.Null);\n        Assert.That(descriptor!.ImplementationType, Is.EqualTo(typeof(UserIndex)));\n    }\n\n    [Test]\n"
+    }
+  ]
+}

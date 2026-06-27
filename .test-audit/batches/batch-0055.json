@@ -1,0 +1,448 @@
+{
+  "schema_version": "test-audit-batch-v1",
+  "batch_no": 55,
+  "purpose": "local LLM audit input",
+  "instructions": "Return JSONL only. One audit object per input test. No markdown. No code edits.",
+  "tests": [
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/UserManagerExtendedTests.cs::UserManagerExtendedTests::RemoveApproval_ZeroUserId_ReturnsRemovalResult",
+        "file": "Unit/Services/UserManagerExtendedTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "UserManagerExtendedTests",
+        "test_name": "RemoveApproval_ZeroUserId_ReturnsRemovalResult",
+        "line": 211,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 13,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify"
+        ],
+        "_source_lineno": 823
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/UserManagerExtendedTests.cs\n# Lines 181-241 (test starts at line 211)\n        _userManagerMock.Setup(x => x.Approve(userId, null))\n            .Returns(ValueTask.CompletedTask);\n\n        // Act\n        await _userManagerMock.Object.Approve(userId);\n\n        // Assert\n        _userManagerMock.Verify(x => x.Approve(userId, null), Times.Once);\n    }\n\n    #endregion\n\n    #region RemoveApproval Tests\n\n    [Test]\n    public void RemoveApproval_ValidUserId_ReturnsRemovalResult()\n    {\n        // Arrange\n        var userId = 12345L;\n        _userManagerMock.Setup(x => x.RemoveApproval(userId, null, false))\n            .Returns(true);\n\n        // Act\n        var result = _userManagerMock.Object.RemoveApproval(userId);\n\n        // Assert\n        Assert.That(result, Is.True);\n        _userManagerMock.Verify(x => x.RemoveApproval(userId, null, false), Times.Once);\n    }\n\n    [Test]\n    public void RemoveApproval_ZeroUserId_ReturnsRemovalResult()\n    {\n        // Arrange\n        var userId = 0L;\n        _userManagerMock.Setup(x => x.RemoveApproval(userId, null, false))\n            .Returns(false);\n\n        // Act\n        var result = _userManagerMock.Object.RemoveApproval(userId);\n\n        // Assert\n        Assert.That(result, Is.False);\n        _userManagerMock.Verify(x => x.RemoveApproval(userId, null, false), Times.Once);\n    }\n\n    [Test]\n    public void RemoveApproval_NegativeUserId_ReturnsRemovalResult()\n    {\n        // Arrange\n        var userId = -12345L;\n        _userManagerMock.Setup(x => x.RemoveApproval(userId, null, false))\n            .Returns(false);\n\n        // Act\n        var result = _userManagerMock.Object.RemoveApproval(userId);\n\n        // Assert\n        Assert.That(result, Is.False);\n        _userManagerMock.Verify(x => x.RemoveApproval(userId, null, false), Times.Once);\n    }\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/UserManagerExtendedTests.cs::UserManagerExtendedTests::RemoveApproval_NegativeUserId_ReturnsRemovalResult",
+        "file": "Unit/Services/UserManagerExtendedTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "UserManagerExtendedTests",
+        "test_name": "RemoveApproval_NegativeUserId_ReturnsRemovalResult",
+        "line": 227,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 13,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify"
+        ],
+        "_source_lineno": 824
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/UserManagerExtendedTests.cs\n# Lines 197-257 (test starts at line 227)\n    {\n        // Arrange\n        var userId = 12345L;\n        _userManagerMock.Setup(x => x.RemoveApproval(userId, null, false))\n            .Returns(true);\n\n        // Act\n        var result = _userManagerMock.Object.RemoveApproval(userId);\n\n        // Assert\n        Assert.That(result, Is.True);\n        _userManagerMock.Verify(x => x.RemoveApproval(userId, null, false), Times.Once);\n    }\n\n    [Test]\n    public void RemoveApproval_ZeroUserId_ReturnsRemovalResult()\n    {\n        // Arrange\n        var userId = 0L;\n        _userManagerMock.Setup(x => x.RemoveApproval(userId, null, false))\n            .Returns(false);\n\n        // Act\n        var result = _userManagerMock.Object.RemoveApproval(userId);\n\n        // Assert\n        Assert.That(result, Is.False);\n        _userManagerMock.Verify(x => x.RemoveApproval(userId, null, false), Times.Once);\n    }\n\n    [Test]\n    public void RemoveApproval_NegativeUserId_ReturnsRemovalResult()\n    {\n        // Arrange\n        var userId = -12345L;\n        _userManagerMock.Setup(x => x.RemoveApproval(userId, null, false))\n            .Returns(false);\n\n        // Act\n        var result = _userManagerMock.Object.RemoveApproval(userId);\n\n        // Assert\n        Assert.That(result, Is.False);\n        _userManagerMock.Verify(x => x.RemoveApproval(userId, null, false), Times.Once);\n    }\n\n    [Test]\n    public void RemoveApproval_WithGroupId_ReturnsRemovalResult()\n    {\n        // Arrange\n        var userId = 12345L;\n        var groupId = 67890L;\n        _userManagerMock.Setup(x => x.RemoveApproval(userId, groupId, false))\n            .Returns(true);\n\n        // Act\n        var result = _userManagerMock.Object.RemoveApproval(userId, groupId);\n\n        // Assert\n        Assert.That(result, Is.True);\n        _userManagerMock.Verify(x => x.RemoveApproval(userId, groupId, false), Times.Once);\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/UserManagerExtendedTests.cs::UserManagerExtendedTests::RemoveApproval_WithGroupId_ReturnsRemovalResult",
+        "file": "Unit/Services/UserManagerExtendedTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "UserManagerExtendedTests",
+        "test_name": "RemoveApproval_WithGroupId_ReturnsRemovalResult",
+        "line": 243,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 14,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify"
+        ],
+        "_source_lineno": 825
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/UserManagerExtendedTests.cs\n# Lines 213-273 (test starts at line 243)\n    {\n        // Arrange\n        var userId = 0L;\n        _userManagerMock.Setup(x => x.RemoveApproval(userId, null, false))\n            .Returns(false);\n\n        // Act\n        var result = _userManagerMock.Object.RemoveApproval(userId);\n\n        // Assert\n        Assert.That(result, Is.False);\n        _userManagerMock.Verify(x => x.RemoveApproval(userId, null, false), Times.Once);\n    }\n\n    [Test]\n    public void RemoveApproval_NegativeUserId_ReturnsRemovalResult()\n    {\n        // Arrange\n        var userId = -12345L;\n        _userManagerMock.Setup(x => x.RemoveApproval(userId, null, false))\n            .Returns(false);\n\n        // Act\n        var result = _userManagerMock.Object.RemoveApproval(userId);\n\n        // Assert\n        Assert.That(result, Is.False);\n        _userManagerMock.Verify(x => x.RemoveApproval(userId, null, false), Times.Once);\n    }\n\n    [Test]\n    public void RemoveApproval_WithGroupId_ReturnsRemovalResult()\n    {\n        // Arrange\n        var userId = 12345L;\n        var groupId = 67890L;\n        _userManagerMock.Setup(x => x.RemoveApproval(userId, groupId, false))\n            .Returns(true);\n\n        // Act\n        var result = _userManagerMock.Object.RemoveApproval(userId, groupId);\n\n        // Assert\n        Assert.That(result, Is.True);\n        _userManagerMock.Verify(x => x.RemoveApproval(userId, groupId, false), Times.Once);\n    }\n\n    [Test]\n    public void RemoveApproval_WithRemoveAll_ReturnsRemovalResult()\n    {\n        // Arrange\n        var userId = 12345L;\n        var removeAll = true;\n        _userManagerMock.Setup(x => x.RemoveApproval(userId, null, removeAll))\n            .Returns(true);\n\n        // Act\n        var result = _userManagerMock.Object.RemoveApproval(userId, removeAll: removeAll);\n\n        // Assert\n        Assert.That(result, Is.True);\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/UserManagerExtendedTests.cs::UserManagerExtendedTests::RemoveApproval_WithRemoveAll_ReturnsRemovalResult",
+        "file": "Unit/Services/UserManagerExtendedTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "UserManagerExtendedTests",
+        "test_name": "RemoveApproval_WithRemoveAll_ReturnsRemovalResult",
+        "line": 260,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 14,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify"
+        ],
+        "_source_lineno": 826
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/UserManagerExtendedTests.cs\n# Lines 230-290 (test starts at line 260)\n        // Arrange\n        var userId = -12345L;\n        _userManagerMock.Setup(x => x.RemoveApproval(userId, null, false))\n            .Returns(false);\n\n        // Act\n        var result = _userManagerMock.Object.RemoveApproval(userId);\n\n        // Assert\n        Assert.That(result, Is.False);\n        _userManagerMock.Verify(x => x.RemoveApproval(userId, null, false), Times.Once);\n    }\n\n    [Test]\n    public void RemoveApproval_WithGroupId_ReturnsRemovalResult()\n    {\n        // Arrange\n        var userId = 12345L;\n        var groupId = 67890L;\n        _userManagerMock.Setup(x => x.RemoveApproval(userId, groupId, false))\n            .Returns(true);\n\n        // Act\n        var result = _userManagerMock.Object.RemoveApproval(userId, groupId);\n\n        // Assert\n        Assert.That(result, Is.True);\n        _userManagerMock.Verify(x => x.RemoveApproval(userId, groupId, false), Times.Once);\n    }\n\n    [Test]\n    public void RemoveApproval_WithRemoveAll_ReturnsRemovalResult()\n    {\n        // Arrange\n        var userId = 12345L;\n        var removeAll = true;\n        _userManagerMock.Setup(x => x.RemoveApproval(userId, null, removeAll))\n            .Returns(true);\n\n        // Act\n        var result = _userManagerMock.Object.RemoveApproval(userId, removeAll: removeAll);\n\n        // Assert\n        Assert.That(result, Is.True);\n        _userManagerMock.Verify(x => x.RemoveApproval(userId, null, removeAll), Times.Once);\n    }\n\n    [Test]\n    public void RemoveApproval_WithGroupIdAndRemoveAll_ReturnsRemovalResult()\n    {\n        // Arrange\n        var userId = 12345L;\n        var groupId = 67890L;\n        var removeAll = true;\n        _userManagerMock.Setup(x => x.RemoveApproval(userId, groupId, removeAll))\n            .Returns(true);\n\n        // Act\n        var result = _userManagerMock.Object.RemoveApproval(userId, groupId, removeAll);\n\n        // Assert\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/UserManagerExtendedTests.cs::UserManagerExtendedTests::RemoveApproval_WithGroupIdAndRemoveAll_ReturnsRemovalResult",
+        "file": "Unit/Services/UserManagerExtendedTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "UserManagerExtendedTests",
+        "test_name": "RemoveApproval_WithGroupIdAndRemoveAll_ReturnsRemovalResult",
+        "line": 277,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 15,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify"
+        ],
+        "_source_lineno": 827
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/UserManagerExtendedTests.cs\n# Lines 247-307 (test starts at line 277)\n        var userId = 12345L;\n        var groupId = 67890L;\n        _userManagerMock.Setup(x => x.RemoveApproval(userId, groupId, false))\n            .Returns(true);\n\n        // Act\n        var result = _userManagerMock.Object.RemoveApproval(userId, groupId);\n\n        // Assert\n        Assert.That(result, Is.True);\n        _userManagerMock.Verify(x => x.RemoveApproval(userId, groupId, false), Times.Once);\n    }\n\n    [Test]\n    public void RemoveApproval_WithRemoveAll_ReturnsRemovalResult()\n    {\n        // Arrange\n        var userId = 12345L;\n        var removeAll = true;\n        _userManagerMock.Setup(x => x.RemoveApproval(userId, null, removeAll))\n            .Returns(true);\n\n        // Act\n        var result = _userManagerMock.Object.RemoveApproval(userId, removeAll: removeAll);\n\n        // Assert\n        Assert.That(result, Is.True);\n        _userManagerMock.Verify(x => x.RemoveApproval(userId, null, removeAll), Times.Once);\n    }\n\n    [Test]\n    public void RemoveApproval_WithGroupIdAndRemoveAll_ReturnsRemovalResult()\n    {\n        // Arrange\n        var userId = 12345L;\n        var groupId = 67890L;\n        var removeAll = true;\n        _userManagerMock.Setup(x => x.RemoveApproval(userId, groupId, removeAll))\n            .Returns(true);\n\n        // Act\n        var result = _userManagerMock.Object.RemoveApproval(userId, groupId, removeAll);\n\n        // Assert\n        Assert.That(result, Is.True);\n        _userManagerMock.Verify(x => x.RemoveApproval(userId, groupId, removeAll), Times.Once);\n    }\n\n    #endregion\n\n    #region InBanlist Tests\n\n    [Test]\n    public async Task InBanlist_ValidUserId_ReturnsBanlistStatus()\n    {\n        // Arrange\n        var userId = 12345L;\n        _userManagerMock.Setup(x => x.InBanlist(userId))\n            .ReturnsAsync(true);\n\n        // Act\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/UserManagerExtendedTests.cs::UserManagerExtendedTests::InBanlist_ValidUserId_ReturnsBanlistStatus",
+        "file": "Unit/Services/UserManagerExtendedTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "UserManagerExtendedTests",
+        "test_name": "InBanlist_ValidUserId_ReturnsBanlistStatus",
+        "line": 299,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 13,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify"
+        ],
+        "_source_lineno": 828
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/UserManagerExtendedTests.cs\n# Lines 269-329 (test starts at line 299)\n        // Act\n        var result = _userManagerMock.Object.RemoveApproval(userId, removeAll: removeAll);\n\n        // Assert\n        Assert.That(result, Is.True);\n        _userManagerMock.Verify(x => x.RemoveApproval(userId, null, removeAll), Times.Once);\n    }\n\n    [Test]\n    public void RemoveApproval_WithGroupIdAndRemoveAll_ReturnsRemovalResult()\n    {\n        // Arrange\n        var userId = 12345L;\n        var groupId = 67890L;\n        var removeAll = true;\n        _userManagerMock.Setup(x => x.RemoveApproval(userId, groupId, removeAll))\n            .Returns(true);\n\n        // Act\n        var result = _userManagerMock.Object.RemoveApproval(userId, groupId, removeAll);\n\n        // Assert\n        Assert.That(result, Is.True);\n        _userManagerMock.Verify(x => x.RemoveApproval(userId, groupId, removeAll), Times.Once);\n    }\n\n    #endregion\n\n    #region InBanlist Tests\n\n    [Test]\n    public async Task InBanlist_ValidUserId_ReturnsBanlistStatus()\n    {\n        // Arrange\n        var userId = 12345L;\n        _userManagerMock.Setup(x => x.InBanlist(userId))\n            .ReturnsAsync(true);\n\n        // Act\n        var result = await _userManagerMock.Object.InBanlist(userId);\n\n        // Assert\n        Assert.That(result, Is.True);\n        _userManagerMock.Verify(x => x.InBanlist(userId), Times.Once);\n    }\n\n    [Test]\n    public async Task InBanlist_ZeroUserId_ReturnsBanlistStatus()\n    {\n        // Arrange\n        var userId = 0L;\n        _userManagerMock.Setup(x => x.InBanlist(userId))\n            .ReturnsAsync(false);\n\n        // Act\n        var result = await _userManagerMock.Object.InBanlist(userId);\n\n        // Assert\n        Assert.That(result, Is.False);\n        _userManagerMock.Verify(x => x.InBanlist(userId), Times.Once);\n    }\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/UserManagerExtendedTests.cs::UserManagerExtendedTests::InBanlist_ZeroUserId_ReturnsBanlistStatus",
+        "file": "Unit/Services/UserManagerExtendedTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "UserManagerExtendedTests",
+        "test_name": "InBanlist_ZeroUserId_ReturnsBanlistStatus",
+        "line": 315,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 13,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify"
+        ],
+        "_source_lineno": 829
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/UserManagerExtendedTests.cs\n# Lines 285-345 (test starts at line 315)\n            .Returns(true);\n\n        // Act\n        var result = _userManagerMock.Object.RemoveApproval(userId, groupId, removeAll);\n\n        // Assert\n        Assert.That(result, Is.True);\n        _userManagerMock.Verify(x => x.RemoveApproval(userId, groupId, removeAll), Times.Once);\n    }\n\n    #endregion\n\n    #region InBanlist Tests\n\n    [Test]\n    public async Task InBanlist_ValidUserId_ReturnsBanlistStatus()\n    {\n        // Arrange\n        var userId = 12345L;\n        _userManagerMock.Setup(x => x.InBanlist(userId))\n            .ReturnsAsync(true);\n\n        // Act\n        var result = await _userManagerMock.Object.InBanlist(userId);\n\n        // Assert\n        Assert.That(result, Is.True);\n        _userManagerMock.Verify(x => x.InBanlist(userId), Times.Once);\n    }\n\n    [Test]\n    public async Task InBanlist_ZeroUserId_ReturnsBanlistStatus()\n    {\n        // Arrange\n        var userId = 0L;\n        _userManagerMock.Setup(x => x.InBanlist(userId))\n            .ReturnsAsync(false);\n\n        // Act\n        var result = await _userManagerMock.Object.InBanlist(userId);\n\n        // Assert\n        Assert.That(result, Is.False);\n        _userManagerMock.Verify(x => x.InBanlist(userId), Times.Once);\n    }\n\n    [Test]\n    public async Task InBanlist_NegativeUserId_ReturnsBanlistStatus()\n    {\n        // Arrange\n        var userId = -12345L;\n        _userManagerMock.Setup(x => x.InBanlist(userId))\n            .ReturnsAsync(false);\n\n        // Act\n        var result = await _userManagerMock.Object.InBanlist(userId);\n\n        // Assert\n        Assert.That(result, Is.False);\n        _userManagerMock.Verify(x => x.InBanlist(userId), Times.Once);\n    }\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/UserManagerExtendedTests.cs::UserManagerExtendedTests::InBanlist_NegativeUserId_ReturnsBanlistStatus",
+        "file": "Unit/Services/UserManagerExtendedTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "UserManagerExtendedTests",
+        "test_name": "InBanlist_NegativeUserId_ReturnsBanlistStatus",
+        "line": 331,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 13,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify"
+        ],
+        "_source_lineno": 830
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/UserManagerExtendedTests.cs\n# Lines 301-361 (test starts at line 331)\n    {\n        // Arrange\n        var userId = 12345L;\n        _userManagerMock.Setup(x => x.InBanlist(userId))\n            .ReturnsAsync(true);\n\n        // Act\n        var result = await _userManagerMock.Object.InBanlist(userId);\n\n        // Assert\n        Assert.That(result, Is.True);\n        _userManagerMock.Verify(x => x.InBanlist(userId), Times.Once);\n    }\n\n    [Test]\n    public async Task InBanlist_ZeroUserId_ReturnsBanlistStatus()\n    {\n        // Arrange\n        var userId = 0L;\n        _userManagerMock.Setup(x => x.InBanlist(userId))\n            .ReturnsAsync(false);\n\n        // Act\n        var result = await _userManagerMock.Object.InBanlist(userId);\n\n        // Assert\n        Assert.That(result, Is.False);\n        _userManagerMock.Verify(x => x.InBanlist(userId), Times.Once);\n    }\n\n    [Test]\n    public async Task InBanlist_NegativeUserId_ReturnsBanlistStatus()\n    {\n        // Arrange\n        var userId = -12345L;\n        _userManagerMock.Setup(x => x.InBanlist(userId))\n            .ReturnsAsync(false);\n\n        // Act\n        var result = await _userManagerMock.Object.InBanlist(userId);\n\n        // Assert\n        Assert.That(result, Is.False);\n        _userManagerMock.Verify(x => x.InBanlist(userId), Times.Once);\n    }\n\n    [Test]\n    public async Task InBanlist_MaxLongUserId_ReturnsBanlistStatus()\n    {\n        // Arrange\n        var userId = long.MaxValue;\n        _userManagerMock.Setup(x => x.InBanlist(userId))\n            .ReturnsAsync(false);\n\n        // Act\n        var result = await _userManagerMock.Object.InBanlist(userId);\n\n        // Assert\n        Assert.That(result, Is.False);\n        _userManagerMock.Verify(x => x.InBanlist(userId), Times.Once);\n    }\n"
+    }
+  ]
+}

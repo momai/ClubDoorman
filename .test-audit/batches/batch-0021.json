@@ -1,0 +1,468 @@
+{
+  "schema_version": "test-audit-batch-v1",
+  "batch_no": 21,
+  "purpose": "local LLM audit input",
+  "instructions": "Return JSONL only. One audit object per input test. No markdown. No code edits.",
+  "tests": [
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Integration/AiAnalysisTests.cs::AiAnalysisTests::E2E_AI_Analysis_AdminButton_Own_ShouldApproveUser",
+        "file": "Integration/AiAnalysisTests.cs",
+        "namespace": "ClubDoorman.Test.Integration",
+        "class": "AiAnalysisTests",
+        "test_name": "E2E_AI_Analysis_AdminButton_Own_ShouldApproveUser",
+        "line": 262,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 43,
+        "declared_area_from_path": "Integration",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": true,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": true,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": true,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "message_handler_test_factory",
+          "fake_services_factory",
+          "real_env_or_api"
+        ],
+        "_source_lineno": 26
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Integration/AiAnalysisTests.cs\n# Lines 232-292 (test starts at line 262)\n        var messageHandler = factory.CreateMessageHandler();\n\n        var suspiciousUser = new User\n        {\n            Id = 12345,\n            FirstName = \"🔥🔥🔥\",\n            LastName = \"💰💰💰\",\n            Username = \"money_maker_2024\"\n        };\n\n        var message = new Message\n        {\n            From = suspiciousUser,\n            Chat = new Chat { Id = -100123456789, Type = ChatType.Supergroup },\n            Text = \"Привет всем!\",\n            Date = DateTime.UtcNow\n        };\n\n        var update = new Update { Message = message };\n\n        // Act - обрабатываем сообщение через MessageHandler\n        await messageHandler.HandleAsync(update);\n\n        // Assert - проверяем, что обработка прошла без ошибок\n        messageHandler.Should().NotBeNull();\n\n        // Проверяем, что фейковый бот получил сообщения\n        _fakeBot.SentMessages.Should().NotBeEmpty();\n    }\n\n    [Test]\n    public async Task E2E_AI_Analysis_AdminButton_Own_ShouldApproveUser()\n    {\n        // Arrange - используем новую фабрику фейковых сервисов\n        var factory = new FakeServicesFactory(_fakeBot, LoggerFactory.Create(builder => builder.AddConsole()), _appConfig);\n        var callbackHandler = factory.CreateCallbackQueryHandler();\n\n        var user = new User { Id = 12345, FirstName = \"Test\", LastName = \"User\" };\n\n        var adminMessage = new Message\n        {\n            From = new User { Id = 999999, FirstName = \"Admin\" },\n            Chat = new Chat { Id = _appConfig.AdminChatId, Type = ChatType.Private },\n            Text = \"AI анализ профиля пользователя\",\n            ReplyMarkup = new InlineKeyboardMarkup(new[]\n            {\n                new[] { new InlineKeyboardButton(\"🥰 свой\") { CallbackData = \"approve_user_12345\" } },\n                new[] { new InlineKeyboardButton(\"🤖 бан\") { CallbackData = \"ban_user_12345\" } },\n                new[] { new InlineKeyboardButton(\"😶 пропуск\") { CallbackData = \"skip_user_12345\" } }\n            })\n        };\n\n        var callbackQuery = new CallbackQuery\n        {\n            Id = \"test_callback_id\",\n            From = new User { Id = 999999, FirstName = \"Admin\" },\n            Message = adminMessage,\n            Data = \"approve_user_12345\"\n        };\n\n        // Act - обрабатываем callback через фейковый обработчик\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Integration/AiAnalysisTests.cs::AiAnalysisTests::E2E_AI_Analysis_AdminButton_Ban_ShouldBanUser",
+        "file": "Integration/AiAnalysisTests.cs",
+        "namespace": "ClubDoorman.Test.Integration",
+        "class": "AiAnalysisTests",
+        "test_name": "E2E_AI_Analysis_AdminButton_Ban_ShouldBanUser",
+        "line": 308,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 39,
+        "declared_area_from_path": "Integration",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": true,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": true,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": true,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "message_handler_test_factory",
+          "fake_services_factory",
+          "real_env_or_api"
+        ],
+        "_source_lineno": 27
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Integration/AiAnalysisTests.cs\n# Lines 278-338 (test starts at line 308)\n                new[] { new InlineKeyboardButton(\"🥰 свой\") { CallbackData = \"approve_user_12345\" } },\n                new[] { new InlineKeyboardButton(\"🤖 бан\") { CallbackData = \"ban_user_12345\" } },\n                new[] { new InlineKeyboardButton(\"😶 пропуск\") { CallbackData = \"skip_user_12345\" } }\n            })\n        };\n\n        var callbackQuery = new CallbackQuery\n        {\n            Id = \"test_callback_id\",\n            From = new User { Id = 999999, FirstName = \"Admin\" },\n            Message = adminMessage,\n            Data = \"approve_user_12345\"\n        };\n\n        // Act - обрабатываем callback через фейковый обработчик\n        await callbackHandler.HandleAsync(callbackQuery);\n\n        // Assert - проверяем, что callback был обработан\n        callbackHandler.CallbackRequests.Should().HaveCount(1);\n        callbackHandler.CallbackResults.Should().HaveCount(1);\n\n        var result = callbackHandler.CallbackResults.First();\n        result.CallbackQueryId.Should().Be(\"test_callback_id\");\n        result.Data.Should().Be(\"approve_user_12345\");\n        result.WasAnswered.Should().BeTrue();\n\n        // Проверяем, что фейковый бот ответил на callback\n        _fakeBot.AnsweredCallbackQueries.Should().HaveCount(1);\n    }\n\n    [Test]\n    public async Task E2E_AI_Analysis_AdminButton_Ban_ShouldBanUser()\n    {\n        // Arrange - используем новую фабрику фейковых сервисов\n        var factory = new FakeServicesFactory(_fakeBot, LoggerFactory.Create(builder => builder.AddConsole()), _appConfig);\n        var callbackHandler = factory.CreateCallbackQueryHandler();\n\n        var user = new User { Id = 12345, FirstName = \"Test\", LastName = \"User\" };\n        var adminMessage = new Message\n        {\n            From = new User { Id = 999999, FirstName = \"Admin\" },\n            Chat = new Chat { Id = _appConfig.AdminChatId, Type = ChatType.Private },\n            Text = \"AI анализ профиля пользователя\",\n            ReplyMarkup = new InlineKeyboardMarkup(new[]\n            {\n                new[] { new InlineKeyboardButton(\"🥰 свой\") { CallbackData = \"approve_user_12345\" } },\n                new[] { new InlineKeyboardButton(\"🤖 бан\") { CallbackData = \"ban_user_12345\" } },\n                new[] { new InlineKeyboardButton(\"😶 пропуск\") { CallbackData = \"skip_user_12345\" } }\n            })\n        };\n\n        var callbackQuery = new CallbackQuery\n        {\n            Id = \"test_callback_id\",\n            From = new User { Id = 999999, FirstName = \"Admin\" },\n            Message = adminMessage,\n            Data = \"ban_user_12345\"\n        };\n\n        // Act - обрабатываем callback через фейковый обработчик\n        await callbackHandler.HandleAsync(callbackQuery);\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Integration/AiAnalysisTests.cs::AiAnalysisTests::E2E_AI_Analysis_AdminButton_Skip_ShouldSkipUser",
+        "file": "Integration/AiAnalysisTests.cs",
+        "namespace": "ClubDoorman.Test.Integration",
+        "class": "AiAnalysisTests",
+        "test_name": "E2E_AI_Analysis_AdminButton_Skip_ShouldSkipUser",
+        "line": 350,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 39,
+        "declared_area_from_path": "Integration",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": true,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": true,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": true,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "message_handler_test_factory",
+          "fake_services_factory",
+          "real_env_or_api"
+        ],
+        "_source_lineno": 28
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Integration/AiAnalysisTests.cs\n# Lines 320-380 (test starts at line 350)\n            Text = \"AI анализ профиля пользователя\",\n            ReplyMarkup = new InlineKeyboardMarkup(new[]\n            {\n                new[] { new InlineKeyboardButton(\"🥰 свой\") { CallbackData = \"approve_user_12345\" } },\n                new[] { new InlineKeyboardButton(\"🤖 бан\") { CallbackData = \"ban_user_12345\" } },\n                new[] { new InlineKeyboardButton(\"😶 пропуск\") { CallbackData = \"skip_user_12345\" } }\n            })\n        };\n\n        var callbackQuery = new CallbackQuery\n        {\n            Id = \"test_callback_id\",\n            From = new User { Id = 999999, FirstName = \"Admin\" },\n            Message = adminMessage,\n            Data = \"ban_user_12345\"\n        };\n\n        // Act - обрабатываем callback через фейковый обработчик\n        await callbackHandler.HandleAsync(callbackQuery);\n\n        // Assert - проверяем, что callback был обработан\n        callbackHandler.CallbackRequests.Should().HaveCount(1);\n        callbackHandler.CallbackResults.Should().HaveCount(1);\n\n        var result = callbackHandler.CallbackResults.First();\n        result.CallbackQueryId.Should().Be(\"test_callback_id\");\n        result.Data.Should().Be(\"ban_user_12345\");\n        result.WasAnswered.Should().BeTrue();\n    }\n\n    [Test]\n    public async Task E2E_AI_Analysis_AdminButton_Skip_ShouldSkipUser()\n    {\n        // Arrange - используем новую фабрику фейковых сервисов\n        var factory = new FakeServicesFactory(_fakeBot, LoggerFactory.Create(builder => builder.AddConsole()), _appConfig);\n        var callbackHandler = factory.CreateCallbackQueryHandler();\n\n        var user = new User { Id = 12345, FirstName = \"Test\", LastName = \"User\" };\n        var adminMessage = new Message\n        {\n            From = new User { Id = 999999, FirstName = \"Admin\" },\n            Chat = new Chat { Id = _appConfig.AdminChatId, Type = ChatType.Private },\n            Text = \"AI анализ профиля пользователя\",\n            ReplyMarkup = new InlineKeyboardMarkup(new[]\n            {\n                new[] { new InlineKeyboardButton(\"🥰 свой\") { CallbackData = \"approve_user_12345\" } },\n                new[] { new InlineKeyboardButton(\"🤖 бан\") { CallbackData = \"ban_user_12345\" } },\n                new[] { new InlineKeyboardButton(\"😶 пропуск\") { CallbackData = \"skip_user_12345\" } }\n            })\n        };\n\n        var callbackQuery = new CallbackQuery\n        {\n            Id = \"test_callback_id\",\n            From = new User { Id = 999999, FirstName = \"Admin\" },\n            Message = adminMessage,\n            Data = \"skip_user_12345\"\n        };\n\n        // Act - обрабатываем callback через фейковый обработчик\n        await callbackHandler.HandleAsync(callbackQuery);\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Integration/MessageHandlerBanBasicTests.cs::MessageHandlerBanBasicTests::DeleteAndReportMessage_WhenModerationReturnsDelete_DeletesMessage",
+        "file": "Integration/MessageHandlerBanBasicTests.cs",
+        "namespace": "ClubDoorman.Test.Integration",
+        "class": "MessageHandlerBanBasicTests",
+        "test_name": "DeleteAndReportMessage_WhenModerationReturnsDelete_DeletesMessage",
+        "line": 60,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "integration",
+          "autofixture"
+        ],
+        "body_lines": 24,
+        "declared_area_from_path": "Integration",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": true,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": true,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "message_handler_test_factory",
+          "testkit_autofixture"
+        ],
+        "_source_lineno": 62
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Integration/MessageHandlerBanBasicTests.cs\n# Lines 30-85 (test starts at line 60)\n\n/// <summary>\n/// Базовые тесты банов с использованием MessageHandlerTestFactory\n/// Демонстрирует рефакторинг старых тестов на новую инфраструктуру\n/// <tags>integration, bans, message-handler, test-kit</tags>\n/// </summary>\n[TestFixture]\n[Category(\"integration\")]\npublic class MessageHandlerBanBasicTests\n{\n    private MessageHandlerTestFactory _factory = null!;\n    private MessageHandler _handler = null!;\n    private Mock<ITelegramBotClientWrapper> _botMock = null!;\n    private Mock<IModerationFacade> _moderationServiceMock = null!;\n\n    [SetUp]\n    public void SetUp()\n    {\n        _factory = new MessageHandlerTestFactory()\n            .WithStandardMocks()\n            .WithBanMocks();\n\n        _botMock = _factory.BotMock;\n        _moderationServiceMock = _factory.ModerationServiceMock;\n\n        _handler = _factory.CreateMessageHandler();\n    }\n\n    [Test]\n    [Category(\"autofixture\")]\n    public async Task DeleteAndReportMessage_WhenModerationReturnsDelete_DeletesMessage()\n    {\n    // This test asserts that a moderation Delete leads to exactly one call to DeleteMessageWithOutcomeAsync.\n    // Legacy DeleteMessage path is deprecated in this scenario.\n        // Arrange - use envelope tracking because Telegram.Bot MessageId remains 0 in tests.\n        var fakeClient = TestKitTelegram.CreateFakeClient();\n        var envelope = MessageEnvelope.CreateTest(\n            messageId: 12345,\n            userId: 123456789,\n            chatId: -1001234567890,\n            text: \"spam\");\n        var message = TestKitTelegram.CreateMessageFromEnvelope(fakeClient, envelope);\n\n        // Настраиваем модерацию через умные моки\n        _moderationServiceMock.Setup(x => x.CheckMessageAsync(message))\n            .ReturnsAsync(new ModerationResult(ModerationAction.Delete, \"ML решил что это спам\"));\n        var handler = _factory.CreateMessageHandlerWithFake(fakeClient);\n\n        // Act\n        var update = new Update { Message = message };\n        await handler.HandleAsync(update, CancellationToken.None);\n\n        // Assert\n        Assert.That(fakeClient.WasMessageDeleted(envelope), Is.True);\n    }\n}\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Integration/UserJoinFacadeIntegrationTests.cs::UserJoinFacadeIntegrationTests::CreateUserJoinFacade_WithBuilder_ReturnsValidFacade",
+        "file": "Integration/UserJoinFacadeIntegrationTests.cs",
+        "namespace": "ClubDoorman.Test.Integration",
+        "class": "UserJoinFacadeIntegrationTests",
+        "test_name": "CreateUserJoinFacade_WithBuilder_ReturnsValidFacade",
+        "line": 48,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "integration",
+          "user-join-facade"
+        ],
+        "body_lines": 10,
+        "declared_area_from_path": "Integration",
+        "construction_path": "testkit_autofixture",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": true,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "testkit_autofixture"
+        ],
+        "_source_lineno": 95
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Integration/UserJoinFacadeIntegrationTests.cs\n# Lines 18-78 (test starts at line 48)\n/// <summary>\n/// Интеграционные тесты для UserJoinFacade\n/// <tags>integration, user-join-facade, new-members, proxy, external-calls</tags>\n/// </summary>\n[TestFixture]\n[Category(\"integration\")]\n[Category(\"user-join-facade\")]\npublic class UserJoinFacadeIntegrationTests\n{\n    private UserJoinFacadeBuilder _builder = null!;\n    private UserJoinFacade _userJoinFacade = null!;\n    private Mock<IUserJoinPolicy> _userJoinPolicyMock = null!;\n    private Mock<ILogger<UserJoinFacade>> _loggerMock = null!;\n\n    [SetUp]\n    public void Setup()\n    {\n        _builder = TK.CreateUserJoinFacadeBuilder()\n            .WithStandardMocks();\n        _userJoinFacade = _builder.Build();\n        _userJoinPolicyMock = _builder.UserJoinPolicyMock;\n        _loggerMock = _builder.LoggerMock;\n    }\n\n    #region POC Tests (существующие)\n\n    /// <summary>\n    /// POC: Проверка создания UserJoinFacade через билдер\n    /// <tags>poc, builder, user-join-facade</tags>\n    /// </summary>\n    [Test]\n    public void CreateUserJoinFacade_WithBuilder_ReturnsValidFacade()\n    {\n        // Arrange & Act\n        var userJoinService = TK.CreateUserJoinFacadeBuilder()\n            .WithStandardMocks()\n            .Build();\n\n        // Assert\n        Assert.That(userJoinService, Is.Not.Null);\n        Assert.That(userJoinService, Is.InstanceOf<UserJoinFacade>());\n    }\n\n    /// <summary>\n    /// POC: Проверка доступа к зависимостям через билдер\n    /// <tags>poc, builder, dependencies</tags>\n    /// </summary>\n    [Test]\n    public void Builder_ProvidesAccessToDependencies()\n    {\n        // Arrange\n        var builder = TK.CreateUserJoinFacadeBuilder()\n            .WithStandardMocks();\n\n        // Act & Assert\n        Assert.That(builder.UserJoinPolicyMock, Is.Not.Null);\n        Assert.That(builder.LoggerMock, Is.Not.Null);\n    }\n\n    /// <summary>\n    /// POC: Проверка проксирования вызова HandleNewMembersAsync\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Integration/UserJoinFacadeIntegrationTests.cs::UserJoinFacadeIntegrationTests::Builder_ProvidesAccessToDependencies",
+        "file": "Integration/UserJoinFacadeIntegrationTests.cs",
+        "namespace": "ClubDoorman.Test.Integration",
+        "class": "UserJoinFacadeIntegrationTests",
+        "test_name": "Builder_ProvidesAccessToDependencies",
+        "line": 65,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "integration",
+          "user-join-facade"
+        ],
+        "body_lines": 9,
+        "declared_area_from_path": "Integration",
+        "construction_path": "testkit_autofixture",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": true,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "testkit_autofixture"
+        ],
+        "_source_lineno": 96
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Integration/UserJoinFacadeIntegrationTests.cs\n# Lines 35-95 (test starts at line 65)\n        _builder = TK.CreateUserJoinFacadeBuilder()\n            .WithStandardMocks();\n        _userJoinFacade = _builder.Build();\n        _userJoinPolicyMock = _builder.UserJoinPolicyMock;\n        _loggerMock = _builder.LoggerMock;\n    }\n\n    #region POC Tests (существующие)\n\n    /// <summary>\n    /// POC: Проверка создания UserJoinFacade через билдер\n    /// <tags>poc, builder, user-join-facade</tags>\n    /// </summary>\n    [Test]\n    public void CreateUserJoinFacade_WithBuilder_ReturnsValidFacade()\n    {\n        // Arrange & Act\n        var userJoinService = TK.CreateUserJoinFacadeBuilder()\n            .WithStandardMocks()\n            .Build();\n\n        // Assert\n        Assert.That(userJoinService, Is.Not.Null);\n        Assert.That(userJoinService, Is.InstanceOf<UserJoinFacade>());\n    }\n\n    /// <summary>\n    /// POC: Проверка доступа к зависимостям через билдер\n    /// <tags>poc, builder, dependencies</tags>\n    /// </summary>\n    [Test]\n    public void Builder_ProvidesAccessToDependencies()\n    {\n        // Arrange\n        var builder = TK.CreateUserJoinFacadeBuilder()\n            .WithStandardMocks();\n\n        // Act & Assert\n        Assert.That(builder.UserJoinPolicyMock, Is.Not.Null);\n        Assert.That(builder.LoggerMock, Is.Not.Null);\n    }\n\n    /// <summary>\n    /// POC: Проверка проксирования вызова HandleNewMembersAsync\n    /// <tags>poc, proxy, handle-new-members</tags>\n    /// </summary>\n    [Test]\n    public async Task HandleNewMembersAsync_ValidMessage_ProxiesToPolicy()\n    {\n        // Arrange\n        var (_, envelope, message, _) = TK.CreateNewUserScenario();\n\n        // Act\n        await _userJoinFacade.HandleNewMembersAsync(message, CancellationToken.None);\n\n        // Assert\n        _userJoinPolicyMock.Verify(x => x.HandleNewMembersAsync(message, CancellationToken.None), Times.Once);\n    }\n\n    /// <summary>\n    /// POC: Проверка проксирования вызова ProcessNewUserAsync\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestInfrastructure/MessageHandlerTestFactoryTests.cs::MessageHandlerTestFactoryTests::CreateMessageHandler_ReturnsWorkingInstance",
+        "file": "TestInfrastructure/MessageHandlerTestFactoryTests.cs",
+        "namespace": "ClubDoorman.TestInfrastructure",
+        "class": "MessageHandlerTestFactoryTests",
+        "test_name": "CreateMessageHandler_ReturnsWorkingInstance",
+        "line": 25,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "test-infrastructure"
+        ],
+        "body_lines": 11,
+        "declared_area_from_path": "TestInfrastructure",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "message_handler_test_factory"
+        ],
+        "_source_lineno": 164
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestInfrastructure/MessageHandlerTestFactoryTests.cs\n# Lines 1-55 (test starts at line 25)\nusing ClubDoorman.Services.BadMessage;\nusing ClubDoorman.Services.Moderation;\nusing ClubDoorman.Services.UserBan;\nusing ClubDoorman.Handlers;\nusing Microsoft.Extensions.Logging;\nusing Microsoft.Extensions.Logging.Abstractions;\nusing Moq;\nusing NUnit.Framework;\nusing Telegram.Bot;\nusing ClubDoorman.Services;\nusing ClubDoorman.Services.UserBan;\nusing ClubDoorman.Services.Captcha;\nusing ClubDoorman.Services.Handlers;\n\nnamespace ClubDoorman.TestInfrastructure;\n\n/// <summary>\n/// Тесты для MessageHandlerTestFactory\n/// Автоматически сгенерировано\n/// </summary>\n[TestFixture]\n[Category(\"test-infrastructure\")]\npublic class MessageHandlerTestFactoryTests\n{\n    [Test]\n    public void CreateMessageHandler_ReturnsWorkingInstance()\n    {\n        // Arrange\n        var factory = new MessageHandlerTestFactory();\n\n        // Act\n        var instance = factory.CreateMessageHandler();\n\n        // Assert\n        Assert.That(instance, Is.Not.Null);\n        Assert.That(instance, Is.InstanceOf<MessageHandler>());\n    }\n\n    [Test]\n    public void CreateMessageHandler_ConfiguresAllDependencies()\n    {\n        // Arrange\n        var factory = new MessageHandlerTestFactory();\n\n        // Act\n        var instance = factory.CreateMessageHandler();\n\n        // Assert\n        // Проверяем что все зависимости настроены\n        Assert.That(instance, Is.Not.Null);\n    }\n\n    [Test]\n    public void CreateMessageHandler_CreatesFreshInstanceEachTime()\n    {\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestInfrastructure/MessageHandlerTestFactoryTests.cs::MessageHandlerTestFactoryTests::CreateMessageHandler_ConfiguresAllDependencies",
+        "file": "TestInfrastructure/MessageHandlerTestFactoryTests.cs",
+        "namespace": "ClubDoorman.TestInfrastructure",
+        "class": "MessageHandlerTestFactoryTests",
+        "test_name": "CreateMessageHandler_ConfiguresAllDependencies",
+        "line": 39,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "test-infrastructure"
+        ],
+        "body_lines": 11,
+        "declared_area_from_path": "TestInfrastructure",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "message_handler_test_factory"
+        ],
+        "_source_lineno": 165
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestInfrastructure/MessageHandlerTestFactoryTests.cs\n# Lines 9-69 (test starts at line 39)\nusing Telegram.Bot;\nusing ClubDoorman.Services;\nusing ClubDoorman.Services.UserBan;\nusing ClubDoorman.Services.Captcha;\nusing ClubDoorman.Services.Handlers;\n\nnamespace ClubDoorman.TestInfrastructure;\n\n/// <summary>\n/// Тесты для MessageHandlerTestFactory\n/// Автоматически сгенерировано\n/// </summary>\n[TestFixture]\n[Category(\"test-infrastructure\")]\npublic class MessageHandlerTestFactoryTests\n{\n    [Test]\n    public void CreateMessageHandler_ReturnsWorkingInstance()\n    {\n        // Arrange\n        var factory = new MessageHandlerTestFactory();\n\n        // Act\n        var instance = factory.CreateMessageHandler();\n\n        // Assert\n        Assert.That(instance, Is.Not.Null);\n        Assert.That(instance, Is.InstanceOf<MessageHandler>());\n    }\n\n    [Test]\n    public void CreateMessageHandler_ConfiguresAllDependencies()\n    {\n        // Arrange\n        var factory = new MessageHandlerTestFactory();\n\n        // Act\n        var instance = factory.CreateMessageHandler();\n\n        // Assert\n        // Проверяем что все зависимости настроены\n        Assert.That(instance, Is.Not.Null);\n    }\n\n    [Test]\n    public void CreateMessageHandler_CreatesFreshInstanceEachTime()\n    {\n        // Arrange\n        var factory = new MessageHandlerTestFactory();\n\n        // Act\n        var instance1 = factory.CreateMessageHandler();\n        var instance2 = factory.CreateMessageHandler();\n\n        // Assert\n        Assert.That(instance1, Is.Not.SameAs(instance2));\n    }\n\n    [Test]\n    public void BotMock_IsProperlyConfigured()\n    {\n"
+    }
+  ]
+}

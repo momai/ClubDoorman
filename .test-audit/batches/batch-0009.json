@@ -1,0 +1,464 @@
+{
+  "schema_version": "test-audit-batch-v1",
+  "batch_no": 9,
+  "purpose": "local LLM audit input",
+  "instructions": "Return JSONL only. One audit object per input test. No markdown. No code edits.",
+  "tests": [
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Integration/MessageHandlerIntegrationTests.cs::MessageHandlerIntegrationTests::HandleAsync_ExceptionInModerationService_HandlesGracefully",
+        "file": "Integration/MessageHandlerIntegrationTests.cs",
+        "namespace": "ClubDoorman.Test.Integration",
+        "class": "MessageHandlerIntegrationTests",
+        "test_name": "HandleAsync_ExceptionInModerationService_HandlesGracefully",
+        "line": 313,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 13,
+        "declared_area_from_path": "Integration",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": true,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "does_not_throw",
+          "message_handler_test_factory"
+        ],
+        "_source_lineno": 89
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Integration/MessageHandlerIntegrationTests.cs\n# Lines 283-343 (test starts at line 313)\n            .Returns(true);\n\n        // Act\n        await _handler.HandleAsync(update);\n\n        // Assert\n        // Verify that the suspicious user's message was handled gracefully\n        Assert.Pass(\"Suspicious user message handled gracefully\");\n    }\n\n    #endregion\n\n    #region Error Handling Tests\n\n    [Test]\n    public async Task HandleAsync_ExceptionInUserManager_HandlesGracefully()\n    {\n        // Arrange\n        var message = CreateMessage(\"Test message\", ChatType.Group);\n        var update = CreateUpdate(message);\n\n        // Mock exception in UserManager\n        _factory.UserManagerMock.Setup(x => x.Approved(It.IsAny<long>(), null))\n            .Throws(new System.Exception(\"Test exception\"));\n\n        // Act & Assert\n        Assert.DoesNotThrowAsync(async () => await _handler.HandleAsync(update),\n            \"Exception in UserManager should be handled gracefully\");\n    }\n\n    [Test]\n    public async Task HandleAsync_ExceptionInModerationService_HandlesGracefully()\n    {\n        // Arrange\n        var message = CreateMessage(\"Test message\", ChatType.Group);\n        var update = CreateUpdate(message);\n\n        // Mock exception in ModerationService\n        _factory.ModerationServiceMock.Setup(x => x.CheckMessageAsync(It.IsAny<Message>()))\n            .ThrowsAsync(new System.Exception(\"Test exception\"));\n\n        // Act & Assert\n        Assert.DoesNotThrowAsync(async () => await _handler.HandleAsync(update),\n            \"Exception in ModerationService should be handled gracefully\");\n    }\n\n    [Test]\n    public async Task HandleAsync_ExceptionInBotClient_HandlesGracefully()\n    {\n        // Arrange\n        var message = CreateMessage(\"Test message\", ChatType.Group);\n        var update = CreateUpdate(message);\n\n        // Mock exception in BotClient\n        _factory.BotMock.Setup(x => x.SendMessageAsync(It.IsAny<ChatId>(), It.IsAny<string>(), It.IsAny<ParseMode>(), It.IsAny<ReplyParameters>(), It.IsAny<ReplyMarkup>(), It.IsAny<CancellationToken>()))\n            .ThrowsAsync(new System.Exception(\"Test exception\"));\n\n        // Act & Assert\n        Assert.DoesNotThrowAsync(async () => await _handler.HandleAsync(update),\n            \"Exception in BotClient should be handled gracefully\");\n    }\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Integration/MessageHandlerIntegrationTests.cs::MessageHandlerIntegrationTests::HandleAsync_ExceptionInBotClient_HandlesGracefully",
+        "file": "Integration/MessageHandlerIntegrationTests.cs",
+        "namespace": "ClubDoorman.Test.Integration",
+        "class": "MessageHandlerIntegrationTests",
+        "test_name": "HandleAsync_ExceptionInBotClient_HandlesGracefully",
+        "line": 329,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 13,
+        "declared_area_from_path": "Integration",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": true,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "does_not_throw",
+          "message_handler_test_factory"
+        ],
+        "_source_lineno": 90
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Integration/MessageHandlerIntegrationTests.cs\n# Lines 299-359 (test starts at line 329)\n    {\n        // Arrange\n        var message = CreateMessage(\"Test message\", ChatType.Group);\n        var update = CreateUpdate(message);\n\n        // Mock exception in UserManager\n        _factory.UserManagerMock.Setup(x => x.Approved(It.IsAny<long>(), null))\n            .Throws(new System.Exception(\"Test exception\"));\n\n        // Act & Assert\n        Assert.DoesNotThrowAsync(async () => await _handler.HandleAsync(update),\n            \"Exception in UserManager should be handled gracefully\");\n    }\n\n    [Test]\n    public async Task HandleAsync_ExceptionInModerationService_HandlesGracefully()\n    {\n        // Arrange\n        var message = CreateMessage(\"Test message\", ChatType.Group);\n        var update = CreateUpdate(message);\n\n        // Mock exception in ModerationService\n        _factory.ModerationServiceMock.Setup(x => x.CheckMessageAsync(It.IsAny<Message>()))\n            .ThrowsAsync(new System.Exception(\"Test exception\"));\n\n        // Act & Assert\n        Assert.DoesNotThrowAsync(async () => await _handler.HandleAsync(update),\n            \"Exception in ModerationService should be handled gracefully\");\n    }\n\n    [Test]\n    public async Task HandleAsync_ExceptionInBotClient_HandlesGracefully()\n    {\n        // Arrange\n        var message = CreateMessage(\"Test message\", ChatType.Group);\n        var update = CreateUpdate(message);\n\n        // Mock exception in BotClient\n        _factory.BotMock.Setup(x => x.SendMessageAsync(It.IsAny<ChatId>(), It.IsAny<string>(), It.IsAny<ParseMode>(), It.IsAny<ReplyParameters>(), It.IsAny<ReplyMarkup>(), It.IsAny<CancellationToken>()))\n            .ThrowsAsync(new System.Exception(\"Test exception\"));\n\n        // Act & Assert\n        Assert.DoesNotThrowAsync(async () => await _handler.HandleAsync(update),\n            \"Exception in BotClient should be handled gracefully\");\n    }\n\n    #endregion\n\n    #region Helper Methods\n\n    private static Message CreateMessage(string text, ChatType chatType)\n    {\n        return new Message\n        {\n            Date = DateTime.UtcNow,\n            Chat = new Chat\n            {\n                Id = 12345,\n                Type = chatType,\n                Title = \"Test Chat\"\n            },\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Integration/UserJoinFacadeIntegrationTests.cs::UserJoinFacadeIntegrationTests::HandleNewMembersAsync_ValidMessage_ProxiesToPolicy",
+        "file": "Integration/UserJoinFacadeIntegrationTests.cs",
+        "namespace": "ClubDoorman.Test.Integration",
+        "class": "UserJoinFacadeIntegrationTests",
+        "test_name": "HandleNewMembersAsync_ValidMessage_ProxiesToPolicy",
+        "line": 81,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "integration",
+          "user-join-facade"
+        ],
+        "body_lines": 10,
+        "declared_area_from_path": "Integration",
+        "construction_path": "testkit_autofixture",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": true,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify",
+          "testkit_autofixture"
+        ],
+        "_source_lineno": 97
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Integration/UserJoinFacadeIntegrationTests.cs\n# Lines 51-111 (test starts at line 81)\n        // Arrange & Act\n        var userJoinService = TK.CreateUserJoinFacadeBuilder()\n            .WithStandardMocks()\n            .Build();\n\n        // Assert\n        Assert.That(userJoinService, Is.Not.Null);\n        Assert.That(userJoinService, Is.InstanceOf<UserJoinFacade>());\n    }\n\n    /// <summary>\n    /// POC: Проверка доступа к зависимостям через билдер\n    /// <tags>poc, builder, dependencies</tags>\n    /// </summary>\n    [Test]\n    public void Builder_ProvidesAccessToDependencies()\n    {\n        // Arrange\n        var builder = TK.CreateUserJoinFacadeBuilder()\n            .WithStandardMocks();\n\n        // Act & Assert\n        Assert.That(builder.UserJoinPolicyMock, Is.Not.Null);\n        Assert.That(builder.LoggerMock, Is.Not.Null);\n    }\n\n    /// <summary>\n    /// POC: Проверка проксирования вызова HandleNewMembersAsync\n    /// <tags>poc, proxy, handle-new-members</tags>\n    /// </summary>\n    [Test]\n    public async Task HandleNewMembersAsync_ValidMessage_ProxiesToPolicy()\n    {\n        // Arrange\n        var (_, envelope, message, _) = TK.CreateNewUserScenario();\n\n        // Act\n        await _userJoinFacade.HandleNewMembersAsync(message, CancellationToken.None);\n\n        // Assert\n        _userJoinPolicyMock.Verify(x => x.HandleNewMembersAsync(message, CancellationToken.None), Times.Once);\n    }\n\n    /// <summary>\n    /// POC: Проверка проксирования вызова ProcessNewUserAsync\n    /// <tags>poc, proxy, process-new-user</tags>\n    /// </summary>\n    [Test]\n    public async Task ProcessNewUserAsync_ValidUser_ProxiesToPolicy()\n    {\n        // Arrange\n        var (_, envelope, message, _) = TK.CreateNewUserScenario();\n        var user = message.NewChatMembers?.FirstOrDefault() ?? TK.CreateUser();\n\n        // Act\n        await _userJoinFacade.ProcessNewUserAsync(message, user, CancellationToken.None);\n\n        // Assert\n        _userJoinPolicyMock.Verify(x => x.ProcessNewUserAsync(message, user, CancellationToken.None), Times.Once);\n    }\n\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Integration/UserJoinFacadeIntegrationTests.cs::UserJoinFacadeIntegrationTests::ProcessNewUserAsync_ValidUser_ProxiesToPolicy",
+        "file": "Integration/UserJoinFacadeIntegrationTests.cs",
+        "namespace": "ClubDoorman.Test.Integration",
+        "class": "UserJoinFacadeIntegrationTests",
+        "test_name": "ProcessNewUserAsync_ValidUser_ProxiesToPolicy",
+        "line": 98,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 11,
+        "declared_area_from_path": "Integration",
+        "construction_path": "testkit_autofixture",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": true,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify",
+          "testkit_autofixture"
+        ],
+        "_source_lineno": 98
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Integration/UserJoinFacadeIntegrationTests.cs\n# Lines 68-113 (test starts at line 98)\n        // Arrange\n        var builder = TK.CreateUserJoinFacadeBuilder()\n            .WithStandardMocks();\n\n        // Act & Assert\n        Assert.That(builder.UserJoinPolicyMock, Is.Not.Null);\n        Assert.That(builder.LoggerMock, Is.Not.Null);\n    }\n\n    /// <summary>\n    /// POC: Проверка проксирования вызова HandleNewMembersAsync\n    /// <tags>poc, proxy, handle-new-members</tags>\n    /// </summary>\n    [Test]\n    public async Task HandleNewMembersAsync_ValidMessage_ProxiesToPolicy()\n    {\n        // Arrange\n        var (_, envelope, message, _) = TK.CreateNewUserScenario();\n\n        // Act\n        await _userJoinFacade.HandleNewMembersAsync(message, CancellationToken.None);\n\n        // Assert\n        _userJoinPolicyMock.Verify(x => x.HandleNewMembersAsync(message, CancellationToken.None), Times.Once);\n    }\n\n    /// <summary>\n    /// POC: Проверка проксирования вызова ProcessNewUserAsync\n    /// <tags>poc, proxy, process-new-user</tags>\n    /// </summary>\n    [Test]\n    public async Task ProcessNewUserAsync_ValidUser_ProxiesToPolicy()\n    {\n        // Arrange\n        var (_, envelope, message, _) = TK.CreateNewUserScenario();\n        var user = message.NewChatMembers?.FirstOrDefault() ?? TK.CreateUser();\n\n        // Act\n        await _userJoinFacade.ProcessNewUserAsync(message, user, CancellationToken.None);\n\n        // Assert\n        _userJoinPolicyMock.Verify(x => x.ProcessNewUserAsync(message, user, CancellationToken.None), Times.Once);\n    }\n\n    #endregion\n}\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestKit/TestKit.BuilderTests.cs::TestKitBuilderTests::MessageHandlerBuilder_WithStandardMocks_CreatesValidHandler",
+        "file": "TestKit/TestKit.BuilderTests.cs",
+        "namespace": "ClubDoorman.Test.TestKit",
+        "class": "TestKitBuilderTests",
+        "test_name": "MessageHandlerBuilder_WithStandardMocks_CreatesValidHandler",
+        "line": 34,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "test-infrastructure",
+          "builders"
+        ],
+        "body_lines": 10,
+        "declared_area_from_path": "TestKit",
+        "construction_path": "testkit_message_handler_builder",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": true,
+          "uses_testkit_autofixture": true,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "testkit_autofixture"
+        ],
+        "_source_lineno": 244
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestKit/TestKit.BuilderTests.cs\n# Lines 4-64 (test starts at line 34)\nusing ClubDoorman.Services.UserBan;\nusing ClubDoorman.Handlers;\nusing ClubDoorman.Models;\nusing ClubDoorman.Services;\nusing ClubDoorman.Services.UserBan;\nusing ClubDoorman.Test.TestKit;\nusing Microsoft.Extensions.Logging;\nusing Moq;\nusing NUnit.Framework;\nusing Telegram.Bot;\nusing Telegram.Bot.Types;\nusing Telegram.Bot.Types.Enums;\nusing ClubDoorman.Services.Telegram;\nusing ClubDoorman.Services.AI;\nusing ClubDoorman.Services.UserManagement;\nusing ClubDoorman.Services.Captcha;\nusing ClubDoorman.Services.Handlers;\nusing ClubDoorman.Features.Moderation;\n\nnamespace ClubDoorman.Test.TestKit;\n\n/// <summary>\n/// Тесты для новых билдеров\n/// <tags>tests, builders, fluent-api, test-infrastructure</tags>\n/// </summary>\n[TestFixture]\n[Category(\"test-infrastructure\")]\n[Category(\"builders\")]\npublic class TestKitBuilderTests\n{\n    [Test]\n    public void MessageHandlerBuilder_WithStandardMocks_CreatesValidHandler()\n    {\n        // Arrange & Act\n        var handler = TK.CreateMessageHandlerBuilder()\n            .WithStandardMocks()\n            .Build();\n\n        // Assert\n        Assert.That(handler, Is.Not.Null);\n        Assert.That(handler, Is.InstanceOf<MessageHandler>());\n    }\n\n    [Test]\n    public void MessageHandlerBuilder_WithBanMocks_CreatesHandlerWithBanConfiguration()\n    {\n        // Arrange & Act\n        var builder = TK.CreateMessageHandlerBuilder()\n            .WithBanMocks();\n\n        var handler = builder.Build();\n\n        // Assert\n        Assert.That(handler, Is.Not.Null);\n        Assert.That(builder.BotMock, Is.Not.Null);\n        Assert.That(builder.ModerationServiceMock, Is.Not.Null);\n    }\n\n    [Test]\n    public void MessageHandlerBuilder_WithModerationServiceMock_CreatesHandlerWithCustomModeration()\n    {\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestKit/TestKit.BuilderTests.cs::TestKitBuilderTests::MessageHandlerBuilder_WithBanMocks_CreatesHandlerWithBanConfiguration",
+        "file": "TestKit/TestKit.BuilderTests.cs",
+        "namespace": "ClubDoorman.Test.TestKit",
+        "class": "TestKitBuilderTests",
+        "test_name": "MessageHandlerBuilder_WithBanMocks_CreatesHandlerWithBanConfiguration",
+        "line": 47,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "test-infrastructure",
+          "builders"
+        ],
+        "body_lines": 12,
+        "declared_area_from_path": "TestKit",
+        "construction_path": "testkit_message_handler_builder",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": true,
+          "uses_testkit_autofixture": true,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "testkit_autofixture"
+        ],
+        "_source_lineno": 245
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestKit/TestKit.BuilderTests.cs\n# Lines 17-77 (test starts at line 47)\nusing ClubDoorman.Services.AI;\nusing ClubDoorman.Services.UserManagement;\nusing ClubDoorman.Services.Captcha;\nusing ClubDoorman.Services.Handlers;\nusing ClubDoorman.Features.Moderation;\n\nnamespace ClubDoorman.Test.TestKit;\n\n/// <summary>\n/// Тесты для новых билдеров\n/// <tags>tests, builders, fluent-api, test-infrastructure</tags>\n/// </summary>\n[TestFixture]\n[Category(\"test-infrastructure\")]\n[Category(\"builders\")]\npublic class TestKitBuilderTests\n{\n    [Test]\n    public void MessageHandlerBuilder_WithStandardMocks_CreatesValidHandler()\n    {\n        // Arrange & Act\n        var handler = TK.CreateMessageHandlerBuilder()\n            .WithStandardMocks()\n            .Build();\n\n        // Assert\n        Assert.That(handler, Is.Not.Null);\n        Assert.That(handler, Is.InstanceOf<MessageHandler>());\n    }\n\n    [Test]\n    public void MessageHandlerBuilder_WithBanMocks_CreatesHandlerWithBanConfiguration()\n    {\n        // Arrange & Act\n        var builder = TK.CreateMessageHandlerBuilder()\n            .WithBanMocks();\n\n        var handler = builder.Build();\n\n        // Assert\n        Assert.That(handler, Is.Not.Null);\n        Assert.That(builder.BotMock, Is.Not.Null);\n        Assert.That(builder.ModerationServiceMock, Is.Not.Null);\n    }\n\n    [Test]\n    public void MessageHandlerBuilder_WithModerationServiceMock_CreatesHandlerWithCustomModeration()\n    {\n        // Arrange & Act\n        var builder = TK.CreateMessageHandlerBuilder()\n            .WithStandardMocks();\n\n        var handler = builder.Build();\n\n        // Assert\n        Assert.That(handler, Is.Not.Null);\n    }\n\n    [Test]\n    public async Task MessageHandlerBuilder_WithModerationFacade_UsesConfiguredFacadeInPipeline()\n    {\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestKit/TestKit.BuilderTests.cs::TestKitBuilderTests::MessageHandlerBuilder_WithModerationServiceMock_CreatesHandlerWithCustomModeration",
+        "file": "TestKit/TestKit.BuilderTests.cs",
+        "namespace": "ClubDoorman.Test.TestKit",
+        "class": "TestKitBuilderTests",
+        "test_name": "MessageHandlerBuilder_WithModerationServiceMock_CreatesHandlerWithCustomModeration",
+        "line": 62,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "test-infrastructure",
+          "builders"
+        ],
+        "body_lines": 10,
+        "declared_area_from_path": "TestKit",
+        "construction_path": "testkit_message_handler_builder",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": true,
+          "uses_testkit_autofixture": true,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "testkit_autofixture"
+        ],
+        "_source_lineno": 246
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestKit/TestKit.BuilderTests.cs\n# Lines 32-92 (test starts at line 62)\npublic class TestKitBuilderTests\n{\n    [Test]\n    public void MessageHandlerBuilder_WithStandardMocks_CreatesValidHandler()\n    {\n        // Arrange & Act\n        var handler = TK.CreateMessageHandlerBuilder()\n            .WithStandardMocks()\n            .Build();\n\n        // Assert\n        Assert.That(handler, Is.Not.Null);\n        Assert.That(handler, Is.InstanceOf<MessageHandler>());\n    }\n\n    [Test]\n    public void MessageHandlerBuilder_WithBanMocks_CreatesHandlerWithBanConfiguration()\n    {\n        // Arrange & Act\n        var builder = TK.CreateMessageHandlerBuilder()\n            .WithBanMocks();\n\n        var handler = builder.Build();\n\n        // Assert\n        Assert.That(handler, Is.Not.Null);\n        Assert.That(builder.BotMock, Is.Not.Null);\n        Assert.That(builder.ModerationServiceMock, Is.Not.Null);\n    }\n\n    [Test]\n    public void MessageHandlerBuilder_WithModerationServiceMock_CreatesHandlerWithCustomModeration()\n    {\n        // Arrange & Act\n        var builder = TK.CreateMessageHandlerBuilder()\n            .WithStandardMocks();\n\n        var handler = builder.Build();\n\n        // Assert\n        Assert.That(handler, Is.Not.Null);\n    }\n\n    [Test]\n    public async Task MessageHandlerBuilder_WithModerationFacade_UsesConfiguredFacadeInPipeline()\n    {\n        var expected = new ModerationResult(ModerationAction.Delete, \"custom facade result\");\n        var builder = TK.CreateMessageHandlerBuilder()\n            .WithModerationFacade(mock =>\n            {\n                mock.Setup(x => x.CheckMessageAsync(It.IsAny<Message>()))\n                    .ReturnsAsync(expected);\n                mock.Setup(x => x.HandleUserMessageAsync(\n                        It.IsAny<Message>(),\n                        It.IsAny<User>(),\n                        It.IsAny<Chat>(),\n                        It.IsAny<ModerationResult>(),\n                        It.IsAny<bool>(),\n                        It.IsAny<CancellationToken>()))\n                    .Returns(Task.CompletedTask);\n            });\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestKit/TestKit.BuilderTests.cs::TestKitBuilderTests::MessageHandlerBuilder_WithUserManager_CreatesHandlerWithCustomUserManager",
+        "file": "TestKit/TestKit.BuilderTests.cs",
+        "namespace": "ClubDoorman.Test.TestKit",
+        "class": "TestKitBuilderTests",
+        "test_name": "MessageHandlerBuilder_WithUserManager_CreatesHandlerWithCustomUserManager",
+        "line": 117,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 12,
+        "declared_area_from_path": "TestKit",
+        "construction_path": "testkit_message_handler_builder",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": true,
+          "uses_testkit_autofixture": true,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "testkit_autofixture"
+        ],
+        "_source_lineno": 248
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestKit/TestKit.BuilderTests.cs\n# Lines 87-147 (test starts at line 117)\n                        It.IsAny<Chat>(),\n                        It.IsAny<ModerationResult>(),\n                        It.IsAny<bool>(),\n                        It.IsAny<CancellationToken>()))\n                    .Returns(Task.CompletedTask);\n            });\n\n        var handler = builder.Build();\n        var update = new Update\n        {\n            Message = new Message\n            {\n                Text = \"test message\",\n                Chat = new Chat { Id = -100123, Type = ChatType.Group, Title = \"test chat\" },\n                From = new User { Id = 456, IsBot = false, FirstName = \"Test\" }\n            }\n        };\n\n        await handler.HandleAsync(update, CancellationToken.None);\n\n        builder.ModerationServiceMock.Verify(x => x.CheckMessageAsync(update.Message), Times.Once);\n        builder.ModerationServiceMock.Verify(x => x.HandleUserMessageAsync(\n            update.Message,\n            update.Message.From,\n            update.Message.Chat,\n            expected,\n            false,\n            It.IsAny<CancellationToken>()), Times.Once);\n    }\n\n    [Test]\n    public void MessageHandlerBuilder_WithUserManager_CreatesHandlerWithCustomUserManager()\n    {\n        // Arrange & Act\n        var handler = TK.CreateMessageHandlerBuilder()\n            .WithUserManager(builder => builder\n                .ThatApprovesUser(12345)\n                .ThatIsNotInBanlist(12345))\n            .WithStandardMocks()\n            .Build();\n\n        // Assert\n        Assert.That(handler, Is.Not.Null);\n    }\n\n    [Test]\n    public void ModerationServiceMockBuilder_ThatBansUsers_CreatesCorrectMock()\n    {\n        // Arrange & Act\n        var mock = TK.CreateModerationServiceMock()\n            .ThatBansUsers(\"Spam detected\")\n            .Build();\n\n        // Assert\n        Assert.That(mock, Is.Not.Null);\n        Assert.That(mock.Object, Is.InstanceOf<IModerationService>());\n    }\n\n    [Test]\n    public void ModerationServiceMockBuilder_ThatAllowsMessages_CreatesCorrectMock()\n    {\n"
+    }
+  ]
+}

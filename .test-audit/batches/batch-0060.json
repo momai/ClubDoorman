@@ -1,0 +1,558 @@
+{
+  "schema_version": "test-audit-batch-v1",
+  "batch_no": 60,
+  "purpose": "local LLM audit input",
+  "instructions": "Return JSONL only. One audit object per input test. No markdown. No code edits.",
+  "tests": [
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestInfrastructure/CaptchaServiceTestFactoryTests.cs::CaptchaServiceTestFactoryTests::CreateCaptchaService_ReturnsWorkingInstance",
+        "file": "TestInfrastructure/CaptchaServiceTestFactoryTests.cs",
+        "namespace": "ClubDoorman.TestInfrastructure",
+        "class": "CaptchaServiceTestFactoryTests",
+        "test_name": "CreateCaptchaService_ReturnsWorkingInstance",
+        "line": 21,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "test-infrastructure"
+        ],
+        "body_lines": 11,
+        "declared_area_from_path": "TestInfrastructure",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 150
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestInfrastructure/CaptchaServiceTestFactoryTests.cs\n# Lines 1-51 (test starts at line 21)\nusing ClubDoorman.Services.UserBan;\nusing ClubDoorman.Services;\nusing ClubDoorman.Services.UserBan;\nusing Microsoft.Extensions.Logging;\nusing Microsoft.Extensions.Logging.Abstractions;\nusing Moq;\nusing NUnit.Framework;\nusing Telegram.Bot;\nusing ClubDoorman.Services.Captcha;\n\nnamespace ClubDoorman.TestInfrastructure;\n\n/// <summary>\n/// Тесты для CaptchaServiceTestFactory\n/// Автоматически сгенерировано\n/// </summary>\n[TestFixture]\n[Category(\"test-infrastructure\")]\npublic class CaptchaServiceTestFactoryTests\n{\n    [Test]\n    public void CreateCaptchaService_ReturnsWorkingInstance()\n    {\n        // Arrange\n        var factory = new CaptchaServiceTestFactory();\n\n        // Act\n        var instance = factory.CreateCaptchaService();\n\n        // Assert\n        Assert.That(instance, Is.Not.Null);\n        Assert.That(instance, Is.InstanceOf<CaptchaService>());\n    }\n\n    [Test]\n    public void CreateCaptchaService_ConfiguresAllDependencies()\n    {\n        // Arrange\n        var factory = new CaptchaServiceTestFactory();\n\n        // Act\n        var instance = factory.CreateCaptchaService();\n\n        // Assert\n        // Проверяем что все зависимости настроены\n        Assert.That(instance, Is.Not.Null);\n    }\n\n    [Test]\n    public void CreateCaptchaService_CreatesFreshInstanceEachTime()\n    {\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestInfrastructure/CaptchaServiceTestFactoryTests.cs::CaptchaServiceTestFactoryTests::CreateCaptchaService_ConfiguresAllDependencies",
+        "file": "TestInfrastructure/CaptchaServiceTestFactoryTests.cs",
+        "namespace": "ClubDoorman.TestInfrastructure",
+        "class": "CaptchaServiceTestFactoryTests",
+        "test_name": "CreateCaptchaService_ConfiguresAllDependencies",
+        "line": 35,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "test-infrastructure"
+        ],
+        "body_lines": 11,
+        "declared_area_from_path": "TestInfrastructure",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 151
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestInfrastructure/CaptchaServiceTestFactoryTests.cs\n# Lines 5-65 (test starts at line 35)\nusing Microsoft.Extensions.Logging.Abstractions;\nusing Moq;\nusing NUnit.Framework;\nusing Telegram.Bot;\nusing ClubDoorman.Services.Captcha;\n\nnamespace ClubDoorman.TestInfrastructure;\n\n/// <summary>\n/// Тесты для CaptchaServiceTestFactory\n/// Автоматически сгенерировано\n/// </summary>\n[TestFixture]\n[Category(\"test-infrastructure\")]\npublic class CaptchaServiceTestFactoryTests\n{\n    [Test]\n    public void CreateCaptchaService_ReturnsWorkingInstance()\n    {\n        // Arrange\n        var factory = new CaptchaServiceTestFactory();\n\n        // Act\n        var instance = factory.CreateCaptchaService();\n\n        // Assert\n        Assert.That(instance, Is.Not.Null);\n        Assert.That(instance, Is.InstanceOf<CaptchaService>());\n    }\n\n    [Test]\n    public void CreateCaptchaService_ConfiguresAllDependencies()\n    {\n        // Arrange\n        var factory = new CaptchaServiceTestFactory();\n\n        // Act\n        var instance = factory.CreateCaptchaService();\n\n        // Assert\n        // Проверяем что все зависимости настроены\n        Assert.That(instance, Is.Not.Null);\n    }\n\n    [Test]\n    public void CreateCaptchaService_CreatesFreshInstanceEachTime()\n    {\n        // Arrange\n        var factory = new CaptchaServiceTestFactory();\n\n        // Act\n        var instance1 = factory.CreateCaptchaService();\n        var instance2 = factory.CreateCaptchaService();\n\n        // Assert\n        Assert.That(instance1, Is.Not.SameAs(instance2));\n    }\n\n    [Test]\n    public void BotMock_IsProperlyConfigured()\n    {\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestInfrastructure/CaptchaServiceTestFactoryTests.cs::CaptchaServiceTestFactoryTests::BotMock_IsProperlyConfigured",
+        "file": "TestInfrastructure/CaptchaServiceTestFactoryTests.cs",
+        "namespace": "ClubDoorman.TestInfrastructure",
+        "class": "CaptchaServiceTestFactoryTests",
+        "test_name": "BotMock_IsProperlyConfigured",
+        "line": 63,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "test-infrastructure"
+        ],
+        "body_lines": 8,
+        "declared_area_from_path": "TestInfrastructure",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 153
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestInfrastructure/CaptchaServiceTestFactoryTests.cs\n# Lines 33-84 (test starts at line 63)\n    }\n\n    [Test]\n    public void CreateCaptchaService_ConfiguresAllDependencies()\n    {\n        // Arrange\n        var factory = new CaptchaServiceTestFactory();\n\n        // Act\n        var instance = factory.CreateCaptchaService();\n\n        // Assert\n        // Проверяем что все зависимости настроены\n        Assert.That(instance, Is.Not.Null);\n    }\n\n    [Test]\n    public void CreateCaptchaService_CreatesFreshInstanceEachTime()\n    {\n        // Arrange\n        var factory = new CaptchaServiceTestFactory();\n\n        // Act\n        var instance1 = factory.CreateCaptchaService();\n        var instance2 = factory.CreateCaptchaService();\n\n        // Assert\n        Assert.That(instance1, Is.Not.SameAs(instance2));\n    }\n\n    [Test]\n    public void BotMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new CaptchaServiceTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.BotMock, Is.Not.Null);\n        Assert.That(factory.BotMock.Object, Is.Not.Null);\n    }\n\n    [Test]\n    public void LoggerMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new CaptchaServiceTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.LoggerMock, Is.Not.Null);\n        Assert.That(factory.LoggerMock.Object, Is.Not.Null);\n    }\n}\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestInfrastructure/CaptchaServiceTestFactoryTests.cs::CaptchaServiceTestFactoryTests::LoggerMock_IsProperlyConfigured",
+        "file": "TestInfrastructure/CaptchaServiceTestFactoryTests.cs",
+        "namespace": "ClubDoorman.TestInfrastructure",
+        "class": "CaptchaServiceTestFactoryTests",
+        "test_name": "LoggerMock_IsProperlyConfigured",
+        "line": 74,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "test-infrastructure"
+        ],
+        "body_lines": 8,
+        "declared_area_from_path": "TestInfrastructure",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 154
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestInfrastructure/CaptchaServiceTestFactoryTests.cs\n# Lines 44-84 (test starts at line 74)\n        // Assert\n        // Проверяем что все зависимости настроены\n        Assert.That(instance, Is.Not.Null);\n    }\n\n    [Test]\n    public void CreateCaptchaService_CreatesFreshInstanceEachTime()\n    {\n        // Arrange\n        var factory = new CaptchaServiceTestFactory();\n\n        // Act\n        var instance1 = factory.CreateCaptchaService();\n        var instance2 = factory.CreateCaptchaService();\n\n        // Assert\n        Assert.That(instance1, Is.Not.SameAs(instance2));\n    }\n\n    [Test]\n    public void BotMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new CaptchaServiceTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.BotMock, Is.Not.Null);\n        Assert.That(factory.BotMock.Object, Is.Not.Null);\n    }\n\n    [Test]\n    public void LoggerMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new CaptchaServiceTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.LoggerMock, Is.Not.Null);\n        Assert.That(factory.LoggerMock.Object, Is.Not.Null);\n    }\n}\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestInfrastructure/ChatMemberHandlerTestFactoryTests.cs::ChatMemberHandlerTestFactoryTests::CreateChatMemberHandler_ReturnsWorkingInstance",
+        "file": "TestInfrastructure/ChatMemberHandlerTestFactoryTests.cs",
+        "namespace": "ClubDoorman.TestInfrastructure",
+        "class": "ChatMemberHandlerTestFactoryTests",
+        "test_name": "CreateChatMemberHandler_ReturnsWorkingInstance",
+        "line": 22,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "test-infrastructure"
+        ],
+        "body_lines": 11,
+        "declared_area_from_path": "TestInfrastructure",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 155
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestInfrastructure/ChatMemberHandlerTestFactoryTests.cs\n# Lines 1-52 (test starts at line 22)\nusing ClubDoorman.Services.UserBan;\nusing ClubDoorman.Handlers;\nusing Microsoft.Extensions.Logging;\nusing Microsoft.Extensions.Logging.Abstractions;\nusing Moq;\nusing NUnit.Framework;\nusing Telegram.Bot;\nusing ClubDoorman.Services;\nusing ClubDoorman.Services.UserBan;\nusing ClubDoorman.Services.Handlers;\n\nnamespace ClubDoorman.TestInfrastructure;\n\n/// <summary>\n/// Тесты для ChatMemberHandlerTestFactory\n/// Автоматически сгенерировано\n/// </summary>\n[TestFixture]\n[Category(\"test-infrastructure\")]\npublic class ChatMemberHandlerTestFactoryTests\n{\n    [Test]\n    public void CreateChatMemberHandler_ReturnsWorkingInstance()\n    {\n        // Arrange\n        var factory = new ChatMemberHandlerTestFactory();\n\n        // Act\n        var instance = factory.CreateChatMemberHandler();\n\n        // Assert\n        Assert.That(instance, Is.Not.Null);\n        Assert.That(instance, Is.InstanceOf<ChatMemberHandler>());\n    }\n\n    [Test]\n    public void CreateChatMemberHandler_ConfiguresAllDependencies()\n    {\n        // Arrange\n        var factory = new ChatMemberHandlerTestFactory();\n\n        // Act\n        var instance = factory.CreateChatMemberHandler();\n\n        // Assert\n        // Проверяем что все зависимости настроены\n        Assert.That(instance, Is.Not.Null);\n    }\n\n    [Test]\n    public void CreateChatMemberHandler_CreatesFreshInstanceEachTime()\n    {\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestInfrastructure/ChatMemberHandlerTestFactoryTests.cs::ChatMemberHandlerTestFactoryTests::CreateChatMemberHandler_ConfiguresAllDependencies",
+        "file": "TestInfrastructure/ChatMemberHandlerTestFactoryTests.cs",
+        "namespace": "ClubDoorman.TestInfrastructure",
+        "class": "ChatMemberHandlerTestFactoryTests",
+        "test_name": "CreateChatMemberHandler_ConfiguresAllDependencies",
+        "line": 36,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "test-infrastructure"
+        ],
+        "body_lines": 11,
+        "declared_area_from_path": "TestInfrastructure",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 156
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestInfrastructure/ChatMemberHandlerTestFactoryTests.cs\n# Lines 6-66 (test starts at line 36)\nusing NUnit.Framework;\nusing Telegram.Bot;\nusing ClubDoorman.Services;\nusing ClubDoorman.Services.UserBan;\nusing ClubDoorman.Services.Handlers;\n\nnamespace ClubDoorman.TestInfrastructure;\n\n/// <summary>\n/// Тесты для ChatMemberHandlerTestFactory\n/// Автоматически сгенерировано\n/// </summary>\n[TestFixture]\n[Category(\"test-infrastructure\")]\npublic class ChatMemberHandlerTestFactoryTests\n{\n    [Test]\n    public void CreateChatMemberHandler_ReturnsWorkingInstance()\n    {\n        // Arrange\n        var factory = new ChatMemberHandlerTestFactory();\n\n        // Act\n        var instance = factory.CreateChatMemberHandler();\n\n        // Assert\n        Assert.That(instance, Is.Not.Null);\n        Assert.That(instance, Is.InstanceOf<ChatMemberHandler>());\n    }\n\n    [Test]\n    public void CreateChatMemberHandler_ConfiguresAllDependencies()\n    {\n        // Arrange\n        var factory = new ChatMemberHandlerTestFactory();\n\n        // Act\n        var instance = factory.CreateChatMemberHandler();\n\n        // Assert\n        // Проверяем что все зависимости настроены\n        Assert.That(instance, Is.Not.Null);\n    }\n\n    [Test]\n    public void CreateChatMemberHandler_CreatesFreshInstanceEachTime()\n    {\n        // Arrange\n        var factory = new ChatMemberHandlerTestFactory();\n\n        // Act\n        var instance1 = factory.CreateChatMemberHandler();\n        var instance2 = factory.CreateChatMemberHandler();\n\n        // Assert\n        Assert.That(instance1, Is.Not.SameAs(instance2));\n    }\n\n    [Test]\n    public void BotMock_IsProperlyConfigured()\n    {\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestInfrastructure/ChatMemberHandlerTestFactoryTests.cs::ChatMemberHandlerTestFactoryTests::BotMock_IsProperlyConfigured",
+        "file": "TestInfrastructure/ChatMemberHandlerTestFactoryTests.cs",
+        "namespace": "ClubDoorman.TestInfrastructure",
+        "class": "ChatMemberHandlerTestFactoryTests",
+        "test_name": "BotMock_IsProperlyConfigured",
+        "line": 64,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "test-infrastructure"
+        ],
+        "body_lines": 8,
+        "declared_area_from_path": "TestInfrastructure",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 158
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestInfrastructure/ChatMemberHandlerTestFactoryTests.cs\n# Lines 34-94 (test starts at line 64)\n    }\n\n    [Test]\n    public void CreateChatMemberHandler_ConfiguresAllDependencies()\n    {\n        // Arrange\n        var factory = new ChatMemberHandlerTestFactory();\n\n        // Act\n        var instance = factory.CreateChatMemberHandler();\n\n        // Assert\n        // Проверяем что все зависимости настроены\n        Assert.That(instance, Is.Not.Null);\n    }\n\n    [Test]\n    public void CreateChatMemberHandler_CreatesFreshInstanceEachTime()\n    {\n        // Arrange\n        var factory = new ChatMemberHandlerTestFactory();\n\n        // Act\n        var instance1 = factory.CreateChatMemberHandler();\n        var instance2 = factory.CreateChatMemberHandler();\n\n        // Assert\n        Assert.That(instance1, Is.Not.SameAs(instance2));\n    }\n\n    [Test]\n    public void BotMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new ChatMemberHandlerTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.BotMock, Is.Not.Null);\n        Assert.That(factory.BotMock.Object, Is.Not.Null);\n    }\n\n    [Test]\n    public void UserManagerMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new ChatMemberHandlerTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.UserManagerMock, Is.Not.Null);\n        Assert.That(factory.UserManagerMock.Object, Is.Not.Null);\n    }\n\n    [Test]\n    public void LoggerMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new ChatMemberHandlerTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.LoggerMock, Is.Not.Null);\n        Assert.That(factory.LoggerMock.Object, Is.Not.Null);\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestInfrastructure/ChatMemberHandlerTestFactoryTests.cs::ChatMemberHandlerTestFactoryTests::UserManagerMock_IsProperlyConfigured",
+        "file": "TestInfrastructure/ChatMemberHandlerTestFactoryTests.cs",
+        "namespace": "ClubDoorman.TestInfrastructure",
+        "class": "ChatMemberHandlerTestFactoryTests",
+        "test_name": "UserManagerMock_IsProperlyConfigured",
+        "line": 75,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "test-infrastructure"
+        ],
+        "body_lines": 8,
+        "declared_area_from_path": "TestInfrastructure",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 159
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestInfrastructure/ChatMemberHandlerTestFactoryTests.cs\n# Lines 45-96 (test starts at line 75)\n        // Assert\n        // Проверяем что все зависимости настроены\n        Assert.That(instance, Is.Not.Null);\n    }\n\n    [Test]\n    public void CreateChatMemberHandler_CreatesFreshInstanceEachTime()\n    {\n        // Arrange\n        var factory = new ChatMemberHandlerTestFactory();\n\n        // Act\n        var instance1 = factory.CreateChatMemberHandler();\n        var instance2 = factory.CreateChatMemberHandler();\n\n        // Assert\n        Assert.That(instance1, Is.Not.SameAs(instance2));\n    }\n\n    [Test]\n    public void BotMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new ChatMemberHandlerTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.BotMock, Is.Not.Null);\n        Assert.That(factory.BotMock.Object, Is.Not.Null);\n    }\n\n    [Test]\n    public void UserManagerMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new ChatMemberHandlerTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.UserManagerMock, Is.Not.Null);\n        Assert.That(factory.UserManagerMock.Object, Is.Not.Null);\n    }\n\n    [Test]\n    public void LoggerMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new ChatMemberHandlerTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.LoggerMock, Is.Not.Null);\n        Assert.That(factory.LoggerMock.Object, Is.Not.Null);\n    }\n}\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestInfrastructure/ChatMemberHandlerTestFactoryTests.cs::ChatMemberHandlerTestFactoryTests::LoggerMock_IsProperlyConfigured",
+        "file": "TestInfrastructure/ChatMemberHandlerTestFactoryTests.cs",
+        "namespace": "ClubDoorman.TestInfrastructure",
+        "class": "ChatMemberHandlerTestFactoryTests",
+        "test_name": "LoggerMock_IsProperlyConfigured",
+        "line": 86,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "test-infrastructure"
+        ],
+        "body_lines": 8,
+        "declared_area_from_path": "TestInfrastructure",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 160
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestInfrastructure/ChatMemberHandlerTestFactoryTests.cs\n# Lines 56-96 (test starts at line 86)\n        // Act\n        var instance1 = factory.CreateChatMemberHandler();\n        var instance2 = factory.CreateChatMemberHandler();\n\n        // Assert\n        Assert.That(instance1, Is.Not.SameAs(instance2));\n    }\n\n    [Test]\n    public void BotMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new ChatMemberHandlerTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.BotMock, Is.Not.Null);\n        Assert.That(factory.BotMock.Object, Is.Not.Null);\n    }\n\n    [Test]\n    public void UserManagerMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new ChatMemberHandlerTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.UserManagerMock, Is.Not.Null);\n        Assert.That(factory.UserManagerMock.Object, Is.Not.Null);\n    }\n\n    [Test]\n    public void LoggerMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new ChatMemberHandlerTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.LoggerMock, Is.Not.Null);\n        Assert.That(factory.LoggerMock.Object, Is.Not.Null);\n    }\n}\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestInfrastructure/ConfigurationExceptionTestFactoryTests.cs::ConfigurationExceptionTestFactoryTests::CreateConfigurationException_ReturnsWorkingInstance",
+        "file": "TestInfrastructure/ConfigurationExceptionTestFactoryTests.cs",
+        "namespace": "ClubDoorman.TestInfrastructure",
+        "class": "ConfigurationExceptionTestFactoryTests",
+        "test_name": "CreateConfigurationException_ReturnsWorkingInstance",
+        "line": 18,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "test-infrastructure"
+        ],
+        "body_lines": 11,
+        "declared_area_from_path": "TestInfrastructure",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 161
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestInfrastructure/ConfigurationExceptionTestFactoryTests.cs\n# Lines 1-48 (test starts at line 18)\nusing ClubDoorman.Services.UserBan;\nusing ClubDoorman.Infrastructure;\nusing Microsoft.Extensions.Logging;\nusing Microsoft.Extensions.Logging.Abstractions;\nusing Moq;\nusing NUnit.Framework;\n\nnamespace ClubDoorman.TestInfrastructure;\n\n/// <summary>\n/// Тесты для ConfigurationExceptionTestFactory\n/// Автоматически сгенерировано\n/// </summary>\n[TestFixture]\n[Category(\"test-infrastructure\")]\npublic class ConfigurationExceptionTestFactoryTests\n{\n    [Test]\n    public void CreateConfigurationException_ReturnsWorkingInstance()\n    {\n        // Arrange\n        var factory = new ConfigurationExceptionTestFactory();\n\n        // Act\n        var instance = factory.CreateConfigurationException();\n\n        // Assert\n        Assert.That(instance, Is.Not.Null);\n        Assert.That(instance, Is.InstanceOf<ConfigurationException>());\n    }\n\n    [Test]\n    public void CreateConfigurationException_ConfiguresAllDependencies()\n    {\n        // Arrange\n        var factory = new ConfigurationExceptionTestFactory();\n\n        // Act\n        var instance = factory.CreateConfigurationException();\n\n        // Assert\n        // Проверяем что все зависимости настроены\n        Assert.That(instance, Is.Not.Null);\n    }\n\n    [Test]\n    public void CreateConfigurationException_CreatesFreshInstanceEachTime()\n    {\n"
+    }
+  ]
+}

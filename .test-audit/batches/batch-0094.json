@@ -1,0 +1,440 @@
+{
+  "schema_version": "test-audit-batch-v1",
+  "batch_no": 94,
+  "purpose": "local LLM audit input",
+  "instructions": "Return JSONL only. One audit object per input test. No markdown. No code edits.",
+  "tests": [
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Moderation/SpamHamClassifierTests.cs::SpamHamClassifierTests::IsSpam_EmptyMessage_ReturnsNotSpam",
+        "file": "Unit/Moderation/SpamHamClassifierTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Moderation",
+        "class": "SpamHamClassifierTests",
+        "test_name": "IsSpam_EmptyMessage_ReturnsNotSpam",
+        "line": 62,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "unit",
+          "moderation",
+          "ml"
+        ],
+        "body_lines": 13,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 511
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Moderation/SpamHamClassifierTests.cs\n# Lines 32-92 (test starts at line 62)\n        // Arrange\n        var message = TK.CreateValidMessage();\n        _classifierMock.Setup(x => x.IsSpam(message.Text!))\n            .ReturnsAsync((false, 0.2f));\n\n        // Act\n        var result = await _classifierMock.Object.IsSpam(message.Text!);\n\n        // Assert\n        Assert.That(result.Spam, Is.False);\n        Assert.That(result.Score, Is.LessThan(0.5f));\n    }\n\n    [Test]\n    public async Task IsSpam_SpamMessage_ReturnsSpam()\n    {\n        // Arrange\n        var message = TK.CreateSpamMessage();\n        _classifierMock.Setup(x => x.IsSpam(message.Text!))\n            .ReturnsAsync((true, 0.8f));\n\n        // Act\n        var result = await _classifierMock.Object.IsSpam(message.Text!);\n\n        // Assert\n        Assert.That(result.Spam, Is.True);\n        Assert.That(result.Score, Is.GreaterThanOrEqualTo(0.0f));\n        Assert.That(result.Score, Is.LessThanOrEqualTo(1.0f));\n    }\n\n    [Test]\n    public async Task IsSpam_EmptyMessage_ReturnsNotSpam()\n    {\n        // Arrange\n        var message = TK.CreateEmptyMessage();\n        _classifierMock.Setup(x => x.IsSpam(message.Text!))\n            .ReturnsAsync((false, 0.1f));\n\n        // Act\n        var result = await _classifierMock.Object.IsSpam(message.Text!);\n\n        // Assert\n        Assert.That(result.Spam, Is.False);\n        Assert.That(result.Score, Is.LessThan(0.5f));\n    }\n\n    [Test]\n    public async Task IsSpam_NullText_ThrowsNullReferenceException()\n    {\n        // Arrange\n        var message = TK.CreateNullTextMessage();\n        _classifierMock.Setup(x => x.IsSpam(message.Text!))\n            .ThrowsAsync(new NullReferenceException());\n\n        // Act & Assert\n        var exception = Assert.ThrowsAsync<NullReferenceException>(async () =>\n            await _classifierMock.Object.IsSpam(message.Text!));\n    }\n\n    [Test]\n    public async Task IsSpam_LongMessage_HandlesCorrectly()\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Moderation/SpamHamClassifierTests.cs::SpamHamClassifierTests::IsSpam_NullText_ThrowsNullReferenceException",
+        "file": "Unit/Moderation/SpamHamClassifierTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Moderation",
+        "class": "SpamHamClassifierTests",
+        "test_name": "IsSpam_NullText_ThrowsNullReferenceException",
+        "line": 78,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "unit",
+          "moderation",
+          "ml"
+        ],
+        "body_lines": 10,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": true,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 512
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Moderation/SpamHamClassifierTests.cs\n# Lines 48-108 (test starts at line 78)\n        // Arrange\n        var message = TK.CreateSpamMessage();\n        _classifierMock.Setup(x => x.IsSpam(message.Text!))\n            .ReturnsAsync((true, 0.8f));\n\n        // Act\n        var result = await _classifierMock.Object.IsSpam(message.Text!);\n\n        // Assert\n        Assert.That(result.Spam, Is.True);\n        Assert.That(result.Score, Is.GreaterThanOrEqualTo(0.0f));\n        Assert.That(result.Score, Is.LessThanOrEqualTo(1.0f));\n    }\n\n    [Test]\n    public async Task IsSpam_EmptyMessage_ReturnsNotSpam()\n    {\n        // Arrange\n        var message = TK.CreateEmptyMessage();\n        _classifierMock.Setup(x => x.IsSpam(message.Text!))\n            .ReturnsAsync((false, 0.1f));\n\n        // Act\n        var result = await _classifierMock.Object.IsSpam(message.Text!);\n\n        // Assert\n        Assert.That(result.Spam, Is.False);\n        Assert.That(result.Score, Is.LessThan(0.5f));\n    }\n\n    [Test]\n    public async Task IsSpam_NullText_ThrowsNullReferenceException()\n    {\n        // Arrange\n        var message = TK.CreateNullTextMessage();\n        _classifierMock.Setup(x => x.IsSpam(message.Text!))\n            .ThrowsAsync(new NullReferenceException());\n\n        // Act & Assert\n        var exception = Assert.ThrowsAsync<NullReferenceException>(async () =>\n            await _classifierMock.Object.IsSpam(message.Text!));\n    }\n\n    [Test]\n    public async Task IsSpam_LongMessage_HandlesCorrectly()\n    {\n        // Arrange\n        var message = TK.CreateLongMessage();\n        _classifierMock.Setup(x => x.IsSpam(message.Text!))\n            .ReturnsAsync((false, 0.3f));\n\n        // Act\n        var result = await _classifierMock.Object.IsSpam(message.Text!);\n\n        // Assert\n        Assert.That(result.Score, Is.GreaterThanOrEqualTo(0.0f));\n        Assert.That(result.Score, Is.LessThanOrEqualTo(1.0f));\n    }\n\n    [Test]\n    public async Task IsSpam_ConcurrentCalls_HandlesCorrectly()\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Moderation/SpamHamClassifierTests.cs::SpamHamClassifierTests::IsSpam_LongMessage_HandlesCorrectly",
+        "file": "Unit/Moderation/SpamHamClassifierTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Moderation",
+        "class": "SpamHamClassifierTests",
+        "test_name": "IsSpam_LongMessage_HandlesCorrectly",
+        "line": 91,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 13,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 513
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Moderation/SpamHamClassifierTests.cs\n# Lines 61-121 (test starts at line 91)\n\n    [Test]\n    public async Task IsSpam_EmptyMessage_ReturnsNotSpam()\n    {\n        // Arrange\n        var message = TK.CreateEmptyMessage();\n        _classifierMock.Setup(x => x.IsSpam(message.Text!))\n            .ReturnsAsync((false, 0.1f));\n\n        // Act\n        var result = await _classifierMock.Object.IsSpam(message.Text!);\n\n        // Assert\n        Assert.That(result.Spam, Is.False);\n        Assert.That(result.Score, Is.LessThan(0.5f));\n    }\n\n    [Test]\n    public async Task IsSpam_NullText_ThrowsNullReferenceException()\n    {\n        // Arrange\n        var message = TK.CreateNullTextMessage();\n        _classifierMock.Setup(x => x.IsSpam(message.Text!))\n            .ThrowsAsync(new NullReferenceException());\n\n        // Act & Assert\n        var exception = Assert.ThrowsAsync<NullReferenceException>(async () =>\n            await _classifierMock.Object.IsSpam(message.Text!));\n    }\n\n    [Test]\n    public async Task IsSpam_LongMessage_HandlesCorrectly()\n    {\n        // Arrange\n        var message = TK.CreateLongMessage();\n        _classifierMock.Setup(x => x.IsSpam(message.Text!))\n            .ReturnsAsync((false, 0.3f));\n\n        // Act\n        var result = await _classifierMock.Object.IsSpam(message.Text!);\n\n        // Assert\n        Assert.That(result.Score, Is.GreaterThanOrEqualTo(0.0f));\n        Assert.That(result.Score, Is.LessThanOrEqualTo(1.0f));\n    }\n\n    [Test]\n    public async Task IsSpam_ConcurrentCalls_HandlesCorrectly()\n    {\n        // Arrange\n        var message = TK.CreateValidMessage();\n        _classifierMock.Setup(x => x.IsSpam(message.Text!))\n            .ReturnsAsync((false, 0.2f));\n        var tasks = new List<Task<(bool, float)>>();\n\n        // Act\n        for (int i = 0; i < 10; i++)\n        {\n            tasks.Add(_classifierMock.Object.IsSpam(message.Text!));\n        }\n\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Moderation/SpamHamClassifierTests.cs::SpamHamClassifierTests::IsSpam_ConcurrentCalls_HandlesCorrectly",
+        "file": "Unit/Moderation/SpamHamClassifierTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Moderation",
+        "class": "SpamHamClassifierTests",
+        "test_name": "IsSpam_ConcurrentCalls_HandlesCorrectly",
+        "line": 107,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 23,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 514
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Moderation/SpamHamClassifierTests.cs\n# Lines 77-137 (test starts at line 107)\n\n    [Test]\n    public async Task IsSpam_NullText_ThrowsNullReferenceException()\n    {\n        // Arrange\n        var message = TK.CreateNullTextMessage();\n        _classifierMock.Setup(x => x.IsSpam(message.Text!))\n            .ThrowsAsync(new NullReferenceException());\n\n        // Act & Assert\n        var exception = Assert.ThrowsAsync<NullReferenceException>(async () =>\n            await _classifierMock.Object.IsSpam(message.Text!));\n    }\n\n    [Test]\n    public async Task IsSpam_LongMessage_HandlesCorrectly()\n    {\n        // Arrange\n        var message = TK.CreateLongMessage();\n        _classifierMock.Setup(x => x.IsSpam(message.Text!))\n            .ReturnsAsync((false, 0.3f));\n\n        // Act\n        var result = await _classifierMock.Object.IsSpam(message.Text!);\n\n        // Assert\n        Assert.That(result.Score, Is.GreaterThanOrEqualTo(0.0f));\n        Assert.That(result.Score, Is.LessThanOrEqualTo(1.0f));\n    }\n\n    [Test]\n    public async Task IsSpam_ConcurrentCalls_HandlesCorrectly()\n    {\n        // Arrange\n        var message = TK.CreateValidMessage();\n        _classifierMock.Setup(x => x.IsSpam(message.Text!))\n            .ReturnsAsync((false, 0.2f));\n        var tasks = new List<Task<(bool, float)>>();\n\n        // Act\n        for (int i = 0; i < 10; i++)\n        {\n            tasks.Add(_classifierMock.Object.IsSpam(message.Text!));\n        }\n\n        var results = await Task.WhenAll(tasks);\n\n        // Assert\n        Assert.That(results, Has.Length.EqualTo(10));\n        foreach (var result in results)\n        {\n            Assert.That(result.Item2, Is.GreaterThanOrEqualTo(0.0f));\n            Assert.That(result.Item2, Is.LessThanOrEqualTo(1.0f));\n        }\n    }\n\n    [Test]\n    public async Task IsSpam_DifferentUserTypes_HandlesCorrectly()\n    {\n        // Arrange\n        var validMessage = TK.CreateValidMessage();\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Moderation/SpamHamClassifierTests.cs::SpamHamClassifierTests::IsSpam_DifferentUserTypes_HandlesCorrectly",
+        "file": "Unit/Moderation/SpamHamClassifierTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Moderation",
+        "class": "SpamHamClassifierTests",
+        "test_name": "IsSpam_DifferentUserTypes_HandlesCorrectly",
+        "line": 133,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 19,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 515
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Moderation/SpamHamClassifierTests.cs\n# Lines 103-163 (test starts at line 133)\n        Assert.That(result.Score, Is.GreaterThanOrEqualTo(0.0f));\n        Assert.That(result.Score, Is.LessThanOrEqualTo(1.0f));\n    }\n\n    [Test]\n    public async Task IsSpam_ConcurrentCalls_HandlesCorrectly()\n    {\n        // Arrange\n        var message = TK.CreateValidMessage();\n        _classifierMock.Setup(x => x.IsSpam(message.Text!))\n            .ReturnsAsync((false, 0.2f));\n        var tasks = new List<Task<(bool, float)>>();\n\n        // Act\n        for (int i = 0; i < 10; i++)\n        {\n            tasks.Add(_classifierMock.Object.IsSpam(message.Text!));\n        }\n\n        var results = await Task.WhenAll(tasks);\n\n        // Assert\n        Assert.That(results, Has.Length.EqualTo(10));\n        foreach (var result in results)\n        {\n            Assert.That(result.Item2, Is.GreaterThanOrEqualTo(0.0f));\n            Assert.That(result.Item2, Is.LessThanOrEqualTo(1.0f));\n        }\n    }\n\n    [Test]\n    public async Task IsSpam_DifferentUserTypes_HandlesCorrectly()\n    {\n        // Arrange\n        var validMessage = TK.CreateValidMessage();\n        var spamMessage = TK.CreateSpamMessage();\n        _classifierMock.Setup(x => x.IsSpam(validMessage.Text!))\n            .ReturnsAsync((false, 0.2f));\n        _classifierMock.Setup(x => x.IsSpam(spamMessage.Text!))\n            .ReturnsAsync((true, 0.8f));\n\n        // Act\n        var validResult = await _classifierMock.Object.IsSpam(validMessage.Text!);\n        var spamResult = await _classifierMock.Object.IsSpam(spamMessage.Text!);\n\n        // Assert\n        Assert.That(validResult.Score, Is.GreaterThanOrEqualTo(0.0f));\n        Assert.That(validResult.Score, Is.LessThanOrEqualTo(1.0f));\n        Assert.That(spamResult.Score, Is.GreaterThanOrEqualTo(0.0f));\n        Assert.That(spamResult.Score, Is.LessThanOrEqualTo(1.0f));\n    }\n\n    [Test]\n    public async Task IsSpam_DifferentChatTypes_HandlesCorrectly()\n    {\n        // Arrange\n        var groupMessage = TK.CreateValidMessage();\n        var privateMessage = TK.CreateSpamMessage();\n        _classifierMock.Setup(x => x.IsSpam(groupMessage.Text!))\n            .ReturnsAsync((false, 0.2f));\n        _classifierMock.Setup(x => x.IsSpam(privateMessage.Text!))\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Moderation/SpamHamClassifierTests.cs::SpamHamClassifierTests::IsSpam_DifferentChatTypes_HandlesCorrectly",
+        "file": "Unit/Moderation/SpamHamClassifierTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Moderation",
+        "class": "SpamHamClassifierTests",
+        "test_name": "IsSpam_DifferentChatTypes_HandlesCorrectly",
+        "line": 155,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 17,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 516
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Moderation/SpamHamClassifierTests.cs\n# Lines 125-185 (test starts at line 155)\n        Assert.That(results, Has.Length.EqualTo(10));\n        foreach (var result in results)\n        {\n            Assert.That(result.Item2, Is.GreaterThanOrEqualTo(0.0f));\n            Assert.That(result.Item2, Is.LessThanOrEqualTo(1.0f));\n        }\n    }\n\n    [Test]\n    public async Task IsSpam_DifferentUserTypes_HandlesCorrectly()\n    {\n        // Arrange\n        var validMessage = TK.CreateValidMessage();\n        var spamMessage = TK.CreateSpamMessage();\n        _classifierMock.Setup(x => x.IsSpam(validMessage.Text!))\n            .ReturnsAsync((false, 0.2f));\n        _classifierMock.Setup(x => x.IsSpam(spamMessage.Text!))\n            .ReturnsAsync((true, 0.8f));\n\n        // Act\n        var validResult = await _classifierMock.Object.IsSpam(validMessage.Text!);\n        var spamResult = await _classifierMock.Object.IsSpam(spamMessage.Text!);\n\n        // Assert\n        Assert.That(validResult.Score, Is.GreaterThanOrEqualTo(0.0f));\n        Assert.That(validResult.Score, Is.LessThanOrEqualTo(1.0f));\n        Assert.That(spamResult.Score, Is.GreaterThanOrEqualTo(0.0f));\n        Assert.That(spamResult.Score, Is.LessThanOrEqualTo(1.0f));\n    }\n\n    [Test]\n    public async Task IsSpam_DifferentChatTypes_HandlesCorrectly()\n    {\n        // Arrange\n        var groupMessage = TK.CreateValidMessage();\n        var privateMessage = TK.CreateSpamMessage();\n        _classifierMock.Setup(x => x.IsSpam(groupMessage.Text!))\n            .ReturnsAsync((false, 0.2f));\n        _classifierMock.Setup(x => x.IsSpam(privateMessage.Text!))\n            .ReturnsAsync((true, 0.8f));\n\n        // Act\n        var groupResult = await _classifierMock.Object.IsSpam(groupMessage.Text!);\n        var privateResult = await _classifierMock.Object.IsSpam(privateMessage.Text!);\n\n        // Assert\n        Assert.That(groupResult.Score, Is.GreaterThanOrEqualTo(0.0f));\n        Assert.That(privateResult.Score, Is.GreaterThanOrEqualTo(0.0f));\n    }\n\n    [Test]\n    public async Task AddSpam_ValidMessage_AddsToDataset()\n    {\n        // Arrange\n        var message = TK.CreateSpamMessage();\n\n        // Act\n        await _classifierMock.Object.AddSpam(message.Text!);\n\n        // Assert\n        // Проверяем, что метод выполнился без исключений\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/AiChecksExtendedTests.cs::AiChecksExtendedTests::GetSpamProbability_NullMessage_ThrowsArgumentNullException",
+        "file": "Unit/Services/AiChecksExtendedTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "AiChecksExtendedTests",
+        "test_name": "GetSpamProbability_NullMessage_ThrowsArgumentNullException",
+        "line": 180,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 10,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": true,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 539
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/AiChecksExtendedTests.cs\n# Lines 150-210 (test starts at line 180)\n        Assert.That(result, Is.Not.Null);\n        Assert.That(result.SpamProbability, Is.Not.Null);\n    }\n\n    [Test]\n    public async Task GetAttentionBaitProbability_WithCallback_ReturnsSpamPhotoBio()\n    {\n        // Arrange\n        var service = _factory.CreateAiChecks();\n        var user = TK.CreateValidUser();\n        var callbackCalled = false;\n        Func<string, Task> callback = async (reason) =>\n        {\n            callbackCalled = true;\n            await Task.CompletedTask;\n        };\n\n        // Act\n        var result = await service.GetAttentionBaitProbability(user, callback);\n\n        // Assert\n        Assert.That(result, Is.Not.Null);\n        Assert.That(result.SpamProbability, Is.Not.Null);\n        // Callback может не вызываться в зависимости от логики\n    }\n\n    #endregion\n\n    #region GetSpamProbability Tests\n\n    [Test]\n    public async Task GetSpamProbability_NullMessage_ThrowsArgumentNullException()\n    {\n        // Arrange\n        var service = _factory.CreateAiChecks();\n\n        // Act & Assert\n        var exception = Assert.ThrowsAsync<ArgumentNullException>(\n            async () => await service.GetSpamProbability(null!));\n\n        Assert.That(exception.ParamName, Is.EqualTo(\"message\"));\n    }\n\n    [Test]\n    public async Task GetSpamProbability_ValidMessage_ReturnsSpamProbability()\n    {\n        // Arrange\n        var service = _factory.CreateAiChecks();\n        var message = TK.CreateValidMessage();\n\n        // Act\n        var result = await service.GetSpamProbability(message);\n\n        // Assert\n        Assert.That(result, Is.Not.Null);\n        Assert.That(result.Probability, Is.GreaterThanOrEqualTo(0.0));\n        Assert.That(result.Probability, Is.LessThanOrEqualTo(1.0));\n        Assert.That(result.Reason, Is.Not.Null);\n    }\n\n    [Test]\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/AiChecksExtendedTests.cs::AiChecksExtendedTests::GetSpamProbability_ConcurrentCalls_HandlesCorrectly",
+        "file": "Unit/Services/AiChecksExtendedTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "AiChecksExtendedTests",
+        "test_name": "GetSpamProbability_ConcurrentCalls_HandlesCorrectly",
+        "line": 439,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 18,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 553
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/AiChecksExtendedTests.cs\n# Lines 409-469 (test starts at line 439)\n        // Act\n        var result = await service.GetSpamProbability(message);\n\n        // Assert\n        Assert.That(result, Is.Not.Null);\n        Assert.That(result.Probability, Is.GreaterThanOrEqualTo(0.0));\n        Assert.That(result.Probability, Is.LessThanOrEqualTo(1.0));\n    }\n\n    [Test]\n    public async Task GetSpamProbability_MessageWithoutFrom_ReturnsSpamProbability()\n    {\n        // Arrange\n        var service = _factory.CreateAiChecks();\n        var message = new Message\n        {\n            From = null,\n            Chat = TK.CreateGroupChat(),\n            Text = \"Test message\"\n        };\n\n        // Act\n        var result = await service.GetSpamProbability(message);\n\n        // Assert\n        Assert.That(result, Is.Not.Null);\n        Assert.That(result.Probability, Is.GreaterThanOrEqualTo(0.0));\n        Assert.That(result.Probability, Is.LessThanOrEqualTo(1.0));\n    }\n\n    [Test]\n    public async Task GetSpamProbability_ConcurrentCalls_HandlesCorrectly()\n    {\n        // Arrange\n        var service = _factory.CreateAiChecks();\n        var message = TK.CreateValidMessage();\n        var tasks = new List<ValueTask<SpamProbability>>();\n\n        // Act\n        for (int i = 0; i < 5; i++)\n        {\n            tasks.Add(service.GetSpamProbability(message));\n        }\n\n        var results = await Task.WhenAll(tasks.Select(t => t.AsTask()));\n\n        // Assert\n        Assert.That(results, Has.Length.EqualTo(5));\n        Assert.That(results.All(r => r.Probability >= 0.0 && r.Probability <= 1.0), Is.True);\n    }\n\n    #endregion\n\n    #region Integration Tests\n\n    [Test]\n    public async Task MarkUserOkay_ThenGetAttentionBaitProbability_ReturnsCachedResult()\n    {\n        // Arrange\n        var service = _factory.CreateAiChecks();\n        var user = TK.CreateValidUser();\n"
+    }
+  ]
+}

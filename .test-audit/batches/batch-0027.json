@@ -1,0 +1,448 @@
+{
+  "schema_version": "test-audit-batch-v1",
+  "batch_no": 27,
+  "purpose": "local LLM audit input",
+  "instructions": "Return JSONL only. One audit object per input test. No markdown. No code edits.",
+  "tests": [
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Integration/InfrastructureE2ETests.cs::InfrastructureE2ETests::E2E_ModerationService_ShouldHandleSpamMessage",
+        "file": "Integration/InfrastructureE2ETests.cs",
+        "namespace": "ClubDoorman.Test.Integration",
+        "class": "InfrastructureE2ETests",
+        "test_name": "E2E_ModerationService_ShouldHandleSpamMessage",
+        "line": 134,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 14,
+        "declared_area_from_path": "Integration",
+        "construction_path": "custom_local_world",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": true,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": true,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "real_env_or_api"
+        ],
+        "_source_lineno": 55
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Integration/InfrastructureE2ETests.cs\n# Lines 104-164 (test starts at line 134)\n    [Test]\n    public async Task E2E_FakeTelegramClient_ShouldTrackSentMessages()\n    {\n        // Arrange\n        var message = TestData.Messages.Valid();\n        var chatId = message.Chat.Id;\n\n        // Act - отправляем сообщение через FakeTelegramClient\n        await _fakeBot.SendMessageAsync(chatId, \"Test message\");\n\n        // Assert с FluentAssertions\n        _fakeBot.SentMessages.Should().HaveCount(1);\n        _fakeBot.SentMessages.First().Text.Should().Be(\"Test message\");\n        _fakeBot.SentMessages.First().ChatId.Should().Be(chatId);\n    }\n\n    [Test]\n    public async Task E2E_FakeTelegramClient_ShouldTrackCallbackQueries()\n    {\n        // Arrange\n        var callbackQuery = TestData.CallbackQueries.Valid();\n\n        // Act - добавляем callback query вручную (метод не существует)\n        _fakeBot.CallbackQueries.Add(callbackQuery);\n\n        // Assert с FluentAssertions\n        _fakeBot.CallbackQueries.Should().HaveCount(1);\n        _fakeBot.CallbackQueries.First().Should().Be(callbackQuery);\n    }\n\n    [Test]\n    public async Task E2E_ModerationService_ShouldHandleSpamMessage()\n    {\n        // Arrange - создаем явный спам сообщение\n        var spamMessage = TestData.Messages.Valid();\n        spamMessage.Text = \"🔥🔥🔥 СРОЧНО! ЗАРАБОТАЙ 1000000$ ЗА ДЕНЬ! 🔥🔥🔥 ПЕРЕХОДИ ПО ССЫЛКЕ: https://scam.com\";\n\n        // Act\n        var result = await _moderationService.CheckMessageAsync(spamMessage);\n\n        // Assert с FluentAssertions\n        result.Should().NotBeNull();\n        // ML может не распознать как спам, но мы проверяем что система работает\n        result.Action.Should().BeOneOf(ModerationAction.Allow, ModerationAction.Delete);\n        result.Reason.Should().NotBeNullOrEmpty();\n    }\n\n    [Test]\n    public async Task E2E_TestDataFactory_ShouldGenerateValidData()\n    {\n        // Arrange & Act\n        var user = TestData.Users.Valid();\n        var message = TestData.Messages.Valid();\n        var chat = TestData.Chats.Group();\n\n        // Assert с FluentAssertions\n        user.Should().NotBeNull();\n        user.Id.Should().BeGreaterThan(0);\n        user.FirstName.Should().NotBeNullOrEmpty();\n\n        message.Should().NotBeNull();\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Integration/InfrastructureE2ETests.cs::InfrastructureE2ETests::E2E_TestDataFactory_ShouldGenerateValidData",
+        "file": "Integration/InfrastructureE2ETests.cs",
+        "namespace": "ClubDoorman.Test.Integration",
+        "class": "InfrastructureE2ETests",
+        "test_name": "E2E_TestDataFactory_ShouldGenerateValidData",
+        "line": 151,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 19,
+        "declared_area_from_path": "Integration",
+        "construction_path": "custom_local_world",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": true,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": true,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "real_env_or_api"
+        ],
+        "_source_lineno": 56
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Integration/InfrastructureE2ETests.cs\n# Lines 121-181 (test starts at line 151)\n    public async Task E2E_FakeTelegramClient_ShouldTrackCallbackQueries()\n    {\n        // Arrange\n        var callbackQuery = TestData.CallbackQueries.Valid();\n\n        // Act - добавляем callback query вручную (метод не существует)\n        _fakeBot.CallbackQueries.Add(callbackQuery);\n\n        // Assert с FluentAssertions\n        _fakeBot.CallbackQueries.Should().HaveCount(1);\n        _fakeBot.CallbackQueries.First().Should().Be(callbackQuery);\n    }\n\n    [Test]\n    public async Task E2E_ModerationService_ShouldHandleSpamMessage()\n    {\n        // Arrange - создаем явный спам сообщение\n        var spamMessage = TestData.Messages.Valid();\n        spamMessage.Text = \"🔥🔥🔥 СРОЧНО! ЗАРАБОТАЙ 1000000$ ЗА ДЕНЬ! 🔥🔥🔥 ПЕРЕХОДИ ПО ССЫЛКЕ: https://scam.com\";\n\n        // Act\n        var result = await _moderationService.CheckMessageAsync(spamMessage);\n\n        // Assert с FluentAssertions\n        result.Should().NotBeNull();\n        // ML может не распознать как спам, но мы проверяем что система работает\n        result.Action.Should().BeOneOf(ModerationAction.Allow, ModerationAction.Delete);\n        result.Reason.Should().NotBeNullOrEmpty();\n    }\n\n    [Test]\n    public async Task E2E_TestDataFactory_ShouldGenerateValidData()\n    {\n        // Arrange & Act\n        var user = TestData.Users.Valid();\n        var message = TestData.Messages.Valid();\n        var chat = TestData.Chats.Group();\n\n        // Assert с FluentAssertions\n        user.Should().NotBeNull();\n        user.Id.Should().BeGreaterThan(0);\n        user.FirstName.Should().NotBeNullOrEmpty();\n\n        message.Should().NotBeNull();\n        message.Text.Should().NotBeNullOrEmpty();\n        message.From.Should().NotBeNull();\n\n        chat.Should().NotBeNull();\n        chat.Id.Should().BeLessThan(0); // Группы имеют отрицательные ID\n        chat.Type.Should().Be(ChatType.Group);\n    }\n\n    [Test]\n    public async Task E2E_ModerationResult_ShouldHaveCorrectProperties()\n    {\n        // Arrange & Act\n        var allowResult = TestData.ModerationResults.Allow();\n        var deleteResult = TestData.ModerationResults.Delete();\n        var banResult = TestData.ModerationResults.Ban();\n\n        // Assert с FluentAssertions\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Integration/InfrastructureE2ETests.cs::InfrastructureE2ETests::E2E_ModerationResult_ShouldHaveCorrectProperties",
+        "file": "Integration/InfrastructureE2ETests.cs",
+        "namespace": "ClubDoorman.Test.Integration",
+        "class": "InfrastructureE2ETests",
+        "test_name": "E2E_ModerationResult_ShouldHaveCorrectProperties",
+        "line": 173,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 19,
+        "declared_area_from_path": "Integration",
+        "construction_path": "custom_local_world",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": true,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": true,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "real_env_or_api"
+        ],
+        "_source_lineno": 57
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Integration/InfrastructureE2ETests.cs\n# Lines 143-203 (test starts at line 173)\n\n        // Assert с FluentAssertions\n        result.Should().NotBeNull();\n        // ML может не распознать как спам, но мы проверяем что система работает\n        result.Action.Should().BeOneOf(ModerationAction.Allow, ModerationAction.Delete);\n        result.Reason.Should().NotBeNullOrEmpty();\n    }\n\n    [Test]\n    public async Task E2E_TestDataFactory_ShouldGenerateValidData()\n    {\n        // Arrange & Act\n        var user = TestData.Users.Valid();\n        var message = TestData.Messages.Valid();\n        var chat = TestData.Chats.Group();\n\n        // Assert с FluentAssertions\n        user.Should().NotBeNull();\n        user.Id.Should().BeGreaterThan(0);\n        user.FirstName.Should().NotBeNullOrEmpty();\n\n        message.Should().NotBeNull();\n        message.Text.Should().NotBeNullOrEmpty();\n        message.From.Should().NotBeNull();\n\n        chat.Should().NotBeNull();\n        chat.Id.Should().BeLessThan(0); // Группы имеют отрицательные ID\n        chat.Type.Should().Be(ChatType.Group);\n    }\n\n    [Test]\n    public async Task E2E_ModerationResult_ShouldHaveCorrectProperties()\n    {\n        // Arrange & Act\n        var allowResult = TestData.ModerationResults.Allow();\n        var deleteResult = TestData.ModerationResults.Delete();\n        var banResult = TestData.ModerationResults.Ban();\n\n        // Assert с FluentAssertions\n        allowResult.Should().NotBeNull();\n        allowResult.Action.Should().Be(ModerationAction.Allow);\n        allowResult.Reason.Should().NotBeNullOrEmpty();\n\n        deleteResult.Should().NotBeNull();\n        deleteResult.Action.Should().Be(ModerationAction.Delete);\n        deleteResult.Reason.Should().NotBeNullOrEmpty();\n\n        banResult.Should().NotBeNull();\n        banResult.Action.Should().Be(ModerationAction.Ban);\n        banResult.Reason.Should().NotBeNullOrEmpty();\n    }\n\n    [Test]\n    public async Task E2E_FakeTelegramClient_ShouldSupportMessageDeletion()\n    {\n        // Arrange\n        var message = TestData.Messages.Valid();\n        var chatId = message.Chat.Id;\n        var messageId = message.MessageId;\n\n        // Act - удаляем сообщение\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Integration/InfrastructureE2ETests.cs::InfrastructureE2ETests::E2E_FakeTelegramClient_ShouldSupportMessageDeletion",
+        "file": "Integration/InfrastructureE2ETests.cs",
+        "namespace": "ClubDoorman.Test.Integration",
+        "class": "InfrastructureE2ETests",
+        "test_name": "E2E_FakeTelegramClient_ShouldSupportMessageDeletion",
+        "line": 195,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 14,
+        "declared_area_from_path": "Integration",
+        "construction_path": "custom_local_world",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": true,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": true,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": true,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": true
+        },
+        "smells": [
+          "real_env_or_api"
+        ],
+        "_source_lineno": 58
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Integration/InfrastructureE2ETests.cs\n# Lines 165-225 (test starts at line 195)\n        message.Text.Should().NotBeNullOrEmpty();\n        message.From.Should().NotBeNull();\n\n        chat.Should().NotBeNull();\n        chat.Id.Should().BeLessThan(0); // Группы имеют отрицательные ID\n        chat.Type.Should().Be(ChatType.Group);\n    }\n\n    [Test]\n    public async Task E2E_ModerationResult_ShouldHaveCorrectProperties()\n    {\n        // Arrange & Act\n        var allowResult = TestData.ModerationResults.Allow();\n        var deleteResult = TestData.ModerationResults.Delete();\n        var banResult = TestData.ModerationResults.Ban();\n\n        // Assert с FluentAssertions\n        allowResult.Should().NotBeNull();\n        allowResult.Action.Should().Be(ModerationAction.Allow);\n        allowResult.Reason.Should().NotBeNullOrEmpty();\n\n        deleteResult.Should().NotBeNull();\n        deleteResult.Action.Should().Be(ModerationAction.Delete);\n        deleteResult.Reason.Should().NotBeNullOrEmpty();\n\n        banResult.Should().NotBeNull();\n        banResult.Action.Should().Be(ModerationAction.Ban);\n        banResult.Reason.Should().NotBeNullOrEmpty();\n    }\n\n    [Test]\n    public async Task E2E_FakeTelegramClient_ShouldSupportMessageDeletion()\n    {\n        // Arrange\n        var message = TestData.Messages.Valid();\n        var chatId = message.Chat.Id;\n        var messageId = message.MessageId;\n\n        // Act - удаляем сообщение\n        await _fakeBot.DeleteMessageAsync(chatId, messageId);\n\n        // Assert с FluentAssertions\n        _fakeBot.DeletedMessages.Should().HaveCount(1);\n        _fakeBot.DeletedMessages.First().ChatId.Should().Be(chatId);\n        _fakeBot.DeletedMessages.First().MessageId.Should().Be(messageId);\n    }\n\n    [Test]\n    public async Task E2E_FakeTelegramClient_ShouldSupportUserBanning()\n    {\n        // Arrange\n        var user = TestData.Users.Valid();\n        var chatId = -1001234567890L; // Тестовый ID группы\n\n        // Act - баним пользователя\n        await _fakeBot.BanChatMemberAsync(chatId, user.Id);\n\n        // Assert с FluentAssertions\n        _fakeBot.BannedUsers.Should().HaveCount(1);\n        _fakeBot.BannedUsers.First().UserId.Should().Be(user.Id);\n        _fakeBot.BannedUsers.First().ChatId.Should().Be(chatId);\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Integration/InfrastructureE2ETests.cs::InfrastructureE2ETests::E2E_ModerationService_ShouldHandleMimicryDetection",
+        "file": "Integration/InfrastructureE2ETests.cs",
+        "namespace": "ClubDoorman.Test.Integration",
+        "class": "InfrastructureE2ETests",
+        "test_name": "E2E_ModerationService_ShouldHandleMimicryDetection",
+        "line": 228,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 13,
+        "declared_area_from_path": "Integration",
+        "construction_path": "custom_local_world",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": true,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": true,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "real_env_or_api"
+        ],
+        "_source_lineno": 60
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Integration/InfrastructureE2ETests.cs\n# Lines 198-258 (test starts at line 228)\n        // Arrange\n        var message = TestData.Messages.Valid();\n        var chatId = message.Chat.Id;\n        var messageId = message.MessageId;\n\n        // Act - удаляем сообщение\n        await _fakeBot.DeleteMessageAsync(chatId, messageId);\n\n        // Assert с FluentAssertions\n        _fakeBot.DeletedMessages.Should().HaveCount(1);\n        _fakeBot.DeletedMessages.First().ChatId.Should().Be(chatId);\n        _fakeBot.DeletedMessages.First().MessageId.Should().Be(messageId);\n    }\n\n    [Test]\n    public async Task E2E_FakeTelegramClient_ShouldSupportUserBanning()\n    {\n        // Arrange\n        var user = TestData.Users.Valid();\n        var chatId = -1001234567890L; // Тестовый ID группы\n\n        // Act - баним пользователя\n        await _fakeBot.BanChatMemberAsync(chatId, user.Id);\n\n        // Assert с FluentAssertions\n        _fakeBot.BannedUsers.Should().HaveCount(1);\n        _fakeBot.BannedUsers.First().UserId.Should().Be(user.Id);\n        _fakeBot.BannedUsers.First().ChatId.Should().Be(chatId);\n    }\n\n    [Test]\n    public async Task E2E_ModerationService_ShouldHandleMimicryDetection()\n    {\n        // Arrange - создаем сообщение с мимикрией (используем обычное сообщение)\n        var mimicryMessage = TestData.Messages.Valid();\n        mimicryMessage.Text = \"Это нормальное сообщение с полезной информацией\"; // Небанальное сообщение\n\n        // Act\n        var result = await _moderationService.CheckMessageAsync(mimicryMessage);\n\n        // Assert с FluentAssertions\n        result.Should().NotBeNull();\n        // Мимикрия обрабатывается отдельно, но сообщение должно пройти проверку\n        result.Action.Should().Be(ModerationAction.Allow);\n    }\n\n    [Test]\n    public async Task E2E_Infrastructure_ShouldSupportAsyncOperations()\n    {\n        // Arrange\n        var tasks = new List<Task>();\n\n        // Act - выполняем несколько операций параллельно\n        for (int i = 0; i < 5; i++)\n        {\n            var message = TestData.Messages.Valid();\n            message.Text = $\"Test message {i}\";\n            tasks.Add(_moderationService.CheckMessageAsync(message));\n        }\n\n        await Task.WhenAll(tasks);\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Integration/MessageHandlerIntegrationTests.cs::MessageHandlerIntegrationTests::HandleMessageAsync_NullMessage_HandlesGracefully",
+        "file": "Integration/MessageHandlerIntegrationTests.cs",
+        "namespace": "ClubDoorman.Test.Integration",
+        "class": "MessageHandlerIntegrationTests",
+        "test_name": "HandleMessageAsync_NullMessage_HandlesGracefully",
+        "line": 184,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 13,
+        "declared_area_from_path": "Integration",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": true,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "message_handler_test_factory"
+        ],
+        "_source_lineno": 82
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Integration/MessageHandlerIntegrationTests.cs\n# Lines 154-214 (test starts at line 184)\n    [Test]\n    public async Task HandleMessageAsync_ValidMessage_ProcessesSuccessfully()\n    {\n        // Arrange\n        var message = CreateMessage(\"Hello, this is a test message\", ChatType.Group);\n        var update = CreateUpdate(message);\n\n        // Act\n        await _handler.HandleAsync(update);\n\n        // Assert\n        // Verify that the message was processed\n        Assert.Pass(\"Valid message processed successfully\");\n    }\n\n    [Test]\n    public async Task HandleMessageAsync_EmptyMessage_HandlesGracefully()\n    {\n        // Arrange\n        var message = CreateMessage(\"\", ChatType.Group);\n        var update = CreateUpdate(message);\n\n        // Act\n        await _handler.HandleAsync(update);\n\n        // Assert\n        // Verify that the empty message was handled gracefully\n        Assert.Pass(\"Empty message handled gracefully\");\n    }\n\n    [Test]\n    public async Task HandleMessageAsync_NullMessage_HandlesGracefully()\n    {\n        // Arrange\n        var update = new Update\n        {\n            Id = 1,\n            Message = null,\n            EditedMessage = null\n        };\n\n        // Act & Assert\n        Assert.ThrowsAsync<ArgumentNullException>(async () => await _handler.HandleAsync(update),\n            \"Should throw ArgumentNullException when both Message and EditedMessage are null\");\n    }\n\n    [Test]\n    public async Task HandleMessageAsync_LongMessage_ProcessesSuccessfully()\n    {\n        // Arrange\n        var longMessage = new string('a', 1000); // 1000 character message\n        var message = CreateMessage(longMessage, ChatType.Group);\n        var update = CreateUpdate(message);\n\n        // Act\n        await _handler.HandleAsync(update);\n\n        // Assert\n        // Verify that the long message was processed\n        Assert.Pass(\"Long message processed successfully\");\n    }\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Integration/SimpleE2ETests.cs::SimpleE2ETests::E2E_CompleteAIAnalysis_ShouldWorkEndToEnd",
+        "file": "Integration/SimpleE2ETests.cs",
+        "namespace": "ClubDoorman.Test.Integration",
+        "class": "SimpleE2ETests",
+        "test_name": "E2E_CompleteAIAnalysis_ShouldWorkEndToEnd",
+        "line": 134,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 44,
+        "declared_area_from_path": "Integration",
+        "construction_path": "custom_local_world",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": true,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": true,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "real_env_or_api"
+        ],
+        "_source_lineno": 94
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Integration/SimpleE2ETests.cs\n# Lines 104-164 (test starts at line 134)\n        // Act\n        var result = await _spamHamClassifier.IsSpam(hamMessage);\n\n        // Assert\n        Assert.That(result.Score, Is.LessThan(0.5), \"Нормальное сообщение должно иметь низкую вероятность спама\");\n        Assert.That(result.Spam, Is.False, \"Сообщение должно быть классифицировано как не спам\");\n\n        Console.WriteLine($\"E2E тест: Нормальное сообщение классифицировано с вероятностью {result.Score}\");\n    }\n\n    [Test]\n    public async Task E2E_MimicryClassifier_ShouldDetectMimicry()\n    {\n        // Arrange - подозрительные сообщения\n        var messages = new List<string>\n        {\n            \"Здравствуйте! Я администратор. Нужна помощь?\",\n            \"Привет! Я модератор. Могу помочь?\",\n            \"Добрый день! Я поддержка. Есть вопросы?\"\n        };\n\n        // Act\n        var result = _mimicryClassifier.AnalyzeMessages(messages);\n\n        // Assert\n        Assert.That(result, Is.GreaterThan(0.3), \"Подозрительные сообщения должны иметь повышенную вероятность\");\n\n        Console.WriteLine($\"E2E тест: Mimicry анализ показал вероятность {result}\");\n    }\n\n    [Test]\n    public async Task E2E_CompleteAIAnalysis_ShouldWorkEndToEnd()\n    {\n        // Arrange - пользователь с фото\n        var user = new User\n        {\n            Id = 12345,\n            FirstName = \"Test\",\n            LastName = \"User\"\n        };\n\n        // Настраиваем FakeTelegramClient\n        _fakeBot.SetupGetChatFullInfo(user.Id, new ChatFullInfo\n        {\n            Id = user.Id,\n            Type = ChatType.Private,\n            Bio = null,\n            LinkedChatId = null,\n            Photo = new ChatPhoto\n            {\n                SmallFileId = \"fake_small_file_id\",\n                BigFileId = \"fake_big_photo_id\"\n            }\n        });\n\n        // Настраиваем фото\n        var photoPath = \"/home/kpblc/projects/ClubDoorman/tmp/big.png\";\n        _fakeBot.SetupGetFile(\"fake_big_photo_id\", photoPath);\n\n        // Act - AI анализ фото\n        var photoResult = await _aiChecks.GetAttentionBaitProbability(user);\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/ModerationServiceTests.cs::ModerationServiceTests::CheckUserNameAsync_InvalidUser_ReturnsBanAction",
+        "file": "ModerationServiceTests.cs",
+        "namespace": "ClubDoorman.Test",
+        "class": "ModerationServiceTests",
+        "test_name": "CheckUserNameAsync_InvalidUser_ReturnsBanAction",
+        "line": 112,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 11,
+        "declared_area_from_path": "Root",
+        "construction_path": "testkit_autofixture",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": true,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "testkit_autofixture"
+        ],
+        "_source_lineno": 110
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/ModerationServiceTests.cs\n# Lines 82-142 (test starts at line 112)\n    [Test]\n    public async Task CheckMessageAsync_BadMessage_ReturnsBanAction()\n    {\n        // Arrange\n        var message = TK.CreateValidMessage(); // Заменяем на валидное сообщение, так как BadMessageManager определяет спам\n        _factory.BadMessageManagerMock.Setup(x => x.KnownBadMessage(It.IsAny<string>()))\n            .Returns(true);\n\n        // Act\n        var result = await _service.CheckMessageAsync(message);\n\n        // Assert\n        Assert.That(result.Action, Is.EqualTo(ModerationAction.Ban));\n        Assert.That(result.Reason, Is.EqualTo(\"Известное спам-сообщение\"));\n    }\n\n    [Test]\n    public async Task CheckUserNameAsync_ValidUser_ReturnsAllowAction()\n    {\n        // Arrange\n        var user = TK.CreateValidUser();\n\n        // Act\n        var result = await _service.CheckUserNameAsync(user);\n\n        // Assert\n        Assert.That(result.Action, Is.EqualTo(ModerationAction.Allow));\n        Assert.That(result.Reason, Is.EqualTo(\"Имя пользователя корректно\"));\n    }\n\n    [Test]\n    public async Task CheckUserNameAsync_InvalidUser_ReturnsBanAction()\n    {\n        // Arrange\n        var user = TK.BuildUser().WithExtremelyLongName().Build(); // Создаем пользователя с очень длинным именем для бана\n\n        // Act\n        var result = await _service.CheckUserNameAsync(user);\n\n        // Assert\n        Assert.That(result.Action, Is.EqualTo(ModerationAction.Ban));\n        Assert.That(result.Reason, Does.Contain(\"Экстремально длинное имя\"));\n    }\n\n    [Test]\n    public async Task BanAndCleanupUserAsync_ValidUser_BansAndCleansUpSuccessfully()\n    {\n        // Arrange\n        var userId = 12345L;\n        var chatId = 67890L;\n        var messageId = 111;\n\n        // Настраиваем UserBanService для успешного выполнения\n        _factory.UserBanServiceMock.Setup(x => x.BanUserAsync(\n            It.IsAny<Chat>(),\n            It.IsAny<User>(),\n            It.IsAny<BanTypeEnum>(),\n            It.IsAny<string>(),\n            It.IsAny<Message>(),\n            It.IsAny<CancellationToken>()))\n            .Returns(Task.CompletedTask);\n"
+    }
+  ]
+}

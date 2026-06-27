@@ -1,0 +1,393 @@
+{
+  "schema_version": "test-audit-batch-v1",
+  "batch_no": 42,
+  "purpose": "local LLM audit input",
+  "instructions": "Return JSONL only. One audit object per input test. No markdown. No code edits.",
+  "tests": [
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Handlers/MessageHandlerHandleUserMessageTests.cs::MessageHandlerHandleUserMessageTests::HandleUserMessageAsync_WithForwardedMessage_ProcessesCorrectly",
+        "file": "Unit/Handlers/MessageHandlerHandleUserMessageTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Handlers",
+        "class": "MessageHandlerHandleUserMessageTests",
+        "test_name": "HandleUserMessageAsync_WithForwardedMessage_ProcessesCorrectly",
+        "line": 204,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 13,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": true,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "assert_pass"
+        ],
+        "_source_lineno": 383
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Handlers/MessageHandlerHandleUserMessageTests.cs\n# Lines 174-234 (test starts at line 204)\n    /// <summary>\n    /// Тест для HandleUserMessageAsync с клубным пользователем\n    /// Проверяет, что метод возвращается для клубных пользователей\n    /// <tags>user-message, club-user, skip-moderation</tags>\n    /// </summary>\n    [Test]\n    public async Task HandleUserMessageAsync_WithClubUser_ReturnsEarly()\n    {\n        // Arrange\n        var message = TK.CreateMessage();\n        var user = message.From!;\n        var clubName = \"test_club\";\n\n        // Настраиваем мок UserManager для клубного пользователя\n        _factory.UserManagerMock.Setup(x => x.GetClubUsername(user.Id))\n            .ReturnsAsync(clubName);\n\n        // Act\n        await _messageHandler.HandleUserMessageAsync(message, false, CancellationToken.None);\n\n        // Assert\n        // Метод должен завершиться без вызова модерации\n        _factory.ModerationServiceMock.Verify(x => x.CheckMessageAsync(It.IsAny<Message>()), Times.Never);\n    }\n\n    /// <summary>\n    /// Тест для HandleUserMessageAsync с пересланным сообщением\n    /// Проверяет обработку пересланных сообщений от новичков\n    /// <tags>user-message, forwarded-message, moderation</tags>\n    /// </summary>\n    [Test]\n    public async Task HandleUserMessageAsync_WithForwardedMessage_ProcessesCorrectly()\n    {\n        // Arrange\n        var message = TK.CreateMessage();\n        message.ForwardOrigin = new MessageOriginUser { SenderUser = TK.CreateUser() };\n\n        // Act\n        await _messageHandler.HandleUserMessageAsync(message, false, CancellationToken.None);\n\n        // Assert\n        // Метод должен завершиться без исключений\n        // Удаление пересланных сообщений зависит от Config.DeleteForwardedMessages\n        Assert.Pass(\"Пересланное сообщение обработано корректно\");\n    }\n\n    /// <summary>\n    /// Тест для HandleUserMessageAsync с разрешенным сообщением\n    /// Проверяет обработку разрешенных сообщений\n    /// <tags>user-message, allowed-message, moderation, allow</tags>\n    /// </summary>\n    [Test]\n    public async Task HandleUserMessageAsync_WithAllowedMessage_ProcessesCorrectly()\n    {\n        // Arrange\n        var message = TK.CreateMessage();\n        var user = message.From!;\n        var chat = message.Chat;\n\n        // Настраиваем мок ModerationFacade для разрешенного сообщения\n        _factory.ModerationFacadeMock.Setup(x => x.CheckMessageAsync(message))\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Handlers/MessageHandlerHandleUserMessageTests.cs::MessageHandlerHandleUserMessageTests::HandleUserMessageAsync_WithAllowedMessage_ProcessesCorrectly",
+        "file": "Unit/Handlers/MessageHandlerHandleUserMessageTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Handlers",
+        "class": "MessageHandlerHandleUserMessageTests",
+        "test_name": "HandleUserMessageAsync_WithAllowedMessage_ProcessesCorrectly",
+        "line": 225,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 17,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify"
+        ],
+        "_source_lineno": 384
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Handlers/MessageHandlerHandleUserMessageTests.cs\n# Lines 195-255 (test starts at line 225)\n        // Метод должен завершиться без вызова модерации\n        _factory.ModerationServiceMock.Verify(x => x.CheckMessageAsync(It.IsAny<Message>()), Times.Never);\n    }\n\n    /// <summary>\n    /// Тест для HandleUserMessageAsync с пересланным сообщением\n    /// Проверяет обработку пересланных сообщений от новичков\n    /// <tags>user-message, forwarded-message, moderation</tags>\n    /// </summary>\n    [Test]\n    public async Task HandleUserMessageAsync_WithForwardedMessage_ProcessesCorrectly()\n    {\n        // Arrange\n        var message = TK.CreateMessage();\n        message.ForwardOrigin = new MessageOriginUser { SenderUser = TK.CreateUser() };\n\n        // Act\n        await _messageHandler.HandleUserMessageAsync(message, false, CancellationToken.None);\n\n        // Assert\n        // Метод должен завершиться без исключений\n        // Удаление пересланных сообщений зависит от Config.DeleteForwardedMessages\n        Assert.Pass(\"Пересланное сообщение обработано корректно\");\n    }\n\n    /// <summary>\n    /// Тест для HandleUserMessageAsync с разрешенным сообщением\n    /// Проверяет обработку разрешенных сообщений\n    /// <tags>user-message, allowed-message, moderation, allow</tags>\n    /// </summary>\n    [Test]\n    public async Task HandleUserMessageAsync_WithAllowedMessage_ProcessesCorrectly()\n    {\n        // Arrange\n        var message = TK.CreateMessage();\n        var user = message.From!;\n        var chat = message.Chat;\n\n        // Настраиваем мок ModerationFacade для разрешенного сообщения\n        _factory.ModerationFacadeMock.Setup(x => x.CheckMessageAsync(message))\n            .ReturnsAsync(TK.CreateAllowResult());\n\n        // Act\n        await _messageHandler.HandleUserMessageAsync(message, false, CancellationToken.None);\n\n        // Assert\n        // Проверяем, что ModerationFacade был вызван\n        _factory.ModerationFacadeMock.Verify(x => x.CheckMessageAsync(message), Times.Once);\n    }\n\n\n\n    /// <summary>\n    /// Тест для HandleUserMessageAsync с сообщением для удаления\n    /// Проверяет обработку сообщений для удаления\n    /// <tags>user-message, delete-message, moderation, delete</tags>\n    /// </summary>\n    [Test]\n    public async Task HandleUserMessageAsync_WithDeleteMessage_CallsDeleteAndReportMessage()\n    {\n        // Arrange\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Handlers/MessageHandlerHandleUserMessageTests.cs::MessageHandlerHandleUserMessageTests::HandleUserMessageAsync_WithDeleteMessage_CallsDeleteAndReportMessage",
+        "file": "Unit/Handlers/MessageHandlerHandleUserMessageTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Handlers",
+        "class": "MessageHandlerHandleUserMessageTests",
+        "test_name": "HandleUserMessageAsync_WithDeleteMessage_CallsDeleteAndReportMessage",
+        "line": 252,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 27,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify"
+        ],
+        "_source_lineno": 385
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Handlers/MessageHandlerHandleUserMessageTests.cs\n# Lines 222-282 (test starts at line 252)\n    /// Проверяет обработку разрешенных сообщений\n    /// <tags>user-message, allowed-message, moderation, allow</tags>\n    /// </summary>\n    [Test]\n    public async Task HandleUserMessageAsync_WithAllowedMessage_ProcessesCorrectly()\n    {\n        // Arrange\n        var message = TK.CreateMessage();\n        var user = message.From!;\n        var chat = message.Chat;\n\n        // Настраиваем мок ModerationFacade для разрешенного сообщения\n        _factory.ModerationFacadeMock.Setup(x => x.CheckMessageAsync(message))\n            .ReturnsAsync(TK.CreateAllowResult());\n\n        // Act\n        await _messageHandler.HandleUserMessageAsync(message, false, CancellationToken.None);\n\n        // Assert\n        // Проверяем, что ModerationFacade был вызван\n        _factory.ModerationFacadeMock.Verify(x => x.CheckMessageAsync(message), Times.Once);\n    }\n\n\n\n    /// <summary>\n    /// Тест для HandleUserMessageAsync с сообщением для удаления\n    /// Проверяет обработку сообщений для удаления\n    /// <tags>user-message, delete-message, moderation, delete</tags>\n    /// </summary>\n    [Test]\n    public async Task HandleUserMessageAsync_WithDeleteMessage_CallsDeleteAndReportMessage()\n    {\n        // Arrange\n        var message = TK.CreateMessage();\n        var user = message.From!;\n        var chat = message.Chat;\n\n        // Настраиваем мок ModerationFacade для сообщения для удаления\n        _factory.ModerationFacadeMock.Setup(x => x.CheckMessageAsync(message))\n            .ReturnsAsync(TK.CreateDeleteResult());\n\n        // Настраиваем мок для DeleteAndReportMessage\n        _factory.MessageServiceMock.Setup(x => x.SendUserNotificationAsync(\n            It.IsAny<User>(), It.IsAny<Chat>(), It.IsAny<UserNotificationType>(),\n            It.IsAny<SimpleNotificationData>(), It.IsAny<CancellationToken>()))\n            .Returns(Task.CompletedTask);\n\n        // Настраиваем мок Bot для удаления сообщения\n        _factory.BotMock.Setup(x => x.DeleteMessage(It.IsAny<ChatId>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))\n            .Returns(Task.CompletedTask);\n\n        // Act\n        await _messageHandler.HandleUserMessageAsync(message, false, CancellationToken.None);\n\n        // Assert\n        // Проверяем, что ModerationFacade был вызван для обработки сообщения для удаления\n        _factory.ModerationFacadeMock.Verify(x => x.HandleUserMessageAsync(message, user, chat, It.IsAny<ModerationResult>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()), Times.Once);\n    }\n\n    /// <summary>\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Handlers/MessageHandlerHandleUserMessageTests.cs::MessageHandlerHandleUserMessageTests::HandleUserMessageAsync_WithModerationError_HandlesGracefully",
+        "file": "Unit/Handlers/MessageHandlerHandleUserMessageTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Handlers",
+        "class": "MessageHandlerHandleUserMessageTests",
+        "test_name": "HandleUserMessageAsync_WithModerationError_HandlesGracefully",
+        "line": 287,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 17,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": true,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "assert_pass"
+        ],
+        "_source_lineno": 386
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Handlers/MessageHandlerHandleUserMessageTests.cs\n# Lines 257-317 (test starts at line 287)\n        var user = message.From!;\n        var chat = message.Chat;\n\n        // Настраиваем мок ModerationFacade для сообщения для удаления\n        _factory.ModerationFacadeMock.Setup(x => x.CheckMessageAsync(message))\n            .ReturnsAsync(TK.CreateDeleteResult());\n\n        // Настраиваем мок для DeleteAndReportMessage\n        _factory.MessageServiceMock.Setup(x => x.SendUserNotificationAsync(\n            It.IsAny<User>(), It.IsAny<Chat>(), It.IsAny<UserNotificationType>(),\n            It.IsAny<SimpleNotificationData>(), It.IsAny<CancellationToken>()))\n            .Returns(Task.CompletedTask);\n\n        // Настраиваем мок Bot для удаления сообщения\n        _factory.BotMock.Setup(x => x.DeleteMessage(It.IsAny<ChatId>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))\n            .Returns(Task.CompletedTask);\n\n        // Act\n        await _messageHandler.HandleUserMessageAsync(message, false, CancellationToken.None);\n\n        // Assert\n        // Проверяем, что ModerationFacade был вызван для обработки сообщения для удаления\n        _factory.ModerationFacadeMock.Verify(x => x.HandleUserMessageAsync(message, user, chat, It.IsAny<ModerationResult>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()), Times.Once);\n    }\n\n    /// <summary>\n    /// Тест для HandleUserMessageAsync с ошибкой модерации\n    /// Проверяет обработку ошибок в ModerationService\n    /// <tags>user-message, moderation-error, exception-handling</tags>\n    /// </summary>\n    [Test]\n    public async Task HandleUserMessageAsync_WithModerationError_HandlesGracefully()\n    {\n        // Arrange\n        var message = TK.CreateMessage();\n        var user = message.From!;\n        var chat = message.Chat;\n\n        // Настраиваем мок ModerationFacade для выброса исключения\n        _factory.ModerationFacadeMock.Setup(x => x.CheckMessageAsync(message))\n            .ThrowsAsync(new Exception(\"Test moderation error\"));\n\n        // Act\n        await _messageHandler.HandleUserMessageAsync(message, false, CancellationToken.None);\n\n        // Assert\n        // Метод должен завершиться без исключений\n        Assert.Pass(\"Ошибка модерации обработана корректно\");\n    }\n\n    /// <summary>\n    /// Тест для HandleUserMessageAsync с AI анализом профиля\n    /// Проверяет выполнение AI анализа профиля\n    /// <tags>user-message, ai-analysis, profile-analysis</tags>\n    /// </summary>\n    [Test]\n    public async Task HandleUserMessageAsync_WithAiProfileAnalysis_ExecutesAnalysis()\n    {\n        // Arrange\n        var message = TK.CreateMessage();\n        var user = message.From!;\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Handlers/MessageHandlerHandleUserMessageTests.cs::MessageHandlerHandleUserMessageTests::HandleUserMessageAsync_WithAiProfileAnalysis_ExecutesAnalysis",
+        "file": "Unit/Handlers/MessageHandlerHandleUserMessageTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Handlers",
+        "class": "MessageHandlerHandleUserMessageTests",
+        "test_name": "HandleUserMessageAsync_WithAiProfileAnalysis_ExecutesAnalysis",
+        "line": 312,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 18,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": true,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "assert_pass"
+        ],
+        "_source_lineno": 387
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Handlers/MessageHandlerHandleUserMessageTests.cs\n# Lines 282-332 (test starts at line 312)\n    /// <summary>\n    /// Тест для HandleUserMessageAsync с ошибкой модерации\n    /// Проверяет обработку ошибок в ModerationService\n    /// <tags>user-message, moderation-error, exception-handling</tags>\n    /// </summary>\n    [Test]\n    public async Task HandleUserMessageAsync_WithModerationError_HandlesGracefully()\n    {\n        // Arrange\n        var message = TK.CreateMessage();\n        var user = message.From!;\n        var chat = message.Chat;\n\n        // Настраиваем мок ModerationFacade для выброса исключения\n        _factory.ModerationFacadeMock.Setup(x => x.CheckMessageAsync(message))\n            .ThrowsAsync(new Exception(\"Test moderation error\"));\n\n        // Act\n        await _messageHandler.HandleUserMessageAsync(message, false, CancellationToken.None);\n\n        // Assert\n        // Метод должен завершиться без исключений\n        Assert.Pass(\"Ошибка модерации обработана корректно\");\n    }\n\n    /// <summary>\n    /// Тест для HandleUserMessageAsync с AI анализом профиля\n    /// Проверяет выполнение AI анализа профиля\n    /// <tags>user-message, ai-analysis, profile-analysis</tags>\n    /// </summary>\n    [Test]\n    public async Task HandleUserMessageAsync_WithAiProfileAnalysis_ExecutesAnalysis()\n    {\n        // Arrange\n        var message = TK.CreateMessage();\n        var user = message.From!;\n        var chat = message.Chat;\n\n        // Настраиваем мок ModerationFacade для разрешенного сообщения\n        _factory.ModerationFacadeMock.Setup(x => x.CheckMessageAsync(message))\n            .ReturnsAsync(TK.CreateAllowResult());\n\n        // Act\n        await _messageHandler.HandleUserMessageAsync(message, false, CancellationToken.None);\n\n        // Assert\n        // Проверяем, что AI анализ был выполнен (через PerformAiProfileAnalysis)\n        // Метод должен завершиться без исключений\n        Assert.Pass(\"AI анализ профиля выполнен корректно\");\n    }\n}\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Handlers/MessageHandlerSemanticsTests.cs::MessageHandlerSemanticsTests::LeftMemberCleanup_EmitsSemanticRule",
+        "file": "Unit/Handlers/MessageHandlerSemanticsTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Handlers",
+        "class": "MessageHandlerSemanticsTests",
+        "test_name": "LeftMemberCleanup_EmitsSemanticRule",
+        "line": 261,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 27,
+        "declared_area_from_path": "Unit",
+        "construction_path": "custom_local_world",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": true,
+          "uses_real_env_or_api": true,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "real_env_or_api"
+        ],
+        "_source_lineno": 402
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Handlers/MessageHandlerSemanticsTests.cs\n# Lines 231-291 (test starts at line 261)\n    var rule = root.GetProperty(\"ruleCode\").GetString();\n    Assert.That(rule, Is.EqualTo(\"PrivateSkip\"));\n    }\n\n    [Test]\n    public async Task NewMembers_TriggersSemanticRule()\n    {\n        var basePath = Path.Combine(Path.GetTempPath(), \"gm_semantics_\" + Path.GetRandomFileName());\n        Directory.CreateDirectory(basePath);\n        var flags = Flags(basePath);\n        var update = new Update\n        {\n            Id = 4,\n            Message = new Message\n            {\n                Chat = new Chat { Id = -100777, Type = ChatType.Supergroup, Title = \"JoinChat\" },\n                From = new User { Id = 111, IsBot = false, FirstName = \"Starter\" },\n                NewChatMembers = new[] { new User { Id = 222, IsBot = false, FirstName = \"Newbie\" } }\n            }\n        };\n    var handler = CreateHandler(flags);\n        await handler.HandleAsync(update, CancellationToken.None);\n        using var doc = LoadSemanticsJson(basePath);\n        var root = doc.RootElement;\n    Assert.That(root.TryGetProperty(\"action\", out var actionEl), Is.True);\n    Assert.That(actionEl.ValueKind, Is.EqualTo(System.Text.Json.JsonValueKind.Null));\n    var rule = root.GetProperty(\"ruleCode\").GetString();\n    Assert.That(rule, Is.EqualTo(\"NewMembers\"));\n    }\n\n    [Test]\n    public async Task LeftMemberCleanup_EmitsSemanticRule()\n    {\n        var basePath = Path.Combine(Path.GetTempPath(), \"gm_semantics_\" + Path.GetRandomFileName());\n        Directory.CreateDirectory(basePath);\n        var flags = Flags(basePath);\n        var bot = new User { Id = 515151, IsBot = true, FirstName = \"Bot\" };\n        var update = new Update\n        {\n            Id = 5,\n            Message = new Message\n            {\n                Chat = new Chat { Id = -100888, Type = ChatType.Supergroup, Title = \"LeaveChat\" },\n                From = bot, // simulate message from bot about left member\n                LeftChatMember = new User { Id = 999, IsBot = false, FirstName = \"Leaver\" }\n            }\n        };\n        var botMock = new Mock<ITelegramBotClientWrapper>();\n        botMock.SetupGet(x => x.BotId).Returns(515151);\n    var handler = CreateHandler(flags, botMock: botMock);\n        // Need to set BotId on ITelegramBotClientWrapper mock used inside handler -> simplest: ignore delete path (won't throw) and rely on semantics kind\n        await handler.HandleAsync(update, CancellationToken.None);\n        using var doc = LoadSemanticsJson(basePath);\n        var root = doc.RootElement;\n    Assert.That(root.TryGetProperty(\"action\", out var actionEl), Is.True);\n    Assert.That(actionEl.ValueKind, Is.EqualTo(System.Text.Json.JsonValueKind.Null));\n    var rule = root.GetProperty(\"ruleCode\").GetString();\n    Assert.That(rule, Is.EqualTo(\"LeftMemberCleanup\"));\n    }\n\n    [Test]\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Moderation/ModerationServiceExtendedTests.cs::ModerationServiceExtendedTests::IncrementGoodMessageCountAsync_ValidParameters_IncrementsCount",
+        "file": "Unit/Moderation/ModerationServiceExtendedTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Moderation",
+        "class": "ModerationServiceExtendedTests",
+        "test_name": "IncrementGoodMessageCountAsync_ValidParameters_IncrementsCount",
+        "line": 141,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 13,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": true,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "assert_pass"
+        ],
+        "_source_lineno": 485
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Moderation/ModerationServiceExtendedTests.cs\n# Lines 111-171 (test starts at line 141)\n    [Test]\n    public async Task IncrementGoodMessageCountAsync_NullChat_ThrowsArgumentNullException()\n    {\n        // Arrange\n        var service = _factory.CreateModerationService();\n        var user = TK.CreateValidUser();\n        var messageText = \"test message\";\n\n        // Act & Assert\n        var exception = Assert.ThrowsAsync<ArgumentNullException>(\n            () => service.IncrementGoodMessageCountAsync(user, null!, messageText));\n\n        Assert.That(exception.ParamName, Is.EqualTo(\"chat\"));\n    }\n\n    [Test]\n    public async Task IncrementGoodMessageCountAsync_EmptyMessageText_ThrowsArgumentException()\n    {\n        // Arrange\n        var service = _factory.CreateModerationService();\n        var user = TK.CreateValidUser();\n        var chat = TK.CreateGroupChat();\n\n        // Act & Assert\n        var exception = Assert.ThrowsAsync<ArgumentException>(\n            () => service.IncrementGoodMessageCountAsync(user, chat, \"\"));\n\n        Assert.That(exception.ParamName, Is.EqualTo(\"messageText\"));\n    }\n\n    [Test]\n    public async Task IncrementGoodMessageCountAsync_ValidParameters_IncrementsCount()\n    {\n        // Arrange\n        var service = _factory.CreateModerationService();\n        var user = TK.CreateValidUser();\n        var chat = TK.CreateGroupChat();\n        var messageText = \"test message\";\n\n        // Act\n        await service.IncrementGoodMessageCountAsync(user, chat, messageText);\n\n        // Assert - проверяем что метод выполнился без исключений\n        Assert.Pass(\"Method executed successfully\");\n    }\n\n    #endregion\n\n    #region BanAndCleanupUserAsync Tests\n\n    [Test]\n    public async Task BanAndCleanupUserAsync_ValidParameters_ReturnsTrue()\n    {\n        // Arrange\n        _factory.WithBotClientSetup(mock =>\n            mock.Setup(x => x.SendRequest(It.IsAny<Telegram.Bot.Requests.BanChatMemberRequest>(), It.IsAny<CancellationToken>()))\n                .Returns(Task.FromResult(true)));\n\n        var service = _factory.CreateModerationService();\n        var userId = 12345L;\n        var chatId = 67890L;\n"
+    }
+  ]
+}

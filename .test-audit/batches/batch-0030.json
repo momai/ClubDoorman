@@ -1,0 +1,457 @@
+{
+  "schema_version": "test-audit-batch-v1",
+  "batch_no": 30,
+  "purpose": "local LLM audit input",
+  "instructions": "Return JSONL only. One audit object per input test. No markdown. No code edits.",
+  "tests": [
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Handlers/MessageHandlerFakeTests.cs::MessageHandlerFakeTests::HandleAsync_NullMessage_ThrowsArgumentNullException",
+        "file": "Unit/Handlers/MessageHandlerFakeTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Handlers",
+        "class": "MessageHandlerFakeTests",
+        "test_name": "HandleAsync_NullMessage_ThrowsArgumentNullException",
+        "line": 233,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 8,
+        "declared_area_from_path": "Unit",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": true,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": true,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "message_handler_test_factory"
+        ],
+        "_source_lineno": 356
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Handlers/MessageHandlerFakeTests.cs\n# Lines 203-263 (test starts at line 233)\n\n        _factory.UserManagerMock\n            .Setup(x => x.GetClubUsername(It.IsAny<long>()))\n            .ReturnsAsync((string?)null);\n\n        _factory.UserManagerMock\n            .Setup(x => x.InBanlist(It.IsAny<long>()))\n            .ReturnsAsync(false);\n\n        _factory.CaptchaServiceMock\n            .Setup(x => x.GenerateKey(It.IsAny<long>(), It.IsAny<long>()))\n            .Returns(\"test-key\");\n\n        _factory.CaptchaServiceMock\n            .Setup(x => x.GetCaptchaInfo(It.IsAny<string>()))\n            .Returns((CaptchaInfo?)null);\n\n        // Act\n        var update = new Update { Message = message };\n        await service.HandleAsync(update);\n\n        // Assert\n        // Сервисные сообщения обрабатываются как новые участники\n        _factory.UserJoinFacadeMock.Verify(\n            x => x.HandleNewMembersAsync(\n                It.IsAny<Message>(),\n                It.IsAny<CancellationToken>()),\n            Times.Once);\n    }\n\n    [Test]\n    public async Task HandleAsync_NullMessage_ThrowsArgumentNullException()\n    {\n        // Arrange\n        var service = _factory.CreateMessageHandlerWithFake(_fakeClient);\n\n        // Act & Assert\n        Assert.ThrowsAsync<ArgumentNullException>(async () =>\n            await service.HandleAsync(new Update { Message = null }));\n    }\n\n    [Test]\n    public async Task HandleAsync_ModerationServiceError_LogsAndContinues()\n    {\n        // Arrange\n        var service = _factory.CreateMessageHandlerWithFake(_fakeClient);\n        var message = TK.CreateValidMessage();\n\n        // Настройка моков\n        _factory.ModerationServiceMock\n            .Setup(x => x.CheckMessageAsync(It.IsAny<Message>()))\n            .ThrowsAsync(new Exception(\"Moderation service error\"));\n\n        _factory.ModerationServiceMock\n            .Setup(x => x.IsUserApproved(It.IsAny<long>(), It.IsAny<long>()))\n            .Returns(false); // Пользователь не одобрен, чтобы дойти до модерации\n\n        // Настройка моков для CaptchaService\n        _factory.CaptchaServiceMock\n            .Setup(x => x.GenerateKey(It.IsAny<long>(), It.IsAny<long>()))\n            .Returns(\"test-key\");\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Handlers/MessageHandlerHandleAsyncBasicTests.cs::MessageHandlerHandleAsyncBasicTests::HandleAsync_NullUpdate_ThrowsArgumentNullException",
+        "file": "Unit/Handlers/MessageHandlerHandleAsyncBasicTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Handlers",
+        "class": "MessageHandlerHandleAsyncBasicTests",
+        "test_name": "HandleAsync_NullUpdate_ThrowsArgumentNullException",
+        "line": 70,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "handle-async",
+          "golden-master"
+        ],
+        "body_lines": 11,
+        "declared_area_from_path": "Unit",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": true,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "message_handler_test_factory"
+        ],
+        "_source_lineno": 362
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Handlers/MessageHandlerHandleAsyncBasicTests.cs\n# Lines 40-100 (test starts at line 70)\n            mock.Setup(x => x.CheckMessageAsync(It.IsAny<Message>()))\n                .ReturnsAsync(new Models.ModerationResult(Models.ModerationAction.Allow, \"Test\"));\n            mock.Setup(x => x.CheckUserNameAsync(It.IsAny<User>()))\n                .ReturnsAsync(new Models.ModerationResult(Models.ModerationAction.Allow, \"Test name\"));\n            mock.Setup(x => x.IsUserApproved(It.IsAny<long>(), It.IsAny<long>()))\n                .Returns(false);\n        });\n\n        _factory.WithUserManagerSetup(mock =>\n        {\n            mock.Setup(x => x.Approved(It.IsAny<long>(), It.IsAny<long?>()))\n                .Returns(false); // Пользователь НЕ одобрен для запуска AI анализа\n            mock.Setup(x => x.GetClubUsername(It.IsAny<long>()))\n                .ReturnsAsync((string?)null);\n            mock.Setup(x => x.InBanlist(It.IsAny<long>()))\n                .ReturnsAsync(false);\n        });\n\n        // Настройка AiCascadeService mock для AI анализа\n        _factory.AiCascadeServiceMock.Setup(x => x.PerformAiProfileAnalysisAsync(It.IsAny<Message>(), It.IsAny<User>(), It.IsAny<Chat>(), It.IsAny<CancellationToken>()))\n            .ReturnsAsync(false); // false означает, что профиль не подозрительный\n\n        _messageHandler = _factory.CreateMessageHandler();\n    }\n\n    /// <summary>\n    /// Тест для HandleAsync с null Update\n    /// Проверяет, что метод выбрасывает ArgumentNullException для null Update\n    /// <tags>golden-master, production, handle-async, null-update, error-handling</tags>\n    /// </summary>\n    [Test]\n    public async Task HandleAsync_NullUpdate_ThrowsArgumentNullException()\n    {\n        // Arrange: Передаем null\n        Update? update = null;\n\n        // Act & Assert: Проверяем исключение\n        var exception = Assert.ThrowsAsync<ArgumentNullException>(\n            async () => await _messageHandler.HandleAsync(update));\n\n        Assert.That(exception.ParamName, Is.EqualTo(\"update\"),\n            \"Параметр исключения должен быть 'update'\");\n    }\n\n    /// <summary>\n    /// Тест для HandleAsync с валидным текстовым сообщением\n    /// Проверяет, что метод обрабатывает обычное текстовое сообщение и вызывает модерацию\n    /// <tags>golden-master, production, handle-async, valid-message, moderation</tags>\n    /// </summary>\n    [Test]\n    public async Task HandleAsync_ValidTextMessage_CallsModerationAndLogs()\n    {\n        // Arrange: Используем готовый сценарий из TestKit\n        var (user, chat, message) = TK.Specialized.Messages.TextOnlyScenario();\n        var update = new Update { Message = message };\n\n        // Act: Вызываем метод\n        await _messageHandler.HandleAsync(update);\n\n        // Assert: Проверяем вызовы модерации - используем конкретный объект\n        _factory.ModerationFacadeMock.Verify(\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/AIModuleTests.cs::AIModuleTests::AddAIServices_ShouldRegisterIAiChecks",
+        "file": "Unit/Services/AIModuleTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services.AI",
+        "class": "AIModuleTests",
+        "test_name": "AddAIServices_ShouldRegisterIAiChecks",
+        "line": 11,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 12,
+        "declared_area_from_path": "Unit",
+        "construction_path": "service_collection_di",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": true,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 527
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/AIModuleTests.cs\n# Lines 1-41 (test starts at line 11)\nusing ClubDoorman.Services.UserBan;\nusing Microsoft.Extensions.DependencyInjection;\nusing NUnit.Framework;\nusing ClubDoorman.Services.AI;\n\nnamespace ClubDoorman.Test.Unit.Services.AI;\n\n[TestFixture]\npublic class AIModuleTests\n{\n    [Test]\n    public void AddAIServices_ShouldRegisterIAiChecks()\n    {\n        // Arrange\n        var services = new ServiceCollection();\n\n        // Act\n        services.AddAIServices();\n\n        // Assert\n        var descriptor = services.FirstOrDefault(s => s.ServiceType == typeof(IAiChecks));\n        Assert.That(descriptor, Is.Not.Null);\n        Assert.That(descriptor!.ImplementationType, Is.EqualTo(typeof(AiChecks)));\n    }\n\n    [Test]\n    public void AddAIServices_ShouldRegisterISpamHamClassifier()\n    {\n        // Arrange\n        var services = new ServiceCollection();\n\n        // Act\n        services.AddAIServices();\n\n        // Assert\n        var descriptor = services.FirstOrDefault(s => s.ServiceType == typeof(ISpamHamClassifier));\n        Assert.That(descriptor, Is.Not.Null);\n        Assert.That(descriptor!.ImplementationType, Is.EqualTo(typeof(SpamHamClassifier)));\n    }\n\n    [Test]\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/AIModuleTests.cs::AIModuleTests::AddAIServices_ShouldRegisterISpamHamClassifier",
+        "file": "Unit/Services/AIModuleTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services.AI",
+        "class": "AIModuleTests",
+        "test_name": "AddAIServices_ShouldRegisterISpamHamClassifier",
+        "line": 26,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 12,
+        "declared_area_from_path": "Unit",
+        "construction_path": "service_collection_di",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": true,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 528
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/AIModuleTests.cs\n# Lines 1-56 (test starts at line 26)\nusing ClubDoorman.Services.UserBan;\nusing Microsoft.Extensions.DependencyInjection;\nusing NUnit.Framework;\nusing ClubDoorman.Services.AI;\n\nnamespace ClubDoorman.Test.Unit.Services.AI;\n\n[TestFixture]\npublic class AIModuleTests\n{\n    [Test]\n    public void AddAIServices_ShouldRegisterIAiChecks()\n    {\n        // Arrange\n        var services = new ServiceCollection();\n\n        // Act\n        services.AddAIServices();\n\n        // Assert\n        var descriptor = services.FirstOrDefault(s => s.ServiceType == typeof(IAiChecks));\n        Assert.That(descriptor, Is.Not.Null);\n        Assert.That(descriptor!.ImplementationType, Is.EqualTo(typeof(AiChecks)));\n    }\n\n    [Test]\n    public void AddAIServices_ShouldRegisterISpamHamClassifier()\n    {\n        // Arrange\n        var services = new ServiceCollection();\n\n        // Act\n        services.AddAIServices();\n\n        // Assert\n        var descriptor = services.FirstOrDefault(s => s.ServiceType == typeof(ISpamHamClassifier));\n        Assert.That(descriptor, Is.Not.Null);\n        Assert.That(descriptor!.ImplementationType, Is.EqualTo(typeof(SpamHamClassifier)));\n    }\n\n    [Test]\n    public void AddAIServices_ShouldRegisterIMimicryClassifier()\n    {\n        // Arrange\n        var services = new ServiceCollection();\n\n        // Act\n        services.AddAIServices();\n\n        // Assert\n        var descriptor = services.FirstOrDefault(s => s.ServiceType == typeof(IMimicryClassifier));\n        Assert.That(descriptor, Is.Not.Null);\n        Assert.That(descriptor!.ImplementationType, Is.EqualTo(typeof(MimicryClassifier)));\n    }\n\n    [Test]\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/AIModuleTests.cs::AIModuleTests::AddAIServices_ShouldRegisterIMimicryClassifier",
+        "file": "Unit/Services/AIModuleTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services.AI",
+        "class": "AIModuleTests",
+        "test_name": "AddAIServices_ShouldRegisterIMimicryClassifier",
+        "line": 41,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 12,
+        "declared_area_from_path": "Unit",
+        "construction_path": "service_collection_di",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": true,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 529
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/AIModuleTests.cs\n# Lines 11-68 (test starts at line 41)\n    [Test]\n    public void AddAIServices_ShouldRegisterIAiChecks()\n    {\n        // Arrange\n        var services = new ServiceCollection();\n\n        // Act\n        services.AddAIServices();\n\n        // Assert\n        var descriptor = services.FirstOrDefault(s => s.ServiceType == typeof(IAiChecks));\n        Assert.That(descriptor, Is.Not.Null);\n        Assert.That(descriptor!.ImplementationType, Is.EqualTo(typeof(AiChecks)));\n    }\n\n    [Test]\n    public void AddAIServices_ShouldRegisterISpamHamClassifier()\n    {\n        // Arrange\n        var services = new ServiceCollection();\n\n        // Act\n        services.AddAIServices();\n\n        // Assert\n        var descriptor = services.FirstOrDefault(s => s.ServiceType == typeof(ISpamHamClassifier));\n        Assert.That(descriptor, Is.Not.Null);\n        Assert.That(descriptor!.ImplementationType, Is.EqualTo(typeof(SpamHamClassifier)));\n    }\n\n    [Test]\n    public void AddAIServices_ShouldRegisterIMimicryClassifier()\n    {\n        // Arrange\n        var services = new ServiceCollection();\n\n        // Act\n        services.AddAIServices();\n\n        // Assert\n        var descriptor = services.FirstOrDefault(s => s.ServiceType == typeof(IMimicryClassifier));\n        Assert.That(descriptor, Is.Not.Null);\n        Assert.That(descriptor!.ImplementationType, Is.EqualTo(typeof(MimicryClassifier)));\n    }\n\n    [Test]\n    public void AddAIServices_ShouldReturnServiceCollection()\n    {\n        // Arrange\n        var services = new ServiceCollection();\n\n        // Act\n        var result = services.AddAIServices();\n\n        // Assert\n        Assert.That(result, Is.SameAs(services));\n    }\n}"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/AiChecksTests.cs::AiChecksTests::Constructor_WithValidDependencies_CreatesInstance",
+        "file": "Unit/Services/AiChecksTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "AiChecksTests",
+        "test_name": "Constructor_WithValidDependencies_CreatesInstance",
+        "line": 35,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "fast",
+          "critical",
+          "uses:ai"
+        ],
+        "body_lines": 5,
+        "declared_area_from_path": "Unit",
+        "construction_path": "custom_local_world",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": true,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "real_env_or_api"
+        ],
+        "_source_lineno": 556
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/AiChecksTests.cs\n# Lines 5-65 (test starts at line 35)\nusing ClubDoorman.TestInfrastructure;\nusing ClubDoorman.Test.TestInfrastructure;\nusing Telegram.Bot.Types;\nusing Moq;\nusing Microsoft.Extensions.Logging;\nusing ClubDoorman.Services.Telegram;\nusing ClubDoorman.Services.AI;\n\nnamespace ClubDoorman.Test.Unit.Services;\n\n[TestFixture]\n[Category(\"fast\")]\n[Category(\"critical\")]\n[Category(\"uses:ai\")]\npublic class AiChecksTests\n{\n    private Mock<ITelegramBotClientWrapper> _mockBot = null!;\n    private Mock<ILogger<AiChecks>> _mockLogger = null!;\n    private AiChecks _aiChecks = null!;\n\n    [SetUp]\n    public void Setup()\n    {\n        _mockBot = new Mock<ITelegramBotClientWrapper>();\n        _mockLogger = new Mock<ILogger<AiChecks>>();\n\n        // Создаем реальный AiChecks с моками\n        _aiChecks = new AiChecks(_mockBot.Object, _mockLogger.Object, AppConfigTestFactory.CreateDefault());\n    }\n\n    [Test]\n    public void Constructor_WithValidDependencies_CreatesInstance()\n    {\n        // Assert\n        Assert.That(_aiChecks, Is.Not.Null);\n        Assert.That(_aiChecks, Is.InstanceOf<IAiChecks>());\n    }\n\n    [Test]\n    public void MarkUserOkay_DoesNotThrowException()\n    {\n        // Arrange\n        var userId = 123L;\n\n        // Act & Assert\n        Assert.DoesNotThrow(() => _aiChecks.MarkUserOkay(userId));\n    }\n\n    [Test]\n    public async Task GetSpamProbability_WithValidMessage_ReturnsSpamProbability()\n    {\n        // Arrange\n        var message = new Message\n        {\n            Text = \"Test message\",\n            Chat = new Chat { Id = 123 },\n            From = new User { Id = 456, FirstName = \"Test\" }\n        };\n\n        // Act\n        var result = await _aiChecks.GetSpamProbability(message);\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/AiChecksTests.cs::AiChecksTests::GetSpamProbability_WithValidMessage_ReturnsSpamProbability",
+        "file": "Unit/Services/AiChecksTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "AiChecksTests",
+        "test_name": "GetSpamProbability_WithValidMessage_ReturnsSpamProbability",
+        "line": 53,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "fast",
+          "critical",
+          "uses:ai"
+        ],
+        "body_lines": 18,
+        "declared_area_from_path": "Unit",
+        "construction_path": "custom_local_world",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": true,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "real_env_or_api"
+        ],
+        "_source_lineno": 558
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/AiChecksTests.cs\n# Lines 23-83 (test starts at line 53)\n    private AiChecks _aiChecks = null!;\n\n    [SetUp]\n    public void Setup()\n    {\n        _mockBot = new Mock<ITelegramBotClientWrapper>();\n        _mockLogger = new Mock<ILogger<AiChecks>>();\n\n        // Создаем реальный AiChecks с моками\n        _aiChecks = new AiChecks(_mockBot.Object, _mockLogger.Object, AppConfigTestFactory.CreateDefault());\n    }\n\n    [Test]\n    public void Constructor_WithValidDependencies_CreatesInstance()\n    {\n        // Assert\n        Assert.That(_aiChecks, Is.Not.Null);\n        Assert.That(_aiChecks, Is.InstanceOf<IAiChecks>());\n    }\n\n    [Test]\n    public void MarkUserOkay_DoesNotThrowException()\n    {\n        // Arrange\n        var userId = 123L;\n\n        // Act & Assert\n        Assert.DoesNotThrow(() => _aiChecks.MarkUserOkay(userId));\n    }\n\n    [Test]\n    public async Task GetSpamProbability_WithValidMessage_ReturnsSpamProbability()\n    {\n        // Arrange\n        var message = new Message\n        {\n            Text = \"Test message\",\n            Chat = new Chat { Id = 123 },\n            From = new User { Id = 456, FirstName = \"Test\" }\n        };\n\n        // Act\n        var result = await _aiChecks.GetSpamProbability(message);\n\n        // Assert\n        Assert.That(result, Is.Not.Null);\n        Assert.That(result, Is.InstanceOf<SpamProbability>());\n        Assert.That(result.Probability, Is.GreaterThanOrEqualTo(0.0));\n        Assert.That(result.Probability, Is.LessThanOrEqualTo(1.0));\n    }\n\n    [Test]\n    public void GetSpamProbability_WithNullMessage_ThrowsArgumentNullException()\n    {\n        // Arrange\n        Message? message = null;\n\n        // Act & Assert\n        Assert.ThrowsAsync<ArgumentNullException>(async () =>\n            await _aiChecks.GetSpamProbability(message!));\n    }\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/AiChecksTests.cs::AiChecksTests::GetSpamProbability_WithEmptyMessage_ReturnsDefaultProbability",
+        "file": "Unit/Services/AiChecksTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "AiChecksTests",
+        "test_name": "GetSpamProbability_WithEmptyMessage_ReturnsDefaultProbability",
+        "line": 85,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "fast",
+          "critical",
+          "uses:ai"
+        ],
+        "body_lines": 16,
+        "declared_area_from_path": "Unit",
+        "construction_path": "custom_local_world",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": true,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "real_env_or_api"
+        ],
+        "_source_lineno": 560
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/AiChecksTests.cs\n# Lines 55-115 (test starts at line 85)\n    {\n        // Arrange\n        var message = new Message\n        {\n            Text = \"Test message\",\n            Chat = new Chat { Id = 123 },\n            From = new User { Id = 456, FirstName = \"Test\" }\n        };\n\n        // Act\n        var result = await _aiChecks.GetSpamProbability(message);\n\n        // Assert\n        Assert.That(result, Is.Not.Null);\n        Assert.That(result, Is.InstanceOf<SpamProbability>());\n        Assert.That(result.Probability, Is.GreaterThanOrEqualTo(0.0));\n        Assert.That(result.Probability, Is.LessThanOrEqualTo(1.0));\n    }\n\n    [Test]\n    public void GetSpamProbability_WithNullMessage_ThrowsArgumentNullException()\n    {\n        // Arrange\n        Message? message = null;\n\n        // Act & Assert\n        Assert.ThrowsAsync<ArgumentNullException>(async () =>\n            await _aiChecks.GetSpamProbability(message!));\n    }\n\n    [Test]\n    public async Task GetSpamProbability_WithEmptyMessage_ReturnsDefaultProbability()\n    {\n        // Arrange\n        var message = new Message\n        {\n            Text = \"\",\n            Chat = new Chat { Id = 123 },\n            From = new User { Id = 456, FirstName = \"Test\" }\n        };\n\n        // Act\n        var result = await _aiChecks.GetSpamProbability(message);\n\n        // Assert\n        Assert.That(result, Is.Not.Null);\n        Assert.That(result.Probability, Is.EqualTo(0.0));\n    }\n\n    [Test]\n    public async Task GetAttentionBaitProbability_WithValidUser_ReturnsSpamPhotoBio()\n    {\n        // Arrange\n        var user = new User\n        {\n            Id = 123,\n            FirstName = \"Test\",\n            Username = \"testuser\"\n        };\n\n        // Act\n"
+    }
+  ]
+}

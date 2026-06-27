@@ -1,0 +1,394 @@
+{
+  "schema_version": "test-audit-batch-v1",
+  "batch_no": 46,
+  "purpose": "local LLM audit input",
+  "instructions": "Return JSONL only. One audit object per input test. No markdown. No code edits.",
+  "tests": [
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/CaptchaServiceExtendedTests.cs::CaptchaServiceExtendedTests::BanExpiredCaptchaUsersAsync_NoExpiredCaptchas_CompletesSuccessfully",
+        "file": "Unit/Services/CaptchaServiceExtendedTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "CaptchaServiceExtendedTests",
+        "test_name": "BanExpiredCaptchaUsersAsync_NoExpiredCaptchas_CompletesSuccessfully",
+        "line": 485,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 7,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": true,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "does_not_throw"
+        ],
+        "_source_lineno": 609
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/CaptchaServiceExtendedTests.cs\n# Lines 455-515 (test starts at line 485)\n        var key1 = service.GenerateKey(1, 1);\n        var key2 = service.GenerateKey(1, 2);\n        var key3 = service.GenerateKey(2, 1);\n\n        // Assert\n        Assert.That(key1, Is.Not.EqualTo(key2));\n        Assert.That(key1, Is.Not.EqualTo(key3));\n        Assert.That(key2, Is.Not.EqualTo(key3));\n    }\n\n    [Test]\n    public void GenerateKey_SameParameters_ReturnsSameKey()\n    {\n        // Arrange\n        var service = _factory.CreateCaptchaService();\n        var chatId = 123L;\n        var userId = 456L;\n\n        // Act\n        var key1 = service.GenerateKey(chatId, userId);\n        var key2 = service.GenerateKey(chatId, userId);\n\n        // Assert\n        Assert.That(key1, Is.EqualTo(key2));\n    }\n\n    #endregion\n\n    #region BanExpiredCaptchaUsersAsync Tests\n\n    [Test]\n    public async Task BanExpiredCaptchaUsersAsync_NoExpiredCaptchas_CompletesSuccessfully()\n    {\n        // Arrange\n        var service = _factory.CreateCaptchaService();\n\n        // Act & Assert\n        Assert.DoesNotThrowAsync(() => service.BanExpiredCaptchaUsersAsync());\n    }\n\n    [Test]\n    public async Task BanExpiredCaptchaUsersAsync_WithActiveCaptchas_CompletesSuccessfully()\n    {\n        // Arrange\n        var service = _factory.CreateCaptchaService();\n        var chat = CreateTestChat();\n        var user = CreateTestUser();\n        var request = new CreateCaptchaRequest(chat, user, null);\n        await service.CreateCaptchaAsync(request);\n\n        // Act & Assert\n        Assert.DoesNotThrowAsync(() => service.BanExpiredCaptchaUsersAsync());\n    }\n\n    #endregion\n\n    #region Edge Cases and Error Handling\n\n    [Test]\n    public async Task CreateCaptchaAsync_TelegramApiError_ThrowsException()\n    {\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/CaptchaServiceExtendedTests.cs::CaptchaServiceExtendedTests::BanExpiredCaptchaUsersAsync_WithActiveCaptchas_CompletesSuccessfully",
+        "file": "Unit/Services/CaptchaServiceExtendedTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "CaptchaServiceExtendedTests",
+        "test_name": "BanExpiredCaptchaUsersAsync_WithActiveCaptchas_CompletesSuccessfully",
+        "line": 495,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 11,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": true,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "does_not_throw"
+        ],
+        "_source_lineno": 610
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/CaptchaServiceExtendedTests.cs\n# Lines 465-525 (test starts at line 495)\n    [Test]\n    public void GenerateKey_SameParameters_ReturnsSameKey()\n    {\n        // Arrange\n        var service = _factory.CreateCaptchaService();\n        var chatId = 123L;\n        var userId = 456L;\n\n        // Act\n        var key1 = service.GenerateKey(chatId, userId);\n        var key2 = service.GenerateKey(chatId, userId);\n\n        // Assert\n        Assert.That(key1, Is.EqualTo(key2));\n    }\n\n    #endregion\n\n    #region BanExpiredCaptchaUsersAsync Tests\n\n    [Test]\n    public async Task BanExpiredCaptchaUsersAsync_NoExpiredCaptchas_CompletesSuccessfully()\n    {\n        // Arrange\n        var service = _factory.CreateCaptchaService();\n\n        // Act & Assert\n        Assert.DoesNotThrowAsync(() => service.BanExpiredCaptchaUsersAsync());\n    }\n\n    [Test]\n    public async Task BanExpiredCaptchaUsersAsync_WithActiveCaptchas_CompletesSuccessfully()\n    {\n        // Arrange\n        var service = _factory.CreateCaptchaService();\n        var chat = CreateTestChat();\n        var user = CreateTestUser();\n        var request = new CreateCaptchaRequest(chat, user, null);\n        await service.CreateCaptchaAsync(request);\n\n        // Act & Assert\n        Assert.DoesNotThrowAsync(() => service.BanExpiredCaptchaUsersAsync());\n    }\n\n    #endregion\n\n    #region Edge Cases and Error Handling\n\n    [Test]\n    public async Task CreateCaptchaAsync_TelegramApiError_ThrowsException()\n    {\n        // Arrange\n        var service = _factory.CreateCaptchaService();\n        var chat = CreateTestChat();\n        var user = CreateTestUser();\n\n        // Act & Assert\n        // Этот тест может падать из-за реальных вызовов Telegram API\n        // В реальном проекте нужно мокировать TelegramBotClient\n        Assert.DoesNotThrowAsync(() =>\n        {\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/CaptchaServiceExtendedTests.cs::CaptchaServiceExtendedTests::CreateCaptchaAsync_TelegramApiError_ThrowsException",
+        "file": "Unit/Services/CaptchaServiceExtendedTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "CaptchaServiceExtendedTests",
+        "test_name": "CreateCaptchaAsync_TelegramApiError_ThrowsException",
+        "line": 513,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 15,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": true,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "does_not_throw",
+          "real_env_or_api"
+        ],
+        "_source_lineno": 611
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/CaptchaServiceExtendedTests.cs\n# Lines 483-543 (test starts at line 513)\n    #region BanExpiredCaptchaUsersAsync Tests\n\n    [Test]\n    public async Task BanExpiredCaptchaUsersAsync_NoExpiredCaptchas_CompletesSuccessfully()\n    {\n        // Arrange\n        var service = _factory.CreateCaptchaService();\n\n        // Act & Assert\n        Assert.DoesNotThrowAsync(() => service.BanExpiredCaptchaUsersAsync());\n    }\n\n    [Test]\n    public async Task BanExpiredCaptchaUsersAsync_WithActiveCaptchas_CompletesSuccessfully()\n    {\n        // Arrange\n        var service = _factory.CreateCaptchaService();\n        var chat = CreateTestChat();\n        var user = CreateTestUser();\n        var request = new CreateCaptchaRequest(chat, user, null);\n        await service.CreateCaptchaAsync(request);\n\n        // Act & Assert\n        Assert.DoesNotThrowAsync(() => service.BanExpiredCaptchaUsersAsync());\n    }\n\n    #endregion\n\n    #region Edge Cases and Error Handling\n\n    [Test]\n    public async Task CreateCaptchaAsync_TelegramApiError_ThrowsException()\n    {\n        // Arrange\n        var service = _factory.CreateCaptchaService();\n        var chat = CreateTestChat();\n        var user = CreateTestUser();\n\n        // Act & Assert\n        // Этот тест может падать из-за реальных вызовов Telegram API\n        // В реальном проекте нужно мокировать TelegramBotClient\n        Assert.DoesNotThrowAsync(() =>\n        {\n            var request = new CreateCaptchaRequest(chat, user, null);\n            return service.CreateCaptchaAsync(request);\n        });\n    }\n\n    [Test]\n    public async Task ValidateCaptchaAsync_ConcurrentValidation_HandlesCorrectly()\n    {\n        // Arrange\n        var service = _factory.CreateCaptchaService();\n        var chat = CreateTestChat();\n        var user = CreateTestUser();\n        var request = new CreateCaptchaRequest(chat, user, null);\n        var captchaInfo = await service.CreateCaptchaAsync(request);\n        var key = service.GenerateKey(chat.Id, user.Id);\n\n        // Act\n        var tasks = new List<Task<bool>>();\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/CaptchaServiceExtendedTests.cs::CaptchaServiceExtendedTests::CreateCaptchaAsync_CancellationToken_RespectsCancellation",
+        "file": "Unit/Services/CaptchaServiceExtendedTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "CaptchaServiceExtendedTests",
+        "test_name": "CreateCaptchaAsync_CancellationToken_RespectsCancellation",
+        "line": 579,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 17,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": true,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "does_not_throw"
+        ],
+        "_source_lineno": 614
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/CaptchaServiceExtendedTests.cs\n# Lines 549-609 (test starts at line 579)\n        var results = await Task.WhenAll(tasks);\n\n        // Assert\n        // Только один вызов должен вернуть true, остальные false\n        Assert.That(results.Count(r => r), Is.LessThanOrEqualTo(1));\n    }\n\n    [Test]\n    public async Task CreateCaptchaAsync_MultipleCaptchasSameUser_HandlesCorrectly()\n    {\n        // Arrange\n        var service = _factory.CreateCaptchaService();\n        var chat = CreateTestChat();\n        var user = CreateTestUser();\n\n        // Act\n        var request1 = new CreateCaptchaRequest(chat, user, null);\n        var captcha1 = await service.CreateCaptchaAsync(request1);\n        var request2 = new CreateCaptchaRequest(chat, user, null);\n        var captcha2 = await service.CreateCaptchaAsync(request2);\n\n        // Assert\n        Assert.That(captcha1, Is.Not.Null);\n        Assert.That(captcha2, Is.Not.Null);\n        // Второй вызов должен перезаписать первый\n        var key = service.GenerateKey(chat.Id, user.Id);\n        var info = service.GetCaptchaInfo(key);\n        Assert.That(info, Is.Not.Null);\n    }\n\n    [Test]\n    public async Task CreateCaptchaAsync_CancellationToken_RespectsCancellation()\n    {\n        // Arrange\n        var service = _factory.CreateCaptchaService();\n        var chat = CreateTestChat();\n        var user = CreateTestUser();\n        var cts = new CancellationTokenSource();\n        cts.Cancel();\n\n        // Act & Assert\n        Assert.DoesNotThrowAsync(() =>\n        {\n            var request = new CreateCaptchaRequest(chat, user, null);\n            return service.CreateCaptchaAsync(request);\n        });\n        // Примечание: CaptchaService не принимает CancellationToken в CreateCaptchaAsync\n        // но внутренние операции могут быть отменены\n    }\n\n    #endregion\n\n    #region Performance and Load Tests\n\n    [Test]\n    public async Task CreateCaptchaAsync_LargeBatch_HandlesCorrectly()\n    {\n        // Arrange\n        var service = _factory.CreateCaptchaService();\n        var chat = CreateTestChat();\n        var tasks = new List<Task<CaptchaInfo>>();\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/CaptchaServiceExtendedTests.cs::CaptchaServiceExtendedTests::BanExpiredCaptchaUsersAsync_ExpiredCaptcha_RegistersViolation",
+        "file": "Unit/Services/CaptchaServiceExtendedTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "CaptchaServiceExtendedTests",
+        "test_name": "BanExpiredCaptchaUsersAsync_ExpiredCaptcha_RegistersViolation",
+        "line": 656,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 42,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify"
+        ],
+        "_source_lineno": 617
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/CaptchaServiceExtendedTests.cs\n# Lines 626-686 (test starts at line 656)\n    public async Task ValidateCaptchaAsync_LargeBatch_HandlesCorrectly()\n    {\n        // Arrange\n        var service = _factory.CreateCaptchaService();\n        var chat = CreateTestChat();\n        var captchas = new List<(string key, int answer)>();\n\n        // Создаем капчи\n        for (int i = 0; i < 50; i++)\n        {\n            var user = CreateTestUser(id: i);\n            var request = new CreateCaptchaRequest(chat, user, null);\n            var captchaInfo = await service.CreateCaptchaAsync(request);\n            var key = service.GenerateKey(chat.Id, user.Id);\n            captchas.Add((key, captchaInfo.CorrectAnswer));\n        }\n\n        // Act\n        var tasks = captchas.Select(c => service.ValidateCaptchaAsync(c.key, c.answer));\n        var results = await Task.WhenAll(tasks);\n\n        // Assert\n        Assert.That(results, Has.Length.EqualTo(50));\n        Assert.That(results.All(r => r), Is.True);\n    }\n\n    #endregion\n\n    #region Captcha Violation Tracking Tests\n\n    [Test]\n    public async Task BanExpiredCaptchaUsersAsync_ExpiredCaptcha_RegistersViolation()\n    {\n        // Arrange\n        var service = _factory.CreateCaptchaService();\n        var chat = CreateTestChat();\n        var user = CreateTestUser();\n        var joinMessage = CreateTestMessage();\n\n        // Создаем капчу с истекшим временем\n        var expiredTime = DateTime.UtcNow.AddMinutes(-2);\n        var captchaInfo = new CaptchaInfo(\n            chat.Id,\n            chat.Title,\n            expiredTime,\n            user,\n            0, // CorrectAnswer\n            new CancellationTokenSource(),\n            joinMessage\n        );\n\n        // Добавляем капчу напрямую в сервис (через reflection для тестирования)\n        var captchaNeededUsersField = typeof(CaptchaService).GetField(\"_captchaNeededUsers\",\n            System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);\n        var captchaNeededUsers = (System.Collections.Concurrent.ConcurrentDictionary<string, CaptchaInfo>)captchaNeededUsersField!.GetValue(service)!;\n        var key = service.GenerateKey(chat.Id, user.Id);\n        captchaNeededUsers.TryAdd(key, captchaInfo);\n\n        // Настраиваем моки\n        _factory.BotMock.Setup(x => x.BanChatMemberAsync(It.IsAny<ChatId>(), It.IsAny<long>(), It.IsAny<DateTime?>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()))\n            .ReturnsAsync(true);\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/CaptchaServiceExtendedTests.cs::CaptchaServiceExtendedTests::BanExpiredCaptchaUsersAsync_ExpiredCaptchaWithViolationLimit_ReturnsTrueAndBansPermanently",
+        "file": "Unit/Services/CaptchaServiceExtendedTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "CaptchaServiceExtendedTests",
+        "test_name": "BanExpiredCaptchaUsersAsync_ExpiredCaptchaWithViolationLimit_ReturnsTrueAndBansPermanently",
+        "line": 701,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 42,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify"
+        ],
+        "_source_lineno": 618
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/CaptchaServiceExtendedTests.cs\n# Lines 671-731 (test starts at line 701)\n            user,\n            0, // CorrectAnswer\n            new CancellationTokenSource(),\n            joinMessage\n        );\n\n        // Добавляем капчу напрямую в сервис (через reflection для тестирования)\n        var captchaNeededUsersField = typeof(CaptchaService).GetField(\"_captchaNeededUsers\",\n            System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);\n        var captchaNeededUsers = (System.Collections.Concurrent.ConcurrentDictionary<string, CaptchaInfo>)captchaNeededUsersField!.GetValue(service)!;\n        var key = service.GenerateKey(chat.Id, user.Id);\n        captchaNeededUsers.TryAdd(key, captchaInfo);\n\n        // Настраиваем моки\n        _factory.BotMock.Setup(x => x.BanChatMemberAsync(It.IsAny<ChatId>(), It.IsAny<long>(), It.IsAny<DateTime?>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()))\n            .ReturnsAsync(true);\n        _factory.BotMock.Setup(x => x.DeleteMessageAsync(It.IsAny<ChatId>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))\n            .ReturnsAsync(true);\n        _factory.ViolationTrackerMock.Setup(x => x.RegisterViolation(It.IsAny<long>(), It.IsAny<long>(), It.IsAny<ViolationType>()))\n            .Returns(false);\n\n        // Act\n        await service.BanExpiredCaptchaUsersAsync();\n\n        // Assert\n        _factory.ViolationTrackerMock.Verify(\n            x => x.RegisterViolation(user.Id, chat.Id, ViolationType.CaptchaFailed),\n            Times.Once);\n    }\n\n    [Test]\n    public async Task BanExpiredCaptchaUsersAsync_ExpiredCaptchaWithViolationLimit_ReturnsTrueAndBansPermanently()\n    {\n        // Arrange\n        var service = _factory.CreateCaptchaService();\n        var chat = CreateTestChat();\n        var user = CreateTestUser();\n        var joinMessage = CreateTestMessage();\n\n        // Создаем капчу с истекшим временем\n        var expiredTime = DateTime.UtcNow.AddMinutes(-2);\n        var captchaInfo = new CaptchaInfo(\n            chat.Id,\n            chat.Title,\n            expiredTime,\n            user,\n            0, // CorrectAnswer\n            new CancellationTokenSource(),\n            joinMessage\n        );\n\n        // Добавляем капчу напрямую в сервис (через reflection для тестирования)\n        var captchaNeededUsersField = typeof(CaptchaService).GetField(\"_captchaNeededUsers\",\n            System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);\n        var captchaNeededUsers = (System.Collections.Concurrent.ConcurrentDictionary<string, CaptchaInfo>)captchaNeededUsersField!.GetValue(service)!;\n        var key = service.GenerateKey(chat.Id, user.Id);\n        captchaNeededUsers.TryAdd(key, captchaInfo);\n\n        // Настраиваем моки\n        _factory.BotMock.Setup(x => x.BanChatMemberAsync(It.IsAny<ChatId>(), It.IsAny<long>(), It.IsAny<DateTime?>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()))\n            .ReturnsAsync(true);\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/CaptchaServiceExtendedTests.cs::CaptchaServiceExtendedTests::BanExpiredCaptchaUsersAsync_ExpiredCaptchaWithoutViolationLimit_ReturnsFalseAndBansTemporarily",
+        "file": "Unit/Services/CaptchaServiceExtendedTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "CaptchaServiceExtendedTests",
+        "test_name": "BanExpiredCaptchaUsersAsync_ExpiredCaptchaWithoutViolationLimit_ReturnsFalseAndBansTemporarily",
+        "line": 746,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 42,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify"
+        ],
+        "_source_lineno": 619
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/CaptchaServiceExtendedTests.cs\n# Lines 716-776 (test starts at line 746)\n            user,\n            0, // CorrectAnswer\n            new CancellationTokenSource(),\n            joinMessage\n        );\n\n        // Добавляем капчу напрямую в сервис (через reflection для тестирования)\n        var captchaNeededUsersField = typeof(CaptchaService).GetField(\"_captchaNeededUsers\",\n            System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);\n        var captchaNeededUsers = (System.Collections.Concurrent.ConcurrentDictionary<string, CaptchaInfo>)captchaNeededUsersField!.GetValue(service)!;\n        var key = service.GenerateKey(chat.Id, user.Id);\n        captchaNeededUsers.TryAdd(key, captchaInfo);\n\n        // Настраиваем моки\n        _factory.BotMock.Setup(x => x.BanChatMemberAsync(It.IsAny<ChatId>(), It.IsAny<long>(), It.IsAny<DateTime?>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()))\n            .ReturnsAsync(true);\n        _factory.BotMock.Setup(x => x.DeleteMessageAsync(It.IsAny<ChatId>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))\n            .ReturnsAsync(true);\n        _factory.ViolationTrackerMock.Setup(x => x.RegisterViolation(It.IsAny<long>(), It.IsAny<long>(), It.IsAny<ViolationType>()))\n            .Returns(true); // Достигнут лимит нарушений\n\n        // Act\n        await service.BanExpiredCaptchaUsersAsync();\n\n        // Assert\n        _factory.BotMock.Verify(\n            x => x.BanChatMemberAsync(chat.Id, user.Id, null, true, It.IsAny<CancellationToken>()), // null = бан навсегда\n            Times.Once);\n    }\n\n    [Test]\n    public async Task BanExpiredCaptchaUsersAsync_ExpiredCaptchaWithoutViolationLimit_ReturnsFalseAndBansTemporarily()\n    {\n        // Arrange\n        var service = _factory.CreateCaptchaService();\n        var chat = CreateTestChat();\n        var user = CreateTestUser();\n        var joinMessage = CreateTestMessage();\n\n        // Создаем капчу с истекшим временем\n        var expiredTime = DateTime.UtcNow.AddMinutes(-2);\n        var captchaInfo = new CaptchaInfo(\n            chat.Id,\n            chat.Title,\n            expiredTime,\n            user,\n            0, // CorrectAnswer\n            new CancellationTokenSource(),\n            joinMessage\n        );\n\n        // Добавляем капчу напрямую в сервис (через reflection для тестирования)\n        var captchaNeededUsersField = typeof(CaptchaService).GetField(\"_captchaNeededUsers\",\n            System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);\n        var captchaNeededUsers = (System.Collections.Concurrent.ConcurrentDictionary<string, CaptchaInfo>)captchaNeededUsersField!.GetValue(service)!;\n        var key = service.GenerateKey(chat.Id, user.Id);\n        captchaNeededUsers.TryAdd(key, captchaInfo);\n\n        // Настраиваем моки\n        _factory.BotMock.Setup(x => x.BanChatMemberAsync(It.IsAny<ChatId>(), It.IsAny<long>(), It.IsAny<DateTime?>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()))\n            .ReturnsAsync(true);\n"
+    }
+  ]
+}

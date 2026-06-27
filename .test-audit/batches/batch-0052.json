@@ -1,0 +1,484 @@
+{
+  "schema_version": "test-audit-batch-v1",
+  "batch_no": 52,
+  "purpose": "local LLM audit input",
+  "instructions": "Return JSONL only. One audit object per input test. No markdown. No code edits.",
+  "tests": [
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/UpdateDispatcherTests.cs::UpdateDispatcherTests::DispatchAsync_NoHandlersCanHandle_LogsDebugInfo",
+        "file": "Unit/Services/UpdateDispatcherTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "UpdateDispatcherTests",
+        "test_name": "DispatchAsync_NoHandlersCanHandle_LogsDebugInfo",
+        "line": 120,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "constructor",
+          "dispatch",
+          "dispatch",
+          "dispatch"
+        ],
+        "body_lines": 15,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify"
+        ],
+        "_source_lineno": 763
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/UpdateDispatcherTests.cs\n# Lines 90-150 (test starts at line 120)\n        await _dispatcher.DispatchAsync(update);\n\n        // Assert\n        _handler1Mock.Verify(x => x.CanHandle(update), Times.Once);\n        _handler1Mock.Verify(x => x.HandleAsync(update, It.IsAny<CancellationToken>()), Times.Once);\n        _handler2Mock.Verify(x => x.CanHandle(update), Times.Once);\n        _handler2Mock.Verify(x => x.HandleAsync(update, It.IsAny<CancellationToken>()), Times.Never);\n    }\n\n    [Test]\n    [Category(\"dispatch\")]\n    public async Task DispatchAsync_AllHandlersCanHandle_CallsAllHandlers()\n    {\n        // Arrange\n        var update = CreateTestUpdate();\n        _handler1Mock.Setup(x => x.CanHandle(update)).Returns(true);\n        _handler2Mock.Setup(x => x.CanHandle(update)).Returns(true);\n\n        // Act\n        await _dispatcher.DispatchAsync(update);\n\n        // Assert\n        _handler1Mock.Verify(x => x.CanHandle(update), Times.Once);\n        _handler1Mock.Verify(x => x.HandleAsync(update, It.IsAny<CancellationToken>()), Times.Once);\n        _handler2Mock.Verify(x => x.CanHandle(update), Times.Once);\n        _handler2Mock.Verify(x => x.HandleAsync(update, It.IsAny<CancellationToken>()), Times.Once);\n    }\n\n    [Test]\n    [Category(\"dispatch\")]\n    public async Task DispatchAsync_NoHandlersCanHandle_LogsDebugInfo()\n    {\n        // Arrange\n        var update = CreateTestUpdate();\n        _handler1Mock.Setup(x => x.CanHandle(update)).Returns(false);\n        _handler2Mock.Setup(x => x.CanHandle(update)).Returns(false);\n\n        // Act\n        await _dispatcher.DispatchAsync(update);\n\n        // Assert\n        _handler1Mock.Verify(x => x.CanHandle(update), Times.Once);\n        _handler1Mock.Verify(x => x.HandleAsync(update, It.IsAny<CancellationToken>()), Times.Never);\n        _handler2Mock.Verify(x => x.CanHandle(update), Times.Once);\n        _handler2Mock.Verify(x => x.HandleAsync(update, It.IsAny<CancellationToken>()), Times.Never);\n    }\n\n    [Test]\n    [Category(\"dispatch\")]\n    public async Task DispatchAsync_NullUpdate_ThrowsArgumentNullException()\n    {\n        // Act & Assert\n        var exception = Assert.ThrowsAsync<ArgumentNullException>(async () =>\n            await _dispatcher.DispatchAsync(null!));\n\n        Assert.That(exception.ParamName, Is.EqualTo(\"update\"));\n    }\n\n    [Test]\n    [Category(\"dispatch\")]\n    public async Task DispatchAsync_HandlerThrowsException_LogsErrorAndRethrows()\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/UpdateDispatcherTests.cs::UpdateDispatcherTests::DispatchAsync_WithCancellationToken_PassesTokenToHandlers",
+        "file": "Unit/Services/UpdateDispatcherTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "UpdateDispatcherTests",
+        "test_name": "DispatchAsync_WithCancellationToken_PassesTokenToHandlers",
+        "line": 186,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "dispatch",
+          "dispatch",
+          "dispatch",
+          "dispatch"
+        ],
+        "body_lines": 12,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify"
+        ],
+        "_source_lineno": 767
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/UpdateDispatcherTests.cs\n# Lines 156-216 (test starts at line 186)\n        _handler1Mock.Setup(x => x.HandleAsync(update, It.IsAny<CancellationToken>()))\n            .ThrowsAsync(expectedException);\n\n        // Act & Assert\n        var exception = Assert.ThrowsAsync<Exception>(async () =>\n            await _dispatcher.DispatchAsync(update));\n\n        Assert.That(exception, Is.EqualTo(expectedException));\n    }\n\n    [Test]\n    [Category(\"dispatch\")]\n    public async Task DispatchAsync_OperationCanceledException_LogsInfoAndRethrows()\n    {\n        // Arrange\n        var update = CreateTestUpdate();\n        var expectedException = new OperationCanceledException();\n        _handler1Mock.Setup(x => x.CanHandle(update)).Returns(true);\n        _handler1Mock.Setup(x => x.HandleAsync(update, It.IsAny<CancellationToken>()))\n            .ThrowsAsync(expectedException);\n\n        // Act & Assert\n        var exception = Assert.ThrowsAsync<OperationCanceledException>(async () =>\n            await _dispatcher.DispatchAsync(update));\n\n        Assert.That(exception, Is.EqualTo(expectedException));\n    }\n\n    [Test]\n    [Category(\"dispatch\")]\n    public async Task DispatchAsync_WithCancellationToken_PassesTokenToHandlers()\n    {\n        // Arrange\n        var update = CreateTestUpdate();\n        var cancellationToken = new CancellationToken();\n        _handler1Mock.Setup(x => x.CanHandle(update)).Returns(true);\n\n        // Act\n        await _dispatcher.DispatchAsync(update, cancellationToken);\n\n        // Assert\n        _handler1Mock.Verify(x => x.HandleAsync(update, cancellationToken), Times.Once);\n    }\n\n    [Test]\n    [Category(\"dispatch\")]\n    public async Task DispatchAsync_EmptyHandlersList_ProcessesWithoutErrors()\n    {\n        // Arrange\n        var emptyDispatcher = new UpdateDispatcher(new List<IUpdateHandler>(), _loggerMock.Object);\n        var update = CreateTestUpdate();\n\n        // Act & Assert\n        Assert.DoesNotThrowAsync(async () => await emptyDispatcher.DispatchAsync(update));\n    }\n\n    [Test]\n    [Category(\"dispatch\")]\n    public async Task DispatchAsync_MessageUpdate_LogsCorrectDebugInfo()\n    {\n        // Arrange\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/UpdateDispatcherTests.cs::UpdateDispatcherTests::DispatchAsync_EmptyHandlersList_ProcessesWithoutErrors",
+        "file": "Unit/Services/UpdateDispatcherTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "UpdateDispatcherTests",
+        "test_name": "DispatchAsync_EmptyHandlersList_ProcessesWithoutErrors",
+        "line": 202,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "dispatch",
+          "dispatch",
+          "dispatch",
+          "dispatch"
+        ],
+        "body_lines": 8,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": true,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "does_not_throw"
+        ],
+        "_source_lineno": 768
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/UpdateDispatcherTests.cs\n# Lines 172-232 (test starts at line 202)\n        var expectedException = new OperationCanceledException();\n        _handler1Mock.Setup(x => x.CanHandle(update)).Returns(true);\n        _handler1Mock.Setup(x => x.HandleAsync(update, It.IsAny<CancellationToken>()))\n            .ThrowsAsync(expectedException);\n\n        // Act & Assert\n        var exception = Assert.ThrowsAsync<OperationCanceledException>(async () =>\n            await _dispatcher.DispatchAsync(update));\n\n        Assert.That(exception, Is.EqualTo(expectedException));\n    }\n\n    [Test]\n    [Category(\"dispatch\")]\n    public async Task DispatchAsync_WithCancellationToken_PassesTokenToHandlers()\n    {\n        // Arrange\n        var update = CreateTestUpdate();\n        var cancellationToken = new CancellationToken();\n        _handler1Mock.Setup(x => x.CanHandle(update)).Returns(true);\n\n        // Act\n        await _dispatcher.DispatchAsync(update, cancellationToken);\n\n        // Assert\n        _handler1Mock.Verify(x => x.HandleAsync(update, cancellationToken), Times.Once);\n    }\n\n    [Test]\n    [Category(\"dispatch\")]\n    public async Task DispatchAsync_EmptyHandlersList_ProcessesWithoutErrors()\n    {\n        // Arrange\n        var emptyDispatcher = new UpdateDispatcher(new List<IUpdateHandler>(), _loggerMock.Object);\n        var update = CreateTestUpdate();\n\n        // Act & Assert\n        Assert.DoesNotThrowAsync(async () => await emptyDispatcher.DispatchAsync(update));\n    }\n\n    [Test]\n    [Category(\"dispatch\")]\n    public async Task DispatchAsync_MessageUpdate_LogsCorrectDebugInfo()\n    {\n        // Arrange\n        var update = CreateTestUpdate();\n\n        // Act\n        await _dispatcher.DispatchAsync(update);\n\n        // Assert\n        // Проверяем, что логгер был вызван с правильными параметрами\n        // (проверка логов в unit тестах обычно не требуется, но можно проверить, что метод не падает)\n        Assert.Pass(\"Update processed successfully\");\n    }\n\n    [Test]\n    [Category(\"dispatch\")]\n    public async Task DispatchAsync_CallbackQueryUpdate_LogsCorrectDebugInfo()\n    {\n        // Arrange\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/UpdateDispatcherTests.cs::UpdateDispatcherTests::DispatchAsync_MessageUpdate_LogsCorrectDebugInfo",
+        "file": "Unit/Services/UpdateDispatcherTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "UpdateDispatcherTests",
+        "test_name": "DispatchAsync_MessageUpdate_LogsCorrectDebugInfo",
+        "line": 214,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "dispatch",
+          "dispatch",
+          "dispatch",
+          "dispatch"
+        ],
+        "body_lines": 12,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": true,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "assert_pass"
+        ],
+        "_source_lineno": 769
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/UpdateDispatcherTests.cs\n# Lines 184-244 (test starts at line 214)\n    [Test]\n    [Category(\"dispatch\")]\n    public async Task DispatchAsync_WithCancellationToken_PassesTokenToHandlers()\n    {\n        // Arrange\n        var update = CreateTestUpdate();\n        var cancellationToken = new CancellationToken();\n        _handler1Mock.Setup(x => x.CanHandle(update)).Returns(true);\n\n        // Act\n        await _dispatcher.DispatchAsync(update, cancellationToken);\n\n        // Assert\n        _handler1Mock.Verify(x => x.HandleAsync(update, cancellationToken), Times.Once);\n    }\n\n    [Test]\n    [Category(\"dispatch\")]\n    public async Task DispatchAsync_EmptyHandlersList_ProcessesWithoutErrors()\n    {\n        // Arrange\n        var emptyDispatcher = new UpdateDispatcher(new List<IUpdateHandler>(), _loggerMock.Object);\n        var update = CreateTestUpdate();\n\n        // Act & Assert\n        Assert.DoesNotThrowAsync(async () => await emptyDispatcher.DispatchAsync(update));\n    }\n\n    [Test]\n    [Category(\"dispatch\")]\n    public async Task DispatchAsync_MessageUpdate_LogsCorrectDebugInfo()\n    {\n        // Arrange\n        var update = CreateTestUpdate();\n\n        // Act\n        await _dispatcher.DispatchAsync(update);\n\n        // Assert\n        // Проверяем, что логгер был вызван с правильными параметрами\n        // (проверка логов в unit тестах обычно не требуется, но можно проверить, что метод не падает)\n        Assert.Pass(\"Update processed successfully\");\n    }\n\n    [Test]\n    [Category(\"dispatch\")]\n    public async Task DispatchAsync_CallbackQueryUpdate_LogsCorrectDebugInfo()\n    {\n        // Arrange\n        var update = new Update\n        {\n            CallbackQuery = new CallbackQuery { Id = \"test_callback\" }\n        };\n\n        // Act\n        await _dispatcher.DispatchAsync(update);\n\n        // Assert\n        Assert.Pass(\"Callback query update processed successfully\");\n    }\n\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/UpdateDispatcherTests.cs::UpdateDispatcherTests::DispatchAsync_CallbackQueryUpdate_LogsCorrectDebugInfo",
+        "file": "Unit/Services/UpdateDispatcherTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "UpdateDispatcherTests",
+        "test_name": "DispatchAsync_CallbackQueryUpdate_LogsCorrectDebugInfo",
+        "line": 230,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "dispatch",
+          "dispatch",
+          "dispatch",
+          "dispatch"
+        ],
+        "body_lines": 13,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": true,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "assert_pass"
+        ],
+        "_source_lineno": 770
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/UpdateDispatcherTests.cs\n# Lines 200-260 (test starts at line 230)\n    [Test]\n    [Category(\"dispatch\")]\n    public async Task DispatchAsync_EmptyHandlersList_ProcessesWithoutErrors()\n    {\n        // Arrange\n        var emptyDispatcher = new UpdateDispatcher(new List<IUpdateHandler>(), _loggerMock.Object);\n        var update = CreateTestUpdate();\n\n        // Act & Assert\n        Assert.DoesNotThrowAsync(async () => await emptyDispatcher.DispatchAsync(update));\n    }\n\n    [Test]\n    [Category(\"dispatch\")]\n    public async Task DispatchAsync_MessageUpdate_LogsCorrectDebugInfo()\n    {\n        // Arrange\n        var update = CreateTestUpdate();\n\n        // Act\n        await _dispatcher.DispatchAsync(update);\n\n        // Assert\n        // Проверяем, что логгер был вызван с правильными параметрами\n        // (проверка логов в unit тестах обычно не требуется, но можно проверить, что метод не падает)\n        Assert.Pass(\"Update processed successfully\");\n    }\n\n    [Test]\n    [Category(\"dispatch\")]\n    public async Task DispatchAsync_CallbackQueryUpdate_LogsCorrectDebugInfo()\n    {\n        // Arrange\n        var update = new Update\n        {\n            CallbackQuery = new CallbackQuery { Id = \"test_callback\" }\n        };\n\n        // Act\n        await _dispatcher.DispatchAsync(update);\n\n        // Assert\n        Assert.Pass(\"Callback query update processed successfully\");\n    }\n\n    [Test]\n    [Category(\"dispatch\")]\n    public async Task DispatchAsync_ChatMemberUpdate_LogsCorrectDebugInfo()\n    {\n        // Arrange\n        var update = new Update\n        {\n            ChatMember = new ChatMemberUpdated\n            {\n                Chat = new Chat { Id = 12345 },\n                From = new User { Id = 67890 }\n            }\n        };\n\n        // Act\n        await _dispatcher.DispatchAsync(update);\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/UpdateDispatcherTests.cs::UpdateDispatcherTests::DispatchAsync_ChatMemberUpdate_LogsCorrectDebugInfo",
+        "file": "Unit/Services/UpdateDispatcherTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "UpdateDispatcherTests",
+        "test_name": "DispatchAsync_ChatMemberUpdate_LogsCorrectDebugInfo",
+        "line": 247,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "dispatch",
+          "dispatch",
+          "dispatch",
+          "dispatch",
+          "dispatch"
+        ],
+        "body_lines": 17,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": true,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "assert_pass"
+        ],
+        "_source_lineno": 771
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/UpdateDispatcherTests.cs\n# Lines 217-277 (test starts at line 247)\n        var update = CreateTestUpdate();\n\n        // Act\n        await _dispatcher.DispatchAsync(update);\n\n        // Assert\n        // Проверяем, что логгер был вызван с правильными параметрами\n        // (проверка логов в unit тестах обычно не требуется, но можно проверить, что метод не падает)\n        Assert.Pass(\"Update processed successfully\");\n    }\n\n    [Test]\n    [Category(\"dispatch\")]\n    public async Task DispatchAsync_CallbackQueryUpdate_LogsCorrectDebugInfo()\n    {\n        // Arrange\n        var update = new Update\n        {\n            CallbackQuery = new CallbackQuery { Id = \"test_callback\" }\n        };\n\n        // Act\n        await _dispatcher.DispatchAsync(update);\n\n        // Assert\n        Assert.Pass(\"Callback query update processed successfully\");\n    }\n\n    [Test]\n    [Category(\"dispatch\")]\n    public async Task DispatchAsync_ChatMemberUpdate_LogsCorrectDebugInfo()\n    {\n        // Arrange\n        var update = new Update\n        {\n            ChatMember = new ChatMemberUpdated\n            {\n                Chat = new Chat { Id = 12345 },\n                From = new User { Id = 67890 }\n            }\n        };\n\n        // Act\n        await _dispatcher.DispatchAsync(update);\n\n        // Assert\n        Assert.Pass(\"Chat member update processed successfully\");\n    }\n\n    [Test]\n    [Category(\"integration\")]\n    public async Task DispatchAsync_MultipleHandlersWithDifferentResponses_ProcessesCorrectly()\n    {\n        // Arrange\n        var update = CreateTestUpdate();\n        _handler1Mock.Setup(x => x.CanHandle(update)).Returns(true);\n        _handler2Mock.Setup(x => x.CanHandle(update)).Returns(true);\n\n        var handler1Called = false;\n        var handler2Called = false;\n\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/UpdateDispatcherTests.cs::UpdateDispatcherTests::DispatchAsync_LargeNumberOfHandlers_ProcessesEfficiently",
+        "file": "Unit/Services/UpdateDispatcherTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "UpdateDispatcherTests",
+        "test_name": "DispatchAsync_LargeNumberOfHandlers_ProcessesEfficiently",
+        "line": 296,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "dispatch",
+          "dispatch",
+          "integration",
+          "performance"
+        ],
+        "body_lines": 33,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify"
+        ],
+        "_source_lineno": 773
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/UpdateDispatcherTests.cs\n# Lines 266-326 (test starts at line 296)\n    [Test]\n    [Category(\"integration\")]\n    public async Task DispatchAsync_MultipleHandlersWithDifferentResponses_ProcessesCorrectly()\n    {\n        // Arrange\n        var update = CreateTestUpdate();\n        _handler1Mock.Setup(x => x.CanHandle(update)).Returns(true);\n        _handler2Mock.Setup(x => x.CanHandle(update)).Returns(true);\n\n        var handler1Called = false;\n        var handler2Called = false;\n\n        _handler1Mock.Setup(x => x.HandleAsync(update, It.IsAny<CancellationToken>()))\n            .Callback(() => handler1Called = true)\n            .Returns(Task.CompletedTask);\n\n        _handler2Mock.Setup(x => x.HandleAsync(update, It.IsAny<CancellationToken>()))\n            .Callback(() => handler2Called = true)\n            .Returns(Task.CompletedTask);\n\n        // Act\n        await _dispatcher.DispatchAsync(update);\n\n        // Assert\n        Assert.That(handler1Called, Is.True);\n        Assert.That(handler2Called, Is.True);\n    }\n\n    [Test]\n    [Category(\"performance\")]\n    public async Task DispatchAsync_LargeNumberOfHandlers_ProcessesEfficiently()\n    {\n        // Arrange\n        var handlers = new List<IUpdateHandler>();\n        var handlerMocks = new List<Mock<IUpdateHandler>>();\n\n        for (int i = 0; i < 10; i++)\n        {\n            var mock = new Mock<IUpdateHandler>();\n            mock.Setup(x => x.CanHandle(It.IsAny<Update>())).Returns(i % 2 == 0);\n            handlers.Add(mock.Object);\n            handlerMocks.Add(mock);\n        }\n\n        var largeDispatcher = new UpdateDispatcher(handlers, _loggerMock.Object);\n        var update = CreateTestUpdate();\n\n        // Act\n        await largeDispatcher.DispatchAsync(update);\n\n        // Assert\n        foreach (var mock in handlerMocks)\n        {\n            mock.Verify(x => x.CanHandle(update), Times.Once);\n            if (handlerMocks.IndexOf(mock) % 2 == 0)\n            {\n                mock.Verify(x => x.HandleAsync(update, It.IsAny<CancellationToken>()), Times.Once);\n            }\n            else\n            {\n                mock.Verify(x => x.HandleAsync(update, It.IsAny<CancellationToken>()), Times.Never);\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/UserBanServiceTests.cs::UserBanServiceTests::BanUserForLongName_ExceptionOccurs_LogsWarning",
+        "file": "Unit/Services/UserBanServiceTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "UserBanServiceTests",
+        "test_name": "BanUserForLongName_ExceptionOccurs_LogsWarning",
+        "line": 283,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 19,
+        "declared_area_from_path": "Unit",
+        "construction_path": "custom_local_world",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": true,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "real_env_or_api"
+        ],
+        "_source_lineno": 785
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/UserBanServiceTests.cs\n# Lines 253-313 (test starts at line 283)\n    }\n\n    [Test]\n    public async Task BanUserForLongName_PermanentBan_BansUserPermanently()\n    {\n        // Arrange\n        var user = TK.CreateValidUser();\n        var chat = TK.CreateGroupChat();\n        var message = TK.CreateValidMessage();\n        message.Chat = chat;\n        var reason = \"Длинное имя\";\n        TimeSpan? banDuration = null; // Перманентный бан\n\n        _botMock.Setup(x => x.BanChatMember(It.IsAny<ChatId>(), It.IsAny<long>(), It.IsAny<DateTime?>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()))\n            .Returns(Task.CompletedTask);\n\n        // Act\n        await _userBanService.BanUserForLongNameAsync(message, user, reason, banDuration, CancellationToken.None);\n\n        // Assert\n        _botMock.Verify(\n            x => x.BanChatMember(\n                chat.Id,\n                user.Id,\n                null, // Перманентный бан\n                true,\n                It.IsAny<CancellationToken>()),\n            Times.Once);\n    }\n\n    [Test]\n    public async Task BanUserForLongName_ExceptionOccurs_LogsWarning()\n    {\n        // Arrange\n        var user = TK.CreateValidUser();\n        var chat = TK.CreateGroupChat();\n        var message = TK.CreateValidMessage();\n        message.Chat = chat;\n        var reason = \"Длинное имя\";\n        var banDuration = TimeSpan.FromMinutes(10);\n\n        _botMock.Setup(x => x.BanChatMember(It.IsAny<ChatId>(), It.IsAny<long>(), It.IsAny<DateTime?>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()))\n            .ThrowsAsync(new Exception(\"Test exception\"));\n\n        // Act\n        await _userBanService.BanUserForLongNameAsync(message, user, reason, banDuration, CancellationToken.None);\n\n        // Assert\n        // Проверяем, что исключение было пробброшено\n        // (логирование происходит в MessageHandler, а не в UserBanService)\n    }\n\n    #endregion\n\n    #region BanBlacklistedUser Tests\n\n    [Test]\n    public async Task BanBlacklistedUser_PrivateChat_LogsWarningAndReturns()\n    {\n        // Arrange\n        var user = TK.CreateValidUser();\n"
+    }
+  ]
+}

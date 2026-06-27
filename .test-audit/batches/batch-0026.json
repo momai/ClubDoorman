@@ -1,0 +1,398 @@
+{
+  "schema_version": "test-audit-batch-v1",
+  "batch_no": 26,
+  "purpose": "local LLM audit input",
+  "instructions": "Return JSONL only. One audit object per input test. No markdown. No code edits.",
+  "tests": [
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/UserBanServiceTests.cs::UserBanServiceTests::AutoBan_TextMentionReason_SelectsCorrectNotificationType",
+        "file": "Unit/Services/UserBanServiceTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "UserBanServiceTests",
+        "test_name": "AutoBan_TextMentionReason_SelectsCorrectNotificationType",
+        "line": 428,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 20,
+        "declared_area_from_path": "Unit",
+        "construction_path": "custom_local_world",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": true,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify",
+          "real_env_or_api"
+        ],
+        "_source_lineno": 791
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/UserBanServiceTests.cs\n# Lines 398-458 (test starts at line 428)\n        await _userBanService.AutoBanAsync(message, reason, CancellationToken.None);\n\n        // Assert\n        // Убеждаемся, что бан не был выполнен для приватного чата\n        _botMock.Verify(x => x.BanChatMember(It.IsAny<ChatId>(), It.IsAny<long>(), It.IsAny<DateTime?>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()), Times.Never);\n    }\n\n    [Test]\n    public async Task AutoBan_KnownSpamReason_SelectsCorrectNotificationType()\n    {\n        // Arrange\n        var user = TK.CreateValidUser();\n        var chat = TK.CreateGroupChat();\n        var message = TK.CreateValidMessage();\n        message.Chat = chat;\n        message.Text = \"Test message\";\n        var reason = \"Известное спам-сообщение\";\n\n        // Act\n        await _userBanService.AutoBanAsync(message, reason, CancellationToken.None);\n\n        // Assert\n        _messageServiceMock.Verify(\n            x => x.SendLogNotificationAsync(\n                LogNotificationType.AutoBanKnownSpam,\n                It.IsAny<AutoBanNotificationData>(),\n                It.IsAny<CancellationToken>()),\n            Times.Once);\n    }\n\n    [Test]\n    public async Task AutoBan_TextMentionReason_SelectsCorrectNotificationType()\n    {\n        // Arrange\n        var user = TK.CreateValidUser();\n        var chat = TK.CreateGroupChat();\n        var message = TK.CreateValidMessage();\n        message.Chat = chat;\n        message.Text = \"Test message\";\n        var reason = \"Ссылки запрещены\";\n\n        // Act\n        await _userBanService.AutoBanAsync(message, reason, CancellationToken.None);\n\n        // Assert\n        _messageServiceMock.Verify(\n            x => x.SendLogNotificationAsync(\n                LogNotificationType.AutoBanTextMention,\n                It.IsAny<AutoBanNotificationData>(),\n                It.IsAny<CancellationToken>()),\n            Times.Once);\n    }\n\n    [Test]\n    public async Task AutoBan_RepeatedViolationsReason_SelectsCorrectNotificationType()\n    {\n        // Arrange\n        var user = TK.CreateValidUser();\n        var chat = TK.CreateGroupChat();\n        var message = TK.CreateValidMessage();\n        message.Chat = chat;\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/UserBanServiceTests.cs::UserBanServiceTests::AutoBan_RepeatedViolationsReason_SelectsCorrectNotificationType",
+        "file": "Unit/Services/UserBanServiceTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "UserBanServiceTests",
+        "test_name": "AutoBan_RepeatedViolationsReason_SelectsCorrectNotificationType",
+        "line": 451,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 20,
+        "declared_area_from_path": "Unit",
+        "construction_path": "custom_local_world",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": true,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify",
+          "real_env_or_api"
+        ],
+        "_source_lineno": 792
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/UserBanServiceTests.cs\n# Lines 421-481 (test starts at line 451)\n            x => x.SendLogNotificationAsync(\n                LogNotificationType.AutoBanKnownSpam,\n                It.IsAny<AutoBanNotificationData>(),\n                It.IsAny<CancellationToken>()),\n            Times.Once);\n    }\n\n    [Test]\n    public async Task AutoBan_TextMentionReason_SelectsCorrectNotificationType()\n    {\n        // Arrange\n        var user = TK.CreateValidUser();\n        var chat = TK.CreateGroupChat();\n        var message = TK.CreateValidMessage();\n        message.Chat = chat;\n        message.Text = \"Test message\";\n        var reason = \"Ссылки запрещены\";\n\n        // Act\n        await _userBanService.AutoBanAsync(message, reason, CancellationToken.None);\n\n        // Assert\n        _messageServiceMock.Verify(\n            x => x.SendLogNotificationAsync(\n                LogNotificationType.AutoBanTextMention,\n                It.IsAny<AutoBanNotificationData>(),\n                It.IsAny<CancellationToken>()),\n            Times.Once);\n    }\n\n    [Test]\n    public async Task AutoBan_RepeatedViolationsReason_SelectsCorrectNotificationType()\n    {\n        // Arrange\n        var user = TK.CreateValidUser();\n        var chat = TK.CreateGroupChat();\n        var message = TK.CreateValidMessage();\n        message.Chat = chat;\n        message.Text = \"Test message\";\n        var reason = \"Повторные нарушения\";\n\n        // Act\n        await _userBanService.AutoBanAsync(message, reason, CancellationToken.None);\n\n        // Assert\n        _messageServiceMock.Verify(\n            x => x.SendLogNotificationAsync(\n                LogNotificationType.AutoBanRepeatedViolations,\n                It.IsAny<AutoBanNotificationData>(),\n                It.IsAny<CancellationToken>()),\n            Times.Once);\n    }\n\n    [Test]\n    public async Task AutoBan_UnknownReason_SelectsDefaultNotificationType()\n    {\n        // Arrange\n        var user = TK.CreateValidUser();\n        var chat = TK.CreateGroupChat();\n        var message = TK.CreateValidMessage();\n        message.Chat = chat;\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/UserBanServiceTests.cs::UserBanServiceTests::AutoBan_UnknownReason_SelectsDefaultNotificationType",
+        "file": "Unit/Services/UserBanServiceTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "UserBanServiceTests",
+        "test_name": "AutoBan_UnknownReason_SelectsDefaultNotificationType",
+        "line": 474,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 20,
+        "declared_area_from_path": "Unit",
+        "construction_path": "custom_local_world",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": true,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify",
+          "real_env_or_api"
+        ],
+        "_source_lineno": 793
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/UserBanServiceTests.cs\n# Lines 444-504 (test starts at line 474)\n            x => x.SendLogNotificationAsync(\n                LogNotificationType.AutoBanTextMention,\n                It.IsAny<AutoBanNotificationData>(),\n                It.IsAny<CancellationToken>()),\n            Times.Once);\n    }\n\n    [Test]\n    public async Task AutoBan_RepeatedViolationsReason_SelectsCorrectNotificationType()\n    {\n        // Arrange\n        var user = TK.CreateValidUser();\n        var chat = TK.CreateGroupChat();\n        var message = TK.CreateValidMessage();\n        message.Chat = chat;\n        message.Text = \"Test message\";\n        var reason = \"Повторные нарушения\";\n\n        // Act\n        await _userBanService.AutoBanAsync(message, reason, CancellationToken.None);\n\n        // Assert\n        _messageServiceMock.Verify(\n            x => x.SendLogNotificationAsync(\n                LogNotificationType.AutoBanRepeatedViolations,\n                It.IsAny<AutoBanNotificationData>(),\n                It.IsAny<CancellationToken>()),\n            Times.Once);\n    }\n\n    [Test]\n    public async Task AutoBan_UnknownReason_SelectsDefaultNotificationType()\n    {\n        // Arrange\n        var user = TK.CreateValidUser();\n        var chat = TK.CreateGroupChat();\n        var message = TK.CreateValidMessage();\n        message.Chat = chat;\n        message.Text = \"Test message\";\n        var reason = \"Неизвестная причина\";\n\n        // Act\n        await _userBanService.AutoBanAsync(message, reason, CancellationToken.None);\n\n        // Assert\n        _messageServiceMock.Verify(\n            x => x.SendLogNotificationAsync(\n                LogNotificationType.AutoBanBlacklist,\n                It.IsAny<AutoBanNotificationData>(),\n                It.IsAny<CancellationToken>()),\n            Times.Once);\n    }\n\n    [Test]\n    public async Task AutoBan_ValidChat_BansUserAndForwardsMessage()\n    {\n        // Arrange\n        var user = TK.CreateValidUser();\n        var chat = TK.CreateGroupChat();\n        var message = TK.CreateValidMessage();\n        message.Chat = chat;\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/UserBanServiceTests.cs::UserBanServiceTests::AutoBan_ValidChat_BansUserAndForwardsMessage",
+        "file": "Unit/Services/UserBanServiceTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "UserBanServiceTests",
+        "test_name": "AutoBan_ValidChat_BansUserAndForwardsMessage",
+        "line": 497,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 20,
+        "declared_area_from_path": "Unit",
+        "construction_path": "custom_local_world",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": true,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify",
+          "real_env_or_api"
+        ],
+        "_source_lineno": 794
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/UserBanServiceTests.cs\n# Lines 467-527 (test starts at line 497)\n            x => x.SendLogNotificationAsync(\n                LogNotificationType.AutoBanRepeatedViolations,\n                It.IsAny<AutoBanNotificationData>(),\n                It.IsAny<CancellationToken>()),\n            Times.Once);\n    }\n\n    [Test]\n    public async Task AutoBan_UnknownReason_SelectsDefaultNotificationType()\n    {\n        // Arrange\n        var user = TK.CreateValidUser();\n        var chat = TK.CreateGroupChat();\n        var message = TK.CreateValidMessage();\n        message.Chat = chat;\n        message.Text = \"Test message\";\n        var reason = \"Неизвестная причина\";\n\n        // Act\n        await _userBanService.AutoBanAsync(message, reason, CancellationToken.None);\n\n        // Assert\n        _messageServiceMock.Verify(\n            x => x.SendLogNotificationAsync(\n                LogNotificationType.AutoBanBlacklist,\n                It.IsAny<AutoBanNotificationData>(),\n                It.IsAny<CancellationToken>()),\n            Times.Once);\n    }\n\n    [Test]\n    public async Task AutoBan_ValidChat_BansUserAndForwardsMessage()\n    {\n        // Arrange\n        var user = TK.CreateValidUser();\n        var chat = TK.CreateGroupChat();\n        var message = TK.CreateValidMessage();\n        message.Chat = chat;\n        message.Text = \"Test message\";\n        var reason = \"Автобан\";\n\n        // Act\n        await _userBanService.AutoBanAsync(message, reason, CancellationToken.None);\n\n        // Assert\n        _messageServiceMock.Verify(\n            x => x.SendLogNotificationAsync(\n                LogNotificationType.AutoBanBlacklist,\n                It.IsAny<AutoBanNotificationData>(),\n                It.IsAny<CancellationToken>()),\n            Times.Once);\n    }\n\n    #endregion\n\n    #region AutoBanChannel Tests\n\n    [Test]\n    public async Task AutoBanChannel_ValidMessage_BansChannelAndSendsNotification()\n    {\n        // Arrange\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/UserBanServiceTests.cs::UserBanServiceTests::AutoBanChannel_ExceptionOccurs_LogsWarningAndSendsErrorNotification",
+        "file": "Unit/Services/UserBanServiceTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "UserBanServiceTests",
+        "test_name": "AutoBanChannel_ExceptionOccurs_LogsWarningAndSendsErrorNotification",
+        "line": 561,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 26,
+        "declared_area_from_path": "Unit",
+        "construction_path": "custom_local_world",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": true,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify",
+          "real_env_or_api"
+        ],
+        "_source_lineno": 796
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/UserBanServiceTests.cs\n# Lines 531-591 (test starts at line 561)\n        message.Chat = chat;\n        message.SenderChat = senderChat;\n        message.Text = \"Test message\";\n\n        _botMock.Setup(x => x.DeleteMessage(It.IsAny<ChatId>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))\n            .Returns(Task.CompletedTask);\n        _botMock.Setup(x => x.BanChatSenderChat(It.IsAny<ChatId>(), It.IsAny<long>(), It.IsAny<CancellationToken>()))\n            .Returns(Task.CompletedTask);\n\n        // Act\n        await _userBanService.AutoBanChannelAsync(message, CancellationToken.None);\n\n        // Assert\n        _botMock.Verify(\n            x => x.DeleteMessage(chat.Id, message.MessageId, It.IsAny<CancellationToken>()),\n            Times.Once);\n\n        _botMock.Verify(\n            x => x.BanChatSenderChat(chat.Id, senderChat.Id, It.IsAny<CancellationToken>()),\n            Times.Once);\n\n        _messageServiceMock.Verify(\n            x => x.ForwardToAdminWithNotificationAsync(\n                message,\n                AdminNotificationType.ChannelMessage,\n                It.IsAny<ChannelMessageNotificationData>(),\n                It.IsAny<CancellationToken>()),\n            Times.Once);\n    }\n\n    [Test]\n    public async Task AutoBanChannel_ExceptionOccurs_LogsWarningAndSendsErrorNotification()\n    {\n        // Arrange\n        var senderChat = new Chat { Id = 789, Type = ChatType.Channel, Title = \"Test Channel\" };\n        var chat = TK.CreateGroupChat();\n        var message = TK.CreateValidMessage();\n        message.Chat = chat;\n        message.SenderChat = senderChat;\n        message.Text = \"Test message\";\n\n        _botMock.Setup(x => x.DeleteMessage(It.IsAny<ChatId>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))\n            .ThrowsAsync(new Exception(\"Test exception\"));\n\n        // Act\n        await _userBanService.AutoBanChannelAsync(message, CancellationToken.None);\n\n        // Assert  \n        // Проверяем, что исключение было проброшено\n        // (логирование происходит в MessageHandler, а не в UserBanService)\n\n        _messageServiceMock.Verify(\n            x => x.SendAdminNotificationAsync(\n                AdminNotificationType.ChannelError,\n                It.IsAny<ErrorNotificationData>(),\n                It.IsAny<CancellationToken>()),\n            Times.Once);\n    }\n\n    #endregion\n\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Integration/AiChecksPhotoLoggingTest.cs::AiChecksPhotoLoggingTest::GetAttentionBaitProbability_WithRealPhoto_ShouldAnalyzePhotoInAPI",
+        "file": "Integration/AiChecksPhotoLoggingTest.cs",
+        "namespace": "ClubDoorman.Test.Integration",
+        "class": "AiChecksPhotoLoggingTest",
+        "test_name": "GetAttentionBaitProbability_WithRealPhoto_ShouldAnalyzePhotoInAPI",
+        "line": 94,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 38,
+        "declared_area_from_path": "Integration",
+        "construction_path": "custom_local_world",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": true,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": true,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "real_env_or_api"
+        ],
+        "_source_lineno": 36
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Integration/AiChecksPhotoLoggingTest.cs\n# Lines 64-124 (test starts at line 94)\n        var envPath = FindEnvFile();\n        if (envPath == null)\n        {\n            Assert.Ignore(\"Файл .env не найден, пропускаем интеграционный тест\");\n        }\n        DotNetEnv.Env.Load(envPath);\n\n        // Загружаем переменные в Environment для Config.cs\n        var apiKey = DotNetEnv.Env.GetString(\"DOORMAN_OPENROUTER_API\");\n        var botToken = DotNetEnv.Env.GetString(\"DOORMAN_BOT_API\");\n        var adminChat = DotNetEnv.Env.GetString(\"DOORMAN_ADMIN_CHAT\");\n\n        Environment.SetEnvironmentVariable(\"DOORMAN_OPENROUTER_API\", apiKey);\n        Environment.SetEnvironmentVariable(\"DOORMAN_BOT_API\", botToken);\n        Environment.SetEnvironmentVariable(\"DOORMAN_ADMIN_CHAT\", adminChat);\n\n        // Отладочная информация (секреты маскируем)\n        string Mask(string? v) => string.IsNullOrEmpty(v) ? \"<empty>\" : (v!.Length <= 6 ? \"******\" : v[..3] + \"***\" + v[^3..]);\n        Console.WriteLine($\"DotNetEnv API Key: {Mask(apiKey)}\");\n        Console.WriteLine($\"Environment API Key: {Mask(Environment.GetEnvironmentVariable(\"DOORMAN_OPENROUTER_API\"))}\");\n\n        // Проверяем наличие API ключа\n        if (string.IsNullOrEmpty(apiKey))\n        {\n            Assert.Ignore(\"DOORMAN_OPENROUTER_API не установлен, пропускаем интеграционный тест\");\n        }\n\n        _aiChecks = new AiChecks(_fakeBot, _logger, AppConfigTestFactory.CreateDefault());\n    }\n\n    [Test]\n    public async Task GetAttentionBaitProbability_WithRealPhoto_ShouldAnalyzePhotoInAPI()\n    {\n        // Arrange - создаем пользователя с фото, но БЕЗ био\n        var user = new User\n        {\n            Id = 12345,\n            FirstName = \"Test\",\n            LastName = \"User\"\n        };\n\n        // Настраиваем FakeTelegramClient чтобы он возвращал реальное фото\n        _fakeBot.SetupGetChatFullInfo(user.Id, new ChatFullInfo\n        {\n            Id = user.Id,\n            Type = ChatType.Private,\n            Bio = null, // НЕТ био - это важно!\n            LinkedChatId = null,\n            Photo = new ChatPhoto\n            {\n                SmallFileId = \"fake_small_file_id\",\n                BigFileId = \"fake_big_photo_id\"\n            }\n        });\n\n        // Настраиваем GetFileAsync чтобы возвращать реальное фото\n        var photoPath = \"/home/kpblc/projects/ClubDoorman/tmp/big.png\";\n        _fakeBot.SetupGetFile(\"fake_big_photo_id\", photoPath);\n\n        // Act\n        var result = await _aiChecks.GetAttentionBaitProbability(user);\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Integration/InfrastructureE2ETests.cs::InfrastructureE2ETests::E2E_ModerationFlow_ShouldProcessMessageWithCorrectOrder",
+        "file": "Integration/InfrastructureE2ETests.cs",
+        "namespace": "ClubDoorman.Test.Integration",
+        "class": "InfrastructureE2ETests",
+        "test_name": "E2E_ModerationFlow_ShouldProcessMessageWithCorrectOrder",
+        "line": 85,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 16,
+        "declared_area_from_path": "Integration",
+        "construction_path": "custom_local_world",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": true,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": true,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "real_env_or_api"
+        ],
+        "_source_lineno": 52
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Integration/InfrastructureE2ETests.cs\n# Lines 55-115 (test starts at line 85)\n\n        // Создаем IModerationService с реальными зависимостями\n        var spamLogger = _loggerFactory.CreateLogger<SpamHamClassifier>();\n        var mimicryLogger = _loggerFactory.CreateLogger<MimicryClassifier>();\n        var suspiciousLogger = _loggerFactory.CreateLogger<SuspiciousUsersStorage>();\n        var aiLogger = _loggerFactory.CreateLogger<AiChecks>();\n\n        var spamClassifier = new SpamHamClassifier(spamLogger);\n        var mimicryClassifier = new MimicryClassifier(mimicryLogger);\n        var badMessageManager = new BadMessageManager();\n        var suspiciousStorage = new SuspiciousUsersStorage(suspiciousLogger);\n        var aiChecks = new AiChecks(_fakeBot, aiLogger, AppConfigTestFactory.CreateDefault());\n\n        var mockUserManager = CreateMock<IUserManager>();\n        var mockMessageService = CreateMock<IMessageService>();\n\n        // Используем простой фейковый IModerationService, возвращающий Allow, вместо пустого мока (иначе null)\n        var moderationServiceMock = new Mock<IModerationService>();\n        moderationServiceMock.Setup(x => x.CheckMessageAsync(It.IsAny<Message>()))\n            .ReturnsAsync(new ModerationResult(ModerationAction.Allow, \"infrastructure-allow\"));\n        moderationServiceMock.Setup(x => x.IsUserApproved(It.IsAny<long>(), It.IsAny<long>())).Returns(false);\n        _moderationService = moderationServiceMock.Object;\n    }\n\n    [TearDown]\n    public void TearDown()\n    {\n        _loggerFactory?.Dispose();\n    }\n\n    [Test]\n    public async Task E2E_ModerationFlow_ShouldProcessMessageWithCorrectOrder()\n    {\n        // Arrange - создаем валидное сообщение\n        var validMessage = TestData.Messages.Valid();\n\n        // Act\n        var result = await _moderationService.CheckMessageAsync(validMessage);\n\n        // Assert с FluentAssertions\n        result.Should().NotBeNull();\n        result.Action.Should().Be(ModerationAction.Allow);\n        result.Reason.Should().NotBeNullOrEmpty();\n\n        // ModerationService не отправляет сообщения через FakeTelegramClient напрямую\n        // Он использует мок ITelegramBotClient, поэтому SentMessages будет пустым\n        // Это нормальное поведение для unit тестов\n    }\n\n    [Test]\n    public async Task E2E_FakeTelegramClient_ShouldTrackSentMessages()\n    {\n        // Arrange\n        var message = TestData.Messages.Valid();\n        var chatId = message.Chat.Id;\n\n        // Act - отправляем сообщение через FakeTelegramClient\n        await _fakeBot.SendMessageAsync(chatId, \"Test message\");\n\n        // Assert с FluentAssertions\n        _fakeBot.SentMessages.Should().HaveCount(1);\n"
+    }
+  ]
+}

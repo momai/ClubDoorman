@@ -1,0 +1,461 @@
+{
+  "schema_version": "test-audit-batch-v1",
+  "batch_no": 8,
+  "purpose": "local LLM audit input",
+  "instructions": "Return JSONL only. One audit object per input test. No markdown. No code edits.",
+  "tests": [
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Integration/MessageHandlerIntegrationTests.cs::MessageHandlerIntegrationTests::HandleMessageAsync_ValidMessage_ProcessesSuccessfully",
+        "file": "Integration/MessageHandlerIntegrationTests.cs",
+        "namespace": "ClubDoorman.Test.Integration",
+        "class": "MessageHandlerIntegrationTests",
+        "test_name": "HandleMessageAsync_ValidMessage_ProcessesSuccessfully",
+        "line": 154,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "disabled",
+          "disabled"
+        ],
+        "body_lines": 12,
+        "declared_area_from_path": "Integration",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": true,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "assert_pass",
+          "message_handler_test_factory"
+        ],
+        "_source_lineno": 80
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Integration/MessageHandlerIntegrationTests.cs\n# Lines 124-184 (test starts at line 154)\n        await _handler.HandleAsync(update);\n\n        // Assert\n        // Verify that the command was handled gracefully\n        Assert.Pass(\"Say command with empty text handled gracefully\");\n    }\n\n    [Test]\n    public async Task HandleCommandAsync_SuspiciousCommand_AdminUser_ProcessesSuccessfully()\n    {\n        // Arrange\n        var message = CreateMessage(\"/suspicious\", ChatType.Group);\n        var update = CreateUpdate(message);\n\n        // Mock admin user\n        _factory.UserManagerMock.Setup(x => x.Approved(It.IsAny<long>(), null))\n            .Returns(true);\n\n        // Act\n        await _handler.HandleAsync(update);\n\n        // Assert\n        // Verify that the command was processed\n        Assert.Pass(\"Suspicious command processed successfully for admin user\");\n    }\n\n    #endregion\n\n    #region Message Processing Tests\n\n    [Test]\n    public async Task HandleMessageAsync_ValidMessage_ProcessesSuccessfully()\n    {\n        // Arrange\n        var message = CreateMessage(\"Hello, this is a test message\", ChatType.Group);\n        var update = CreateUpdate(message);\n\n        // Act\n        await _handler.HandleAsync(update);\n\n        // Assert\n        // Verify that the message was processed\n        Assert.Pass(\"Valid message processed successfully\");\n    }\n\n    [Test]\n    public async Task HandleMessageAsync_EmptyMessage_HandlesGracefully()\n    {\n        // Arrange\n        var message = CreateMessage(\"\", ChatType.Group);\n        var update = CreateUpdate(message);\n\n        // Act\n        await _handler.HandleAsync(update);\n\n        // Assert\n        // Verify that the empty message was handled gracefully\n        Assert.Pass(\"Empty message handled gracefully\");\n    }\n\n    [Test]\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Integration/MessageHandlerIntegrationTests.cs::MessageHandlerIntegrationTests::HandleMessageAsync_EmptyMessage_HandlesGracefully",
+        "file": "Integration/MessageHandlerIntegrationTests.cs",
+        "namespace": "ClubDoorman.Test.Integration",
+        "class": "MessageHandlerIntegrationTests",
+        "test_name": "HandleMessageAsync_EmptyMessage_HandlesGracefully",
+        "line": 169,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "disabled"
+        ],
+        "body_lines": 12,
+        "declared_area_from_path": "Integration",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": true,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "assert_pass",
+          "message_handler_test_factory"
+        ],
+        "_source_lineno": 81
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Integration/MessageHandlerIntegrationTests.cs\n# Lines 139-199 (test starts at line 169)\n        _factory.UserManagerMock.Setup(x => x.Approved(It.IsAny<long>(), null))\n            .Returns(true);\n\n        // Act\n        await _handler.HandleAsync(update);\n\n        // Assert\n        // Verify that the command was processed\n        Assert.Pass(\"Suspicious command processed successfully for admin user\");\n    }\n\n    #endregion\n\n    #region Message Processing Tests\n\n    [Test]\n    public async Task HandleMessageAsync_ValidMessage_ProcessesSuccessfully()\n    {\n        // Arrange\n        var message = CreateMessage(\"Hello, this is a test message\", ChatType.Group);\n        var update = CreateUpdate(message);\n\n        // Act\n        await _handler.HandleAsync(update);\n\n        // Assert\n        // Verify that the message was processed\n        Assert.Pass(\"Valid message processed successfully\");\n    }\n\n    [Test]\n    public async Task HandleMessageAsync_EmptyMessage_HandlesGracefully()\n    {\n        // Arrange\n        var message = CreateMessage(\"\", ChatType.Group);\n        var update = CreateUpdate(message);\n\n        // Act\n        await _handler.HandleAsync(update);\n\n        // Assert\n        // Verify that the empty message was handled gracefully\n        Assert.Pass(\"Empty message handled gracefully\");\n    }\n\n    [Test]\n    public async Task HandleMessageAsync_NullMessage_HandlesGracefully()\n    {\n        // Arrange\n        var update = new Update\n        {\n            Id = 1,\n            Message = null,\n            EditedMessage = null\n        };\n\n        // Act & Assert\n        Assert.ThrowsAsync<ArgumentNullException>(async () => await _handler.HandleAsync(update),\n            \"Should throw ArgumentNullException when both Message and EditedMessage are null\");\n    }\n\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Integration/MessageHandlerIntegrationTests.cs::MessageHandlerIntegrationTests::HandleMessageAsync_LongMessage_ProcessesSuccessfully",
+        "file": "Integration/MessageHandlerIntegrationTests.cs",
+        "namespace": "ClubDoorman.Test.Integration",
+        "class": "MessageHandlerIntegrationTests",
+        "test_name": "HandleMessageAsync_LongMessage_ProcessesSuccessfully",
+        "line": 200,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 13,
+        "declared_area_from_path": "Integration",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": true,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "assert_pass",
+          "message_handler_test_factory"
+        ],
+        "_source_lineno": 83
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Integration/MessageHandlerIntegrationTests.cs\n# Lines 170-230 (test starts at line 200)\n    public async Task HandleMessageAsync_EmptyMessage_HandlesGracefully()\n    {\n        // Arrange\n        var message = CreateMessage(\"\", ChatType.Group);\n        var update = CreateUpdate(message);\n\n        // Act\n        await _handler.HandleAsync(update);\n\n        // Assert\n        // Verify that the empty message was handled gracefully\n        Assert.Pass(\"Empty message handled gracefully\");\n    }\n\n    [Test]\n    public async Task HandleMessageAsync_NullMessage_HandlesGracefully()\n    {\n        // Arrange\n        var update = new Update\n        {\n            Id = 1,\n            Message = null,\n            EditedMessage = null\n        };\n\n        // Act & Assert\n        Assert.ThrowsAsync<ArgumentNullException>(async () => await _handler.HandleAsync(update),\n            \"Should throw ArgumentNullException when both Message and EditedMessage are null\");\n    }\n\n    [Test]\n    public async Task HandleMessageAsync_LongMessage_ProcessesSuccessfully()\n    {\n        // Arrange\n        var longMessage = new string('a', 1000); // 1000 character message\n        var message = CreateMessage(longMessage, ChatType.Group);\n        var update = CreateUpdate(message);\n\n        // Act\n        await _handler.HandleAsync(update);\n\n        // Assert\n        // Verify that the long message was processed\n        Assert.Pass(\"Long message processed successfully\");\n    }\n\n    [Test]\n    public async Task HandleMessageAsync_MessageWithSpecialCharacters_ProcessesSuccessfully()\n    {\n        // Arrange\n        var specialMessage = \"Message with special chars: @#$%^&*()_+-=[]{}|;':\\\",./<>?\";\n        var message = CreateMessage(specialMessage, ChatType.Group);\n        var update = CreateUpdate(message);\n\n        // Act\n        await _handler.HandleAsync(update);\n\n        // Assert\n        // Verify that the message with special characters was processed\n        Assert.Pass(\"Message with special characters processed successfully\");\n    }\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Integration/MessageHandlerIntegrationTests.cs::MessageHandlerIntegrationTests::HandleMessageAsync_MessageWithSpecialCharacters_ProcessesSuccessfully",
+        "file": "Integration/MessageHandlerIntegrationTests.cs",
+        "namespace": "ClubDoorman.Test.Integration",
+        "class": "MessageHandlerIntegrationTests",
+        "test_name": "HandleMessageAsync_MessageWithSpecialCharacters_ProcessesSuccessfully",
+        "line": 216,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 13,
+        "declared_area_from_path": "Integration",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": true,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "assert_pass",
+          "message_handler_test_factory"
+        ],
+        "_source_lineno": 84
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Integration/MessageHandlerIntegrationTests.cs\n# Lines 186-246 (test starts at line 216)\n    {\n        // Arrange\n        var update = new Update\n        {\n            Id = 1,\n            Message = null,\n            EditedMessage = null\n        };\n\n        // Act & Assert\n        Assert.ThrowsAsync<ArgumentNullException>(async () => await _handler.HandleAsync(update),\n            \"Should throw ArgumentNullException when both Message and EditedMessage are null\");\n    }\n\n    [Test]\n    public async Task HandleMessageAsync_LongMessage_ProcessesSuccessfully()\n    {\n        // Arrange\n        var longMessage = new string('a', 1000); // 1000 character message\n        var message = CreateMessage(longMessage, ChatType.Group);\n        var update = CreateUpdate(message);\n\n        // Act\n        await _handler.HandleAsync(update);\n\n        // Assert\n        // Verify that the long message was processed\n        Assert.Pass(\"Long message processed successfully\");\n    }\n\n    [Test]\n    public async Task HandleMessageAsync_MessageWithSpecialCharacters_ProcessesSuccessfully()\n    {\n        // Arrange\n        var specialMessage = \"Message with special chars: @#$%^&*()_+-=[]{}|;':\\\",./<>?\";\n        var message = CreateMessage(specialMessage, ChatType.Group);\n        var update = CreateUpdate(message);\n\n        // Act\n        await _handler.HandleAsync(update);\n\n        // Assert\n        // Verify that the message with special characters was processed\n        Assert.Pass(\"Message with special characters processed successfully\");\n    }\n\n    #endregion\n\n    #region User Status Tests\n\n    [Test]\n    public async Task HandleMessageAsync_ApprovedUser_ProcessesSuccessfully()\n    {\n        // Arrange\n        var message = CreateMessage(\"Hello from approved user\", ChatType.Group);\n        var update = CreateUpdate(message);\n\n        // Mock approved user\n        _factory.UserManagerMock.Setup(x => x.Approved(It.IsAny<long>(), null))\n            .Returns(true);\n\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Integration/MessageHandlerIntegrationTests.cs::MessageHandlerIntegrationTests::HandleMessageAsync_ApprovedUser_ProcessesSuccessfully",
+        "file": "Integration/MessageHandlerIntegrationTests.cs",
+        "namespace": "ClubDoorman.Test.Integration",
+        "class": "MessageHandlerIntegrationTests",
+        "test_name": "HandleMessageAsync_ApprovedUser_ProcessesSuccessfully",
+        "line": 236,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 16,
+        "declared_area_from_path": "Integration",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": true,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "assert_pass",
+          "message_handler_test_factory"
+        ],
+        "_source_lineno": 85
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Integration/MessageHandlerIntegrationTests.cs\n# Lines 206-266 (test starts at line 236)\n        var update = CreateUpdate(message);\n\n        // Act\n        await _handler.HandleAsync(update);\n\n        // Assert\n        // Verify that the long message was processed\n        Assert.Pass(\"Long message processed successfully\");\n    }\n\n    [Test]\n    public async Task HandleMessageAsync_MessageWithSpecialCharacters_ProcessesSuccessfully()\n    {\n        // Arrange\n        var specialMessage = \"Message with special chars: @#$%^&*()_+-=[]{}|;':\\\",./<>?\";\n        var message = CreateMessage(specialMessage, ChatType.Group);\n        var update = CreateUpdate(message);\n\n        // Act\n        await _handler.HandleAsync(update);\n\n        // Assert\n        // Verify that the message with special characters was processed\n        Assert.Pass(\"Message with special characters processed successfully\");\n    }\n\n    #endregion\n\n    #region User Status Tests\n\n    [Test]\n    public async Task HandleMessageAsync_ApprovedUser_ProcessesSuccessfully()\n    {\n        // Arrange\n        var message = CreateMessage(\"Hello from approved user\", ChatType.Group);\n        var update = CreateUpdate(message);\n\n        // Mock approved user\n        _factory.UserManagerMock.Setup(x => x.Approved(It.IsAny<long>(), null))\n            .Returns(true);\n\n        // Act\n        await _handler.HandleAsync(update);\n\n        // Assert\n        // Verify that the approved user's message was processed\n        Assert.Pass(\"Approved user message processed successfully\");\n    }\n\n    [Test]\n    public async Task HandleMessageAsync_BannedUser_HandlesGracefully()\n    {\n        // Arrange\n        var message = CreateMessage(\"Hello from banned user\", ChatType.Group);\n        var update = CreateUpdate(message);\n\n        // Mock banned user\n        _factory.UserManagerMock.Setup(x => x.InBanlist(It.IsAny<long>()))\n            .ReturnsAsync(true);\n\n        // Act\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Integration/MessageHandlerIntegrationTests.cs::MessageHandlerIntegrationTests::HandleMessageAsync_BannedUser_HandlesGracefully",
+        "file": "Integration/MessageHandlerIntegrationTests.cs",
+        "namespace": "ClubDoorman.Test.Integration",
+        "class": "MessageHandlerIntegrationTests",
+        "test_name": "HandleMessageAsync_BannedUser_HandlesGracefully",
+        "line": 255,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 16,
+        "declared_area_from_path": "Integration",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": true,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "assert_pass",
+          "message_handler_test_factory"
+        ],
+        "_source_lineno": 86
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Integration/MessageHandlerIntegrationTests.cs\n# Lines 225-285 (test starts at line 255)\n        await _handler.HandleAsync(update);\n\n        // Assert\n        // Verify that the message with special characters was processed\n        Assert.Pass(\"Message with special characters processed successfully\");\n    }\n\n    #endregion\n\n    #region User Status Tests\n\n    [Test]\n    public async Task HandleMessageAsync_ApprovedUser_ProcessesSuccessfully()\n    {\n        // Arrange\n        var message = CreateMessage(\"Hello from approved user\", ChatType.Group);\n        var update = CreateUpdate(message);\n\n        // Mock approved user\n        _factory.UserManagerMock.Setup(x => x.Approved(It.IsAny<long>(), null))\n            .Returns(true);\n\n        // Act\n        await _handler.HandleAsync(update);\n\n        // Assert\n        // Verify that the approved user's message was processed\n        Assert.Pass(\"Approved user message processed successfully\");\n    }\n\n    [Test]\n    public async Task HandleMessageAsync_BannedUser_HandlesGracefully()\n    {\n        // Arrange\n        var message = CreateMessage(\"Hello from banned user\", ChatType.Group);\n        var update = CreateUpdate(message);\n\n        // Mock banned user\n        _factory.UserManagerMock.Setup(x => x.InBanlist(It.IsAny<long>()))\n            .ReturnsAsync(true);\n\n        // Act\n        await _handler.HandleAsync(update);\n\n        // Assert\n        // Verify that the banned user's message was handled gracefully\n        Assert.Pass(\"Banned user message handled gracefully\");\n    }\n\n    [Test]\n    public async Task HandleMessageAsync_SuspiciousUser_HandlesGracefully()\n    {\n        // Arrange\n        var message = CreateMessage(\"Hello from suspicious user\", ChatType.Group);\n        var update = CreateUpdate(message);\n\n        // Mock suspicious user\n        _factory.SuspiciousUsersStorageMock.Setup(x => x.IsSuspicious(It.IsAny<long>(), It.IsAny<long>()))\n            .Returns(true);\n\n        // Act\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Integration/MessageHandlerIntegrationTests.cs::MessageHandlerIntegrationTests::HandleMessageAsync_SuspiciousUser_HandlesGracefully",
+        "file": "Integration/MessageHandlerIntegrationTests.cs",
+        "namespace": "ClubDoorman.Test.Integration",
+        "class": "MessageHandlerIntegrationTests",
+        "test_name": "HandleMessageAsync_SuspiciousUser_HandlesGracefully",
+        "line": 274,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 16,
+        "declared_area_from_path": "Integration",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": true,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "assert_pass",
+          "message_handler_test_factory"
+        ],
+        "_source_lineno": 87
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Integration/MessageHandlerIntegrationTests.cs\n# Lines 244-304 (test starts at line 274)\n        _factory.UserManagerMock.Setup(x => x.Approved(It.IsAny<long>(), null))\n            .Returns(true);\n\n        // Act\n        await _handler.HandleAsync(update);\n\n        // Assert\n        // Verify that the approved user's message was processed\n        Assert.Pass(\"Approved user message processed successfully\");\n    }\n\n    [Test]\n    public async Task HandleMessageAsync_BannedUser_HandlesGracefully()\n    {\n        // Arrange\n        var message = CreateMessage(\"Hello from banned user\", ChatType.Group);\n        var update = CreateUpdate(message);\n\n        // Mock banned user\n        _factory.UserManagerMock.Setup(x => x.InBanlist(It.IsAny<long>()))\n            .ReturnsAsync(true);\n\n        // Act\n        await _handler.HandleAsync(update);\n\n        // Assert\n        // Verify that the banned user's message was handled gracefully\n        Assert.Pass(\"Banned user message handled gracefully\");\n    }\n\n    [Test]\n    public async Task HandleMessageAsync_SuspiciousUser_HandlesGracefully()\n    {\n        // Arrange\n        var message = CreateMessage(\"Hello from suspicious user\", ChatType.Group);\n        var update = CreateUpdate(message);\n\n        // Mock suspicious user\n        _factory.SuspiciousUsersStorageMock.Setup(x => x.IsSuspicious(It.IsAny<long>(), It.IsAny<long>()))\n            .Returns(true);\n\n        // Act\n        await _handler.HandleAsync(update);\n\n        // Assert\n        // Verify that the suspicious user's message was handled gracefully\n        Assert.Pass(\"Suspicious user message handled gracefully\");\n    }\n\n    #endregion\n\n    #region Error Handling Tests\n\n    [Test]\n    public async Task HandleAsync_ExceptionInUserManager_HandlesGracefully()\n    {\n        // Arrange\n        var message = CreateMessage(\"Test message\", ChatType.Group);\n        var update = CreateUpdate(message);\n\n        // Mock exception in UserManager\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Integration/MessageHandlerIntegrationTests.cs::MessageHandlerIntegrationTests::HandleAsync_ExceptionInUserManager_HandlesGracefully",
+        "file": "Integration/MessageHandlerIntegrationTests.cs",
+        "namespace": "ClubDoorman.Test.Integration",
+        "class": "MessageHandlerIntegrationTests",
+        "test_name": "HandleAsync_ExceptionInUserManager_HandlesGracefully",
+        "line": 297,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 13,
+        "declared_area_from_path": "Integration",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": true,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "does_not_throw",
+          "message_handler_test_factory"
+        ],
+        "_source_lineno": 88
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Integration/MessageHandlerIntegrationTests.cs\n# Lines 267-327 (test starts at line 297)\n        await _handler.HandleAsync(update);\n\n        // Assert\n        // Verify that the banned user's message was handled gracefully\n        Assert.Pass(\"Banned user message handled gracefully\");\n    }\n\n    [Test]\n    public async Task HandleMessageAsync_SuspiciousUser_HandlesGracefully()\n    {\n        // Arrange\n        var message = CreateMessage(\"Hello from suspicious user\", ChatType.Group);\n        var update = CreateUpdate(message);\n\n        // Mock suspicious user\n        _factory.SuspiciousUsersStorageMock.Setup(x => x.IsSuspicious(It.IsAny<long>(), It.IsAny<long>()))\n            .Returns(true);\n\n        // Act\n        await _handler.HandleAsync(update);\n\n        // Assert\n        // Verify that the suspicious user's message was handled gracefully\n        Assert.Pass(\"Suspicious user message handled gracefully\");\n    }\n\n    #endregion\n\n    #region Error Handling Tests\n\n    [Test]\n    public async Task HandleAsync_ExceptionInUserManager_HandlesGracefully()\n    {\n        // Arrange\n        var message = CreateMessage(\"Test message\", ChatType.Group);\n        var update = CreateUpdate(message);\n\n        // Mock exception in UserManager\n        _factory.UserManagerMock.Setup(x => x.Approved(It.IsAny<long>(), null))\n            .Throws(new System.Exception(\"Test exception\"));\n\n        // Act & Assert\n        Assert.DoesNotThrowAsync(async () => await _handler.HandleAsync(update),\n            \"Exception in UserManager should be handled gracefully\");\n    }\n\n    [Test]\n    public async Task HandleAsync_ExceptionInModerationService_HandlesGracefully()\n    {\n        // Arrange\n        var message = CreateMessage(\"Test message\", ChatType.Group);\n        var update = CreateUpdate(message);\n\n        // Mock exception in ModerationService\n        _factory.ModerationServiceMock.Setup(x => x.CheckMessageAsync(It.IsAny<Message>()))\n            .ThrowsAsync(new System.Exception(\"Test exception\"));\n\n        // Act & Assert\n        Assert.DoesNotThrowAsync(async () => await _handler.HandleAsync(update),\n            \"Exception in ModerationService should be handled gracefully\");\n    }\n"
+    }
+  ]
+}

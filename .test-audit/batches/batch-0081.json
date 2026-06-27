@@ -1,0 +1,548 @@
+{
+  "schema_version": "test-audit-batch-v1",
+  "batch_no": 81,
+  "purpose": "local LLM audit input",
+  "instructions": "Return JSONL only. One audit object per input test. No markdown. No code edits.",
+  "tests": [
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestInfrastructure/UserCleanupServiceTestFactoryTests.cs::UserCleanupServiceTestFactoryTests::CreateUserCleanupService_CreatesFreshInstanceEachTime",
+        "file": "TestInfrastructure/UserCleanupServiceTestFactoryTests.cs",
+        "namespace": "ClubDoorman.TestInfrastructure",
+        "class": "UserCleanupServiceTestFactoryTests",
+        "test_name": "CreateUserCleanupService_CreatesFreshInstanceEachTime",
+        "line": 46,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "test-infrastructure"
+        ],
+        "body_lines": 11,
+        "declared_area_from_path": "TestInfrastructure",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 237
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestInfrastructure/UserCleanupServiceTestFactoryTests.cs\n# Lines 16-76 (test starts at line 46)\npublic class UserCleanupServiceTestFactoryTests\n{\n    [Test]\n    public void CreateUserCleanupService_ReturnsWorkingInstance()\n    {\n        // Arrange\n        var factory = new UserCleanupServiceTestFactory();\n\n        // Act\n        var instance = factory.CreateUserCleanupService();\n\n        // Assert\n        Assert.That(instance, Is.Not.Null);\n        Assert.That(instance, Is.InstanceOf<UserCleanupService>());\n    }\n\n    [Test]\n    public void CreateUserCleanupService_ConfiguresAllDependencies()\n    {\n        // Arrange\n        var factory = new UserCleanupServiceTestFactory();\n\n        // Act\n        var instance = factory.CreateUserCleanupService();\n\n        // Assert\n        // Проверяем что все зависимости настроены\n        Assert.That(instance, Is.Not.Null);\n    }\n\n    [Test]\n    public void CreateUserCleanupService_CreatesFreshInstanceEachTime()\n    {\n        // Arrange\n        var factory = new UserCleanupServiceTestFactory();\n\n        // Act\n        var instance1 = factory.CreateUserCleanupService();\n        var instance2 = factory.CreateUserCleanupService();\n\n        // Assert\n        Assert.That(instance1, Is.Not.SameAs(instance2));\n    }\n\n    [Test]\n    public void CreateRealUserCleanupService_ReturnsWorkingInstance()\n    {\n        // Arrange\n        var factory = new UserCleanupServiceTestFactory();\n\n        // Act\n        var instance = factory.CreateRealUserCleanupService();\n\n        // Assert\n        Assert.That(instance, Is.Not.Null);\n        Assert.That(instance, Is.InstanceOf<UserCleanupService>());\n    }\n\n    [Test]\n    public void LoggerMock_IsProperlyConfigured()\n    {\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestInfrastructure/UserManagementExceptionTestFactoryTests.cs::UserManagementExceptionTestFactoryTests::CreateUserManagementException_CreatesFreshInstanceEachTime",
+        "file": "TestInfrastructure/UserManagementExceptionTestFactoryTests.cs",
+        "namespace": "ClubDoorman.TestInfrastructure",
+        "class": "UserManagementExceptionTestFactoryTests",
+        "test_name": "CreateUserManagementException_CreatesFreshInstanceEachTime",
+        "line": 46,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "test-infrastructure"
+        ],
+        "body_lines": 11,
+        "declared_area_from_path": "TestInfrastructure",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 243
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestInfrastructure/UserManagementExceptionTestFactoryTests.cs\n# Lines 16-59 (test starts at line 46)\npublic class UserManagementExceptionTestFactoryTests\n{\n    [Test]\n    public void CreateUserManagementException_ReturnsWorkingInstance()\n    {\n        // Arrange\n        var factory = new UserManagementExceptionTestFactory();\n\n        // Act\n        var instance = factory.CreateUserManagementException();\n\n        // Assert\n        Assert.That(instance, Is.Not.Null);\n        Assert.That(instance, Is.InstanceOf<UserManagementException>());\n    }\n\n    [Test]\n    public void CreateUserManagementException_ConfiguresAllDependencies()\n    {\n        // Arrange\n        var factory = new UserManagementExceptionTestFactory();\n\n        // Act\n        var instance = factory.CreateUserManagementException();\n\n        // Assert\n        // Проверяем что все зависимости настроены\n        Assert.That(instance, Is.Not.Null);\n    }\n\n    [Test]\n    public void CreateUserManagementException_CreatesFreshInstanceEachTime()\n    {\n        // Arrange\n        var factory = new UserManagementExceptionTestFactory();\n\n        // Act\n        var instance1 = factory.CreateUserManagementException();\n        var instance2 = factory.CreateUserManagementException();\n\n        // Assert\n        Assert.That(instance1, Is.Not.SameAs(instance2));\n    }\n}\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestKit/TestKit.BuilderTests.cs::TestKitBuilderTests::CreateTestToken_ReturnsConsistentToken",
+        "file": "TestKit/TestKit.BuilderTests.cs",
+        "namespace": "ClubDoorman.Test.TestKit",
+        "class": "TestKitBuilderTests",
+        "test_name": "CreateTestToken_ReturnsConsistentToken",
+        "line": 314,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "scenarios",
+          "test-tokens",
+          "test-tokens"
+        ],
+        "body_lines": 10,
+        "declared_area_from_path": "TestKit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 260
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestKit/TestKit.BuilderTests.cs\n# Lines 284-325 (test starts at line 314)\n        Assert.That(mocks, Is.Not.Null);\n        Assert.That(mocks.Count, Is.EqualTo(8)); // 8 моков в словаре (только интерфейсы)\n\n        // Проверяем что все ожидаемые моки есть\n        Assert.That(mocks.ContainsKey(\"UserManager\"), Is.True);\n        Assert.That(mocks.ContainsKey(\"AiChecks\"), Is.True);\n        Assert.That(mocks.ContainsKey(\"Logger\"), Is.True);\n        Assert.That(mocks.ContainsKey(\"BotClient\"), Is.True);\n        Assert.That(mocks.ContainsKey(\"MessageService\"), Is.True);\n\n        // Sealed классы не мокаются, поэтому их нет в словаре\n        Assert.That(mocks.ContainsKey(\"BadMessageManager\"), Is.False);\n    }\n\n    [Test]\n    [Category(TestCategories.TestInfrastructure)]\n    [Category(\"test-tokens\")]\n    public void CreateTestBotClient_ReturnsValidClient()\n    {\n        // Act\n        var client = TK.CreateTestBotClient();\n\n        // Assert\n        Assert.That(client, Is.Not.Null);\n        Assert.That(client, Is.InstanceOf<TelegramBotClient>());\n    }\n\n    [Test]\n    [Category(TestCategories.TestInfrastructure)]\n    [Category(\"test-tokens\")]\n    public void CreateTestToken_ReturnsConsistentToken()\n    {\n        // Act\n        var token1 = TK.CreateTestToken();\n        var token2 = TK.CreateTestToken();\n\n        // Assert\n        Assert.That(token1, Is.EqualTo(token2));\n        Assert.That(token1, Does.StartWith(\"1234567890:\"));\n        Assert.That(token1, Does.Contain(\"TEST_TOKEN\"));\n    }\n}\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TextProcessorNullTests.cs::TextProcessorNullTests::NormalizeText_WithNullInput_ThrowsArgumentNullException",
+        "file": "TextProcessorNullTests.cs",
+        "namespace": "ClubDoorman.Test",
+        "class": "TextProcessorNullTests",
+        "test_name": "NormalizeText_WithNullInput_ThrowsArgumentNullException",
+        "line": 12,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 7,
+        "declared_area_from_path": "Root",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": true,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 261
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TextProcessorNullTests.cs\n# Lines 1-42 (test starts at line 12)\nusing ClubDoorman.Services.UserBan;\nusing ClubDoorman.Services;\nusing ClubDoorman.Services.UserBan;\nusing ClubDoorman.Services.TextProcessing;\nusing NUnit.Framework;\n\nnamespace ClubDoorman.Test;\n\n[TestFixture]\npublic class TextProcessorNullTests\n{\n    [Test]\n    public void NormalizeText_WithNullInput_ThrowsArgumentNullException()\n    {\n        // Act & Assert\n        var exception = Assert.Throws<ArgumentNullException>(() =>\n            TextProcessor.NormalizeText(null!));\n\n        Assert.That(exception.ParamName, Is.EqualTo(\"input\"));\n    }\n\n    [Test]\n    public void NormalizeText_WithEmptyString_ReturnsEmptyString()\n    {\n        // Act\n        var result = TextProcessor.NormalizeText(\"\");\n\n        // Assert\n        Assert.That(result, Is.EqualTo(\"\"));\n    }\n\n    [Test]\n    public void NormalizeText_WithNormalText_ReturnsNormalizedText()\n    {\n        // Arrange\n        var input = \"Hello, World! 🌍\";\n\n        // Act\n        var result = TextProcessor.NormalizeText(input);\n\n        // Assert\n        Assert.That(result, Is.EqualTo(\"hello world \"));\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TextProcessorNullTests.cs::TextProcessorNullTests::NormalizeText_WithEmptyString_ReturnsEmptyString",
+        "file": "TextProcessorNullTests.cs",
+        "namespace": "ClubDoorman.Test",
+        "class": "TextProcessorNullTests",
+        "test_name": "NormalizeText_WithEmptyString_ReturnsEmptyString",
+        "line": 22,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 7,
+        "declared_area_from_path": "Root",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 262
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TextProcessorNullTests.cs\n# Lines 1-52 (test starts at line 22)\nusing ClubDoorman.Services.UserBan;\nusing ClubDoorman.Services;\nusing ClubDoorman.Services.UserBan;\nusing ClubDoorman.Services.TextProcessing;\nusing NUnit.Framework;\n\nnamespace ClubDoorman.Test;\n\n[TestFixture]\npublic class TextProcessorNullTests\n{\n    [Test]\n    public void NormalizeText_WithNullInput_ThrowsArgumentNullException()\n    {\n        // Act & Assert\n        var exception = Assert.Throws<ArgumentNullException>(() =>\n            TextProcessor.NormalizeText(null!));\n\n        Assert.That(exception.ParamName, Is.EqualTo(\"input\"));\n    }\n\n    [Test]\n    public void NormalizeText_WithEmptyString_ReturnsEmptyString()\n    {\n        // Act\n        var result = TextProcessor.NormalizeText(\"\");\n\n        // Assert\n        Assert.That(result, Is.EqualTo(\"\"));\n    }\n\n    [Test]\n    public void NormalizeText_WithNormalText_ReturnsNormalizedText()\n    {\n        // Arrange\n        var input = \"Hello, World! 🌍\";\n\n        // Act\n        var result = TextProcessor.NormalizeText(input);\n\n        // Assert\n        Assert.That(result, Is.EqualTo(\"hello world \"));\n    }\n\n    [Test]\n    public void NormalizeText_WithRussianText_ReturnsNormalizedText()\n    {\n        // Arrange\n        var input = \"Привет, мир! 🌍\";\n\n        // Act\n        var result = TextProcessor.NormalizeText(input);\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TextProcessorNullTests.cs::TextProcessorNullTests::NormalizeText_WithNormalText_ReturnsNormalizedText",
+        "file": "TextProcessorNullTests.cs",
+        "namespace": "ClubDoorman.Test",
+        "class": "TextProcessorNullTests",
+        "test_name": "NormalizeText_WithNormalText_ReturnsNormalizedText",
+        "line": 32,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 10,
+        "declared_area_from_path": "Root",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 263
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TextProcessorNullTests.cs\n# Lines 2-62 (test starts at line 32)\nusing ClubDoorman.Services;\nusing ClubDoorman.Services.UserBan;\nusing ClubDoorman.Services.TextProcessing;\nusing NUnit.Framework;\n\nnamespace ClubDoorman.Test;\n\n[TestFixture]\npublic class TextProcessorNullTests\n{\n    [Test]\n    public void NormalizeText_WithNullInput_ThrowsArgumentNullException()\n    {\n        // Act & Assert\n        var exception = Assert.Throws<ArgumentNullException>(() =>\n            TextProcessor.NormalizeText(null!));\n\n        Assert.That(exception.ParamName, Is.EqualTo(\"input\"));\n    }\n\n    [Test]\n    public void NormalizeText_WithEmptyString_ReturnsEmptyString()\n    {\n        // Act\n        var result = TextProcessor.NormalizeText(\"\");\n\n        // Assert\n        Assert.That(result, Is.EqualTo(\"\"));\n    }\n\n    [Test]\n    public void NormalizeText_WithNormalText_ReturnsNormalizedText()\n    {\n        // Arrange\n        var input = \"Hello, World! 🌍\";\n\n        // Act\n        var result = TextProcessor.NormalizeText(input);\n\n        // Assert\n        Assert.That(result, Is.EqualTo(\"hello world \"));\n    }\n\n    [Test]\n    public void NormalizeText_WithRussianText_ReturnsNormalizedText()\n    {\n        // Arrange\n        var input = \"Привет, мир! 🌍\";\n\n        // Act\n        var result = TextProcessor.NormalizeText(input);\n\n        // Assert\n        Assert.That(result, Is.EqualTo(\"привет мир \"));\n    }\n\n    [Test]\n    public void NormalizeText_WithMultipleLines_ReturnsSingleLine()\n    {\n        // Arrange\n        var input = \"Line 1\\nLine 2\\r\\nLine 3\";\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TextProcessorNullTests.cs::TextProcessorNullTests::NormalizeText_WithRussianText_ReturnsNormalizedText",
+        "file": "TextProcessorNullTests.cs",
+        "namespace": "ClubDoorman.Test",
+        "class": "TextProcessorNullTests",
+        "test_name": "NormalizeText_WithRussianText_ReturnsNormalizedText",
+        "line": 45,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 10,
+        "declared_area_from_path": "Root",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 264
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TextProcessorNullTests.cs\n# Lines 15-75 (test starts at line 45)\n        // Act & Assert\n        var exception = Assert.Throws<ArgumentNullException>(() =>\n            TextProcessor.NormalizeText(null!));\n\n        Assert.That(exception.ParamName, Is.EqualTo(\"input\"));\n    }\n\n    [Test]\n    public void NormalizeText_WithEmptyString_ReturnsEmptyString()\n    {\n        // Act\n        var result = TextProcessor.NormalizeText(\"\");\n\n        // Assert\n        Assert.That(result, Is.EqualTo(\"\"));\n    }\n\n    [Test]\n    public void NormalizeText_WithNormalText_ReturnsNormalizedText()\n    {\n        // Arrange\n        var input = \"Hello, World! 🌍\";\n\n        // Act\n        var result = TextProcessor.NormalizeText(input);\n\n        // Assert\n        Assert.That(result, Is.EqualTo(\"hello world \"));\n    }\n\n    [Test]\n    public void NormalizeText_WithRussianText_ReturnsNormalizedText()\n    {\n        // Arrange\n        var input = \"Привет, мир! 🌍\";\n\n        // Act\n        var result = TextProcessor.NormalizeText(input);\n\n        // Assert\n        Assert.That(result, Is.EqualTo(\"привет мир \"));\n    }\n\n    [Test]\n    public void NormalizeText_WithMultipleLines_ReturnsSingleLine()\n    {\n        // Arrange\n        var input = \"Line 1\\nLine 2\\r\\nLine 3\";\n\n        // Act\n        var result = TextProcessor.NormalizeText(input);\n\n        // Assert\n        Assert.That(result, Is.EqualTo(\"line 1 line 2 line 3\"));\n    }\n\n    [Test]\n    public void NormalizeText_WithMultipleSpaces_ReturnsSingleSpaces()\n    {\n        // Arrange\n        var input = \"  Multiple    spaces  \";\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TextProcessorNullTests.cs::TextProcessorNullTests::NormalizeText_WithMultipleLines_ReturnsSingleLine",
+        "file": "TextProcessorNullTests.cs",
+        "namespace": "ClubDoorman.Test",
+        "class": "TextProcessorNullTests",
+        "test_name": "NormalizeText_WithMultipleLines_ReturnsSingleLine",
+        "line": 58,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 10,
+        "declared_area_from_path": "Root",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 265
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TextProcessorNullTests.cs\n# Lines 28-83 (test starts at line 58)\n        // Assert\n        Assert.That(result, Is.EqualTo(\"\"));\n    }\n\n    [Test]\n    public void NormalizeText_WithNormalText_ReturnsNormalizedText()\n    {\n        // Arrange\n        var input = \"Hello, World! 🌍\";\n\n        // Act\n        var result = TextProcessor.NormalizeText(input);\n\n        // Assert\n        Assert.That(result, Is.EqualTo(\"hello world \"));\n    }\n\n    [Test]\n    public void NormalizeText_WithRussianText_ReturnsNormalizedText()\n    {\n        // Arrange\n        var input = \"Привет, мир! 🌍\";\n\n        // Act\n        var result = TextProcessor.NormalizeText(input);\n\n        // Assert\n        Assert.That(result, Is.EqualTo(\"привет мир \"));\n    }\n\n    [Test]\n    public void NormalizeText_WithMultipleLines_ReturnsSingleLine()\n    {\n        // Arrange\n        var input = \"Line 1\\nLine 2\\r\\nLine 3\";\n\n        // Act\n        var result = TextProcessor.NormalizeText(input);\n\n        // Assert\n        Assert.That(result, Is.EqualTo(\"line 1 line 2 line 3\"));\n    }\n\n    [Test]\n    public void NormalizeText_WithMultipleSpaces_ReturnsSingleSpaces()\n    {\n        // Arrange\n        var input = \"  Multiple    spaces  \";\n\n        // Act\n        var result = TextProcessor.NormalizeText(input);\n\n        // Assert\n        Assert.That(result, Is.EqualTo(\" multiple spaces \"));\n    }\n}"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TextProcessorNullTests.cs::TextProcessorNullTests::NormalizeText_WithMultipleSpaces_ReturnsSingleSpaces",
+        "file": "TextProcessorNullTests.cs",
+        "namespace": "ClubDoorman.Test",
+        "class": "TextProcessorNullTests",
+        "test_name": "NormalizeText_WithMultipleSpaces_ReturnsSingleSpaces",
+        "line": 71,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 10,
+        "declared_area_from_path": "Root",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 266
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TextProcessorNullTests.cs\n# Lines 41-83 (test starts at line 71)\n        // Assert\n        Assert.That(result, Is.EqualTo(\"hello world \"));\n    }\n\n    [Test]\n    public void NormalizeText_WithRussianText_ReturnsNormalizedText()\n    {\n        // Arrange\n        var input = \"Привет, мир! 🌍\";\n\n        // Act\n        var result = TextProcessor.NormalizeText(input);\n\n        // Assert\n        Assert.That(result, Is.EqualTo(\"привет мир \"));\n    }\n\n    [Test]\n    public void NormalizeText_WithMultipleLines_ReturnsSingleLine()\n    {\n        // Arrange\n        var input = \"Line 1\\nLine 2\\r\\nLine 3\";\n\n        // Act\n        var result = TextProcessor.NormalizeText(input);\n\n        // Assert\n        Assert.That(result, Is.EqualTo(\"line 1 line 2 line 3\"));\n    }\n\n    [Test]\n    public void NormalizeText_WithMultipleSpaces_ReturnsSingleSpaces()\n    {\n        // Arrange\n        var input = \"  Multiple    spaces  \";\n\n        // Act\n        var result = TextProcessor.NormalizeText(input);\n\n        // Assert\n        Assert.That(result, Is.EqualTo(\" multiple spaces \"));\n    }\n}"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Golden/GoldenAggregateTests.cs::GoldenAggregateTests::Aggregates_ShouldAlignWithManifest",
+        "file": "Unit/Golden/GoldenAggregateTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Golden",
+        "class": "GoldenAggregateTests",
+        "test_name": "Aggregates_ShouldAlignWithManifest",
+        "line": 10,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "GoldenAgg"
+        ],
+        "body_lines": 42,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": true,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 281
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Golden/GoldenAggregateTests.cs\n# Lines 1-40 (test starts at line 10)\nusing System.Text.Json;\nusing NUnit.Framework;\n\nnamespace ClubDoorman.Test.Unit.Golden;\n\n[TestFixture]\n[Category(\"GoldenAgg\")]\npublic class GoldenAggregateTests\n{\n    [Test]\n    public void Aggregates_ShouldAlignWithManifest()\n    {\n        var root = FindSolutionRoot();\n        var goldenRoot = Path.Combine(root, \"ClubDoorman.Baseline\", \"golden\");\n        var manifestPath = Path.Combine(goldenRoot, \"manifest.json\");\n        Assume.That(File.Exists(manifestPath), \"Manifest missing\");\n        var manifestJson = File.ReadAllText(manifestPath);\n        using var mDoc = JsonDocument.Parse(manifestJson);\n        var entries = mDoc.RootElement.GetProperty(\"Entries\").EnumerateArray().Select(e => new\n        {\n            Action = e.TryGetProperty(\"ExpectedAction\", out var a) ? a.GetString() ?? \"(null)\" : \"(null)\",\n            RuleCode = e.TryGetProperty(\"RuleCode\", out var r) ? r.GetString() ?? \"(null)\" : \"(null)\"\n        }).ToList();\n\n        var aggregatesPath = Path.Combine(goldenRoot, \"aggregates.json\");\n        Assert.That(File.Exists(aggregatesPath), \"aggregates.json missing (Phase 5 builder)\");\n        using var aDoc = JsonDocument.Parse(File.ReadAllText(aggregatesPath));\n        var rootEl = aDoc.RootElement;\n        Assert.That(rootEl.GetProperty(\"Schema\").GetInt32(), Is.EqualTo(5));\n\n        // Totals\n        Assert.That(rootEl.GetProperty(\"Total\").GetInt32(), Is.EqualTo(entries.Count), \"Total mismatch\");\n\n        // Action counts parity\n        var actCounts = entries.GroupBy(e => e.Action).ToDictionary(g => g.Key, g => g.Count());\n        foreach (var kv in actCounts)\n        {\n            var jsonVal = rootEl.GetProperty(\"ActionCounts\").GetProperty(kv.Key).GetString();\n            Assert.That(int.Parse(jsonVal!), Is.EqualTo(kv.Value), $\"Action count mismatch for {kv.Key}\");\n        }\n"
+    }
+  ]
+}

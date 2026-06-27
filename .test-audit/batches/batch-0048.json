@@ -1,0 +1,459 @@
+{
+  "schema_version": "test-audit-batch-v1",
+  "batch_no": 48,
+  "purpose": "local LLM audit input",
+  "instructions": "Return JSONL only. One audit object per input test. No markdown. No code edits.",
+  "tests": [
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/CommandRouterTests.cs::CommandRouterTests::HandleCommandAsync_ValidCommand_RoutesToCorrectHandler",
+        "file": "Unit/Services/CommandRouterTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services.Commands",
+        "class": "CommandRouterTests",
+        "test_name": "HandleCommandAsync_ValidCommand_RoutesToCorrectHandler",
+        "line": 42,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "unit",
+          "command-router"
+        ],
+        "body_lines": 14,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify"
+        ],
+        "_source_lineno": 644
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/CommandRouterTests.cs\n# Lines 12-72 (test starts at line 42)\n/// <tags>unit, command-router, routing</tags>\n/// </summary>\n[TestFixture]\n[Category(\"unit\")]\n[Category(\"command-router\")]\npublic class CommandRouterTests\n{\n    private Mock<ILogger<CommandRouter>> _loggerMock = null!;\n    private Mock<ICommandHandler> _commandHandler1Mock = null!;\n    private Mock<ICommandHandler> _commandHandler2Mock = null!;\n    private CommandRouter _commandRouter = null!;\n\n    [SetUp]\n    public void Setup()\n    {\n        _loggerMock = new Mock<ILogger<CommandRouter>>();\n        _commandHandler1Mock = new Mock<ICommandHandler>();\n        _commandHandler1Mock.Setup(x => x.CommandName).Returns(\"test1\");\n\n        _commandHandler2Mock = new Mock<ICommandHandler>();\n        _commandHandler2Mock.Setup(x => x.CommandName).Returns(\"test2\");\n\n        var handlers = new List<ICommandHandler> { _commandHandler1Mock.Object, _commandHandler2Mock.Object };\n        _commandRouter = new CommandRouter(handlers, _loggerMock.Object);\n    }\n\n    /// <summary>\n    /// Проверка успешной маршрутизации команды к соответствующему обработчику\n    /// <tags>routing, success</tags>\n    /// </summary>\n    [Test]\n    public async Task HandleCommandAsync_ValidCommand_RoutesToCorrectHandler()\n    {\n        // Arrange\n        var message = TK.CreateMessage();\n        message.Text = \"/test1\";\n        var cancellationToken = CancellationToken.None;\n\n        // Act\n        var result = await _commandRouter.HandleCommandAsync(message, cancellationToken);\n\n        // Assert\n        Assert.That(result, Is.True);\n        _commandHandler1Mock.Verify(x => x.HandleAsync(message, cancellationToken), Times.Once);\n        _commandHandler2Mock.Verify(x => x.HandleAsync(It.IsAny<Message>(), It.IsAny<CancellationToken>()), Times.Never);\n    }\n\n    /// <summary>\n    /// Проверка, что неизвестная команда не обрабатывается\n    /// <tags>routing, unknown-command</tags>\n    /// </summary>\n    [Test]\n    public async Task HandleCommandAsync_UnknownCommand_ReturnsFalse()\n    {\n        // Arrange\n        var message = TK.CreateMessage();\n        message.Text = \"/unknown\";\n        var cancellationToken = CancellationToken.None;\n\n        // Act\n        var result = await _commandRouter.HandleCommandAsync(message, cancellationToken);\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/CommandRouterTests.cs::CommandRouterTests::HandleCommandAsync_UnknownCommand_ReturnsFalse",
+        "file": "Unit/Services/CommandRouterTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services.Commands",
+        "class": "CommandRouterTests",
+        "test_name": "HandleCommandAsync_UnknownCommand_ReturnsFalse",
+        "line": 63,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "unit",
+          "command-router"
+        ],
+        "body_lines": 14,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify"
+        ],
+        "_source_lineno": 645
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/CommandRouterTests.cs\n# Lines 33-93 (test starts at line 63)\n\n        var handlers = new List<ICommandHandler> { _commandHandler1Mock.Object, _commandHandler2Mock.Object };\n        _commandRouter = new CommandRouter(handlers, _loggerMock.Object);\n    }\n\n    /// <summary>\n    /// Проверка успешной маршрутизации команды к соответствующему обработчику\n    /// <tags>routing, success</tags>\n    /// </summary>\n    [Test]\n    public async Task HandleCommandAsync_ValidCommand_RoutesToCorrectHandler()\n    {\n        // Arrange\n        var message = TK.CreateMessage();\n        message.Text = \"/test1\";\n        var cancellationToken = CancellationToken.None;\n\n        // Act\n        var result = await _commandRouter.HandleCommandAsync(message, cancellationToken);\n\n        // Assert\n        Assert.That(result, Is.True);\n        _commandHandler1Mock.Verify(x => x.HandleAsync(message, cancellationToken), Times.Once);\n        _commandHandler2Mock.Verify(x => x.HandleAsync(It.IsAny<Message>(), It.IsAny<CancellationToken>()), Times.Never);\n    }\n\n    /// <summary>\n    /// Проверка, что неизвестная команда не обрабатывается\n    /// <tags>routing, unknown-command</tags>\n    /// </summary>\n    [Test]\n    public async Task HandleCommandAsync_UnknownCommand_ReturnsFalse()\n    {\n        // Arrange\n        var message = TK.CreateMessage();\n        message.Text = \"/unknown\";\n        var cancellationToken = CancellationToken.None;\n\n        // Act\n        var result = await _commandRouter.HandleCommandAsync(message, cancellationToken);\n\n        // Assert\n        Assert.That(result, Is.False);\n        _commandHandler1Mock.Verify(x => x.HandleAsync(It.IsAny<Message>(), It.IsAny<CancellationToken>()), Times.Never);\n        _commandHandler2Mock.Verify(x => x.HandleAsync(It.IsAny<Message>(), It.IsAny<CancellationToken>()), Times.Never);\n    }\n\n    /// <summary>\n    /// Проверка, что не-команда не обрабатывается\n    /// <tags>routing, non-command</tags>\n    /// </summary>\n    [Test]\n    public async Task HandleCommandAsync_NonCommand_ReturnsFalse()\n    {\n        // Arrange\n        var message = TK.CreateMessage();\n        message.Text = \"regular message\";\n        var cancellationToken = CancellationToken.None;\n\n        // Act\n        var result = await _commandRouter.HandleCommandAsync(message, cancellationToken);\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/CommandRouterTests.cs::CommandRouterTests::HandleCommandAsync_NonCommand_ReturnsFalse",
+        "file": "Unit/Services/CommandRouterTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services.Commands",
+        "class": "CommandRouterTests",
+        "test_name": "HandleCommandAsync_NonCommand_ReturnsFalse",
+        "line": 84,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 14,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify"
+        ],
+        "_source_lineno": 646
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/CommandRouterTests.cs\n# Lines 54-114 (test starts at line 84)\n        Assert.That(result, Is.True);\n        _commandHandler1Mock.Verify(x => x.HandleAsync(message, cancellationToken), Times.Once);\n        _commandHandler2Mock.Verify(x => x.HandleAsync(It.IsAny<Message>(), It.IsAny<CancellationToken>()), Times.Never);\n    }\n\n    /// <summary>\n    /// Проверка, что неизвестная команда не обрабатывается\n    /// <tags>routing, unknown-command</tags>\n    /// </summary>\n    [Test]\n    public async Task HandleCommandAsync_UnknownCommand_ReturnsFalse()\n    {\n        // Arrange\n        var message = TK.CreateMessage();\n        message.Text = \"/unknown\";\n        var cancellationToken = CancellationToken.None;\n\n        // Act\n        var result = await _commandRouter.HandleCommandAsync(message, cancellationToken);\n\n        // Assert\n        Assert.That(result, Is.False);\n        _commandHandler1Mock.Verify(x => x.HandleAsync(It.IsAny<Message>(), It.IsAny<CancellationToken>()), Times.Never);\n        _commandHandler2Mock.Verify(x => x.HandleAsync(It.IsAny<Message>(), It.IsAny<CancellationToken>()), Times.Never);\n    }\n\n    /// <summary>\n    /// Проверка, что не-команда не обрабатывается\n    /// <tags>routing, non-command</tags>\n    /// </summary>\n    [Test]\n    public async Task HandleCommandAsync_NonCommand_ReturnsFalse()\n    {\n        // Arrange\n        var message = TK.CreateMessage();\n        message.Text = \"regular message\";\n        var cancellationToken = CancellationToken.None;\n\n        // Act\n        var result = await _commandRouter.HandleCommandAsync(message, cancellationToken);\n\n        // Assert\n        Assert.That(result, Is.False);\n        _commandHandler1Mock.Verify(x => x.HandleAsync(It.IsAny<Message>(), It.IsAny<CancellationToken>()), Times.Never);\n        _commandHandler2Mock.Verify(x => x.HandleAsync(It.IsAny<Message>(), It.IsAny<CancellationToken>()), Times.Never);\n    }\n\n    /// <summary>\n    /// Проверка маршрутизации второй команды\n    /// <tags>routing, second-handler</tags>\n    /// </summary>\n    [Test]\n    public async Task HandleCommandAsync_SecondCommand_RoutesToSecondHandler()\n    {\n        // Arrange\n        var message = TK.CreateMessage();\n        message.Text = \"/test2 with parameters\";\n        var cancellationToken = CancellationToken.None;\n\n        // Act\n        var result = await _commandRouter.HandleCommandAsync(message, cancellationToken);\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/CommandRouterTests.cs::CommandRouterTests::HandleCommandAsync_SecondCommand_RoutesToSecondHandler",
+        "file": "Unit/Services/CommandRouterTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services.Commands",
+        "class": "CommandRouterTests",
+        "test_name": "HandleCommandAsync_SecondCommand_RoutesToSecondHandler",
+        "line": 105,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 14,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify"
+        ],
+        "_source_lineno": 647
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/CommandRouterTests.cs\n# Lines 75-121 (test starts at line 105)\n        Assert.That(result, Is.False);\n        _commandHandler1Mock.Verify(x => x.HandleAsync(It.IsAny<Message>(), It.IsAny<CancellationToken>()), Times.Never);\n        _commandHandler2Mock.Verify(x => x.HandleAsync(It.IsAny<Message>(), It.IsAny<CancellationToken>()), Times.Never);\n    }\n\n    /// <summary>\n    /// Проверка, что не-команда не обрабатывается\n    /// <tags>routing, non-command</tags>\n    /// </summary>\n    [Test]\n    public async Task HandleCommandAsync_NonCommand_ReturnsFalse()\n    {\n        // Arrange\n        var message = TK.CreateMessage();\n        message.Text = \"regular message\";\n        var cancellationToken = CancellationToken.None;\n\n        // Act\n        var result = await _commandRouter.HandleCommandAsync(message, cancellationToken);\n\n        // Assert\n        Assert.That(result, Is.False);\n        _commandHandler1Mock.Verify(x => x.HandleAsync(It.IsAny<Message>(), It.IsAny<CancellationToken>()), Times.Never);\n        _commandHandler2Mock.Verify(x => x.HandleAsync(It.IsAny<Message>(), It.IsAny<CancellationToken>()), Times.Never);\n    }\n\n    /// <summary>\n    /// Проверка маршрутизации второй команды\n    /// <tags>routing, second-handler</tags>\n    /// </summary>\n    [Test]\n    public async Task HandleCommandAsync_SecondCommand_RoutesToSecondHandler()\n    {\n        // Arrange\n        var message = TK.CreateMessage();\n        message.Text = \"/test2 with parameters\";\n        var cancellationToken = CancellationToken.None;\n\n        // Act\n        var result = await _commandRouter.HandleCommandAsync(message, cancellationToken);\n\n        // Assert\n        Assert.That(result, Is.True);\n        _commandHandler2Mock.Verify(x => x.HandleAsync(message, cancellationToken), Times.Once);\n        _commandHandler1Mock.Verify(x => x.HandleAsync(It.IsAny<Message>(), It.IsAny<CancellationToken>()), Times.Never);\n    }\n}"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/CommandsModuleTests.cs::CommandsModuleTests::AddCommandsServices_RegistersExpectedDescriptors",
+        "file": "Unit/Services/CommandsModuleTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services.Commands",
+        "class": "CommandsModuleTests",
+        "test_name": "AddCommandsServices_RegistersExpectedDescriptors",
+        "line": 36,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "unit",
+          "commands-module"
+        ],
+        "body_lines": 50,
+        "declared_area_from_path": "Unit",
+        "construction_path": "service_collection_di",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": true,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "real_env_or_api"
+        ],
+        "_source_lineno": 648
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/CommandsModuleTests.cs\n# Lines 6-66 (test starts at line 36)\nusing ClubDoorman.Features.AdminOps;\nusing ClubDoorman.Services.Telegram;\nusing ClubDoorman.Services.Messaging;\nusing ClubDoorman.Services.Core.Configuration;\nusing ClubDoorman.Handlers;\nusing ClubDoorman.Services;\nusing ClubDoorman.Services.AI;\nusing ClubDoorman.Services.BadMessage;\nusing ClubDoorman.Services.Statistics;\nusing ClubDoorman.Services.UserFlow;\nusing ClubDoorman.Services.Violation;\nusing ClubDoorman.Services.ChannelModeration;\nusing ClubDoorman.Features.Moderation;\nusing Moq;\n\nnamespace ClubDoorman.Test.Unit.Services.Commands;\n\n/// <summary>\n/// Тесты для CommandsModule\n/// <tags>unit, commands-module, di-registration</tags>\n/// </summary>\n[TestFixture]\n[Category(\"unit\")]\n[Category(\"commands-module\")]\npublic class CommandsModuleTests\n{\n    /// <summary>\n    /// Единый тест: проверяет что AddCommandsServices регистрирует ожидаемый набор обработчиков и сервисов.\n    /// Не строим граф, чтобы не тянуть реальные зависимости модерации.\n    /// </summary>\n    [Test]\n    public void AddCommandsServices_RegistersExpectedDescriptors()\n    {\n        var services = new ServiceCollection();\n        services.AddLogging();\n\n        // базовые моки (минимум чтобы не тянуть лишнее при возможном последующем расширении теста)\n        services.AddSingleton(Mock.Of<ITelegramBotClientWrapper>());\n        services.AddSingleton(Mock.Of<IUpdateHandler>());\n        services.AddSingleton(Mock.Of<IAppConfig>());\n        services.AddSingleton(Mock.Of<IModerationService>());\n        services.AddSingleton(Mock.Of<IMessageService>());\n        services.AddSingleton(Mock.Of<ISpamHamClassifier>());\n        services.AddSingleton(Mock.Of<IBotPermissionsService>());\n        services.AddSingleton(Mock.Of<IBadMessageManager>());\n        services.AddSingleton(Mock.Of<IAiChecks>());\n        services.AddSingleton(Mock.Of<IStatisticsService>());\n        services.AddSingleton(Mock.Of<IUserFlowLogger>());\n        services.AddSingleton(Mock.Of<IChatLinkFormatter>());\n        services.AddSingleton(Mock.Of<IViolationTracker>());\n        services.AddSingleton(Mock.Of<IUserBanService>());\n        services.AddSingleton(Mock.Of<IChannelModerationService>());\n        services.AddSingleton(Mock.Of<ILogChatService>());\n        services.AddSingleton<ClubDoorman.Features.Moderation.IModerationFacade>(_ => Mock.Of<ClubDoorman.Features.Moderation.IModerationFacade>()); // защитный мок\n\n        // act\n        services.AddCommandsServices();\n\n        // ожидаемые обработчики\n        var expectedHandlerTypes = new[]\n        {\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/ConfigurationModuleTests.cs::ConfigurationModuleTests::AddConfigurationServices_ShouldReturnServiceCollection",
+        "file": "Unit/Services/ConfigurationModuleTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services.Core.Configuration",
+        "class": "ConfigurationModuleTests",
+        "test_name": "AddConfigurationServices_ShouldReturnServiceCollection",
+        "line": 27,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 10,
+        "declared_area_from_path": "Unit",
+        "construction_path": "service_collection_di",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": true,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 650
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/ConfigurationModuleTests.cs\n# Lines 1-39 (test starts at line 27)\nusing ClubDoorman.Services.UserBan;\nusing Microsoft.Extensions.DependencyInjection;\nusing NUnit.Framework;\nusing ClubDoorman.Services.Core.Configuration;\n\nnamespace ClubDoorman.Test.Unit.Services.Core.Configuration;\n\n[TestFixture]\npublic class ConfigurationModuleTests\n{\n    [Test]\n    public void AddConfigurationServices_ShouldRegisterIAppConfig()\n    {\n        // Arrange\n        var services = new ServiceCollection();\n\n        // Act\n        services.AddConfigurationServices();\n        var serviceProvider = services.BuildServiceProvider();\n\n        // Assert\n        var appConfig = serviceProvider.GetService<IAppConfig>();\n        Assert.That(appConfig, Is.Not.Null);\n        Assert.That(appConfig, Is.InstanceOf<AppConfig>());\n    }\n\n    [Test]\n    public void AddConfigurationServices_ShouldReturnServiceCollection()\n    {\n        // Arrange\n        var services = new ServiceCollection();\n\n        // Act\n        var result = services.AddConfigurationServices();\n\n        // Assert\n        Assert.That(result, Is.SameAs(services));\n    }\n}"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/GlobalStatsManagerTests.cs::GlobalStatsManagerTests::EnsureChatAsync_NewChat_AddsChatToStats",
+        "file": "Unit/Services/GlobalStatsManagerTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "GlobalStatsManagerTests",
+        "test_name": "EnsureChatAsync_NewChat_AddsChatToStats",
+        "line": 48,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "business-logic"
+        ],
+        "body_lines": 18,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": true,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": true,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "assert_pass"
+        ],
+        "_source_lineno": 652
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/GlobalStatsManagerTests.cs\n# Lines 18-78 (test starts at line 48)\n{\n    private GlobalStatsManagerTestFactory _factory;\n    private GlobalStatsManager _service;\n    private Mock<ITelegramBotClientWrapper> _botClientMock;\n\n    [SetUp]\n    public void Setup()\n    {\n        _factory = new GlobalStatsManagerTestFactory();\n        _service = _factory.CreateDefault();\n        _botClientMock = _factory.BotClientMock;\n    }\n\n    [Test]\n    public void Constructor_CreatesDataDirectory_WhenNotExists()\n    {\n        // Arrange & Act\n        var tempDir = Path.GetTempPath();\n        var testDataDir = Path.Combine(tempDir, \"test_data_global_stats\");\n\n        if (Directory.Exists(testDataDir))\n            Directory.Delete(testDataDir, true);\n\n        // Создаем временный сервис с кастомным путем\n        var service = new GlobalStatsManager();\n\n        // Assert\n        Assert.That(Directory.Exists(\"data\"), Is.True);\n    }\n\n    [Test]\n    public async Task EnsureChatAsync_NewChat_AddsChatToStats()\n    {\n        // Arrange\n        var chatId = 123456L;\n        var chatTitle = \"Test Chat\";\n\n        _factory.WithBotClientSetup(mock =>\n            mock.Setup(x => x.GetChatMemberCount(It.IsAny<ChatId>(), It.IsAny<CancellationToken>()))\n                .ReturnsAsync(100));\n\n        // Act\n        await _service.EnsureChatAsync(chatId, chatTitle, _botClientMock.Object);\n\n        // Assert\n        // Проверяем, что чат добавлен в статистику\n        // Это сложно проверить напрямую, так как данные сохраняются в файл\n        // Но мы можем проверить, что метод не выбрасывает исключений\n        Assert.Pass(\"Метод выполнился без исключений\");\n    }\n\n    [Test]\n    public async Task EnsureChatAsync_ExistingChat_UpdatesTitle()\n    {\n        // Arrange\n        var chatId = 123456L;\n        var oldTitle = \"Old Title\";\n        var newTitle = \"New Title\";\n\n        // Сначала добавляем чат\n        _factory.WithBotClientSetup(mock =>\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/GlobalStatsManagerTests.cs::GlobalStatsManagerTests::EnsureChatAsync_ExistingChat_UpdatesTitle",
+        "file": "Unit/Services/GlobalStatsManagerTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "GlobalStatsManagerTests",
+        "test_name": "EnsureChatAsync_ExistingChat_UpdatesTitle",
+        "line": 69,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "business-logic"
+        ],
+        "body_lines": 19,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": true,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": true,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "assert_pass"
+        ],
+        "_source_lineno": 653
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/GlobalStatsManagerTests.cs\n# Lines 39-99 (test starts at line 69)\n            Directory.Delete(testDataDir, true);\n\n        // Создаем временный сервис с кастомным путем\n        var service = new GlobalStatsManager();\n\n        // Assert\n        Assert.That(Directory.Exists(\"data\"), Is.True);\n    }\n\n    [Test]\n    public async Task EnsureChatAsync_NewChat_AddsChatToStats()\n    {\n        // Arrange\n        var chatId = 123456L;\n        var chatTitle = \"Test Chat\";\n\n        _factory.WithBotClientSetup(mock =>\n            mock.Setup(x => x.GetChatMemberCount(It.IsAny<ChatId>(), It.IsAny<CancellationToken>()))\n                .ReturnsAsync(100));\n\n        // Act\n        await _service.EnsureChatAsync(chatId, chatTitle, _botClientMock.Object);\n\n        // Assert\n        // Проверяем, что чат добавлен в статистику\n        // Это сложно проверить напрямую, так как данные сохраняются в файл\n        // Но мы можем проверить, что метод не выбрасывает исключений\n        Assert.Pass(\"Метод выполнился без исключений\");\n    }\n\n    [Test]\n    public async Task EnsureChatAsync_ExistingChat_UpdatesTitle()\n    {\n        // Arrange\n        var chatId = 123456L;\n        var oldTitle = \"Old Title\";\n        var newTitle = \"New Title\";\n\n        // Сначала добавляем чат\n        _factory.WithBotClientSetup(mock =>\n            mock.Setup(x => x.GetChatMemberCount(It.IsAny<ChatId>(), It.IsAny<CancellationToken>()))\n                .ReturnsAsync(100));\n\n        await _service.EnsureChatAsync(chatId, oldTitle, _botClientMock.Object);\n\n        // Act - обновляем заголовок\n        await _service.EnsureChatAsync(chatId, newTitle, _botClientMock.Object);\n\n        // Assert\n        Assert.Pass(\"Метод выполнился без исключений\");\n    }\n\n    [Test]\n    public async Task UpdateAllMembersAsync_ValidChats_UpdatesMemberCounts()\n    {\n        // Arrange\n        var chatId1 = 123456L;\n        var chatId2 = 789012L;\n\n        // Добавляем чаты\n        _factory.WithBotClientSetup(mock =>\n"
+    }
+  ]
+}

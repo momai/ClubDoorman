@@ -1,0 +1,444 @@
+{
+  "schema_version": "test-audit-batch-v1",
+  "batch_no": 93,
+  "purpose": "local LLM audit input",
+  "instructions": "Return JSONL only. One audit object per input test. No markdown. No code edits.",
+  "tests": [
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Moderation/ModerationServiceTests.cs::ModerationServiceTests::CheckMessageAsync_SpamMessage_ReturnsDelete",
+        "file": "Unit/Moderation/ModerationServiceTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Moderation",
+        "class": "ModerationServiceTests",
+        "test_name": "CheckMessageAsync_SpamMessage_ReturnsDelete",
+        "line": 65,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "unit",
+          "moderation",
+          "critical"
+        ],
+        "body_lines": 20,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 502
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Moderation/ModerationServiceTests.cs\n# Lines 35-95 (test starts at line 65)\n\n        // Assert\n        Assert.That(service, Is.Not.Null);\n        Assert.That(service, Is.InstanceOf<IModerationService>());\n    }\n\n    [Test]\n    public async Task CheckMessageAsync_ValidMessage_ReturnsAllow()\n    {\n        // Arrange\n        _factory.WithClassifierSetup(mock =>\n            mock.Setup(x => x.IsSpam(It.IsAny<string>()))\n                .ReturnsAsync((false, -1.5f))); // Уверенный ham (не спам)\n\n        var service = _factory.CreateModerationService();\n        var message = new Message\n        {\n            Text = \"Hello, this is a valid message!\",\n            From = new User { Id = 123, FirstName = \"Test\" },\n            Chat = new Chat { Id = 456, Type = Telegram.Bot.Types.Enums.ChatType.Group }\n        };\n\n        // Act\n        var result = await service.CheckMessageAsync(message);\n\n        // Assert\n        Assert.That(result.Action, Is.EqualTo(ModerationAction.Allow));\n        Assert.That(result.Reason, Is.Not.Empty);\n    }\n\n    [Test]\n    public async Task CheckMessageAsync_SpamMessage_ReturnsDelete()\n    {\n        // Arrange\n        _factory.WithClassifierSetup(mock =>\n            mock.Setup(x => x.IsSpam(It.IsAny<string>()))\n                .ReturnsAsync((true, 0.9f)));\n        var service = _factory.CreateModerationService();\n        var message = new Message\n        {\n            Text = \"BUY NOW!!! AMAZING OFFER!!!\",\n            From = new User { Id = 123, FirstName = \"Test\" },\n            Chat = new Chat { Id = 456, Type = Telegram.Bot.Types.Enums.ChatType.Group }\n        };\n\n        // Act\n        var result = await service.CheckMessageAsync(message);\n\n        // Assert\n        Assert.That(result.Action, Is.EqualTo(ModerationAction.Delete));\n        Assert.That(result.Reason, Does.Contain(\"спам\"));\n    }\n\n    [Test]\n    public async Task CheckMessageAsync_BannedUser_ReturnsBan()\n    {\n        // Arrange\n        _factory.WithUserManagerSetup(mock =>\n            mock.Setup(x => x.InBanlist(It.IsAny<long>()))\n                .ReturnsAsync(true));\n        var service = _factory.CreateModerationService();\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Moderation/ModerationServiceTests.cs::ModerationServiceTests::CheckMessageAsync_BannedUser_ReturnsBan",
+        "file": "Unit/Moderation/ModerationServiceTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Moderation",
+        "class": "ModerationServiceTests",
+        "test_name": "CheckMessageAsync_BannedUser_ReturnsBan",
+        "line": 88,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 20,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 503
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Moderation/ModerationServiceTests.cs\n# Lines 58-118 (test starts at line 88)\n        var result = await service.CheckMessageAsync(message);\n\n        // Assert\n        Assert.That(result.Action, Is.EqualTo(ModerationAction.Allow));\n        Assert.That(result.Reason, Is.Not.Empty);\n    }\n\n    [Test]\n    public async Task CheckMessageAsync_SpamMessage_ReturnsDelete()\n    {\n        // Arrange\n        _factory.WithClassifierSetup(mock =>\n            mock.Setup(x => x.IsSpam(It.IsAny<string>()))\n                .ReturnsAsync((true, 0.9f)));\n        var service = _factory.CreateModerationService();\n        var message = new Message\n        {\n            Text = \"BUY NOW!!! AMAZING OFFER!!!\",\n            From = new User { Id = 123, FirstName = \"Test\" },\n            Chat = new Chat { Id = 456, Type = Telegram.Bot.Types.Enums.ChatType.Group }\n        };\n\n        // Act\n        var result = await service.CheckMessageAsync(message);\n\n        // Assert\n        Assert.That(result.Action, Is.EqualTo(ModerationAction.Delete));\n        Assert.That(result.Reason, Does.Contain(\"спам\"));\n    }\n\n    [Test]\n    public async Task CheckMessageAsync_BannedUser_ReturnsBan()\n    {\n        // Arrange\n        _factory.WithUserManagerSetup(mock =>\n            mock.Setup(x => x.InBanlist(It.IsAny<long>()))\n                .ReturnsAsync(true));\n        var service = _factory.CreateModerationService();\n        var message = new Message\n        {\n            Text = \"Hello\",\n            From = new User { Id = 123, FirstName = \"Test\" },\n            Chat = new Chat { Id = 456, Type = Telegram.Bot.Types.Enums.ChatType.Group }\n        };\n\n        // Act\n        var result = await service.CheckMessageAsync(message);\n\n        // Assert\n        Assert.That(result.Action, Is.EqualTo(ModerationAction.Ban));\n        Assert.That(result.Reason, Does.Contain(\"блэклист\"));\n    }\n\n    [Test]\n    public async Task CheckMessageAsync_NullMessage_ThrowsArgumentNullException()\n    {\n        // Arrange\n        var service = _factory.CreateModerationService();\n\n        // Act & Assert\n        var exception = Assert.ThrowsAsync<ArgumentNullException>(\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Moderation/ModerationServiceTests.cs::ModerationServiceTests::CheckMessageAsync_NullMessage_ThrowsArgumentNullException",
+        "file": "Unit/Moderation/ModerationServiceTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Moderation",
+        "class": "ModerationServiceTests",
+        "test_name": "CheckMessageAsync_NullMessage_ThrowsArgumentNullException",
+        "line": 111,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 10,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": true,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 504
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Moderation/ModerationServiceTests.cs\n# Lines 81-141 (test starts at line 111)\n        var result = await service.CheckMessageAsync(message);\n\n        // Assert\n        Assert.That(result.Action, Is.EqualTo(ModerationAction.Delete));\n        Assert.That(result.Reason, Does.Contain(\"спам\"));\n    }\n\n    [Test]\n    public async Task CheckMessageAsync_BannedUser_ReturnsBan()\n    {\n        // Arrange\n        _factory.WithUserManagerSetup(mock =>\n            mock.Setup(x => x.InBanlist(It.IsAny<long>()))\n                .ReturnsAsync(true));\n        var service = _factory.CreateModerationService();\n        var message = new Message\n        {\n            Text = \"Hello\",\n            From = new User { Id = 123, FirstName = \"Test\" },\n            Chat = new Chat { Id = 456, Type = Telegram.Bot.Types.Enums.ChatType.Group }\n        };\n\n        // Act\n        var result = await service.CheckMessageAsync(message);\n\n        // Assert\n        Assert.That(result.Action, Is.EqualTo(ModerationAction.Ban));\n        Assert.That(result.Reason, Does.Contain(\"блэклист\"));\n    }\n\n    [Test]\n    public async Task CheckMessageAsync_NullMessage_ThrowsArgumentNullException()\n    {\n        // Arrange\n        var service = _factory.CreateModerationService();\n\n        // Act & Assert\n        var exception = Assert.ThrowsAsync<ArgumentNullException>(\n            () => service.CheckMessageAsync(null!));\n\n        Assert.That(exception.ParamName, Is.EqualTo(\"message\"));\n    }\n\n    [Test]\n    public async Task CheckMessageAsync_EmptyMessage_ReturnsReport()\n    {\n        // Arrange\n        var service = _factory.CreateModerationService();\n        var message = new Message\n        {\n            Text = \"\",\n            From = new User { Id = 123, FirstName = \"Test\" },\n            Chat = new Chat { Id = 456, Type = Telegram.Bot.Types.Enums.ChatType.Group }\n        };\n\n        // Act\n        var result = await service.CheckMessageAsync(message);\n\n        // Assert\n        Assert.That(result.Action, Is.EqualTo(ModerationAction.Report));\n    }\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Moderation/ModerationServiceTests.cs::ModerationServiceTests::CheckMessageAsync_EmptyMessage_ReturnsReport",
+        "file": "Unit/Moderation/ModerationServiceTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Moderation",
+        "class": "ModerationServiceTests",
+        "test_name": "CheckMessageAsync_EmptyMessage_ReturnsReport",
+        "line": 124,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 16,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 505
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Moderation/ModerationServiceTests.cs\n# Lines 94-154 (test starts at line 124)\n                .ReturnsAsync(true));\n        var service = _factory.CreateModerationService();\n        var message = new Message\n        {\n            Text = \"Hello\",\n            From = new User { Id = 123, FirstName = \"Test\" },\n            Chat = new Chat { Id = 456, Type = Telegram.Bot.Types.Enums.ChatType.Group }\n        };\n\n        // Act\n        var result = await service.CheckMessageAsync(message);\n\n        // Assert\n        Assert.That(result.Action, Is.EqualTo(ModerationAction.Ban));\n        Assert.That(result.Reason, Does.Contain(\"блэклист\"));\n    }\n\n    [Test]\n    public async Task CheckMessageAsync_NullMessage_ThrowsArgumentNullException()\n    {\n        // Arrange\n        var service = _factory.CreateModerationService();\n\n        // Act & Assert\n        var exception = Assert.ThrowsAsync<ArgumentNullException>(\n            () => service.CheckMessageAsync(null!));\n\n        Assert.That(exception.ParamName, Is.EqualTo(\"message\"));\n    }\n\n    [Test]\n    public async Task CheckMessageAsync_EmptyMessage_ReturnsReport()\n    {\n        // Arrange\n        var service = _factory.CreateModerationService();\n        var message = new Message\n        {\n            Text = \"\",\n            From = new User { Id = 123, FirstName = \"Test\" },\n            Chat = new Chat { Id = 456, Type = Telegram.Bot.Types.Enums.ChatType.Group }\n        };\n\n        // Act\n        var result = await service.CheckMessageAsync(message);\n\n        // Assert\n        Assert.That(result.Action, Is.EqualTo(ModerationAction.Report));\n    }\n\n    [Test]\n    public async Task CheckMessageAsync_ClassifierException_ThrowsException()\n    {\n        // Arrange\n        _factory.WithClassifierSetup(mock =>\n            mock.Setup(x => x.IsSpam(It.IsAny<string>()))\n                .ThrowsAsync(new Exception(\"Classifier error\")));\n        var service = _factory.CreateModerationService();\n        var message = new Message\n        {\n            Text = \"Test message\",\n            From = new User { Id = 123, FirstName = \"Test\" },\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Moderation/ModerationServiceTests.cs::ModerationServiceTests::CheckMessageAsync_ClassifierException_ThrowsException",
+        "file": "Unit/Moderation/ModerationServiceTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Moderation",
+        "class": "ModerationServiceTests",
+        "test_name": "CheckMessageAsync_ClassifierException_ThrowsException",
+        "line": 143,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 19,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": true,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 506
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Moderation/ModerationServiceTests.cs\n# Lines 113-173 (test starts at line 143)\n    {\n        // Arrange\n        var service = _factory.CreateModerationService();\n\n        // Act & Assert\n        var exception = Assert.ThrowsAsync<ArgumentNullException>(\n            () => service.CheckMessageAsync(null!));\n\n        Assert.That(exception.ParamName, Is.EqualTo(\"message\"));\n    }\n\n    [Test]\n    public async Task CheckMessageAsync_EmptyMessage_ReturnsReport()\n    {\n        // Arrange\n        var service = _factory.CreateModerationService();\n        var message = new Message\n        {\n            Text = \"\",\n            From = new User { Id = 123, FirstName = \"Test\" },\n            Chat = new Chat { Id = 456, Type = Telegram.Bot.Types.Enums.ChatType.Group }\n        };\n\n        // Act\n        var result = await service.CheckMessageAsync(message);\n\n        // Assert\n        Assert.That(result.Action, Is.EqualTo(ModerationAction.Report));\n    }\n\n    [Test]\n    public async Task CheckMessageAsync_ClassifierException_ThrowsException()\n    {\n        // Arrange\n        _factory.WithClassifierSetup(mock =>\n            mock.Setup(x => x.IsSpam(It.IsAny<string>()))\n                .ThrowsAsync(new Exception(\"Classifier error\")));\n        var service = _factory.CreateModerationService();\n        var message = new Message\n        {\n            Text = \"Test message\",\n            From = new User { Id = 123, FirstName = \"Test\" },\n            Chat = new Chat { Id = 456, Type = Telegram.Bot.Types.Enums.ChatType.Group }\n        };\n\n        // Act & Assert\n        var exception = Assert.ThrowsAsync<Exception>(async () =>\n            await service.CheckMessageAsync(message));\n\n        Assert.That(exception.Message, Is.EqualTo(\"Classifier error\"));\n    }\n\n    [Test]\n    public void ModerationTestFactory_CreatesFreshInstanceEachTime()\n    {\n        // Arrange & Act\n        var service1 = _factory.CreateModerationService();\n        var service2 = _factory.CreateModerationService();\n\n        // Assert\n        Assert.That(service1, Is.Not.SameAs(service2));\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Moderation/ModerationServiceTests.cs::ModerationServiceTests::ModerationTestFactory_CreatesFreshInstanceEachTime",
+        "file": "Unit/Moderation/ModerationServiceTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Moderation",
+        "class": "ModerationServiceTests",
+        "test_name": "ModerationTestFactory_CreatesFreshInstanceEachTime",
+        "line": 165,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 8,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 507
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Moderation/ModerationServiceTests.cs\n# Lines 135-192 (test starts at line 165)\n\n        // Act\n        var result = await service.CheckMessageAsync(message);\n\n        // Assert\n        Assert.That(result.Action, Is.EqualTo(ModerationAction.Report));\n    }\n\n    [Test]\n    public async Task CheckMessageAsync_ClassifierException_ThrowsException()\n    {\n        // Arrange\n        _factory.WithClassifierSetup(mock =>\n            mock.Setup(x => x.IsSpam(It.IsAny<string>()))\n                .ThrowsAsync(new Exception(\"Classifier error\")));\n        var service = _factory.CreateModerationService();\n        var message = new Message\n        {\n            Text = \"Test message\",\n            From = new User { Id = 123, FirstName = \"Test\" },\n            Chat = new Chat { Id = 456, Type = Telegram.Bot.Types.Enums.ChatType.Group }\n        };\n\n        // Act & Assert\n        var exception = Assert.ThrowsAsync<Exception>(async () =>\n            await service.CheckMessageAsync(message));\n\n        Assert.That(exception.Message, Is.EqualTo(\"Classifier error\"));\n    }\n\n    [Test]\n    public void ModerationTestFactory_CreatesFreshInstanceEachTime()\n    {\n        // Arrange & Act\n        var service1 = _factory.CreateModerationService();\n        var service2 = _factory.CreateModerationService();\n\n        // Assert\n        Assert.That(service1, Is.Not.SameAs(service2));\n    }\n\n    [Test]\n    public void ModerationTestFactory_ConfiguresAllDependencies()\n    {\n        // Arrange & Act\n        var service = _factory.CreateModerationService();\n\n        // Assert - проверяем что все моки настроены\n        Assert.That(_factory.ClassifierMock, Is.Not.Null);\n        Assert.That(_factory.MimicryClassifierMock, Is.Not.Null);\n        Assert.That(_factory.BadMessageManagerMock, Is.Not.Null);\n        Assert.That(_factory.UserManagerMock, Is.Not.Null);\n        Assert.That(_factory.AiChecksMock, Is.Not.Null);\n        Assert.That(_factory.SuspiciousUsersStorageMock, Is.Not.Null);\n        Assert.That(_factory.BotClientMock, Is.Not.Null);\n        Assert.That(_factory.LoggerMock, Is.Not.Null);\n    }\n}"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Moderation/SpamHamClassifierTests.cs::SpamHamClassifierTests::IsSpam_ValidMessage_ReturnsNotSpam",
+        "file": "Unit/Moderation/SpamHamClassifierTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Moderation",
+        "class": "SpamHamClassifierTests",
+        "test_name": "IsSpam_ValidMessage_ReturnsNotSpam",
+        "line": 29,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "unit",
+          "moderation",
+          "ml"
+        ],
+        "body_lines": 13,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 509
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Moderation/SpamHamClassifierTests.cs\n# Lines 1-59 (test starts at line 29)\nusing ClubDoorman.Services.UserBan;\nusing ClubDoorman.Services;\nusing ClubDoorman.Services.UserBan;\nusing ClubDoorman.Test.TestData;\nusing ClubDoorman.TestInfrastructure;\nusing Microsoft.Extensions.Logging;\nusing Moq;\nusing NUnit.Framework;\nusing ClubDoorman.Services.AI;\n\nnamespace ClubDoorman.Test.Unit.Moderation;\n\n[TestFixture]\n[Category(\"unit\")]\n[Category(\"moderation\")]\n[Category(\"ml\")]\npublic class SpamHamClassifierTests : TestBase\n{\n    private Mock<ISpamHamClassifier> _classifierMock = null!;\n    private SpamHamClassifierTestFactory _factory = null!;\n\n    [SetUp]\n    public void Setup()\n    {\n        _factory = new SpamHamClassifierTestFactory();\n        _classifierMock = TK.CreateMockSpamHamClassifier();\n    }\n\n    [Test]\n    public async Task IsSpam_ValidMessage_ReturnsNotSpam()\n    {\n        // Arrange\n        var message = TK.CreateValidMessage();\n        _classifierMock.Setup(x => x.IsSpam(message.Text!))\n            .ReturnsAsync((false, 0.2f));\n\n        // Act\n        var result = await _classifierMock.Object.IsSpam(message.Text!);\n\n        // Assert\n        Assert.That(result.Spam, Is.False);\n        Assert.That(result.Score, Is.LessThan(0.5f));\n    }\n\n    [Test]\n    public async Task IsSpam_SpamMessage_ReturnsSpam()\n    {\n        // Arrange\n        var message = TK.CreateSpamMessage();\n        _classifierMock.Setup(x => x.IsSpam(message.Text!))\n            .ReturnsAsync((true, 0.8f));\n\n        // Act\n        var result = await _classifierMock.Object.IsSpam(message.Text!);\n\n        // Assert\n        Assert.That(result.Spam, Is.True);\n        Assert.That(result.Score, Is.GreaterThanOrEqualTo(0.0f));\n        Assert.That(result.Score, Is.LessThanOrEqualTo(1.0f));\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Moderation/SpamHamClassifierTests.cs::SpamHamClassifierTests::IsSpam_SpamMessage_ReturnsSpam",
+        "file": "Unit/Moderation/SpamHamClassifierTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Moderation",
+        "class": "SpamHamClassifierTests",
+        "test_name": "IsSpam_SpamMessage_ReturnsSpam",
+        "line": 45,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "unit",
+          "moderation",
+          "ml"
+        ],
+        "body_lines": 14,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 510
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Moderation/SpamHamClassifierTests.cs\n# Lines 15-75 (test starts at line 45)\n[Category(\"moderation\")]\n[Category(\"ml\")]\npublic class SpamHamClassifierTests : TestBase\n{\n    private Mock<ISpamHamClassifier> _classifierMock = null!;\n    private SpamHamClassifierTestFactory _factory = null!;\n\n    [SetUp]\n    public void Setup()\n    {\n        _factory = new SpamHamClassifierTestFactory();\n        _classifierMock = TK.CreateMockSpamHamClassifier();\n    }\n\n    [Test]\n    public async Task IsSpam_ValidMessage_ReturnsNotSpam()\n    {\n        // Arrange\n        var message = TK.CreateValidMessage();\n        _classifierMock.Setup(x => x.IsSpam(message.Text!))\n            .ReturnsAsync((false, 0.2f));\n\n        // Act\n        var result = await _classifierMock.Object.IsSpam(message.Text!);\n\n        // Assert\n        Assert.That(result.Spam, Is.False);\n        Assert.That(result.Score, Is.LessThan(0.5f));\n    }\n\n    [Test]\n    public async Task IsSpam_SpamMessage_ReturnsSpam()\n    {\n        // Arrange\n        var message = TK.CreateSpamMessage();\n        _classifierMock.Setup(x => x.IsSpam(message.Text!))\n            .ReturnsAsync((true, 0.8f));\n\n        // Act\n        var result = await _classifierMock.Object.IsSpam(message.Text!);\n\n        // Assert\n        Assert.That(result.Spam, Is.True);\n        Assert.That(result.Score, Is.GreaterThanOrEqualTo(0.0f));\n        Assert.That(result.Score, Is.LessThanOrEqualTo(1.0f));\n    }\n\n    [Test]\n    public async Task IsSpam_EmptyMessage_ReturnsNotSpam()\n    {\n        // Arrange\n        var message = TK.CreateEmptyMessage();\n        _classifierMock.Setup(x => x.IsSpam(message.Text!))\n            .ReturnsAsync((false, 0.1f));\n\n        // Act\n        var result = await _classifierMock.Object.IsSpam(message.Text!);\n\n        // Assert\n        Assert.That(result.Spam, Is.False);\n        Assert.That(result.Score, Is.LessThan(0.5f));\n"
+    }
+  ]
+}

@@ -1,0 +1,463 @@
+{
+  "schema_version": "test-audit-batch-v1",
+  "batch_no": 11,
+  "purpose": "local LLM audit input",
+  "instructions": "Return JSONL only. One audit object per input test. No markdown. No code edits.",
+  "tests": [
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Handlers/MessageHandlerDeleteMessageLaterTests.cs::MessageHandlerDeleteMessageLaterTests::DeleteMessageLater_WhenCancelled_DoesNotInvokeDelete",
+        "file": "Unit/Handlers/MessageHandlerDeleteMessageLaterTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Handlers",
+        "class": "MessageHandlerDeleteMessageLaterTests",
+        "test_name": "DeleteMessageLater_WhenCancelled_DoesNotInvokeDelete",
+        "line": 107,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 8,
+        "declared_area_from_path": "Unit",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": true,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify",
+          "message_handler_test_factory"
+        ],
+        "_source_lineno": 313
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Handlers/MessageHandlerDeleteMessageLaterTests.cs\n# Lines 77-117 (test starts at line 107)\n        var message = TestKitTelegram.CreateMessageFromEnvelope(fakeClient, envelope);\n        var messageHandler = _factory.CreateMessageHandlerWithFake(fakeClient);\n\n        messageHandler.DeleteMessageLater(message, TimeSpan.FromMilliseconds(40), CancellationToken.None);\n\n        await Task.Delay(120);\n        Assert.That(fakeClient.WasMessageDeleted(envelope), Is.True);\n    }\n\n    [Test]\n    public async Task DeleteMessageLater_WhenDeleteFails_LogsWarning()\n    {\n        var (_, _, message) = TK.Specialized.Messages.TextOnlyScenario();\n        _factory.WithBotSetup(mock =>\n        {\n            mock.Setup(x => x.DeleteMessageWithOutcomeAsync(It.IsAny<ChatId>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))\n                .ReturnsAsync((ChatId c, int m, CancellationToken ct) => new DeleteMessageResult((long)c.Identifier!, m, DeleteMessageOutcome.UnexpectedError, 5, \"boom\", \"raw\"));\n        });\n        _messageHandler.DeleteMessageLater(message, TimeSpan.FromMilliseconds(30), CancellationToken.None);\n        await Task.Delay(120);\n        _factory.LoggerMock.Verify(\n            x => x.Log(\n                LogLevel.Warning,\n                It.IsAny<EventId>(),\n                It.Is<It.IsAnyType>((v, _) => v!.ToString()!.Contains(\"Не удалось удалить сообщение\")),\n                It.IsAny<Exception?>(),\n                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),\n            Times.AtLeastOnce);\n    }\n\n    [Test]\n    public async Task DeleteMessageLater_WhenCancelled_DoesNotInvokeDelete()\n    {\n        var (_, _, message) = TK.Specialized.Messages.TextOnlyScenario();\n        var cts = new CancellationTokenSource();\n        _messageHandler.DeleteMessageLater(message, TimeSpan.FromMilliseconds(100), cts.Token);\n        cts.Cancel();\n        await Task.Delay(150);\n        _factory.BotMock.Verify(x => x.DeleteMessageWithOutcomeAsync(It.IsAny<ChatId>(), It.IsAny<int>(), It.IsAny<CancellationToken>()), Times.Never);\n    }\n}\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Handlers/MessageHandlerExtendedTests.cs::MessageHandlerExtendedTests::HandleAsync_ValidMessage_HandlesSuccessfully",
+        "file": "Unit/Handlers/MessageHandlerExtendedTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Handlers",
+        "class": "MessageHandlerExtendedTests",
+        "test_name": "HandleAsync_ValidMessage_HandlesSuccessfully",
+        "line": 258,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 13,
+        "declared_area_from_path": "Unit",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": true,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": true,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "assert_pass",
+          "message_handler_test_factory",
+          "real_env_or_api"
+        ],
+        "_source_lineno": 320
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Handlers/MessageHandlerExtendedTests.cs\n# Lines 228-288 (test starts at line 258)\n            EditedMessage = null,\n            CallbackQuery = new CallbackQuery { Id = \"test\" }\n        };\n        var handler = _factory.CreateMessageHandler();\n\n        // Act\n        var result = handler.CanHandle(update);\n\n        // Assert\n        Assert.That(result, Is.False);\n    }\n\n    #endregion\n\n    #region HandleAsync - Basic Tests\n\n    [Test]\n    public async Task HandleAsync_NullUpdate_ThrowsArgumentNullException()\n    {\n        // Arrange\n        Update? update = null;\n        var handler = _factory.CreateMessageHandler();\n\n        // Act & Assert\n        var exception = Assert.ThrowsAsync<ArgumentNullException>(\n            async () => await handler.HandleAsync(update));\n\n        Assert.That(exception.ParamName, Is.EqualTo(\"update\"));\n    }\n\n    [Test]\n    public async Task HandleAsync_ValidMessage_HandlesSuccessfully()\n    {\n        // Arrange\n        var message = CreateTestMessage(\"Hello world\");\n        var update = new Update { Message = message };\n        var handler = _factory.CreateMessageHandler();\n\n        // Act\n        await handler.HandleAsync(update);\n\n        // Assert\n        // Тест проходит, если не выброшено исключение\n        Assert.Pass();\n    }\n\n    [Test]\n    public async Task HandleAsync_EditedMessage_HandlesSuccessfully()\n    {\n        // Arrange\n        var editedMessage = CreateTestMessage(\"Edited message\");\n        editedMessage.EditDate = DateTime.UtcNow;\n        var update = new Update { EditedMessage = editedMessage };\n        var handler = _factory.CreateMessageHandler();\n\n        // Act\n        await handler.HandleAsync(update);\n\n        // Assert\n        // Тест проходит, если не выброшено исключение\n        Assert.Pass();\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Handlers/MessageHandlerExtendedTests.cs::MessageHandlerExtendedTests::HandleAsync_EditedMessage_HandlesSuccessfully",
+        "file": "Unit/Handlers/MessageHandlerExtendedTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Handlers",
+        "class": "MessageHandlerExtendedTests",
+        "test_name": "HandleAsync_EditedMessage_HandlesSuccessfully",
+        "line": 274,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 14,
+        "declared_area_from_path": "Unit",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": true,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": true,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "assert_pass",
+          "message_handler_test_factory",
+          "real_env_or_api"
+        ],
+        "_source_lineno": 321
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Handlers/MessageHandlerExtendedTests.cs\n# Lines 244-304 (test starts at line 274)\n    [Test]\n    public async Task HandleAsync_NullUpdate_ThrowsArgumentNullException()\n    {\n        // Arrange\n        Update? update = null;\n        var handler = _factory.CreateMessageHandler();\n\n        // Act & Assert\n        var exception = Assert.ThrowsAsync<ArgumentNullException>(\n            async () => await handler.HandleAsync(update));\n\n        Assert.That(exception.ParamName, Is.EqualTo(\"update\"));\n    }\n\n    [Test]\n    public async Task HandleAsync_ValidMessage_HandlesSuccessfully()\n    {\n        // Arrange\n        var message = CreateTestMessage(\"Hello world\");\n        var update = new Update { Message = message };\n        var handler = _factory.CreateMessageHandler();\n\n        // Act\n        await handler.HandleAsync(update);\n\n        // Assert\n        // Тест проходит, если не выброшено исключение\n        Assert.Pass();\n    }\n\n    [Test]\n    public async Task HandleAsync_EditedMessage_HandlesSuccessfully()\n    {\n        // Arrange\n        var editedMessage = CreateTestMessage(\"Edited message\");\n        editedMessage.EditDate = DateTime.UtcNow;\n        var update = new Update { EditedMessage = editedMessage };\n        var handler = _factory.CreateMessageHandler();\n\n        // Act\n        await handler.HandleAsync(update);\n\n        // Assert\n        // Тест проходит, если не выброшено исключение\n        Assert.Pass();\n    }\n\n    #endregion\n\n    #region HandleAsync - Command Tests\n\n    [Test]\n    public async Task HandleAsync_StartCommand_HandlesSuccessfully()\n    {\n        // Arrange\n        var message = CreateTestMessage(\"/start\");\n        var update = new Update { Message = message };\n        var handler = _factory.CreateMessageHandler();\n\n        // Act\n        await handler.HandleAsync(update);\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Handlers/MessageHandlerExtendedTests.cs::MessageHandlerExtendedTests::HandleAsync_StartCommand_HandlesSuccessfully",
+        "file": "Unit/Handlers/MessageHandlerExtendedTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Handlers",
+        "class": "MessageHandlerExtendedTests",
+        "test_name": "HandleAsync_StartCommand_HandlesSuccessfully",
+        "line": 295,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 13,
+        "declared_area_from_path": "Unit",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": true,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": true,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "assert_pass",
+          "message_handler_test_factory",
+          "real_env_or_api"
+        ],
+        "_source_lineno": 322
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Handlers/MessageHandlerExtendedTests.cs\n# Lines 265-325 (test starts at line 295)\n\n        // Act\n        await handler.HandleAsync(update);\n\n        // Assert\n        // Тест проходит, если не выброшено исключение\n        Assert.Pass();\n    }\n\n    [Test]\n    public async Task HandleAsync_EditedMessage_HandlesSuccessfully()\n    {\n        // Arrange\n        var editedMessage = CreateTestMessage(\"Edited message\");\n        editedMessage.EditDate = DateTime.UtcNow;\n        var update = new Update { EditedMessage = editedMessage };\n        var handler = _factory.CreateMessageHandler();\n\n        // Act\n        await handler.HandleAsync(update);\n\n        // Assert\n        // Тест проходит, если не выброшено исключение\n        Assert.Pass();\n    }\n\n    #endregion\n\n    #region HandleAsync - Command Tests\n\n    [Test]\n    public async Task HandleAsync_StartCommand_HandlesSuccessfully()\n    {\n        // Arrange\n        var message = CreateTestMessage(\"/start\");\n        var update = new Update { Message = message };\n        var handler = _factory.CreateMessageHandler();\n\n        // Act\n        await handler.HandleAsync(update);\n\n        // Assert\n        // Тест проходит, если не выброшено исключение\n        Assert.Pass();\n    }\n\n    [Test]\n    public async Task HandleAsync_SuspiciousCommand_HandlesSuccessfully()\n    {\n        // Arrange\n        var message = CreateTestMessage(\"/suspicious\");\n        var update = new Update { Message = message };\n        var handler = _factory.CreateMessageHandler();\n\n        // Act\n        await handler.HandleAsync(update);\n\n        // Assert\n        // Тест проходит, если не выброшено исключение\n        Assert.Pass();\n    }\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Handlers/MessageHandlerExtendedTests.cs::MessageHandlerExtendedTests::HandleAsync_SuspiciousCommand_HandlesSuccessfully",
+        "file": "Unit/Handlers/MessageHandlerExtendedTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Handlers",
+        "class": "MessageHandlerExtendedTests",
+        "test_name": "HandleAsync_SuspiciousCommand_HandlesSuccessfully",
+        "line": 311,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 13,
+        "declared_area_from_path": "Unit",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": true,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": true,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "assert_pass",
+          "message_handler_test_factory",
+          "real_env_or_api"
+        ],
+        "_source_lineno": 323
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Handlers/MessageHandlerExtendedTests.cs\n# Lines 281-341 (test starts at line 311)\n        var handler = _factory.CreateMessageHandler();\n\n        // Act\n        await handler.HandleAsync(update);\n\n        // Assert\n        // Тест проходит, если не выброшено исключение\n        Assert.Pass();\n    }\n\n    #endregion\n\n    #region HandleAsync - Command Tests\n\n    [Test]\n    public async Task HandleAsync_StartCommand_HandlesSuccessfully()\n    {\n        // Arrange\n        var message = CreateTestMessage(\"/start\");\n        var update = new Update { Message = message };\n        var handler = _factory.CreateMessageHandler();\n\n        // Act\n        await handler.HandleAsync(update);\n\n        // Assert\n        // Тест проходит, если не выброшено исключение\n        Assert.Pass();\n    }\n\n    [Test]\n    public async Task HandleAsync_SuspiciousCommand_HandlesSuccessfully()\n    {\n        // Arrange\n        var message = CreateTestMessage(\"/suspicious\");\n        var update = new Update { Message = message };\n        var handler = _factory.CreateMessageHandler();\n\n        // Act\n        await handler.HandleAsync(update);\n\n        // Assert\n        // Тест проходит, если не выброшено исключение\n        Assert.Pass();\n    }\n\n    [Test]\n    public async Task HandleAsync_SpamCommand_HandlesSuccessfully()\n    {\n        // Arrange\n        var replyToMessage = CreateTestMessage(\"Spam message\", new User { Id = 999, FirstName = \"Target\" });\n        var message = CreateTestMessageWithReply(\"/spam\", replyToMessage);\n        var update = new Update { Message = message };\n        var handler = _factory.CreateMessageHandler();\n\n        // Act\n        await handler.HandleAsync(update);\n\n        // Assert\n        // Тест проходит, если не выброшено исключение\n        Assert.Pass();\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Handlers/MessageHandlerExtendedTests.cs::MessageHandlerExtendedTests::HandleAsync_SpamCommand_HandlesSuccessfully",
+        "file": "Unit/Handlers/MessageHandlerExtendedTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Handlers",
+        "class": "MessageHandlerExtendedTests",
+        "test_name": "HandleAsync_SpamCommand_HandlesSuccessfully",
+        "line": 327,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 14,
+        "declared_area_from_path": "Unit",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": true,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": true,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "assert_pass",
+          "message_handler_test_factory",
+          "real_env_or_api"
+        ],
+        "_source_lineno": 324
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Handlers/MessageHandlerExtendedTests.cs\n# Lines 297-357 (test starts at line 327)\n    {\n        // Arrange\n        var message = CreateTestMessage(\"/start\");\n        var update = new Update { Message = message };\n        var handler = _factory.CreateMessageHandler();\n\n        // Act\n        await handler.HandleAsync(update);\n\n        // Assert\n        // Тест проходит, если не выброшено исключение\n        Assert.Pass();\n    }\n\n    [Test]\n    public async Task HandleAsync_SuspiciousCommand_HandlesSuccessfully()\n    {\n        // Arrange\n        var message = CreateTestMessage(\"/suspicious\");\n        var update = new Update { Message = message };\n        var handler = _factory.CreateMessageHandler();\n\n        // Act\n        await handler.HandleAsync(update);\n\n        // Assert\n        // Тест проходит, если не выброшено исключение\n        Assert.Pass();\n    }\n\n    [Test]\n    public async Task HandleAsync_SpamCommand_HandlesSuccessfully()\n    {\n        // Arrange\n        var replyToMessage = CreateTestMessage(\"Spam message\", new User { Id = 999, FirstName = \"Target\" });\n        var message = CreateTestMessageWithReply(\"/spam\", replyToMessage);\n        var update = new Update { Message = message };\n        var handler = _factory.CreateMessageHandler();\n\n        // Act\n        await handler.HandleAsync(update);\n\n        // Assert\n        // Тест проходит, если не выброшено исключение\n        Assert.Pass();\n    }\n\n    [Test]\n    public async Task HandleAsync_HamCommand_HandlesSuccessfully()\n    {\n        // Arrange\n        var replyToMessage = CreateTestMessage(\"Ham message\", new User { Id = 999, FirstName = \"Target\" });\n        var message = CreateTestMessageWithReply(\"/ham\", replyToMessage);\n        var update = new Update { Message = message };\n        var handler = _factory.CreateMessageHandler();\n\n        // Act\n        await handler.HandleAsync(update);\n\n        // Assert\n        // Тест проходит, если не выброшено исключение\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Handlers/MessageHandlerExtendedTests.cs::MessageHandlerExtendedTests::HandleAsync_HamCommand_HandlesSuccessfully",
+        "file": "Unit/Handlers/MessageHandlerExtendedTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Handlers",
+        "class": "MessageHandlerExtendedTests",
+        "test_name": "HandleAsync_HamCommand_HandlesSuccessfully",
+        "line": 344,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 14,
+        "declared_area_from_path": "Unit",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": true,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": true,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "assert_pass",
+          "message_handler_test_factory",
+          "real_env_or_api"
+        ],
+        "_source_lineno": 325
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Handlers/MessageHandlerExtendedTests.cs\n# Lines 314-374 (test starts at line 344)\n        // Arrange\n        var message = CreateTestMessage(\"/suspicious\");\n        var update = new Update { Message = message };\n        var handler = _factory.CreateMessageHandler();\n\n        // Act\n        await handler.HandleAsync(update);\n\n        // Assert\n        // Тест проходит, если не выброшено исключение\n        Assert.Pass();\n    }\n\n    [Test]\n    public async Task HandleAsync_SpamCommand_HandlesSuccessfully()\n    {\n        // Arrange\n        var replyToMessage = CreateTestMessage(\"Spam message\", new User { Id = 999, FirstName = \"Target\" });\n        var message = CreateTestMessageWithReply(\"/spam\", replyToMessage);\n        var update = new Update { Message = message };\n        var handler = _factory.CreateMessageHandler();\n\n        // Act\n        await handler.HandleAsync(update);\n\n        // Assert\n        // Тест проходит, если не выброшено исключение\n        Assert.Pass();\n    }\n\n    [Test]\n    public async Task HandleAsync_HamCommand_HandlesSuccessfully()\n    {\n        // Arrange\n        var replyToMessage = CreateTestMessage(\"Ham message\", new User { Id = 999, FirstName = \"Target\" });\n        var message = CreateTestMessageWithReply(\"/ham\", replyToMessage);\n        var update = new Update { Message = message };\n        var handler = _factory.CreateMessageHandler();\n\n        // Act\n        await handler.HandleAsync(update);\n\n        // Assert\n        // Тест проходит, если не выброшено исключение\n        Assert.Pass();\n    }\n\n    [Test]\n    public async Task HandleAsync_CheckCommand_HandlesSuccessfully()\n    {\n        // Arrange\n        var replyToMessage = CreateTestMessage(\"Check message\", new User { Id = 999, FirstName = \"Target\" });\n        var message = CreateTestMessageWithReply(\"/check\", replyToMessage);\n        var update = new Update { Message = message };\n        var handler = _factory.CreateMessageHandler();\n\n        // Act\n        await handler.HandleAsync(update);\n\n        // Assert\n        // Тест проходит, если не выброшено исключение\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Handlers/MessageHandlerExtendedTests.cs::MessageHandlerExtendedTests::HandleAsync_CheckCommand_HandlesSuccessfully",
+        "file": "Unit/Handlers/MessageHandlerExtendedTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Handlers",
+        "class": "MessageHandlerExtendedTests",
+        "test_name": "HandleAsync_CheckCommand_HandlesSuccessfully",
+        "line": 361,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 14,
+        "declared_area_from_path": "Unit",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": true,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": true,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "assert_pass",
+          "message_handler_test_factory",
+          "real_env_or_api"
+        ],
+        "_source_lineno": 326
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Handlers/MessageHandlerExtendedTests.cs\n# Lines 331-391 (test starts at line 361)\n        var replyToMessage = CreateTestMessage(\"Spam message\", new User { Id = 999, FirstName = \"Target\" });\n        var message = CreateTestMessageWithReply(\"/spam\", replyToMessage);\n        var update = new Update { Message = message };\n        var handler = _factory.CreateMessageHandler();\n\n        // Act\n        await handler.HandleAsync(update);\n\n        // Assert\n        // Тест проходит, если не выброшено исключение\n        Assert.Pass();\n    }\n\n    [Test]\n    public async Task HandleAsync_HamCommand_HandlesSuccessfully()\n    {\n        // Arrange\n        var replyToMessage = CreateTestMessage(\"Ham message\", new User { Id = 999, FirstName = \"Target\" });\n        var message = CreateTestMessageWithReply(\"/ham\", replyToMessage);\n        var update = new Update { Message = message };\n        var handler = _factory.CreateMessageHandler();\n\n        // Act\n        await handler.HandleAsync(update);\n\n        // Assert\n        // Тест проходит, если не выброшено исключение\n        Assert.Pass();\n    }\n\n    [Test]\n    public async Task HandleAsync_CheckCommand_HandlesSuccessfully()\n    {\n        // Arrange\n        var replyToMessage = CreateTestMessage(\"Check message\", new User { Id = 999, FirstName = \"Target\" });\n        var message = CreateTestMessageWithReply(\"/check\", replyToMessage);\n        var update = new Update { Message = message };\n        var handler = _factory.CreateMessageHandler();\n\n        // Act\n        await handler.HandleAsync(update);\n\n        // Assert\n        // Тест проходит, если не выброшено исключение\n        Assert.Pass();\n    }\n\n    [Test]\n    public async Task HandleAsync_UnknownCommand_HandlesSuccessfully()\n    {\n        // Arrange\n        var message = CreateTestMessage(\"/unknown\");\n        var update = new Update { Message = message };\n        var handler = _factory.CreateMessageHandler();\n\n        // Act\n        await handler.HandleAsync(update);\n\n        // Assert\n        // Тест проходит, если не выброшено исключение\n        Assert.Pass();\n"
+    }
+  ]
+}

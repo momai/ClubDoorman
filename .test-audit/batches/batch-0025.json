@@ -1,0 +1,408 @@
+{
+  "schema_version": "test-audit-batch-v1",
+  "batch_no": 25,
+  "purpose": "local LLM audit input",
+  "instructions": "Return JSONL only. One audit object per input test. No markdown. No code edits.",
+  "tests": [
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/CaptchaServiceFakeTests.cs::CaptchaServiceFakeTests::CreateCaptchaAsync_UserWithInappropriateName_UsesGenericName",
+        "file": "Unit/Services/CaptchaServiceFakeTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "CaptchaServiceFakeTests",
+        "test_name": "CreateCaptchaAsync_UserWithInappropriateName_UsesGenericName",
+        "line": 80,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "services",
+          "captcha"
+        ],
+        "body_lines": 15,
+        "declared_area_from_path": "Unit",
+        "construction_path": "custom_local_world",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": true,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify",
+          "real_env_or_api"
+        ],
+        "_source_lineno": 621
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/CaptchaServiceFakeTests.cs\n# Lines 50-110 (test starts at line 80)\n        return new CaptchaService(\n            new Mock<ITelegramBotClientWrapper>().Object,\n            new Mock<ILogger<CaptchaService>>().Object,\n            _messageServiceMock.Object,\n            AppConfigTestFactory.CreateDefault(),\n            new Mock<IViolationTracker>().Object,\n            new Mock<IUserBanService>().Object\n        );\n    }\n\n    [Test]\n    public async Task CreateCaptchaAsync_ValidUser_SendsWelcomeMessage()\n    {\n        // Arrange\n        _messageServiceMock.Setup(x => x.SendCaptchaMessageAsync(\n            It.IsAny<SendCaptchaMessageRequest>()))\n        .ReturnsAsync(new global::Telegram.Bot.Types.Message());\n\n        var service = CreateCaptchaService();\n\n        // Act\n        var captchaInfo = await service.CreateCaptchaAsync(new CreateCaptchaRequest(chat, user, null));\n\n        // Assert\n        Assert.That(captchaInfo, Is.Not.Null);\n        Assert.That(captchaInfo.User.Id, Is.EqualTo(789));\n\n        _messageServiceMock.Verify(x => x.SendCaptchaMessageAsync(It.IsAny<SendCaptchaMessageRequest>()), Times.Once);\n    }\n\n    [Test]\n    public async Task CreateCaptchaAsync_UserWithInappropriateName_UsesGenericName()\n    {\n        // Arrange\n        _messageServiceMock.Setup(x => x.SendCaptchaMessageAsync(\n            It.IsAny<SendCaptchaMessageRequest>()))\n        .ReturnsAsync(new global::Telegram.Bot.Types.Message());\n\n        var service = CreateCaptchaService();\n        var userWithInappropriateName = new User { Id = 999, FirstName = \"p0rn\", LastName = \"User\" };\n\n        // Act\n        var captchaInfo = await service.CreateCaptchaAsync(new CreateCaptchaRequest(chat, userWithInappropriateName, null));\n\n        // Assert\n        _messageServiceMock.Verify(x => x.SendCaptchaMessageAsync(It.IsAny<SendCaptchaMessageRequest>()), Times.Once);\n    }\n\n    [Test]\n    public async Task ValidateCaptchaAsync_CorrectAnswer_ReturnsTrue()\n    {\n        // Arrange\n        _messageServiceMock.Setup(x => x.SendCaptchaMessageAsync(\n            It.IsAny<SendCaptchaMessageRequest>()))\n        .ReturnsAsync(new global::Telegram.Bot.Types.Message());\n\n        var service = CreateCaptchaService();\n\n        // Act - сначала создаем капчу\n        var createdCaptcha = await service.CreateCaptchaAsync(new CreateCaptchaRequest(chat, user, null));\n        var key = service.GenerateKey(chat.Id, user.Id);\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/CaptchaServiceFakeTests.cs::CaptchaServiceFakeTests::CreateCaptchaAsync_IncludesVpnAd_ByDefault",
+        "file": "Unit/Services/CaptchaServiceFakeTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "CaptchaServiceFakeTests",
+        "test_name": "CreateCaptchaAsync_IncludesVpnAd_ByDefault",
+        "line": 169,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 15,
+        "declared_area_from_path": "Unit",
+        "construction_path": "custom_local_world",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": true,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify",
+          "real_env_or_api"
+        ],
+        "_source_lineno": 626
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/CaptchaServiceFakeTests.cs\n# Lines 139-199 (test starts at line 169)\n        _messageServiceMock.Setup(x => x.SendCaptchaMessageAsync(\n            It.IsAny<SendCaptchaMessageRequest>()))\n        .ThrowsAsync(new Exception(\"Telegram API error\"));\n\n        var service = CreateCaptchaService();\n\n        // Act & Assert\n        var caughtException = Assert.ThrowsAsync<Exception>(async () =>\n        {\n            await service.CreateCaptchaAsync(new CreateCaptchaRequest(chat, user, null));\n        });\n\n        Assert.That(caughtException.Message, Is.EqualTo(\"Telegram API error\"));\n    }\n\n    [Test]\n    public void GenerateKey_ValidIds_ReturnsExpectedKey()\n    {\n        // Arrange\n        var service = _factory.CreateCaptchaService();\n        var chatId = 123456L;\n        var userId = 789L;\n\n        // Act\n        var key = service.GenerateKey(chatId, userId);\n\n        // Assert\n        Assert.That(key, Is.EqualTo(\"123456_789\"));\n    }\n\n    [Test]\n    public async Task CreateCaptchaAsync_IncludesVpnAd_ByDefault()\n    {\n        // Arrange\n        _messageServiceMock.Setup(x => x.SendCaptchaMessageAsync(\n            It.IsAny<SendCaptchaMessageRequest>()))\n        .ReturnsAsync(new global::Telegram.Bot.Types.Message());\n\n        var service = CreateCaptchaService();\n\n        // Act\n        var captchaInfo = await service.CreateCaptchaAsync(new CreateCaptchaRequest(chat, user, null));\n\n        // Assert\n        _messageServiceMock.Verify(x => x.SendCaptchaMessageAsync(\n            It.Is<SendCaptchaMessageRequest>(req => req.Chat.Id == 123456 && req.Message.Contains(\"📍 Место для рекламы\"))), Times.Once);\n    }\n\n    [Test]\n    public async Task ValidateCaptchaAsync_ExpiredCaptcha_ReturnsFalse()\n    {\n        // Arrange\n        _messageServiceMock.Setup(x => x.SendCaptchaMessageAsync(\n            It.IsAny<SendCaptchaMessageRequest>()))\n        .ReturnsAsync(new global::Telegram.Bot.Types.Message());\n\n        var service = CreateCaptchaService();\n        var key = service.GenerateKey(chat.Id, user.Id);\n\n        // Act - используем неправильный ответ, чтобы проверить что капча работает\n        var result = await service.ValidateCaptchaAsync(key, 999);\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/UserBanServiceTests.cs::UserBanServiceTests::BanUserForLongName_PrivateChat_LogsWarningAndReturns_Obsolete",
+        "file": "Unit/Services/UserBanServiceTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "UserBanServiceTests",
+        "test_name": "BanUserForLongName_PrivateChat_LogsWarningAndReturns_Obsolete",
+        "line": 131,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "migration-new",
+          "migration-old"
+        ],
+        "body_lines": 25,
+        "declared_area_from_path": "Unit",
+        "construction_path": "custom_local_world",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": true,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify",
+          "real_env_or_api"
+        ],
+        "_source_lineno": 781
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/UserBanServiceTests.cs\n# Lines 101-161 (test starts at line 131)\n        // Arrange - используем builders вместо мутаций\n        var user = TK.CreateValidUser();\n        var chat = TK.CreatePrivateChat();\n        var message = TK.BuildMessage()\n            .AsValid()\n            .InChat(chat)\n            .Build();\n        var reason = \"Длинное имя\";\n        var banDuration = TimeSpan.FromMinutes(10);\n\n        // Act\n        await _userBanService.BanUserForLongNameAsync(message, user, reason, banDuration, CancellationToken.None);\n\n        // Assert - идентично оригиналу\n        // Логирование происходит в MessageHandler, а не в UserBanService\n\n        _messageServiceMock.Verify(\n            x => x.SendAdminNotificationAsync(\n                AdminNotificationType.PrivateChatBanAttempt,\n                It.IsAny<ErrorNotificationData>(),\n                It.IsAny<CancellationToken>()),\n            Times.Once);\n\n        // Убеждаемся, что бан не был выполнен\n        _botMock.Verify(x => x.BanChatMember(It.IsAny<ChatId>(), It.IsAny<long>(), It.IsAny<DateTime?>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()), Times.Never);\n    }\n\n    [Test]\n    [Category(\"migration-old\")]\n    [Obsolete(\"Replaced by builders version - will be archived\")]\n    public async Task BanUserForLongName_PrivateChat_LogsWarningAndReturns_Obsolete()\n    {\n        // Arrange\n        var user = TK.CreateValidUser();\n        var chat = TK.CreatePrivateChat();\n        var message = TK.CreateValidMessage();\n        message.Chat = chat;\n        var reason = \"Длинное имя\";\n        var banDuration = TimeSpan.FromMinutes(10);\n\n        // Act\n        await _userBanService.BanUserForLongNameAsync(message, user, reason, banDuration, CancellationToken.None);\n\n        // Assert\n        // Логирование происходит в MessageHandler, а не в UserBanService\n\n        _messageServiceMock.Verify(\n            x => x.SendAdminNotificationAsync(\n                AdminNotificationType.PrivateChatBanAttempt,\n                It.IsAny<ErrorNotificationData>(),\n                It.IsAny<CancellationToken>()),\n            Times.Once);\n\n        // Убеждаемся, что бан не был выполнен\n        _botMock.Verify(x => x.BanChatMember(It.IsAny<ChatId>(), It.IsAny<long>(), It.IsAny<DateTime?>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()), Times.Never);\n    }\n\n    [Test]\n    [Category(\"migration-new\")]\n    public async Task BanUserForLongName_ValidChat_BansUserAndSendsNotification()\n    {\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/UserBanServiceTests.cs::UserBanServiceTests::BanUserForLongName_PermanentBan_BansUserPermanently",
+        "file": "Unit/Services/UserBanServiceTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "UserBanServiceTests",
+        "test_name": "BanUserForLongName_PermanentBan_BansUserPermanently",
+        "line": 255,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "migration-old"
+        ],
+        "body_lines": 25,
+        "declared_area_from_path": "Unit",
+        "construction_path": "custom_local_world",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": true,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify",
+          "real_env_or_api"
+        ],
+        "_source_lineno": 784
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/UserBanServiceTests.cs\n# Lines 225-285 (test starts at line 255)\n        // Act\n        await _userBanService.BanUserForLongNameAsync(message, user, reason, banDuration, CancellationToken.None);\n\n        // Assert\n        _botMock.Verify(\n            x => x.BanChatMember(\n                chat.Id,\n                user.Id,\n                It.Is<DateTime?>(d => d.HasValue && d.Value > DateTime.UtcNow),\n                true,\n                It.IsAny<CancellationToken>()),\n            Times.Once);\n\n        _botMock.Verify(\n            x => x.DeleteMessage(chat.Id, message.MessageId, It.IsAny<CancellationToken>()),\n            Times.Once);\n\n        _messageServiceMock.Verify(\n            x => x.ForwardToLogWithNotificationAsync(\n                message,\n                LogNotificationType.BanForLongName,\n                It.IsAny<AutoBanNotificationData>(),\n                It.IsAny<CancellationToken>()),\n            Times.Once);\n\n        _userFlowLoggerMock.Verify(\n            x => x.LogUserBanned(user, chat, reason),\n            Times.Once);\n    }\n\n    [Test]\n    public async Task BanUserForLongName_PermanentBan_BansUserPermanently()\n    {\n        // Arrange\n        var user = TK.CreateValidUser();\n        var chat = TK.CreateGroupChat();\n        var message = TK.CreateValidMessage();\n        message.Chat = chat;\n        var reason = \"Длинное имя\";\n        TimeSpan? banDuration = null; // Перманентный бан\n\n        _botMock.Setup(x => x.BanChatMember(It.IsAny<ChatId>(), It.IsAny<long>(), It.IsAny<DateTime?>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()))\n            .Returns(Task.CompletedTask);\n\n        // Act\n        await _userBanService.BanUserForLongNameAsync(message, user, reason, banDuration, CancellationToken.None);\n\n        // Assert\n        _botMock.Verify(\n            x => x.BanChatMember(\n                chat.Id,\n                user.Id,\n                null, // Перманентный бан\n                true,\n                It.IsAny<CancellationToken>()),\n            Times.Once);\n    }\n\n    [Test]\n    public async Task BanUserForLongName_ExceptionOccurs_LogsWarning()\n    {\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/UserBanServiceTests.cs::UserBanServiceTests::BanBlacklistedUser_PrivateChat_LogsWarningAndReturns",
+        "file": "Unit/Services/UserBanServiceTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "UserBanServiceTests",
+        "test_name": "BanBlacklistedUser_PrivateChat_LogsWarningAndReturns",
+        "line": 309,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 14,
+        "declared_area_from_path": "Unit",
+        "construction_path": "custom_local_world",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": true,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify",
+          "real_env_or_api"
+        ],
+        "_source_lineno": 786
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/UserBanServiceTests.cs\n# Lines 279-339 (test starts at line 309)\n                It.IsAny<CancellationToken>()),\n            Times.Once);\n    }\n\n    [Test]\n    public async Task BanUserForLongName_ExceptionOccurs_LogsWarning()\n    {\n        // Arrange\n        var user = TK.CreateValidUser();\n        var chat = TK.CreateGroupChat();\n        var message = TK.CreateValidMessage();\n        message.Chat = chat;\n        var reason = \"Длинное имя\";\n        var banDuration = TimeSpan.FromMinutes(10);\n\n        _botMock.Setup(x => x.BanChatMember(It.IsAny<ChatId>(), It.IsAny<long>(), It.IsAny<DateTime?>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()))\n            .ThrowsAsync(new Exception(\"Test exception\"));\n\n        // Act\n        await _userBanService.BanUserForLongNameAsync(message, user, reason, banDuration, CancellationToken.None);\n\n        // Assert\n        // Проверяем, что исключение было пробброшено\n        // (логирование происходит в MessageHandler, а не в UserBanService)\n    }\n\n    #endregion\n\n    #region BanBlacklistedUser Tests\n\n    [Test]\n    public async Task BanBlacklistedUser_PrivateChat_LogsWarningAndReturns()\n    {\n        // Arrange\n        var user = TK.CreateValidUser();\n        var chat = TK.CreatePrivateChat();\n        var message = TK.CreateValidMessage();\n        message.Chat = chat;\n\n        // Act\n        await _userBanService.BanBlacklistedUserAsync(message, user, CancellationToken.None);\n\n        // Assert\n        // Убеждаемся, что бан не был выполнен для приватного чата\n        _botMock.Verify(x => x.BanChatMember(It.IsAny<ChatId>(), It.IsAny<long>(), It.IsAny<DateTime?>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()), Times.Never);\n    }\n\n    [Test]\n    public async Task BanBlacklistedUser_ValidChat_BansUserFor4Hours()\n    {\n        // Arrange\n        var user = TK.CreateValidUser();\n        var chat = TK.CreateGroupChat();\n        var message = TK.CreateValidMessage();\n        message.Chat = chat;\n\n        _botMock.Setup(x => x.BanChatMember(It.IsAny<ChatId>(), It.IsAny<long>(), It.IsAny<DateTime?>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()))\n            .Returns(Task.CompletedTask);\n        _botMock.Setup(x => x.DeleteMessage(It.IsAny<ChatId>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))\n            .Returns(Task.CompletedTask);\n\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/UserBanServiceTests.cs::UserBanServiceTests::AutoBan_PrivateChat_LogsWarningAndReturns",
+        "file": "Unit/Services/UserBanServiceTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "UserBanServiceTests",
+        "test_name": "AutoBan_PrivateChat_LogsWarningAndReturns",
+        "line": 386,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 16,
+        "declared_area_from_path": "Unit",
+        "construction_path": "custom_local_world",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": true,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify",
+          "real_env_or_api"
+        ],
+        "_source_lineno": 789
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/UserBanServiceTests.cs\n# Lines 356-416 (test starts at line 386)\n\n        _userFlowLoggerMock.Verify(\n            x => x.LogUserBanned(user, chat, \"Пользователь в блэклисте\"),\n            Times.Once);\n    }\n\n    [Test]\n    public async Task BanBlacklistedUser_ExceptionOccurs_LogsWarning()\n    {\n        // Arrange\n        var user = TK.CreateValidUser();\n        var chat = TK.CreateGroupChat();\n        var message = TK.CreateValidMessage();\n        message.Chat = chat;\n\n        _botMock.Setup(x => x.BanChatMember(It.IsAny<ChatId>(), It.IsAny<long>(), It.IsAny<DateTime?>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()))\n            .ThrowsAsync(new Exception(\"Test exception\"));\n\n        // Act & Assert\n        // Ожидаем, что исключение будет проброшено (re-throw behavior)\n        var exception = Assert.ThrowsAsync<Exception>(async () =>\n            await _userBanService.BanBlacklistedUserAsync(message, user, CancellationToken.None));\n\n        Assert.That(exception.Message, Is.EqualTo(\"Test exception\"));\n    }\n\n    #endregion\n\n    #region AutoBan Tests\n\n    [Test]\n    public async Task AutoBan_PrivateChat_LogsWarningAndReturns()\n    {\n        // Arrange\n        var user = TK.CreateValidUser();\n        var chat = TK.CreatePrivateChat();\n        var message = TK.CreateValidMessage();\n        message.Chat = chat;\n        message.Text = \"Test message\";\n        var reason = \"Спам\";\n\n        // Act\n        await _userBanService.AutoBanAsync(message, reason, CancellationToken.None);\n\n        // Assert\n        // Убеждаемся, что бан не был выполнен для приватного чата\n        _botMock.Verify(x => x.BanChatMember(It.IsAny<ChatId>(), It.IsAny<long>(), It.IsAny<DateTime?>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()), Times.Never);\n    }\n\n    [Test]\n    public async Task AutoBan_KnownSpamReason_SelectsCorrectNotificationType()\n    {\n        // Arrange\n        var user = TK.CreateValidUser();\n        var chat = TK.CreateGroupChat();\n        var message = TK.CreateValidMessage();\n        message.Chat = chat;\n        message.Text = \"Test message\";\n        var reason = \"Известное спам-сообщение\";\n\n        // Act\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/UserBanServiceTests.cs::UserBanServiceTests::AutoBan_KnownSpamReason_SelectsCorrectNotificationType",
+        "file": "Unit/Services/UserBanServiceTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "UserBanServiceTests",
+        "test_name": "AutoBan_KnownSpamReason_SelectsCorrectNotificationType",
+        "line": 405,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 20,
+        "declared_area_from_path": "Unit",
+        "construction_path": "custom_local_world",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": true,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify",
+          "real_env_or_api"
+        ],
+        "_source_lineno": 790
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/UserBanServiceTests.cs\n# Lines 375-435 (test starts at line 405)\n        // Ожидаем, что исключение будет проброшено (re-throw behavior)\n        var exception = Assert.ThrowsAsync<Exception>(async () =>\n            await _userBanService.BanBlacklistedUserAsync(message, user, CancellationToken.None));\n\n        Assert.That(exception.Message, Is.EqualTo(\"Test exception\"));\n    }\n\n    #endregion\n\n    #region AutoBan Tests\n\n    [Test]\n    public async Task AutoBan_PrivateChat_LogsWarningAndReturns()\n    {\n        // Arrange\n        var user = TK.CreateValidUser();\n        var chat = TK.CreatePrivateChat();\n        var message = TK.CreateValidMessage();\n        message.Chat = chat;\n        message.Text = \"Test message\";\n        var reason = \"Спам\";\n\n        // Act\n        await _userBanService.AutoBanAsync(message, reason, CancellationToken.None);\n\n        // Assert\n        // Убеждаемся, что бан не был выполнен для приватного чата\n        _botMock.Verify(x => x.BanChatMember(It.IsAny<ChatId>(), It.IsAny<long>(), It.IsAny<DateTime?>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()), Times.Never);\n    }\n\n    [Test]\n    public async Task AutoBan_KnownSpamReason_SelectsCorrectNotificationType()\n    {\n        // Arrange\n        var user = TK.CreateValidUser();\n        var chat = TK.CreateGroupChat();\n        var message = TK.CreateValidMessage();\n        message.Chat = chat;\n        message.Text = \"Test message\";\n        var reason = \"Известное спам-сообщение\";\n\n        // Act\n        await _userBanService.AutoBanAsync(message, reason, CancellationToken.None);\n\n        // Assert\n        _messageServiceMock.Verify(\n            x => x.SendLogNotificationAsync(\n                LogNotificationType.AutoBanKnownSpam,\n                It.IsAny<AutoBanNotificationData>(),\n                It.IsAny<CancellationToken>()),\n            Times.Once);\n    }\n\n    [Test]\n    public async Task AutoBan_TextMentionReason_SelectsCorrectNotificationType()\n    {\n        // Arrange\n        var user = TK.CreateValidUser();\n        var chat = TK.CreateGroupChat();\n        var message = TK.CreateValidMessage();\n        message.Chat = chat;\n"
+    }
+  ]
+}

@@ -1,0 +1,503 @@
+{
+  "schema_version": "test-audit-batch-v1",
+  "batch_no": 61,
+  "purpose": "local LLM audit input",
+  "instructions": "Return JSONL only. One audit object per input test. No markdown. No code edits.",
+  "tests": [
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestInfrastructure/ConfigurationExceptionTestFactoryTests.cs::ConfigurationExceptionTestFactoryTests::CreateConfigurationException_ConfiguresAllDependencies",
+        "file": "TestInfrastructure/ConfigurationExceptionTestFactoryTests.cs",
+        "namespace": "ClubDoorman.TestInfrastructure",
+        "class": "ConfigurationExceptionTestFactoryTests",
+        "test_name": "CreateConfigurationException_ConfiguresAllDependencies",
+        "line": 32,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "test-infrastructure"
+        ],
+        "body_lines": 11,
+        "declared_area_from_path": "TestInfrastructure",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 162
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestInfrastructure/ConfigurationExceptionTestFactoryTests.cs\n# Lines 2-59 (test starts at line 32)\nusing ClubDoorman.Infrastructure;\nusing Microsoft.Extensions.Logging;\nusing Microsoft.Extensions.Logging.Abstractions;\nusing Moq;\nusing NUnit.Framework;\n\nnamespace ClubDoorman.TestInfrastructure;\n\n/// <summary>\n/// Тесты для ConfigurationExceptionTestFactory\n/// Автоматически сгенерировано\n/// </summary>\n[TestFixture]\n[Category(\"test-infrastructure\")]\npublic class ConfigurationExceptionTestFactoryTests\n{\n    [Test]\n    public void CreateConfigurationException_ReturnsWorkingInstance()\n    {\n        // Arrange\n        var factory = new ConfigurationExceptionTestFactory();\n\n        // Act\n        var instance = factory.CreateConfigurationException();\n\n        // Assert\n        Assert.That(instance, Is.Not.Null);\n        Assert.That(instance, Is.InstanceOf<ConfigurationException>());\n    }\n\n    [Test]\n    public void CreateConfigurationException_ConfiguresAllDependencies()\n    {\n        // Arrange\n        var factory = new ConfigurationExceptionTestFactory();\n\n        // Act\n        var instance = factory.CreateConfigurationException();\n\n        // Assert\n        // Проверяем что все зависимости настроены\n        Assert.That(instance, Is.Not.Null);\n    }\n\n    [Test]\n    public void CreateConfigurationException_CreatesFreshInstanceEachTime()\n    {\n        // Arrange\n        var factory = new ConfigurationExceptionTestFactory();\n\n        // Act\n        var instance1 = factory.CreateConfigurationException();\n        var instance2 = factory.CreateConfigurationException();\n\n        // Assert\n        Assert.That(instance1, Is.Not.SameAs(instance2));\n    }\n}\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestInfrastructure/MimicryClassifierTestFactoryTests.cs::MimicryClassifierTestFactoryTests::CreateMimicryClassifier_ReturnsWorkingInstance",
+        "file": "TestInfrastructure/MimicryClassifierTestFactoryTests.cs",
+        "namespace": "ClubDoorman.TestInfrastructure",
+        "class": "MimicryClassifierTestFactoryTests",
+        "test_name": "CreateMimicryClassifier_ReturnsWorkingInstance",
+        "line": 20,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "test-infrastructure"
+        ],
+        "body_lines": 11,
+        "declared_area_from_path": "TestInfrastructure",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 177
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestInfrastructure/MimicryClassifierTestFactoryTests.cs\n# Lines 1-50 (test starts at line 20)\nusing ClubDoorman.Services.UserBan;\nusing ClubDoorman.Services;\nusing ClubDoorman.Services.UserBan;\nusing Microsoft.Extensions.Logging;\nusing Microsoft.Extensions.Logging.Abstractions;\nusing Moq;\nusing NUnit.Framework;\nusing ClubDoorman.Services.AI;\n\nnamespace ClubDoorman.TestInfrastructure;\n\n/// <summary>\n/// Тесты для MimicryClassifierTestFactory\n/// Автоматически сгенерировано\n/// </summary>\n[TestFixture]\n[Category(\"test-infrastructure\")]\npublic class MimicryClassifierTestFactoryTests\n{\n    [Test]\n    public void CreateMimicryClassifier_ReturnsWorkingInstance()\n    {\n        // Arrange\n        var factory = new MimicryClassifierTestFactory();\n\n        // Act\n        var instance = factory.CreateMimicryClassifier();\n\n        // Assert\n        Assert.That(instance, Is.Not.Null);\n        Assert.That(instance, Is.InstanceOf<MimicryClassifier>());\n    }\n\n    [Test]\n    public void CreateMimicryClassifier_ConfiguresAllDependencies()\n    {\n        // Arrange\n        var factory = new MimicryClassifierTestFactory();\n\n        // Act\n        var instance = factory.CreateMimicryClassifier();\n\n        // Assert\n        // Проверяем что все зависимости настроены\n        Assert.That(instance, Is.Not.Null);\n    }\n\n    [Test]\n    public void CreateMimicryClassifier_CreatesFreshInstanceEachTime()\n    {\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestInfrastructure/MimicryClassifierTestFactoryTests.cs::MimicryClassifierTestFactoryTests::CreateMimicryClassifier_ConfiguresAllDependencies",
+        "file": "TestInfrastructure/MimicryClassifierTestFactoryTests.cs",
+        "namespace": "ClubDoorman.TestInfrastructure",
+        "class": "MimicryClassifierTestFactoryTests",
+        "test_name": "CreateMimicryClassifier_ConfiguresAllDependencies",
+        "line": 34,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "test-infrastructure"
+        ],
+        "body_lines": 11,
+        "declared_area_from_path": "TestInfrastructure",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 178
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestInfrastructure/MimicryClassifierTestFactoryTests.cs\n# Lines 4-64 (test starts at line 34)\nusing Microsoft.Extensions.Logging;\nusing Microsoft.Extensions.Logging.Abstractions;\nusing Moq;\nusing NUnit.Framework;\nusing ClubDoorman.Services.AI;\n\nnamespace ClubDoorman.TestInfrastructure;\n\n/// <summary>\n/// Тесты для MimicryClassifierTestFactory\n/// Автоматически сгенерировано\n/// </summary>\n[TestFixture]\n[Category(\"test-infrastructure\")]\npublic class MimicryClassifierTestFactoryTests\n{\n    [Test]\n    public void CreateMimicryClassifier_ReturnsWorkingInstance()\n    {\n        // Arrange\n        var factory = new MimicryClassifierTestFactory();\n\n        // Act\n        var instance = factory.CreateMimicryClassifier();\n\n        // Assert\n        Assert.That(instance, Is.Not.Null);\n        Assert.That(instance, Is.InstanceOf<MimicryClassifier>());\n    }\n\n    [Test]\n    public void CreateMimicryClassifier_ConfiguresAllDependencies()\n    {\n        // Arrange\n        var factory = new MimicryClassifierTestFactory();\n\n        // Act\n        var instance = factory.CreateMimicryClassifier();\n\n        // Assert\n        // Проверяем что все зависимости настроены\n        Assert.That(instance, Is.Not.Null);\n    }\n\n    [Test]\n    public void CreateMimicryClassifier_CreatesFreshInstanceEachTime()\n    {\n        // Arrange\n        var factory = new MimicryClassifierTestFactory();\n\n        // Act\n        var instance1 = factory.CreateMimicryClassifier();\n        var instance2 = factory.CreateMimicryClassifier();\n\n        // Assert\n        Assert.That(instance1, Is.Not.SameAs(instance2));\n    }\n\n    [Test]\n    public void LoggerMock_IsProperlyConfigured()\n    {\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestInfrastructure/MimicryClassifierTestFactoryTests.cs::MimicryClassifierTestFactoryTests::LoggerMock_IsProperlyConfigured",
+        "file": "TestInfrastructure/MimicryClassifierTestFactoryTests.cs",
+        "namespace": "ClubDoorman.TestInfrastructure",
+        "class": "MimicryClassifierTestFactoryTests",
+        "test_name": "LoggerMock_IsProperlyConfigured",
+        "line": 62,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "test-infrastructure"
+        ],
+        "body_lines": 8,
+        "declared_area_from_path": "TestInfrastructure",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 180
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestInfrastructure/MimicryClassifierTestFactoryTests.cs\n# Lines 32-72 (test starts at line 62)\n    }\n\n    [Test]\n    public void CreateMimicryClassifier_ConfiguresAllDependencies()\n    {\n        // Arrange\n        var factory = new MimicryClassifierTestFactory();\n\n        // Act\n        var instance = factory.CreateMimicryClassifier();\n\n        // Assert\n        // Проверяем что все зависимости настроены\n        Assert.That(instance, Is.Not.Null);\n    }\n\n    [Test]\n    public void CreateMimicryClassifier_CreatesFreshInstanceEachTime()\n    {\n        // Arrange\n        var factory = new MimicryClassifierTestFactory();\n\n        // Act\n        var instance1 = factory.CreateMimicryClassifier();\n        var instance2 = factory.CreateMimicryClassifier();\n\n        // Assert\n        Assert.That(instance1, Is.Not.SameAs(instance2));\n    }\n\n    [Test]\n    public void LoggerMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new MimicryClassifierTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.LoggerMock, Is.Not.Null);\n        Assert.That(factory.LoggerMock.Object, Is.Not.Null);\n    }\n}\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestInfrastructure/MockAiChecksFactoryTests.cs::MockAiChecksFactoryTests::CreateMockAiChecks_WithDefaultParameters_ReturnsMockWithDefaultValues",
+        "file": "TestInfrastructure/MockAiChecksFactoryTests.cs",
+        "namespace": "ClubDoorman.TestInfrastructure",
+        "class": "MockAiChecksFactoryTests",
+        "test_name": "CreateMockAiChecks_WithDefaultParameters_ReturnsMockWithDefaultValues",
+        "line": 15,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "fast"
+        ],
+        "body_lines": 8,
+        "declared_area_from_path": "TestInfrastructure",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 181
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestInfrastructure/MockAiChecksFactoryTests.cs\n# Lines 1-45 (test starts at line 15)\nusing ClubDoorman.Services.UserBan;\nusing NUnit.Framework;\nusing ClubDoorman.Infrastructure;\nusing ClubDoorman.Services;\nusing ClubDoorman.Services.UserBan;\nusing Telegram.Bot.Types;\nusing ClubDoorman.Services.AI;\n\nnamespace ClubDoorman.TestInfrastructure;\n\n[TestFixture]\n[Category(\"fast\")]\npublic class MockAiChecksFactoryTests\n{\n    [Test]\n    public void CreateMockAiChecks_WithDefaultParameters_ReturnsMockWithDefaultValues()\n    {\n        // Act\n        var mockAi = TK.CreateMockAiChecks();\n\n        // Assert\n        Assert.That(mockAi, Is.Not.Null);\n        Assert.That(mockAi, Is.InstanceOf<Mock<IAiChecks>>());\n    }\n\n    [Test]\n    public void CreateMockAiChecks_WithCustomParameters_ReturnsMockWithCustomValues()\n    {\n        // Arrange\n        var spamProb = 0.8;\n        var attentionProb = 0.6;\n        var eroticProb = 0.4;\n        var suspiciousProb = 0.7;\n\n        // Act\n        var mockAi = TK.CreateMockAiChecks(\n            spamProb, attentionProb, eroticProb, suspiciousProb);\n\n        // Assert\n        Assert.That(mockAi, Is.Not.Null);\n        Assert.That(mockAi, Is.InstanceOf<Mock<IAiChecks>>());\n    }\n\n    [Test]\n    public void CreateSpamScenario_ReturnsHighProbabilities()\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestInfrastructure/MockAiChecksFactoryTests.cs::MockAiChecksFactoryTests::CreateMockAiChecks_WithCustomParameters_ReturnsMockWithCustomValues",
+        "file": "TestInfrastructure/MockAiChecksFactoryTests.cs",
+        "namespace": "ClubDoorman.TestInfrastructure",
+        "class": "MockAiChecksFactoryTests",
+        "test_name": "CreateMockAiChecks_WithCustomParameters_ReturnsMockWithCustomValues",
+        "line": 26,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "fast"
+        ],
+        "body_lines": 15,
+        "declared_area_from_path": "TestInfrastructure",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 182
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestInfrastructure/MockAiChecksFactoryTests.cs\n# Lines 1-56 (test starts at line 26)\nusing ClubDoorman.Services.UserBan;\nusing NUnit.Framework;\nusing ClubDoorman.Infrastructure;\nusing ClubDoorman.Services;\nusing ClubDoorman.Services.UserBan;\nusing Telegram.Bot.Types;\nusing ClubDoorman.Services.AI;\n\nnamespace ClubDoorman.TestInfrastructure;\n\n[TestFixture]\n[Category(\"fast\")]\npublic class MockAiChecksFactoryTests\n{\n    [Test]\n    public void CreateMockAiChecks_WithDefaultParameters_ReturnsMockWithDefaultValues()\n    {\n        // Act\n        var mockAi = TK.CreateMockAiChecks();\n\n        // Assert\n        Assert.That(mockAi, Is.Not.Null);\n        Assert.That(mockAi, Is.InstanceOf<Mock<IAiChecks>>());\n    }\n\n    [Test]\n    public void CreateMockAiChecks_WithCustomParameters_ReturnsMockWithCustomValues()\n    {\n        // Arrange\n        var spamProb = 0.8;\n        var attentionProb = 0.6;\n        var eroticProb = 0.4;\n        var suspiciousProb = 0.7;\n\n        // Act\n        var mockAi = TK.CreateMockAiChecks(\n            spamProb, attentionProb, eroticProb, suspiciousProb);\n\n        // Assert\n        Assert.That(mockAi, Is.Not.Null);\n        Assert.That(mockAi, Is.InstanceOf<Mock<IAiChecks>>());\n    }\n\n    [Test]\n    public void CreateSpamScenario_ReturnsHighProbabilities()\n    {\n        // Act\n        var mockAi = TK.CreateSpamAiChecks();\n\n        // Assert\n        Assert.That(mockAi, Is.Not.Null);\n        Assert.That(mockAi, Is.InstanceOf<Mock<IAiChecks>>());\n    }\n\n    [Test]\n    public void CreateNormalScenario_ReturnsLowProbabilities()\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestInfrastructure/MockAiChecksFactoryTests.cs::MockAiChecksFactoryTests::CreateSpamScenario_ReturnsHighProbabilities",
+        "file": "TestInfrastructure/MockAiChecksFactoryTests.cs",
+        "namespace": "ClubDoorman.TestInfrastructure",
+        "class": "MockAiChecksFactoryTests",
+        "test_name": "CreateSpamScenario_ReturnsHighProbabilities",
+        "line": 44,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "fast"
+        ],
+        "body_lines": 8,
+        "declared_area_from_path": "TestInfrastructure",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 183
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestInfrastructure/MockAiChecksFactoryTests.cs\n# Lines 14-74 (test starts at line 44)\n{\n    [Test]\n    public void CreateMockAiChecks_WithDefaultParameters_ReturnsMockWithDefaultValues()\n    {\n        // Act\n        var mockAi = TK.CreateMockAiChecks();\n\n        // Assert\n        Assert.That(mockAi, Is.Not.Null);\n        Assert.That(mockAi, Is.InstanceOf<Mock<IAiChecks>>());\n    }\n\n    [Test]\n    public void CreateMockAiChecks_WithCustomParameters_ReturnsMockWithCustomValues()\n    {\n        // Arrange\n        var spamProb = 0.8;\n        var attentionProb = 0.6;\n        var eroticProb = 0.4;\n        var suspiciousProb = 0.7;\n\n        // Act\n        var mockAi = TK.CreateMockAiChecks(\n            spamProb, attentionProb, eroticProb, suspiciousProb);\n\n        // Assert\n        Assert.That(mockAi, Is.Not.Null);\n        Assert.That(mockAi, Is.InstanceOf<Mock<IAiChecks>>());\n    }\n\n    [Test]\n    public void CreateSpamScenario_ReturnsHighProbabilities()\n    {\n        // Act\n        var mockAi = TK.CreateSpamAiChecks();\n\n        // Assert\n        Assert.That(mockAi, Is.Not.Null);\n        Assert.That(mockAi, Is.InstanceOf<Mock<IAiChecks>>());\n    }\n\n    [Test]\n    public void CreateNormalScenario_ReturnsLowProbabilities()\n    {\n        // Act\n        var mockAi = TK.CreateNormalAiChecks();\n\n        // Assert\n        Assert.That(mockAi, Is.Not.Null);\n        Assert.That(mockAi, Is.InstanceOf<Mock<IAiChecks>>());\n    }\n\n    [Test]\n    public void CreateSuspiciousUserScenario_ReturnsHighSuspiciousProbability()\n    {\n        // Act\n        var mockAi = TK.CreateSuspiciousUserAiChecks();\n\n        // Assert\n        Assert.That(mockAi, Is.Not.Null);\n        Assert.That(mockAi, Is.InstanceOf<Mock<IAiChecks>>());\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestInfrastructure/MockAiChecksFactoryTests.cs::MockAiChecksFactoryTests::CreateNormalScenario_ReturnsLowProbabilities",
+        "file": "TestInfrastructure/MockAiChecksFactoryTests.cs",
+        "namespace": "ClubDoorman.TestInfrastructure",
+        "class": "MockAiChecksFactoryTests",
+        "test_name": "CreateNormalScenario_ReturnsLowProbabilities",
+        "line": 55,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "fast"
+        ],
+        "body_lines": 8,
+        "declared_area_from_path": "TestInfrastructure",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 184
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestInfrastructure/MockAiChecksFactoryTests.cs\n# Lines 25-85 (test starts at line 55)\n\n    [Test]\n    public void CreateMockAiChecks_WithCustomParameters_ReturnsMockWithCustomValues()\n    {\n        // Arrange\n        var spamProb = 0.8;\n        var attentionProb = 0.6;\n        var eroticProb = 0.4;\n        var suspiciousProb = 0.7;\n\n        // Act\n        var mockAi = TK.CreateMockAiChecks(\n            spamProb, attentionProb, eroticProb, suspiciousProb);\n\n        // Assert\n        Assert.That(mockAi, Is.Not.Null);\n        Assert.That(mockAi, Is.InstanceOf<Mock<IAiChecks>>());\n    }\n\n    [Test]\n    public void CreateSpamScenario_ReturnsHighProbabilities()\n    {\n        // Act\n        var mockAi = TK.CreateSpamAiChecks();\n\n        // Assert\n        Assert.That(mockAi, Is.Not.Null);\n        Assert.That(mockAi, Is.InstanceOf<Mock<IAiChecks>>());\n    }\n\n    [Test]\n    public void CreateNormalScenario_ReturnsLowProbabilities()\n    {\n        // Act\n        var mockAi = TK.CreateNormalAiChecks();\n\n        // Assert\n        Assert.That(mockAi, Is.Not.Null);\n        Assert.That(mockAi, Is.InstanceOf<Mock<IAiChecks>>());\n    }\n\n    [Test]\n    public void CreateSuspiciousUserScenario_ReturnsHighSuspiciousProbability()\n    {\n        // Act\n        var mockAi = TK.CreateSuspiciousUserAiChecks();\n\n        // Assert\n        Assert.That(mockAi, Is.Not.Null);\n        Assert.That(mockAi, Is.InstanceOf<Mock<IAiChecks>>());\n    }\n\n    [Test]\n    public void CreateErrorScenario_ReturnsMockThatThrowsException()\n    {\n        // Act\n        var mockAi = TK.CreateErrorAiChecks();\n\n        // Assert\n        Assert.That(mockAi, Is.Not.Null);\n        Assert.That(mockAi, Is.InstanceOf<Mock<IAiChecks>>());\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestInfrastructure/MockAiChecksFactoryTests.cs::MockAiChecksFactoryTests::CreateSuspiciousUserScenario_ReturnsHighSuspiciousProbability",
+        "file": "TestInfrastructure/MockAiChecksFactoryTests.cs",
+        "namespace": "ClubDoorman.TestInfrastructure",
+        "class": "MockAiChecksFactoryTests",
+        "test_name": "CreateSuspiciousUserScenario_ReturnsHighSuspiciousProbability",
+        "line": 66,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "fast"
+        ],
+        "body_lines": 8,
+        "declared_area_from_path": "TestInfrastructure",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 185
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestInfrastructure/MockAiChecksFactoryTests.cs\n# Lines 36-96 (test starts at line 66)\n        var mockAi = TK.CreateMockAiChecks(\n            spamProb, attentionProb, eroticProb, suspiciousProb);\n\n        // Assert\n        Assert.That(mockAi, Is.Not.Null);\n        Assert.That(mockAi, Is.InstanceOf<Mock<IAiChecks>>());\n    }\n\n    [Test]\n    public void CreateSpamScenario_ReturnsHighProbabilities()\n    {\n        // Act\n        var mockAi = TK.CreateSpamAiChecks();\n\n        // Assert\n        Assert.That(mockAi, Is.Not.Null);\n        Assert.That(mockAi, Is.InstanceOf<Mock<IAiChecks>>());\n    }\n\n    [Test]\n    public void CreateNormalScenario_ReturnsLowProbabilities()\n    {\n        // Act\n        var mockAi = TK.CreateNormalAiChecks();\n\n        // Assert\n        Assert.That(mockAi, Is.Not.Null);\n        Assert.That(mockAi, Is.InstanceOf<Mock<IAiChecks>>());\n    }\n\n    [Test]\n    public void CreateSuspiciousUserScenario_ReturnsHighSuspiciousProbability()\n    {\n        // Act\n        var mockAi = TK.CreateSuspiciousUserAiChecks();\n\n        // Assert\n        Assert.That(mockAi, Is.Not.Null);\n        Assert.That(mockAi, Is.InstanceOf<Mock<IAiChecks>>());\n    }\n\n    [Test]\n    public void CreateErrorScenario_ReturnsMockThatThrowsException()\n    {\n        // Act\n        var mockAi = TK.CreateErrorAiChecks();\n\n        // Assert\n        Assert.That(mockAi, Is.Not.Null);\n        Assert.That(mockAi, Is.InstanceOf<Mock<IAiChecks>>());\n    }\n\n    [Test]\n    public void CreateErrorScenario_WithCustomException_ReturnsMockThatThrowsCustomException()\n    {\n        // Arrange\n        var customException = new InvalidOperationException(\"Custom error\");\n\n        // Act\n        var mockAi = TK.CreateErrorAiChecks(customException);\n\n"
+    }
+  ]
+}

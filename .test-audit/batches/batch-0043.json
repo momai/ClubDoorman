@@ -1,0 +1,503 @@
+{
+  "schema_version": "test-audit-batch-v1",
+  "batch_no": 43,
+  "purpose": "local LLM audit input",
+  "instructions": "Return JSONL only. One audit object per input test. No markdown. No code edits.",
+  "tests": [
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Moderation/SpamHamClassifierTests.cs::SpamHamClassifierTests::AddSpam_ValidMessage_AddsToDataset",
+        "file": "Unit/Moderation/SpamHamClassifierTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Moderation",
+        "class": "SpamHamClassifierTests",
+        "test_name": "AddSpam_ValidMessage_AddsToDataset",
+        "line": 175,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 11,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": true,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "assert_pass"
+        ],
+        "_source_lineno": 517
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Moderation/SpamHamClassifierTests.cs\n# Lines 145-205 (test starts at line 175)\n        var validResult = await _classifierMock.Object.IsSpam(validMessage.Text!);\n        var spamResult = await _classifierMock.Object.IsSpam(spamMessage.Text!);\n\n        // Assert\n        Assert.That(validResult.Score, Is.GreaterThanOrEqualTo(0.0f));\n        Assert.That(validResult.Score, Is.LessThanOrEqualTo(1.0f));\n        Assert.That(spamResult.Score, Is.GreaterThanOrEqualTo(0.0f));\n        Assert.That(spamResult.Score, Is.LessThanOrEqualTo(1.0f));\n    }\n\n    [Test]\n    public async Task IsSpam_DifferentChatTypes_HandlesCorrectly()\n    {\n        // Arrange\n        var groupMessage = TK.CreateValidMessage();\n        var privateMessage = TK.CreateSpamMessage();\n        _classifierMock.Setup(x => x.IsSpam(groupMessage.Text!))\n            .ReturnsAsync((false, 0.2f));\n        _classifierMock.Setup(x => x.IsSpam(privateMessage.Text!))\n            .ReturnsAsync((true, 0.8f));\n\n        // Act\n        var groupResult = await _classifierMock.Object.IsSpam(groupMessage.Text!);\n        var privateResult = await _classifierMock.Object.IsSpam(privateMessage.Text!);\n\n        // Assert\n        Assert.That(groupResult.Score, Is.GreaterThanOrEqualTo(0.0f));\n        Assert.That(privateResult.Score, Is.GreaterThanOrEqualTo(0.0f));\n    }\n\n    [Test]\n    public async Task AddSpam_ValidMessage_AddsToDataset()\n    {\n        // Arrange\n        var message = TK.CreateSpamMessage();\n\n        // Act\n        await _classifierMock.Object.AddSpam(message.Text!);\n\n        // Assert\n        // Проверяем, что метод выполнился без исключений\n        Assert.Pass(\"AddSpam executed successfully\");\n    }\n\n    [Test]\n    public async Task AddHam_ValidMessage_AddsToDataset()\n    {\n        // Arrange\n        var message = TK.CreateValidMessage();\n\n        // Act\n        await _classifierMock.Object.AddHam(message.Text!);\n\n        // Assert\n        // Проверяем, что метод выполнился без исключений\n        Assert.Pass(\"AddHam executed successfully\");\n    }\n\n    [Test]\n    public async Task AddSpam_EmptyMessage_HandlesCorrectly()\n    {\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Moderation/SpamHamClassifierTests.cs::SpamHamClassifierTests::AddHam_ValidMessage_AddsToDataset",
+        "file": "Unit/Moderation/SpamHamClassifierTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Moderation",
+        "class": "SpamHamClassifierTests",
+        "test_name": "AddHam_ValidMessage_AddsToDataset",
+        "line": 189,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 11,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": true,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "assert_pass"
+        ],
+        "_source_lineno": 518
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Moderation/SpamHamClassifierTests.cs\n# Lines 159-219 (test starts at line 189)\n        var groupMessage = TK.CreateValidMessage();\n        var privateMessage = TK.CreateSpamMessage();\n        _classifierMock.Setup(x => x.IsSpam(groupMessage.Text!))\n            .ReturnsAsync((false, 0.2f));\n        _classifierMock.Setup(x => x.IsSpam(privateMessage.Text!))\n            .ReturnsAsync((true, 0.8f));\n\n        // Act\n        var groupResult = await _classifierMock.Object.IsSpam(groupMessage.Text!);\n        var privateResult = await _classifierMock.Object.IsSpam(privateMessage.Text!);\n\n        // Assert\n        Assert.That(groupResult.Score, Is.GreaterThanOrEqualTo(0.0f));\n        Assert.That(privateResult.Score, Is.GreaterThanOrEqualTo(0.0f));\n    }\n\n    [Test]\n    public async Task AddSpam_ValidMessage_AddsToDataset()\n    {\n        // Arrange\n        var message = TK.CreateSpamMessage();\n\n        // Act\n        await _classifierMock.Object.AddSpam(message.Text!);\n\n        // Assert\n        // Проверяем, что метод выполнился без исключений\n        Assert.Pass(\"AddSpam executed successfully\");\n    }\n\n    [Test]\n    public async Task AddHam_ValidMessage_AddsToDataset()\n    {\n        // Arrange\n        var message = TK.CreateValidMessage();\n\n        // Act\n        await _classifierMock.Object.AddHam(message.Text!);\n\n        // Assert\n        // Проверяем, что метод выполнился без исключений\n        Assert.Pass(\"AddHam executed successfully\");\n    }\n\n    [Test]\n    public async Task AddSpam_EmptyMessage_HandlesCorrectly()\n    {\n        // Arrange\n        var message = TK.CreateEmptyMessage();\n\n        // Act\n        await _classifierMock.Object.AddSpam(message.Text!);\n\n        // Assert\n        // Проверяем, что метод выполнился без исключений\n        Assert.Pass(\"AddSpam with empty message executed successfully\");\n    }\n\n    [Test]\n    public async Task AddHam_EmptyMessage_HandlesCorrectly()\n    {\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Moderation/SpamHamClassifierTests.cs::SpamHamClassifierTests::AddSpam_EmptyMessage_HandlesCorrectly",
+        "file": "Unit/Moderation/SpamHamClassifierTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Moderation",
+        "class": "SpamHamClassifierTests",
+        "test_name": "AddSpam_EmptyMessage_HandlesCorrectly",
+        "line": 203,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 11,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": true,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "assert_pass"
+        ],
+        "_source_lineno": 519
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Moderation/SpamHamClassifierTests.cs\n# Lines 173-233 (test starts at line 203)\n    }\n\n    [Test]\n    public async Task AddSpam_ValidMessage_AddsToDataset()\n    {\n        // Arrange\n        var message = TK.CreateSpamMessage();\n\n        // Act\n        await _classifierMock.Object.AddSpam(message.Text!);\n\n        // Assert\n        // Проверяем, что метод выполнился без исключений\n        Assert.Pass(\"AddSpam executed successfully\");\n    }\n\n    [Test]\n    public async Task AddHam_ValidMessage_AddsToDataset()\n    {\n        // Arrange\n        var message = TK.CreateValidMessage();\n\n        // Act\n        await _classifierMock.Object.AddHam(message.Text!);\n\n        // Assert\n        // Проверяем, что метод выполнился без исключений\n        Assert.Pass(\"AddHam executed successfully\");\n    }\n\n    [Test]\n    public async Task AddSpam_EmptyMessage_HandlesCorrectly()\n    {\n        // Arrange\n        var message = TK.CreateEmptyMessage();\n\n        // Act\n        await _classifierMock.Object.AddSpam(message.Text!);\n\n        // Assert\n        // Проверяем, что метод выполнился без исключений\n        Assert.Pass(\"AddSpam with empty message executed successfully\");\n    }\n\n    [Test]\n    public async Task AddHam_EmptyMessage_HandlesCorrectly()\n    {\n        // Arrange\n        var message = TK.CreateEmptyMessage();\n\n        // Act\n        await _classifierMock.Object.AddHam(message.Text!);\n\n        // Assert\n        // Проверяем, что метод выполнился без исключений\n        Assert.Pass(\"AddHam with empty message executed successfully\");\n    }\n\n    [Test]\n    public async Task AddSpam_LongMessage_HandlesCorrectly()\n    {\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Moderation/SpamHamClassifierTests.cs::SpamHamClassifierTests::AddHam_EmptyMessage_HandlesCorrectly",
+        "file": "Unit/Moderation/SpamHamClassifierTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Moderation",
+        "class": "SpamHamClassifierTests",
+        "test_name": "AddHam_EmptyMessage_HandlesCorrectly",
+        "line": 217,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 11,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": true,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "assert_pass"
+        ],
+        "_source_lineno": 520
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Moderation/SpamHamClassifierTests.cs\n# Lines 187-247 (test starts at line 217)\n    }\n\n    [Test]\n    public async Task AddHam_ValidMessage_AddsToDataset()\n    {\n        // Arrange\n        var message = TK.CreateValidMessage();\n\n        // Act\n        await _classifierMock.Object.AddHam(message.Text!);\n\n        // Assert\n        // Проверяем, что метод выполнился без исключений\n        Assert.Pass(\"AddHam executed successfully\");\n    }\n\n    [Test]\n    public async Task AddSpam_EmptyMessage_HandlesCorrectly()\n    {\n        // Arrange\n        var message = TK.CreateEmptyMessage();\n\n        // Act\n        await _classifierMock.Object.AddSpam(message.Text!);\n\n        // Assert\n        // Проверяем, что метод выполнился без исключений\n        Assert.Pass(\"AddSpam with empty message executed successfully\");\n    }\n\n    [Test]\n    public async Task AddHam_EmptyMessage_HandlesCorrectly()\n    {\n        // Arrange\n        var message = TK.CreateEmptyMessage();\n\n        // Act\n        await _classifierMock.Object.AddHam(message.Text!);\n\n        // Assert\n        // Проверяем, что метод выполнился без исключений\n        Assert.Pass(\"AddHam with empty message executed successfully\");\n    }\n\n    [Test]\n    public async Task AddSpam_LongMessage_HandlesCorrectly()\n    {\n        // Arrange\n        var message = TK.CreateLongMessage();\n\n        // Act\n        await _classifierMock.Object.AddSpam(message.Text!);\n\n        // Assert\n        // Проверяем, что метод выполнился без исключений\n        Assert.Pass(\"AddSpam with long message executed successfully\");\n    }\n\n    [Test]\n    public async Task AddHam_LongMessage_HandlesCorrectly()\n    {\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Moderation/SpamHamClassifierTests.cs::SpamHamClassifierTests::AddSpam_LongMessage_HandlesCorrectly",
+        "file": "Unit/Moderation/SpamHamClassifierTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Moderation",
+        "class": "SpamHamClassifierTests",
+        "test_name": "AddSpam_LongMessage_HandlesCorrectly",
+        "line": 231,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 11,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": true,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "assert_pass"
+        ],
+        "_source_lineno": 521
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Moderation/SpamHamClassifierTests.cs\n# Lines 201-261 (test starts at line 231)\n    }\n\n    [Test]\n    public async Task AddSpam_EmptyMessage_HandlesCorrectly()\n    {\n        // Arrange\n        var message = TK.CreateEmptyMessage();\n\n        // Act\n        await _classifierMock.Object.AddSpam(message.Text!);\n\n        // Assert\n        // Проверяем, что метод выполнился без исключений\n        Assert.Pass(\"AddSpam with empty message executed successfully\");\n    }\n\n    [Test]\n    public async Task AddHam_EmptyMessage_HandlesCorrectly()\n    {\n        // Arrange\n        var message = TK.CreateEmptyMessage();\n\n        // Act\n        await _classifierMock.Object.AddHam(message.Text!);\n\n        // Assert\n        // Проверяем, что метод выполнился без исключений\n        Assert.Pass(\"AddHam with empty message executed successfully\");\n    }\n\n    [Test]\n    public async Task AddSpam_LongMessage_HandlesCorrectly()\n    {\n        // Arrange\n        var message = TK.CreateLongMessage();\n\n        // Act\n        await _classifierMock.Object.AddSpam(message.Text!);\n\n        // Assert\n        // Проверяем, что метод выполнился без исключений\n        Assert.Pass(\"AddSpam with long message executed successfully\");\n    }\n\n    [Test]\n    public async Task AddHam_LongMessage_HandlesCorrectly()\n    {\n        // Arrange\n        var message = TK.CreateLongMessage();\n\n        // Act\n        await _classifierMock.Object.AddHam(message.Text!);\n\n        // Assert\n        // Проверяем, что метод выполнился без исключений\n        Assert.Pass(\"AddHam with long message executed successfully\");\n    }\n\n    [Test]\n    public async Task AddSpam_SpecialCharacters_HandlesCorrectly()\n    {\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Moderation/SpamHamClassifierTests.cs::SpamHamClassifierTests::AddHam_LongMessage_HandlesCorrectly",
+        "file": "Unit/Moderation/SpamHamClassifierTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Moderation",
+        "class": "SpamHamClassifierTests",
+        "test_name": "AddHam_LongMessage_HandlesCorrectly",
+        "line": 245,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 11,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": true,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "assert_pass"
+        ],
+        "_source_lineno": 522
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Moderation/SpamHamClassifierTests.cs\n# Lines 215-275 (test starts at line 245)\n    }\n\n    [Test]\n    public async Task AddHam_EmptyMessage_HandlesCorrectly()\n    {\n        // Arrange\n        var message = TK.CreateEmptyMessage();\n\n        // Act\n        await _classifierMock.Object.AddHam(message.Text!);\n\n        // Assert\n        // Проверяем, что метод выполнился без исключений\n        Assert.Pass(\"AddHam with empty message executed successfully\");\n    }\n\n    [Test]\n    public async Task AddSpam_LongMessage_HandlesCorrectly()\n    {\n        // Arrange\n        var message = TK.CreateLongMessage();\n\n        // Act\n        await _classifierMock.Object.AddSpam(message.Text!);\n\n        // Assert\n        // Проверяем, что метод выполнился без исключений\n        Assert.Pass(\"AddSpam with long message executed successfully\");\n    }\n\n    [Test]\n    public async Task AddHam_LongMessage_HandlesCorrectly()\n    {\n        // Arrange\n        var message = TK.CreateLongMessage();\n\n        // Act\n        await _classifierMock.Object.AddHam(message.Text!);\n\n        // Assert\n        // Проверяем, что метод выполнился без исключений\n        Assert.Pass(\"AddHam with long message executed successfully\");\n    }\n\n    [Test]\n    public async Task AddSpam_SpecialCharacters_HandlesCorrectly()\n    {\n        // Arrange\n        var messageWithSpecialChars = \"Hello! @#$%^&*()_+-=[]{}|;':\\\",./<>?\";\n\n        // Act\n        await _classifierMock.Object.AddSpam(messageWithSpecialChars);\n\n        // Assert\n        // Проверяем, что метод выполнился без исключений\n        Assert.Pass(\"AddSpam with special characters executed successfully\");\n    }\n\n    [Test]\n    public async Task AddHam_SpecialCharacters_HandlesCorrectly()\n    {\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Moderation/SpamHamClassifierTests.cs::SpamHamClassifierTests::AddSpam_SpecialCharacters_HandlesCorrectly",
+        "file": "Unit/Moderation/SpamHamClassifierTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Moderation",
+        "class": "SpamHamClassifierTests",
+        "test_name": "AddSpam_SpecialCharacters_HandlesCorrectly",
+        "line": 259,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 11,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": true,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "assert_pass"
+        ],
+        "_source_lineno": 523
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Moderation/SpamHamClassifierTests.cs\n# Lines 229-289 (test starts at line 259)\n    }\n\n    [Test]\n    public async Task AddSpam_LongMessage_HandlesCorrectly()\n    {\n        // Arrange\n        var message = TK.CreateLongMessage();\n\n        // Act\n        await _classifierMock.Object.AddSpam(message.Text!);\n\n        // Assert\n        // Проверяем, что метод выполнился без исключений\n        Assert.Pass(\"AddSpam with long message executed successfully\");\n    }\n\n    [Test]\n    public async Task AddHam_LongMessage_HandlesCorrectly()\n    {\n        // Arrange\n        var message = TK.CreateLongMessage();\n\n        // Act\n        await _classifierMock.Object.AddHam(message.Text!);\n\n        // Assert\n        // Проверяем, что метод выполнился без исключений\n        Assert.Pass(\"AddHam with long message executed successfully\");\n    }\n\n    [Test]\n    public async Task AddSpam_SpecialCharacters_HandlesCorrectly()\n    {\n        // Arrange\n        var messageWithSpecialChars = \"Hello! @#$%^&*()_+-=[]{}|;':\\\",./<>?\";\n\n        // Act\n        await _classifierMock.Object.AddSpam(messageWithSpecialChars);\n\n        // Assert\n        // Проверяем, что метод выполнился без исключений\n        Assert.Pass(\"AddSpam with special characters executed successfully\");\n    }\n\n    [Test]\n    public async Task AddHam_SpecialCharacters_HandlesCorrectly()\n    {\n        // Arrange\n        var messageWithSpecialChars = \"Hello! @#$%^&*()_+-=[]{}|;':\\\",./<>?\";\n\n        // Act\n        await _classifierMock.Object.AddHam(messageWithSpecialChars);\n\n        // Assert\n        // Проверяем, что метод выполнился без исключений\n        Assert.Pass(\"AddHam with special characters executed successfully\");\n    }\n\n    [Test]\n    public async Task AddSpam_ConcurrentCalls_HandlesCorrectly()\n    {\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Moderation/SpamHamClassifierTests.cs::SpamHamClassifierTests::AddHam_SpecialCharacters_HandlesCorrectly",
+        "file": "Unit/Moderation/SpamHamClassifierTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Moderation",
+        "class": "SpamHamClassifierTests",
+        "test_name": "AddHam_SpecialCharacters_HandlesCorrectly",
+        "line": 273,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 11,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": true,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "assert_pass"
+        ],
+        "_source_lineno": 524
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Moderation/SpamHamClassifierTests.cs\n# Lines 243-303 (test starts at line 273)\n    }\n\n    [Test]\n    public async Task AddHam_LongMessage_HandlesCorrectly()\n    {\n        // Arrange\n        var message = TK.CreateLongMessage();\n\n        // Act\n        await _classifierMock.Object.AddHam(message.Text!);\n\n        // Assert\n        // Проверяем, что метод выполнился без исключений\n        Assert.Pass(\"AddHam with long message executed successfully\");\n    }\n\n    [Test]\n    public async Task AddSpam_SpecialCharacters_HandlesCorrectly()\n    {\n        // Arrange\n        var messageWithSpecialChars = \"Hello! @#$%^&*()_+-=[]{}|;':\\\",./<>?\";\n\n        // Act\n        await _classifierMock.Object.AddSpam(messageWithSpecialChars);\n\n        // Assert\n        // Проверяем, что метод выполнился без исключений\n        Assert.Pass(\"AddSpam with special characters executed successfully\");\n    }\n\n    [Test]\n    public async Task AddHam_SpecialCharacters_HandlesCorrectly()\n    {\n        // Arrange\n        var messageWithSpecialChars = \"Hello! @#$%^&*()_+-=[]{}|;':\\\",./<>?\";\n\n        // Act\n        await _classifierMock.Object.AddHam(messageWithSpecialChars);\n\n        // Assert\n        // Проверяем, что метод выполнился без исключений\n        Assert.Pass(\"AddHam with special characters executed successfully\");\n    }\n\n    [Test]\n    public async Task AddSpam_ConcurrentCalls_HandlesCorrectly()\n    {\n        // Arrange\n        var message = TK.CreateSpamMessage();\n        var tasks = new List<Task>();\n\n        // Act\n        for (int i = 0; i < 5; i++)\n        {\n            tasks.Add(_classifierMock.Object.AddSpam(message.Text!));\n        }\n\n        await Task.WhenAll(tasks);\n\n        // Assert\n        // Проверяем, что все вызовы выполнились без исключений\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Moderation/SpamHamClassifierTests.cs::SpamHamClassifierTests::AddSpam_ConcurrentCalls_HandlesCorrectly",
+        "file": "Unit/Moderation/SpamHamClassifierTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Moderation",
+        "class": "SpamHamClassifierTests",
+        "test_name": "AddSpam_ConcurrentCalls_HandlesCorrectly",
+        "line": 287,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 17,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": true,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "assert_pass"
+        ],
+        "_source_lineno": 525
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Moderation/SpamHamClassifierTests.cs\n# Lines 257-317 (test starts at line 287)\n    }\n\n    [Test]\n    public async Task AddSpam_SpecialCharacters_HandlesCorrectly()\n    {\n        // Arrange\n        var messageWithSpecialChars = \"Hello! @#$%^&*()_+-=[]{}|;':\\\",./<>?\";\n\n        // Act\n        await _classifierMock.Object.AddSpam(messageWithSpecialChars);\n\n        // Assert\n        // Проверяем, что метод выполнился без исключений\n        Assert.Pass(\"AddSpam with special characters executed successfully\");\n    }\n\n    [Test]\n    public async Task AddHam_SpecialCharacters_HandlesCorrectly()\n    {\n        // Arrange\n        var messageWithSpecialChars = \"Hello! @#$%^&*()_+-=[]{}|;':\\\",./<>?\";\n\n        // Act\n        await _classifierMock.Object.AddHam(messageWithSpecialChars);\n\n        // Assert\n        // Проверяем, что метод выполнился без исключений\n        Assert.Pass(\"AddHam with special characters executed successfully\");\n    }\n\n    [Test]\n    public async Task AddSpam_ConcurrentCalls_HandlesCorrectly()\n    {\n        // Arrange\n        var message = TK.CreateSpamMessage();\n        var tasks = new List<Task>();\n\n        // Act\n        for (int i = 0; i < 5; i++)\n        {\n            tasks.Add(_classifierMock.Object.AddSpam(message.Text!));\n        }\n\n        await Task.WhenAll(tasks);\n\n        // Assert\n        // Проверяем, что все вызовы выполнились без исключений\n        Assert.Pass(\"Concurrent AddSpam calls executed successfully\");\n    }\n\n    [Test]\n    public async Task AddHam_ConcurrentCalls_HandlesCorrectly()\n    {\n        // Arrange\n        var message = TK.CreateValidMessage();\n        var tasks = new List<Task>();\n\n        // Act - выполняем несколько операций параллельно\n        for (int i = 0; i < 5; i++)\n        {\n            tasks.Add(_classifierMock.Object.AddHam(message.Text!));\n"
+    }
+  ]
+}

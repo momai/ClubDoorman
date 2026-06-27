@@ -1,0 +1,457 @@
+{
+  "schema_version": "test-audit-batch-v1",
+  "batch_no": 33,
+  "purpose": "local LLM audit input",
+  "instructions": "Return JSONL only. One audit object per input test. No markdown. No code edits.",
+  "tests": [
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/MessagingModuleTests.cs::MessagingModuleTests::AddMessagingServices_ShouldRegisterIMessageService",
+        "file": "Unit/Services/MessagingModuleTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services.Messaging",
+        "class": "MessagingModuleTests",
+        "test_name": "AddMessagingServices_ShouldRegisterIMessageService",
+        "line": 95,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 9,
+        "declared_area_from_path": "Unit",
+        "construction_path": "service_collection_di",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": true,
+          "uses_real_service_provider": true,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "real_env_or_api"
+        ],
+        "_source_lineno": 671
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/MessagingModuleTests.cs\n# Lines 65-125 (test starts at line 95)\n    {\n        // Act\n        _services.AddMessagingServices();\n\n        // Assert\n        var serviceProvider = _services.BuildServiceProvider();\n        var loggingConfigService = serviceProvider.GetService<ILoggingConfigurationService>();\n        Assert.That(loggingConfigService, Is.Not.Null);\n    }\n\n    /// <summary>\n    /// POC: Проверка регистрации IServiceChatDispatcher\n    /// <tags>poc, service-chat-dispatcher, di-registration</tags>\n    /// </summary>\n    [Test]\n    public void AddMessagingServices_ShouldRegisterIServiceChatDispatcher()\n    {\n        // Act\n        _services.AddMessagingServices();\n\n        // Assert\n        var serviceProvider = _services.BuildServiceProvider();\n        var serviceChatDispatcher = serviceProvider.GetService<IServiceChatDispatcher>();\n        Assert.That(serviceChatDispatcher, Is.Not.Null);\n    }\n\n    /// <summary>\n    /// POC: Проверка регистрации IMessageService\n    /// <tags>poc, message-service, di-registration</tags>\n    /// </summary>\n    [Test]\n    public void AddMessagingServices_ShouldRegisterIMessageService()\n    {\n        // Act\n        _services.AddMessagingServices();\n\n        // Assert\n        var serviceProvider = _services.BuildServiceProvider();\n        var messageService = serviceProvider.GetService<IMessageService>();\n        Assert.That(messageService, Is.Not.Null);\n    }\n\n    /// <summary>\n    /// POC: Проверка регистрации IChatLinkFormatter\n    /// <tags>poc, chat-link-formatter, di-registration</tags>\n    /// </summary>\n    [Test]\n    public void AddMessagingServices_ShouldRegisterIChatLinkFormatter()\n    {\n        // Act\n        _services.AddMessagingServices();\n\n        // Assert\n        var serviceProvider = _services.BuildServiceProvider();\n        var chatLinkFormatter = serviceProvider.GetService<IChatLinkFormatter>();\n        Assert.That(chatLinkFormatter, Is.Not.Null);\n    }\n\n    /// <summary>\n    /// POC: Проверка регистрации INotificationService\n    /// <tags>poc, notification-service, di-registration</tags>\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/MessagingModuleTests.cs::MessagingModuleTests::AddMessagingServices_ShouldRegisterIChatLinkFormatter",
+        "file": "Unit/Services/MessagingModuleTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services.Messaging",
+        "class": "MessagingModuleTests",
+        "test_name": "AddMessagingServices_ShouldRegisterIChatLinkFormatter",
+        "line": 111,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 9,
+        "declared_area_from_path": "Unit",
+        "construction_path": "service_collection_di",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": true,
+          "uses_real_service_provider": true,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "real_env_or_api"
+        ],
+        "_source_lineno": 672
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/MessagingModuleTests.cs\n# Lines 81-141 (test starts at line 111)\n    {\n        // Act\n        _services.AddMessagingServices();\n\n        // Assert\n        var serviceProvider = _services.BuildServiceProvider();\n        var serviceChatDispatcher = serviceProvider.GetService<IServiceChatDispatcher>();\n        Assert.That(serviceChatDispatcher, Is.Not.Null);\n    }\n\n    /// <summary>\n    /// POC: Проверка регистрации IMessageService\n    /// <tags>poc, message-service, di-registration</tags>\n    /// </summary>\n    [Test]\n    public void AddMessagingServices_ShouldRegisterIMessageService()\n    {\n        // Act\n        _services.AddMessagingServices();\n\n        // Assert\n        var serviceProvider = _services.BuildServiceProvider();\n        var messageService = serviceProvider.GetService<IMessageService>();\n        Assert.That(messageService, Is.Not.Null);\n    }\n\n    /// <summary>\n    /// POC: Проверка регистрации IChatLinkFormatter\n    /// <tags>poc, chat-link-formatter, di-registration</tags>\n    /// </summary>\n    [Test]\n    public void AddMessagingServices_ShouldRegisterIChatLinkFormatter()\n    {\n        // Act\n        _services.AddMessagingServices();\n\n        // Assert\n        var serviceProvider = _services.BuildServiceProvider();\n        var chatLinkFormatter = serviceProvider.GetService<IChatLinkFormatter>();\n        Assert.That(chatLinkFormatter, Is.Not.Null);\n    }\n\n    /// <summary>\n    /// POC: Проверка регистрации INotificationService\n    /// <tags>poc, notification-service, di-registration</tags>\n    /// </summary>\n    [Test]\n    public void AddMessagingServices_ShouldRegisterINotificationService()\n    {\n        // Act\n        _services.AddMessagingServices();\n\n        // Assert\n        var serviceProvider = _services.BuildServiceProvider();\n        var notificationService = serviceProvider.GetService<INotificationService>();\n        Assert.That(notificationService, Is.Not.Null);\n    }\n\n    /// <summary>\n    /// POC: Проверка регистрации ILogChatService\n    /// <tags>poc, log-chat-service, di-registration</tags>\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/MessagingModuleTests.cs::MessagingModuleTests::AddMessagingServices_ShouldRegisterINotificationService",
+        "file": "Unit/Services/MessagingModuleTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services.Messaging",
+        "class": "MessagingModuleTests",
+        "test_name": "AddMessagingServices_ShouldRegisterINotificationService",
+        "line": 127,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 9,
+        "declared_area_from_path": "Unit",
+        "construction_path": "service_collection_di",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": true,
+          "uses_real_service_provider": true,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "real_env_or_api"
+        ],
+        "_source_lineno": 673
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/MessagingModuleTests.cs\n# Lines 97-157 (test starts at line 127)\n    {\n        // Act\n        _services.AddMessagingServices();\n\n        // Assert\n        var serviceProvider = _services.BuildServiceProvider();\n        var messageService = serviceProvider.GetService<IMessageService>();\n        Assert.That(messageService, Is.Not.Null);\n    }\n\n    /// <summary>\n    /// POC: Проверка регистрации IChatLinkFormatter\n    /// <tags>poc, chat-link-formatter, di-registration</tags>\n    /// </summary>\n    [Test]\n    public void AddMessagingServices_ShouldRegisterIChatLinkFormatter()\n    {\n        // Act\n        _services.AddMessagingServices();\n\n        // Assert\n        var serviceProvider = _services.BuildServiceProvider();\n        var chatLinkFormatter = serviceProvider.GetService<IChatLinkFormatter>();\n        Assert.That(chatLinkFormatter, Is.Not.Null);\n    }\n\n    /// <summary>\n    /// POC: Проверка регистрации INotificationService\n    /// <tags>poc, notification-service, di-registration</tags>\n    /// </summary>\n    [Test]\n    public void AddMessagingServices_ShouldRegisterINotificationService()\n    {\n        // Act\n        _services.AddMessagingServices();\n\n        // Assert\n        var serviceProvider = _services.BuildServiceProvider();\n        var notificationService = serviceProvider.GetService<INotificationService>();\n        Assert.That(notificationService, Is.Not.Null);\n    }\n\n    /// <summary>\n    /// POC: Проверка регистрации ILogChatService\n    /// <tags>poc, log-chat-service, di-registration</tags>\n    /// </summary>\n    [Test]\n    public void AddMessagingServices_ShouldRegisterILogChatService()\n    {\n        // Act\n        _services.AddMessagingServices();\n\n        // Assert\n        var serviceProvider = _services.BuildServiceProvider();\n        var logChatService = serviceProvider.GetService<ILogChatService>();\n        Assert.That(logChatService, Is.Not.Null);\n    }\n\n    /// <summary>\n    /// Production: Проверка возврата IServiceCollection для цепочки вызовов\n    /// <tags>production, fluent-api, di-registration</tags>\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/MessagingModuleTests.cs::MessagingModuleTests::AddMessagingServices_ShouldRegisterILogChatService",
+        "file": "Unit/Services/MessagingModuleTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services.Messaging",
+        "class": "MessagingModuleTests",
+        "test_name": "AddMessagingServices_ShouldRegisterILogChatService",
+        "line": 143,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 9,
+        "declared_area_from_path": "Unit",
+        "construction_path": "service_collection_di",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": true,
+          "uses_real_service_provider": true,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "real_env_or_api"
+        ],
+        "_source_lineno": 674
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/MessagingModuleTests.cs\n# Lines 113-168 (test starts at line 143)\n    {\n        // Act\n        _services.AddMessagingServices();\n\n        // Assert\n        var serviceProvider = _services.BuildServiceProvider();\n        var chatLinkFormatter = serviceProvider.GetService<IChatLinkFormatter>();\n        Assert.That(chatLinkFormatter, Is.Not.Null);\n    }\n\n    /// <summary>\n    /// POC: Проверка регистрации INotificationService\n    /// <tags>poc, notification-service, di-registration</tags>\n    /// </summary>\n    [Test]\n    public void AddMessagingServices_ShouldRegisterINotificationService()\n    {\n        // Act\n        _services.AddMessagingServices();\n\n        // Assert\n        var serviceProvider = _services.BuildServiceProvider();\n        var notificationService = serviceProvider.GetService<INotificationService>();\n        Assert.That(notificationService, Is.Not.Null);\n    }\n\n    /// <summary>\n    /// POC: Проверка регистрации ILogChatService\n    /// <tags>poc, log-chat-service, di-registration</tags>\n    /// </summary>\n    [Test]\n    public void AddMessagingServices_ShouldRegisterILogChatService()\n    {\n        // Act\n        _services.AddMessagingServices();\n\n        // Assert\n        var serviceProvider = _services.BuildServiceProvider();\n        var logChatService = serviceProvider.GetService<ILogChatService>();\n        Assert.That(logChatService, Is.Not.Null);\n    }\n\n    /// <summary>\n    /// Production: Проверка возврата IServiceCollection для цепочки вызовов\n    /// <tags>production, fluent-api, di-registration</tags>\n    /// </summary>\n    [Test]\n    public void AddMessagingServices_ShouldReturnServiceCollection()\n    {\n        // Act\n        var result = _services.AddMessagingServices();\n\n        // Assert\n        Assert.That(result, Is.SameAs(_services));\n    }\n}"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/ModerationServiceBusinessLogicTests.cs::ModerationServiceBusinessLogicTests::CheckMessageAsync_UserInBanlist_ReturnsBanAction",
+        "file": "Unit/Services/ModerationServiceBusinessLogicTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "ModerationServiceBusinessLogicTests",
+        "test_name": "CheckMessageAsync_UserInBanlist_ReturnsBanAction",
+        "line": 42,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "business-logic",
+          "moderation"
+        ],
+        "body_lines": 18,
+        "declared_area_from_path": "Unit",
+        "construction_path": "testkit_autofixture",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": true,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": true,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "testkit_autofixture"
+        ],
+        "_source_lineno": 695
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/ModerationServiceBusinessLogicTests.cs\n# Lines 12-72 (test starts at line 42)\nusing Telegram.Bot.Types.Enums;\nusing Telegram.Bot.Types.ReplyMarkups;\nusing ClubDoorman.Test.TestKit;\nusing ClubDoorman.TestInfrastructure;\n\nnamespace ClubDoorman.Test.Unit.Services;\n\n/// <summary>\n/// Тесты бизнес-логики ModerationService\n/// Проверяют реальную логику модерации\n/// </summary>\n[TestFixture]\n[Category(\"business-logic\")]\n[Category(\"moderation\")]\npublic class ModerationServiceBusinessLogicTests\n{\n    private ModerationServiceAdapter _service;\n    private FakeTelegramClient _fakeClient;\n    private ModerationServiceTestFactory _factory;\n\n    [SetUp]\n    public void Setup()\n    {\n        _fakeClient = new FakeTelegramClient();\n        _factory = new ModerationServiceTestFactory();\n        _service = _factory.CreateModerationService();\n    }\n\n    #region Тесты проверки сообщений\n\n    [Test]\n    public async Task CheckMessageAsync_UserInBanlist_ReturnsBanAction()\n    {\n        // Arrange - используем новые возможности TestKit\n        var userId = 123456L;\n        var message = TestKitBuilders.CreateMessage()\n            .FromUser(userId)\n            .WithText(\"Hello world\")\n            .Build();\n\n        _factory.WithUserManagerSetup(mock =>\n            mock.Setup(x => x.InBanlist(userId)).ReturnsAsync(true));\n\n        // Act\n        var result = await _service.CheckMessageAsync(message);\n\n        // Assert\n        Assert.That(result.Action, Is.EqualTo(ModerationAction.Ban));\n        Assert.That(result.Reason, Does.Contain(\"блэклисте\"));\n    }\n\n    [Test]\n    public async Task CheckMessageAsync_MessageWithButtons_ReturnsBanAction()\n    {\n        // Arrange - используем новые возможности TestKit\n        var message = TestKitBuilders.CreateMessage()\n            .FromUser(123456L)\n            .WithText(\"Hello\")\n            .Build();\n\n        // Добавляем кнопки (пока нет билдера для этого)\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/ModerationServiceBusinessLogicTests.cs::ModerationServiceBusinessLogicTests::CheckMessageAsync_MessageWithButtons_ReturnsBanAction",
+        "file": "Unit/Services/ModerationServiceBusinessLogicTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "ModerationServiceBusinessLogicTests",
+        "test_name": "CheckMessageAsync_MessageWithButtons_ReturnsBanAction",
+        "line": 63,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "business-logic",
+          "moderation"
+        ],
+        "body_lines": 20,
+        "declared_area_from_path": "Unit",
+        "construction_path": "testkit_autofixture",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": true,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": true,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "testkit_autofixture"
+        ],
+        "_source_lineno": 696
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/ModerationServiceBusinessLogicTests.cs\n# Lines 33-93 (test starts at line 63)\n    public void Setup()\n    {\n        _fakeClient = new FakeTelegramClient();\n        _factory = new ModerationServiceTestFactory();\n        _service = _factory.CreateModerationService();\n    }\n\n    #region Тесты проверки сообщений\n\n    [Test]\n    public async Task CheckMessageAsync_UserInBanlist_ReturnsBanAction()\n    {\n        // Arrange - используем новые возможности TestKit\n        var userId = 123456L;\n        var message = TestKitBuilders.CreateMessage()\n            .FromUser(userId)\n            .WithText(\"Hello world\")\n            .Build();\n\n        _factory.WithUserManagerSetup(mock =>\n            mock.Setup(x => x.InBanlist(userId)).ReturnsAsync(true));\n\n        // Act\n        var result = await _service.CheckMessageAsync(message);\n\n        // Assert\n        Assert.That(result.Action, Is.EqualTo(ModerationAction.Ban));\n        Assert.That(result.Reason, Does.Contain(\"блэклисте\"));\n    }\n\n    [Test]\n    public async Task CheckMessageAsync_MessageWithButtons_ReturnsBanAction()\n    {\n        // Arrange - используем новые возможности TestKit\n        var message = TestKitBuilders.CreateMessage()\n            .FromUser(123456L)\n            .WithText(\"Hello\")\n            .Build();\n\n        // Добавляем кнопки (пока нет билдера для этого)\n        message.ReplyMarkup = new InlineKeyboardMarkup(new[]\n        {\n            new[] { new InlineKeyboardButton(\"Button 1\") { CallbackData = \"test\" } }\n        });\n\n        // Act\n        var result = await _service.CheckMessageAsync(message);\n\n        // Assert\n        Assert.That(result.Action, Is.EqualTo(ModerationAction.Ban));\n        Assert.That(result.Reason, Does.Contain(\"кнопками\"));\n    }\n\n    [Test]\n    public async Task CheckMessageAsync_StoryMessage_ReturnsDeleteAction()\n    {\n        // Arrange - используем новые возможности TestKit\n        var message = TestKitBuilders.CreateMessage()\n            .FromUser(123456L)\n            .WithText(\"Hello\")\n            .Build();\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/ModerationServiceBusinessLogicTests.cs::ModerationServiceBusinessLogicTests::CheckMessageAsync_StoryMessage_ReturnsDeleteAction",
+        "file": "Unit/Services/ModerationServiceBusinessLogicTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "ModerationServiceBusinessLogicTests",
+        "test_name": "CheckMessageAsync_StoryMessage_ReturnsDeleteAction",
+        "line": 86,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "business-logic",
+          "moderation"
+        ],
+        "body_lines": 17,
+        "declared_area_from_path": "Unit",
+        "construction_path": "testkit_autofixture",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": true,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": true,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "testkit_autofixture"
+        ],
+        "_source_lineno": 697
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/ModerationServiceBusinessLogicTests.cs\n# Lines 56-116 (test starts at line 86)\n        var result = await _service.CheckMessageAsync(message);\n\n        // Assert\n        Assert.That(result.Action, Is.EqualTo(ModerationAction.Ban));\n        Assert.That(result.Reason, Does.Contain(\"блэклисте\"));\n    }\n\n    [Test]\n    public async Task CheckMessageAsync_MessageWithButtons_ReturnsBanAction()\n    {\n        // Arrange - используем новые возможности TestKit\n        var message = TestKitBuilders.CreateMessage()\n            .FromUser(123456L)\n            .WithText(\"Hello\")\n            .Build();\n\n        // Добавляем кнопки (пока нет билдера для этого)\n        message.ReplyMarkup = new InlineKeyboardMarkup(new[]\n        {\n            new[] { new InlineKeyboardButton(\"Button 1\") { CallbackData = \"test\" } }\n        });\n\n        // Act\n        var result = await _service.CheckMessageAsync(message);\n\n        // Assert\n        Assert.That(result.Action, Is.EqualTo(ModerationAction.Ban));\n        Assert.That(result.Reason, Does.Contain(\"кнопками\"));\n    }\n\n    [Test]\n    public async Task CheckMessageAsync_StoryMessage_ReturnsDeleteAction()\n    {\n        // Arrange - используем новые возможности TestKit\n        var message = TestKitBuilders.CreateMessage()\n            .FromUser(123456L)\n            .WithText(\"Hello\")\n            .Build();\n\n        // Добавляем Story (пока нет билдера для этого)\n        message.Story = new Story { Id = 1 };\n\n        // Act\n        var result = await _service.CheckMessageAsync(message);\n\n        // Assert\n        Assert.That(result.Action, Is.EqualTo(ModerationAction.Delete));\n        Assert.That(result.Reason, Does.Contain(\"Сторис\"));\n    }\n\n    [Test]\n    public async Task CheckMessageAsync_SpamDetected_ReturnsBanAction()\n    {\n        // Arrange - используем новые возможности TestKit\n        var message = TestKitBuilders.CreateMessage()\n            .FromUser(123456L)\n            .WithText(\"SPAM MESSAGE\")\n            .Build();\n\n        _factory.WithClassifierSetup(mock =>\n            mock.Setup(x => x.IsSpam(It.IsAny<string>()))\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/ModerationServiceBusinessLogicTests.cs::ModerationServiceBusinessLogicTests::CheckMessageAsync_SpamDetected_ReturnsBanAction",
+        "file": "Unit/Services/ModerationServiceBusinessLogicTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "ModerationServiceBusinessLogicTests",
+        "test_name": "CheckMessageAsync_SpamDetected_ReturnsBanAction",
+        "line": 106,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 18,
+        "declared_area_from_path": "Unit",
+        "construction_path": "testkit_autofixture",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": true,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": true,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "testkit_autofixture"
+        ],
+        "_source_lineno": 698
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/ModerationServiceBusinessLogicTests.cs\n# Lines 76-136 (test starts at line 106)\n        });\n\n        // Act\n        var result = await _service.CheckMessageAsync(message);\n\n        // Assert\n        Assert.That(result.Action, Is.EqualTo(ModerationAction.Ban));\n        Assert.That(result.Reason, Does.Contain(\"кнопками\"));\n    }\n\n    [Test]\n    public async Task CheckMessageAsync_StoryMessage_ReturnsDeleteAction()\n    {\n        // Arrange - используем новые возможности TestKit\n        var message = TestKitBuilders.CreateMessage()\n            .FromUser(123456L)\n            .WithText(\"Hello\")\n            .Build();\n\n        // Добавляем Story (пока нет билдера для этого)\n        message.Story = new Story { Id = 1 };\n\n        // Act\n        var result = await _service.CheckMessageAsync(message);\n\n        // Assert\n        Assert.That(result.Action, Is.EqualTo(ModerationAction.Delete));\n        Assert.That(result.Reason, Does.Contain(\"Сторис\"));\n    }\n\n    [Test]\n    public async Task CheckMessageAsync_SpamDetected_ReturnsBanAction()\n    {\n        // Arrange - используем новые возможности TestKit\n        var message = TestKitBuilders.CreateMessage()\n            .FromUser(123456L)\n            .WithText(\"SPAM MESSAGE\")\n            .Build();\n\n        _factory.WithClassifierSetup(mock =>\n            mock.Setup(x => x.IsSpam(It.IsAny<string>()))\n                .ReturnsAsync((true, 0.9f)));\n\n        // Act\n        var result = await _service.CheckMessageAsync(message);\n\n        // Assert\n        Assert.That(result.Action, Is.EqualTo(ModerationAction.Delete));\n        Assert.That(result.Reason, Does.Contain(\"спам\"));\n    }\n\n    [Test]\n    public async Task CheckMessageAsync_MimicryDetected_ReturnsBanAction()\n    {\n        // Arrange\n        var message = CreateTestMessage(123456L, \"Это нормальное сообщение с полезной информацией\");\n\n        _factory.WithClassifierSetup(mock =>\n            mock.Setup(x => x.IsSpam(It.IsAny<string>()))\n                .ReturnsAsync((false, -1.5f))); // Уверенный ham (не спам)\n\n"
+    }
+  ]
+}

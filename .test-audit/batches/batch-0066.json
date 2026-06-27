@@ -1,0 +1,455 @@
+{
+  "schema_version": "test-audit-batch-v1",
+  "batch_no": 66,
+  "purpose": "local LLM audit input",
+  "instructions": "Return JSONL only. One audit object per input test. No markdown. No code edits.",
+  "tests": [
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestInfrastructure/UserCleanupServiceTestFactoryTests.cs::UserCleanupServiceTestFactoryTests::LoggerMock_IsProperlyConfigured",
+        "file": "TestInfrastructure/UserCleanupServiceTestFactoryTests.cs",
+        "namespace": "ClubDoorman.TestInfrastructure",
+        "class": "UserCleanupServiceTestFactoryTests",
+        "test_name": "LoggerMock_IsProperlyConfigured",
+        "line": 74,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "test-infrastructure"
+        ],
+        "body_lines": 8,
+        "declared_area_from_path": "TestInfrastructure",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 239
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestInfrastructure/UserCleanupServiceTestFactoryTests.cs\n# Lines 44-95 (test starts at line 74)\n    }\n\n    [Test]\n    public void CreateUserCleanupService_CreatesFreshInstanceEachTime()\n    {\n        // Arrange\n        var factory = new UserCleanupServiceTestFactory();\n\n        // Act\n        var instance1 = factory.CreateUserCleanupService();\n        var instance2 = factory.CreateUserCleanupService();\n\n        // Assert\n        Assert.That(instance1, Is.Not.SameAs(instance2));\n    }\n\n    [Test]\n    public void CreateRealUserCleanupService_ReturnsWorkingInstance()\n    {\n        // Arrange\n        var factory = new UserCleanupServiceTestFactory();\n\n        // Act\n        var instance = factory.CreateRealUserCleanupService();\n\n        // Assert\n        Assert.That(instance, Is.Not.Null);\n        Assert.That(instance, Is.InstanceOf<UserCleanupService>());\n    }\n\n    [Test]\n    public void LoggerMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new UserCleanupServiceTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.LoggerMock, Is.Not.Null);\n        Assert.That(factory.LoggerMock.Object, Is.Not.Null);\n    }\n\n    [Test]\n    public void ApprovedUsersStorageLoggerMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new UserCleanupServiceTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.ApprovedUsersStorageLoggerMock, Is.Not.Null);\n        Assert.That(factory.ApprovedUsersStorageLoggerMock.Object, Is.Not.Null);\n    }\n}"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestInfrastructure/UserCleanupServiceTestFactoryTests.cs::UserCleanupServiceTestFactoryTests::ApprovedUsersStorageLoggerMock_IsProperlyConfigured",
+        "file": "TestInfrastructure/UserCleanupServiceTestFactoryTests.cs",
+        "namespace": "ClubDoorman.TestInfrastructure",
+        "class": "UserCleanupServiceTestFactoryTests",
+        "test_name": "ApprovedUsersStorageLoggerMock_IsProperlyConfigured",
+        "line": 85,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "test-infrastructure"
+        ],
+        "body_lines": 8,
+        "declared_area_from_path": "TestInfrastructure",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 240
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestInfrastructure/UserCleanupServiceTestFactoryTests.cs\n# Lines 55-95 (test starts at line 85)\n\n        // Assert\n        Assert.That(instance1, Is.Not.SameAs(instance2));\n    }\n\n    [Test]\n    public void CreateRealUserCleanupService_ReturnsWorkingInstance()\n    {\n        // Arrange\n        var factory = new UserCleanupServiceTestFactory();\n\n        // Act\n        var instance = factory.CreateRealUserCleanupService();\n\n        // Assert\n        Assert.That(instance, Is.Not.Null);\n        Assert.That(instance, Is.InstanceOf<UserCleanupService>());\n    }\n\n    [Test]\n    public void LoggerMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new UserCleanupServiceTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.LoggerMock, Is.Not.Null);\n        Assert.That(factory.LoggerMock.Object, Is.Not.Null);\n    }\n\n    [Test]\n    public void ApprovedUsersStorageLoggerMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new UserCleanupServiceTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.ApprovedUsersStorageLoggerMock, Is.Not.Null);\n        Assert.That(factory.ApprovedUsersStorageLoggerMock.Object, Is.Not.Null);\n    }\n}"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestInfrastructure/UserManagementExceptionTestFactoryTests.cs::UserManagementExceptionTestFactoryTests::CreateUserManagementException_ReturnsWorkingInstance",
+        "file": "TestInfrastructure/UserManagementExceptionTestFactoryTests.cs",
+        "namespace": "ClubDoorman.TestInfrastructure",
+        "class": "UserManagementExceptionTestFactoryTests",
+        "test_name": "CreateUserManagementException_ReturnsWorkingInstance",
+        "line": 18,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "test-infrastructure"
+        ],
+        "body_lines": 11,
+        "declared_area_from_path": "TestInfrastructure",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 241
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestInfrastructure/UserManagementExceptionTestFactoryTests.cs\n# Lines 1-48 (test starts at line 18)\nusing ClubDoorman.Services.UserBan;\nusing ClubDoorman.Infrastructure;\nusing Microsoft.Extensions.Logging;\nusing Microsoft.Extensions.Logging.Abstractions;\nusing Moq;\nusing NUnit.Framework;\n\nnamespace ClubDoorman.TestInfrastructure;\n\n/// <summary>\n/// Тесты для UserManagementExceptionTestFactory\n/// Автоматически сгенерировано\n/// </summary>\n[TestFixture]\n[Category(\"test-infrastructure\")]\npublic class UserManagementExceptionTestFactoryTests\n{\n    [Test]\n    public void CreateUserManagementException_ReturnsWorkingInstance()\n    {\n        // Arrange\n        var factory = new UserManagementExceptionTestFactory();\n\n        // Act\n        var instance = factory.CreateUserManagementException();\n\n        // Assert\n        Assert.That(instance, Is.Not.Null);\n        Assert.That(instance, Is.InstanceOf<UserManagementException>());\n    }\n\n    [Test]\n    public void CreateUserManagementException_ConfiguresAllDependencies()\n    {\n        // Arrange\n        var factory = new UserManagementExceptionTestFactory();\n\n        // Act\n        var instance = factory.CreateUserManagementException();\n\n        // Assert\n        // Проверяем что все зависимости настроены\n        Assert.That(instance, Is.Not.Null);\n    }\n\n    [Test]\n    public void CreateUserManagementException_CreatesFreshInstanceEachTime()\n    {\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestInfrastructure/UserManagementExceptionTestFactoryTests.cs::UserManagementExceptionTestFactoryTests::CreateUserManagementException_ConfiguresAllDependencies",
+        "file": "TestInfrastructure/UserManagementExceptionTestFactoryTests.cs",
+        "namespace": "ClubDoorman.TestInfrastructure",
+        "class": "UserManagementExceptionTestFactoryTests",
+        "test_name": "CreateUserManagementException_ConfiguresAllDependencies",
+        "line": 32,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "test-infrastructure"
+        ],
+        "body_lines": 11,
+        "declared_area_from_path": "TestInfrastructure",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 242
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestInfrastructure/UserManagementExceptionTestFactoryTests.cs\n# Lines 2-59 (test starts at line 32)\nusing ClubDoorman.Infrastructure;\nusing Microsoft.Extensions.Logging;\nusing Microsoft.Extensions.Logging.Abstractions;\nusing Moq;\nusing NUnit.Framework;\n\nnamespace ClubDoorman.TestInfrastructure;\n\n/// <summary>\n/// Тесты для UserManagementExceptionTestFactory\n/// Автоматически сгенерировано\n/// </summary>\n[TestFixture]\n[Category(\"test-infrastructure\")]\npublic class UserManagementExceptionTestFactoryTests\n{\n    [Test]\n    public void CreateUserManagementException_ReturnsWorkingInstance()\n    {\n        // Arrange\n        var factory = new UserManagementExceptionTestFactory();\n\n        // Act\n        var instance = factory.CreateUserManagementException();\n\n        // Assert\n        Assert.That(instance, Is.Not.Null);\n        Assert.That(instance, Is.InstanceOf<UserManagementException>());\n    }\n\n    [Test]\n    public void CreateUserManagementException_ConfiguresAllDependencies()\n    {\n        // Arrange\n        var factory = new UserManagementExceptionTestFactory();\n\n        // Act\n        var instance = factory.CreateUserManagementException();\n\n        // Assert\n        // Проверяем что все зависимости настроены\n        Assert.That(instance, Is.Not.Null);\n    }\n\n    [Test]\n    public void CreateUserManagementException_CreatesFreshInstanceEachTime()\n    {\n        // Arrange\n        var factory = new UserManagementExceptionTestFactory();\n\n        // Act\n        var instance1 = factory.CreateUserManagementException();\n        var instance2 = factory.CreateUserManagementException();\n\n        // Assert\n        Assert.That(instance1, Is.Not.SameAs(instance2));\n    }\n}\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestKit/TestKit.BuilderTests.cs::TestKitBuilderTests::ModerationScenarios_CompleteSetup_WorksCorrectly",
+        "file": "TestKit/TestKit.BuilderTests.cs",
+        "namespace": "ClubDoorman.Test.TestKit",
+        "class": "TestKitBuilderTests",
+        "test_name": "ModerationScenarios_CompleteSetup_WorksCorrectly",
+        "line": 235,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "scenarios"
+        ],
+        "body_lines": 18,
+        "declared_area_from_path": "TestKit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 256
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestKit/TestKit.BuilderTests.cs\n# Lines 205-265 (test starts at line 235)\n\n        // Assert\n        Assert.That(mock, Is.Not.Null);\n        Assert.That(mock.Object, Is.InstanceOf<ITelegramBotClientWrapper>());\n    }\n\n    [Test]\n    public void MessageHandlerBuilder_ComplexScenario_CreatesValidHandler()\n    {\n        // Arrange & Act\n        var handler = TK.CreateMessageHandlerBuilder()\n            .WithUserManager(builder => builder\n                .ThatRejectsUser(12345)\n                .ThatIsInBanlist(12345))\n            .WithCaptchaService(builder => builder\n                .ThatFails())\n            .WithAiChecks(builder => builder\n                .ThatRejectsPhoto())\n            .WithTelegramBot(builder => builder\n                .ThatSendsMessageSuccessfully())\n            .Build();\n\n        // Assert\n        Assert.That(handler, Is.Not.Null);\n        Assert.That(handler, Is.InstanceOf<MessageHandler>());\n    }\n\n    [Test]\n    [Category(TestCategories.TestInfrastructure)]\n    [Category(\"scenarios\")]\n    public void ModerationScenarios_CompleteSetup_WorksCorrectly()\n    {\n        // Act\n        var setup = TK.Specialized.ModerationScenarios.CompleteSetup();\n\n        // Assert\n        Assert.That(setup.Service, Is.Not.Null);\n        Assert.That(setup.SpamClassifier, Is.Not.Null);\n        Assert.That(setup.MimicryClassifier, Is.Not.Null);\n        Assert.That(setup.BadMessageManager, Is.Not.Null);\n        Assert.That(setup.SuspiciousUsersStorage, Is.Not.Null);\n        Assert.That(setup.AiChecks, Is.Not.Null);\n\n        // Проверяем моки\n        Assert.That(setup.UserManagerMock, Is.Not.Null);\n        Assert.That(setup.BotClientMock, Is.Not.Null);\n        Assert.That(setup.MessageServiceMock, Is.Not.Null);\n        Assert.That(setup.LoggerMock, Is.Not.Null);\n    }\n\n    [Test]\n    [Category(TestCategories.TestInfrastructure)]\n    [Category(\"scenarios\")]\n    public void ModerationScenarios_MinimalSetup_WorksCorrectly()\n    {\n        // Act\n        var setup = TK.Specialized.ModerationScenarios.MinimalSetup();\n\n        // Assert\n        Assert.That(setup.Service, Is.Not.Null);\n        Assert.That(setup.SpamClassifier, Is.Not.Null);\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestKit/TestKit.BuilderTests.cs::TestKitBuilderTests::ModerationScenarios_MinimalSetup_WorksCorrectly",
+        "file": "TestKit/TestKit.BuilderTests.cs",
+        "namespace": "ClubDoorman.Test.TestKit",
+        "class": "TestKitBuilderTests",
+        "test_name": "ModerationScenarios_MinimalSetup_WorksCorrectly",
+        "line": 258,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "scenarios",
+          "scenarios"
+        ],
+        "body_lines": 14,
+        "declared_area_from_path": "TestKit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 257
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestKit/TestKit.BuilderTests.cs\n# Lines 228-288 (test starts at line 258)\n        Assert.That(handler, Is.Not.Null);\n        Assert.That(handler, Is.InstanceOf<MessageHandler>());\n    }\n\n    [Test]\n    [Category(TestCategories.TestInfrastructure)]\n    [Category(\"scenarios\")]\n    public void ModerationScenarios_CompleteSetup_WorksCorrectly()\n    {\n        // Act\n        var setup = TK.Specialized.ModerationScenarios.CompleteSetup();\n\n        // Assert\n        Assert.That(setup.Service, Is.Not.Null);\n        Assert.That(setup.SpamClassifier, Is.Not.Null);\n        Assert.That(setup.MimicryClassifier, Is.Not.Null);\n        Assert.That(setup.BadMessageManager, Is.Not.Null);\n        Assert.That(setup.SuspiciousUsersStorage, Is.Not.Null);\n        Assert.That(setup.AiChecks, Is.Not.Null);\n\n        // Проверяем моки\n        Assert.That(setup.UserManagerMock, Is.Not.Null);\n        Assert.That(setup.BotClientMock, Is.Not.Null);\n        Assert.That(setup.MessageServiceMock, Is.Not.Null);\n        Assert.That(setup.LoggerMock, Is.Not.Null);\n    }\n\n    [Test]\n    [Category(TestCategories.TestInfrastructure)]\n    [Category(\"scenarios\")]\n    public void ModerationScenarios_MinimalSetup_WorksCorrectly()\n    {\n        // Act\n        var setup = TK.Specialized.ModerationScenarios.MinimalSetup();\n\n        // Assert\n        Assert.That(setup.Service, Is.Not.Null);\n        Assert.That(setup.SpamClassifier, Is.Not.Null);\n        Assert.That(setup.MimicryClassifier, Is.Not.Null);\n        Assert.That(setup.BadMessageManager, Is.Not.Null);\n\n        // Минимальный setup использует моки для некоторых компонентов\n        Assert.That(setup.AiChecks, Is.Not.Null);\n        Assert.That(setup.SuspiciousUsersStorage, Is.Not.Null);\n    }\n\n    [Test]\n    [Category(TestCategories.TestInfrastructure)]\n    [Category(\"scenarios\")]\n    public void ModerationScenarios_MockedSetup_WorksCorrectly()\n    {\n        // Act\n        var (service, mocks) = TK.Specialized.ModerationScenarios.MockedSetup();\n\n        // Assert\n        Assert.That(service, Is.Not.Null);\n        Assert.That(mocks, Is.Not.Null);\n        Assert.That(mocks.Count, Is.EqualTo(8)); // 8 моков в словаре (только интерфейсы)\n\n        // Проверяем что все ожидаемые моки есть\n        Assert.That(mocks.ContainsKey(\"UserManager\"), Is.True);\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestKit/TestKit.BuilderTests.cs::TestKitBuilderTests::ModerationScenarios_MockedSetup_WorksCorrectly",
+        "file": "TestKit/TestKit.BuilderTests.cs",
+        "namespace": "ClubDoorman.Test.TestKit",
+        "class": "TestKitBuilderTests",
+        "test_name": "ModerationScenarios_MockedSetup_WorksCorrectly",
+        "line": 277,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "scenarios",
+          "scenarios",
+          "scenarios"
+        ],
+        "body_lines": 19,
+        "declared_area_from_path": "TestKit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 258
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestKit/TestKit.BuilderTests.cs\n# Lines 247-307 (test starts at line 277)\n\n        // Проверяем моки\n        Assert.That(setup.UserManagerMock, Is.Not.Null);\n        Assert.That(setup.BotClientMock, Is.Not.Null);\n        Assert.That(setup.MessageServiceMock, Is.Not.Null);\n        Assert.That(setup.LoggerMock, Is.Not.Null);\n    }\n\n    [Test]\n    [Category(TestCategories.TestInfrastructure)]\n    [Category(\"scenarios\")]\n    public void ModerationScenarios_MinimalSetup_WorksCorrectly()\n    {\n        // Act\n        var setup = TK.Specialized.ModerationScenarios.MinimalSetup();\n\n        // Assert\n        Assert.That(setup.Service, Is.Not.Null);\n        Assert.That(setup.SpamClassifier, Is.Not.Null);\n        Assert.That(setup.MimicryClassifier, Is.Not.Null);\n        Assert.That(setup.BadMessageManager, Is.Not.Null);\n\n        // Минимальный setup использует моки для некоторых компонентов\n        Assert.That(setup.AiChecks, Is.Not.Null);\n        Assert.That(setup.SuspiciousUsersStorage, Is.Not.Null);\n    }\n\n    [Test]\n    [Category(TestCategories.TestInfrastructure)]\n    [Category(\"scenarios\")]\n    public void ModerationScenarios_MockedSetup_WorksCorrectly()\n    {\n        // Act\n        var (service, mocks) = TK.Specialized.ModerationScenarios.MockedSetup();\n\n        // Assert\n        Assert.That(service, Is.Not.Null);\n        Assert.That(mocks, Is.Not.Null);\n        Assert.That(mocks.Count, Is.EqualTo(8)); // 8 моков в словаре (только интерфейсы)\n\n        // Проверяем что все ожидаемые моки есть\n        Assert.That(mocks.ContainsKey(\"UserManager\"), Is.True);\n        Assert.That(mocks.ContainsKey(\"AiChecks\"), Is.True);\n        Assert.That(mocks.ContainsKey(\"Logger\"), Is.True);\n        Assert.That(mocks.ContainsKey(\"BotClient\"), Is.True);\n        Assert.That(mocks.ContainsKey(\"MessageService\"), Is.True);\n\n        // Sealed классы не мокаются, поэтому их нет в словаре\n        Assert.That(mocks.ContainsKey(\"BadMessageManager\"), Is.False);\n    }\n\n    [Test]\n    [Category(TestCategories.TestInfrastructure)]\n    [Category(\"test-tokens\")]\n    public void CreateTestBotClient_ReturnsValidClient()\n    {\n        // Act\n        var client = TK.CreateTestBotClient();\n\n        // Assert\n        Assert.That(client, Is.Not.Null);\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestKit/TestKit.BuilderTests.cs::TestKitBuilderTests::CreateTestBotClient_ReturnsValidClient",
+        "file": "TestKit/TestKit.BuilderTests.cs",
+        "namespace": "ClubDoorman.Test.TestKit",
+        "class": "TestKitBuilderTests",
+        "test_name": "CreateTestBotClient_ReturnsValidClient",
+        "line": 301,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "scenarios",
+          "scenarios",
+          "test-tokens"
+        ],
+        "body_lines": 8,
+        "declared_area_from_path": "TestKit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "real_env_or_api"
+        ],
+        "_source_lineno": 259
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestKit/TestKit.BuilderTests.cs\n# Lines 271-325 (test starts at line 301)\n        Assert.That(setup.SuspiciousUsersStorage, Is.Not.Null);\n    }\n\n    [Test]\n    [Category(TestCategories.TestInfrastructure)]\n    [Category(\"scenarios\")]\n    public void ModerationScenarios_MockedSetup_WorksCorrectly()\n    {\n        // Act\n        var (service, mocks) = TK.Specialized.ModerationScenarios.MockedSetup();\n\n        // Assert\n        Assert.That(service, Is.Not.Null);\n        Assert.That(mocks, Is.Not.Null);\n        Assert.That(mocks.Count, Is.EqualTo(8)); // 8 моков в словаре (только интерфейсы)\n\n        // Проверяем что все ожидаемые моки есть\n        Assert.That(mocks.ContainsKey(\"UserManager\"), Is.True);\n        Assert.That(mocks.ContainsKey(\"AiChecks\"), Is.True);\n        Assert.That(mocks.ContainsKey(\"Logger\"), Is.True);\n        Assert.That(mocks.ContainsKey(\"BotClient\"), Is.True);\n        Assert.That(mocks.ContainsKey(\"MessageService\"), Is.True);\n\n        // Sealed классы не мокаются, поэтому их нет в словаре\n        Assert.That(mocks.ContainsKey(\"BadMessageManager\"), Is.False);\n    }\n\n    [Test]\n    [Category(TestCategories.TestInfrastructure)]\n    [Category(\"test-tokens\")]\n    public void CreateTestBotClient_ReturnsValidClient()\n    {\n        // Act\n        var client = TK.CreateTestBotClient();\n\n        // Assert\n        Assert.That(client, Is.Not.Null);\n        Assert.That(client, Is.InstanceOf<TelegramBotClient>());\n    }\n\n    [Test]\n    [Category(TestCategories.TestInfrastructure)]\n    [Category(\"test-tokens\")]\n    public void CreateTestToken_ReturnsConsistentToken()\n    {\n        // Act\n        var token1 = TK.CreateTestToken();\n        var token2 = TK.CreateTestToken();\n\n        // Assert\n        Assert.That(token1, Is.EqualTo(token2));\n        Assert.That(token1, Does.StartWith(\"1234567890:\"));\n        Assert.That(token1, Does.Contain(\"TEST_TOKEN\"));\n    }\n}\n"
+    }
+  ]
+}

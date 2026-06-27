@@ -1,0 +1,450 @@
+{
+  "schema_version": "test-audit-batch-v1",
+  "batch_no": 39,
+  "purpose": "local LLM audit input",
+  "instructions": "Return JSONL only. One audit object per input test. No markdown. No code edits.",
+  "tests": [
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestInfrastructure/MockAiChecksFactoryTests.cs::MockAiChecksTests::MarkUserOkay_DoesNotThrowException",
+        "file": "TestInfrastructure/MockAiChecksFactoryTests.cs",
+        "namespace": "ClubDoorman.TestInfrastructure",
+        "class": "MockAiChecksTests",
+        "test_name": "MarkUserOkay_DoesNotThrowException",
+        "line": 139,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "fast"
+        ],
+        "body_lines": 7,
+        "declared_area_from_path": "TestInfrastructure",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": true,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "does_not_throw"
+        ],
+        "_source_lineno": 190
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestInfrastructure/MockAiChecksFactoryTests.cs\n# Lines 109-169 (test starts at line 139)\n    {\n        // Arrange\n        var expectedProbability = 0.75;\n        var mockAi = TK.CreateMockAiChecks(expectedProbability, 0.1, 0.1, 0.1);\n        var message = new Message { Text = \"test message\" };\n\n        // Act\n        var result = await mockAi.Object.GetSpamProbability(message);\n\n        // Assert\n        Assert.That(result.Probability, Is.EqualTo(expectedProbability));\n        Assert.That(result.Reason, Is.EqualTo(\"Mock spam check\"));\n    }\n\n    [Test]\n    public async Task GetAttentionBaitProbability_ReturnsConfiguredValue()\n    {\n        // Arrange\n        var expectedProbability = 0.65;\n        var mockAi = TK.CreateMockAiChecks(0.1, expectedProbability, 0.1, 0.1);\n        var user = new User { Id = 123, FirstName = \"Test\", Username = \"testuser\" };\n\n        // Act\n        var result = await mockAi.Object.GetAttentionBaitProbability(user);\n\n        // Assert\n        Assert.That(result.SpamProbability.Probability, Is.EqualTo(expectedProbability));\n        Assert.That(result.SpamProbability.Reason, Is.EqualTo(\"Mock attention bait check\"));\n    }\n\n    [Test]\n    public void MarkUserOkay_DoesNotThrowException()\n    {\n        // Arrange\n        var mockAi = TK.CreateMockAiChecks(0.1, 0.1, 0.1, 0.1);\n\n        // Act & Assert\n        Assert.DoesNotThrow(() => mockAi.Object.MarkUserOkay(123));\n    }\n\n    [Test]\n    public async Task GetSuspiciousUserSpamProbability_ReturnsConfiguredValue()\n    {\n        // Arrange\n        var expectedProbability = 0.85;\n        var mockAi = TK.CreateMockAiChecks(0.1, 0.1, 0.1, expectedProbability);\n        var message = new Message { Text = \"test message\" };\n        var user = new User { Id = 123, FirstName = \"Suspicious\", Username = \"suspicious_user\" };\n        var firstMessages = new List<string> { \"Hello\", \"How are you?\" };\n\n        // Act\n        var result = await mockAi.Object.GetSuspiciousUserSpamProbability(message, user, firstMessages, 0.5);\n\n        // Assert\n        Assert.That(result.Probability, Is.EqualTo(expectedProbability));\n        Assert.That(result.Reason, Is.EqualTo(\"Mock suspicious user check\"));\n    }\n\n    [Test]\n    public async Task GetSuspiciousUserSpamProbabilityWithPhoto_ReturnsCombinedProbability()\n    {\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Effects/AiAnalysisEffectsTest.cs::AiAnalysisEffectsTest::RequireAiAnalysisEffect_ShouldCallAiCascadeService",
+        "file": "Unit/Effects/AiAnalysisEffectsTest.cs",
+        "namespace": "ClubDoorman.Test.Unit.Effects",
+        "class": "AiAnalysisEffectsTest",
+        "test_name": "RequireAiAnalysisEffect_ShouldCallAiCascadeService",
+        "line": 32,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 20,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify"
+        ],
+        "_source_lineno": 267
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Effects/AiAnalysisEffectsTest.cs\n# Lines 2-62 (test starts at line 32)\nusing ClubDoorman.Services.AI;\nusing Microsoft.Extensions.Logging;\nusing Moq;\nusing NUnit.Framework;\nusing Telegram.Bot.Types;\n\nnamespace ClubDoorman.Test.Unit.Effects;\n\n[TestFixture]\npublic class AiAnalysisEffectsTest\n{\n    private Mock<IAiCascadeService> _aiCascadeServiceMock;\n    private Mock<ILogger<RequireAiAnalysisEffect>> _loggerMock;\n    private Message _testMessage;\n    private User _testUser;\n\n    [SetUp]\n    public void Setup()\n    {\n        _aiCascadeServiceMock = new Mock<IAiCascadeService>();\n        _loggerMock = new Mock<ILogger<RequireAiAnalysisEffect>>();\n\n        _testUser = new User { Id = 456, Username = \"testuser\" };\n        _testMessage = new Message\n        {\n            Text = \"test message\",\n            From = _testUser\n        };\n    }\n\n    [Test]\n    public async Task RequireAiAnalysisEffect_ShouldCallAiCascadeService()\n    {\n        // Arrange\n        var mlScore = 0.75;\n        var isSilentMode = false;\n        var effect = new RequireAiAnalysisEffect(\n            _aiCascadeServiceMock.Object,\n            _loggerMock.Object,\n            _testMessage,\n            _testUser,\n            mlScore,\n            isSilentMode);\n\n        // Act\n        await effect.ExecuteAsync(CancellationToken.None);\n\n        // Assert\n        _aiCascadeServiceMock.Verify(\n            x => x.HandleAiCascadeAnalysisAsync(_testMessage, _testUser, mlScore, isSilentMode, CancellationToken.None),\n            Times.Once);\n    }\n\n    [Test]\n    public async Task RequireAiAnalysisEffect_WithSilentMode_ShouldPassSilentModeToAiCascadeService()\n    {\n        // Arrange\n        var mlScore = 0.5;\n        var isSilentMode = true;\n        var effect = new RequireAiAnalysisEffect(\n            _aiCascadeServiceMock.Object,\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Effects/AiAnalysisEffectsTest.cs::AiAnalysisEffectsTest::RequireAiAnalysisEffect_WithSilentMode_ShouldPassSilentModeToAiCascadeService",
+        "file": "Unit/Effects/AiAnalysisEffectsTest.cs",
+        "namespace": "ClubDoorman.Test.Unit.Effects",
+        "class": "AiAnalysisEffectsTest",
+        "test_name": "RequireAiAnalysisEffect_WithSilentMode_ShouldPassSilentModeToAiCascadeService",
+        "line": 55,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 20,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify"
+        ],
+        "_source_lineno": 268
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Effects/AiAnalysisEffectsTest.cs\n# Lines 25-85 (test starts at line 55)\n        _testMessage = new Message\n        {\n            Text = \"test message\",\n            From = _testUser\n        };\n    }\n\n    [Test]\n    public async Task RequireAiAnalysisEffect_ShouldCallAiCascadeService()\n    {\n        // Arrange\n        var mlScore = 0.75;\n        var isSilentMode = false;\n        var effect = new RequireAiAnalysisEffect(\n            _aiCascadeServiceMock.Object,\n            _loggerMock.Object,\n            _testMessage,\n            _testUser,\n            mlScore,\n            isSilentMode);\n\n        // Act\n        await effect.ExecuteAsync(CancellationToken.None);\n\n        // Assert\n        _aiCascadeServiceMock.Verify(\n            x => x.HandleAiCascadeAnalysisAsync(_testMessage, _testUser, mlScore, isSilentMode, CancellationToken.None),\n            Times.Once);\n    }\n\n    [Test]\n    public async Task RequireAiAnalysisEffect_WithSilentMode_ShouldPassSilentModeToAiCascadeService()\n    {\n        // Arrange\n        var mlScore = 0.5;\n        var isSilentMode = true;\n        var effect = new RequireAiAnalysisEffect(\n            _aiCascadeServiceMock.Object,\n            _loggerMock.Object,\n            _testMessage,\n            _testUser,\n            mlScore,\n            isSilentMode);\n\n        // Act\n        await effect.ExecuteAsync(CancellationToken.None);\n\n        // Assert\n        _aiCascadeServiceMock.Verify(\n            x => x.HandleAiCascadeAnalysisAsync(_testMessage, _testUser, mlScore, isSilentMode, CancellationToken.None),\n            Times.Once);\n    }\n\n    [Test]\n    public async Task RequireAiAnalysisEffect_WithZeroMlScore_ShouldPassZeroToAiCascadeService()\n    {\n        // Arrange\n        var mlScore = 0.0;\n        var isSilentMode = false;\n        var effect = new RequireAiAnalysisEffect(\n            _aiCascadeServiceMock.Object,\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Effects/AiAnalysisEffectsTest.cs::AiAnalysisEffectsTest::RequireAiAnalysisEffect_WithZeroMlScore_ShouldPassZeroToAiCascadeService",
+        "file": "Unit/Effects/AiAnalysisEffectsTest.cs",
+        "namespace": "ClubDoorman.Test.Unit.Effects",
+        "class": "AiAnalysisEffectsTest",
+        "test_name": "RequireAiAnalysisEffect_WithZeroMlScore_ShouldPassZeroToAiCascadeService",
+        "line": 78,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 20,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify"
+        ],
+        "_source_lineno": 269
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Effects/AiAnalysisEffectsTest.cs\n# Lines 48-100 (test starts at line 78)\n\n        // Assert\n        _aiCascadeServiceMock.Verify(\n            x => x.HandleAiCascadeAnalysisAsync(_testMessage, _testUser, mlScore, isSilentMode, CancellationToken.None),\n            Times.Once);\n    }\n\n    [Test]\n    public async Task RequireAiAnalysisEffect_WithSilentMode_ShouldPassSilentModeToAiCascadeService()\n    {\n        // Arrange\n        var mlScore = 0.5;\n        var isSilentMode = true;\n        var effect = new RequireAiAnalysisEffect(\n            _aiCascadeServiceMock.Object,\n            _loggerMock.Object,\n            _testMessage,\n            _testUser,\n            mlScore,\n            isSilentMode);\n\n        // Act\n        await effect.ExecuteAsync(CancellationToken.None);\n\n        // Assert\n        _aiCascadeServiceMock.Verify(\n            x => x.HandleAiCascadeAnalysisAsync(_testMessage, _testUser, mlScore, isSilentMode, CancellationToken.None),\n            Times.Once);\n    }\n\n    [Test]\n    public async Task RequireAiAnalysisEffect_WithZeroMlScore_ShouldPassZeroToAiCascadeService()\n    {\n        // Arrange\n        var mlScore = 0.0;\n        var isSilentMode = false;\n        var effect = new RequireAiAnalysisEffect(\n            _aiCascadeServiceMock.Object,\n            _loggerMock.Object,\n            _testMessage,\n            _testUser,\n            mlScore,\n            isSilentMode);\n\n        // Act\n        await effect.ExecuteAsync(CancellationToken.None);\n\n        // Assert\n        _aiCascadeServiceMock.Verify(\n            x => x.HandleAiCascadeAnalysisAsync(_testMessage, _testUser, mlScore, isSilentMode, CancellationToken.None),\n            Times.Once);\n    }\n}\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Effects/AllowEffectsTest.cs::AllowEffectsTest::AllowMessageEffect_WhenAiDetectNotBlocked_ShouldIncrementGoodMessageCount",
+        "file": "Unit/Effects/AllowEffectsTest.cs",
+        "namespace": "ClubDoorman.Test.Unit.Effects",
+        "class": "AllowEffectsTest",
+        "test_name": "AllowMessageEffect_WhenAiDetectNotBlocked_ShouldIncrementGoodMessageCount",
+        "line": 35,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 26,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify"
+        ],
+        "_source_lineno": 270
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Effects/AllowEffectsTest.cs\n# Lines 5-65 (test starts at line 35)\nusing NUnit.Framework;\nusing Telegram.Bot.Types;\n\nnamespace ClubDoorman.Test.Unit.Effects;\n\n[TestFixture]\npublic class AllowEffectsTest\n{\n    private Mock<IModerationPolicy> _moderationPolicyMock;\n    private Mock<ILogger<AllowMessageEffect>> _loggerMock;\n    private Message _testMessage;\n    private User _testUser;\n    private Chat _testChat;\n\n    [SetUp]\n    public void Setup()\n    {\n        _moderationPolicyMock = new Mock<IModerationPolicy>();\n        _loggerMock = new Mock<ILogger<AllowMessageEffect>>();\n\n        _testUser = new User { Id = 456, Username = \"testuser\" };\n        _testChat = new Chat { Id = 789, Title = \"Test Chat\" };\n        _testMessage = new Message\n        {\n            Text = \"test message\",\n            From = _testUser,\n            Chat = _testChat\n        };\n    }\n\n    [Test]\n    public async Task AllowMessageEffect_WhenAiDetectNotBlocked_ShouldIncrementGoodMessageCount()\n    {\n        // Arrange\n        var reason = \"Test allow reason\";\n        _moderationPolicyMock.Setup(x => x.CheckAiDetectAndNotifyAdminsAsync(_testUser, _testChat, _testMessage))\n            .ReturnsAsync(false); // AI детект не заблокировал\n\n        var effect = new AllowMessageEffect(\n            _moderationPolicyMock.Object,\n            _loggerMock.Object,\n            _testMessage,\n            _testUser,\n            _testChat,\n            reason);\n\n        // Act\n        await effect.ExecuteAsync(CancellationToken.None);\n\n        // Assert\n        _moderationPolicyMock.Verify(\n            x => x.CheckAiDetectAndNotifyAdminsAsync(_testUser, _testChat, _testMessage),\n            Times.Once);\n\n        _moderationPolicyMock.Verify(\n            x => x.IncrementGoodMessageCountAsync(_testUser, _testChat, \"test message\"),\n            Times.Once);\n    }\n\n    [Test]\n    public async Task AllowMessageEffect_WhenAiDetectBlocked_ShouldNotIncrementGoodMessageCount()\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Effects/AllowEffectsTest.cs::AllowEffectsTest::AllowMessageEffect_WhenAiDetectBlocked_ShouldNotIncrementGoodMessageCount",
+        "file": "Unit/Effects/AllowEffectsTest.cs",
+        "namespace": "ClubDoorman.Test.Unit.Effects",
+        "class": "AllowEffectsTest",
+        "test_name": "AllowMessageEffect_WhenAiDetectBlocked_ShouldNotIncrementGoodMessageCount",
+        "line": 64,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 26,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify"
+        ],
+        "_source_lineno": 271
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Effects/AllowEffectsTest.cs\n# Lines 34-94 (test starts at line 64)\n\n    [Test]\n    public async Task AllowMessageEffect_WhenAiDetectNotBlocked_ShouldIncrementGoodMessageCount()\n    {\n        // Arrange\n        var reason = \"Test allow reason\";\n        _moderationPolicyMock.Setup(x => x.CheckAiDetectAndNotifyAdminsAsync(_testUser, _testChat, _testMessage))\n            .ReturnsAsync(false); // AI детект не заблокировал\n\n        var effect = new AllowMessageEffect(\n            _moderationPolicyMock.Object,\n            _loggerMock.Object,\n            _testMessage,\n            _testUser,\n            _testChat,\n            reason);\n\n        // Act\n        await effect.ExecuteAsync(CancellationToken.None);\n\n        // Assert\n        _moderationPolicyMock.Verify(\n            x => x.CheckAiDetectAndNotifyAdminsAsync(_testUser, _testChat, _testMessage),\n            Times.Once);\n\n        _moderationPolicyMock.Verify(\n            x => x.IncrementGoodMessageCountAsync(_testUser, _testChat, \"test message\"),\n            Times.Once);\n    }\n\n    [Test]\n    public async Task AllowMessageEffect_WhenAiDetectBlocked_ShouldNotIncrementGoodMessageCount()\n    {\n        // Arrange\n        var reason = \"Test allow reason\";\n        _moderationPolicyMock.Setup(x => x.CheckAiDetectAndNotifyAdminsAsync(_testUser, _testChat, _testMessage))\n            .ReturnsAsync(true); // AI детект заблокировал\n\n        var effect = new AllowMessageEffect(\n            _moderationPolicyMock.Object,\n            _loggerMock.Object,\n            _testMessage,\n            _testUser,\n            _testChat,\n            reason);\n\n        // Act\n        await effect.ExecuteAsync(CancellationToken.None);\n\n        // Assert\n        _moderationPolicyMock.Verify(\n            x => x.CheckAiDetectAndNotifyAdminsAsync(_testUser, _testChat, _testMessage),\n            Times.Once);\n\n        _moderationPolicyMock.Verify(\n            x => x.IncrementGoodMessageCountAsync(It.IsAny<User>(), It.IsAny<Chat>(), It.IsAny<string>()),\n            Times.Never);\n    }\n\n    [Test]\n    public async Task AllowMessageEffect_WithCaption_ShouldUseCaptionAsMessageText()\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Effects/AllowEffectsTest.cs::AllowEffectsTest::AllowMessageEffect_WithCaption_ShouldUseCaptionAsMessageText",
+        "file": "Unit/Effects/AllowEffectsTest.cs",
+        "namespace": "ClubDoorman.Test.Unit.Effects",
+        "class": "AllowEffectsTest",
+        "test_name": "AllowMessageEffect_WithCaption_ShouldUseCaptionAsMessageText",
+        "line": 93,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 25,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify"
+        ],
+        "_source_lineno": 272
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Effects/AllowEffectsTest.cs\n# Lines 63-120 (test starts at line 93)\n\n    [Test]\n    public async Task AllowMessageEffect_WhenAiDetectBlocked_ShouldNotIncrementGoodMessageCount()\n    {\n        // Arrange\n        var reason = \"Test allow reason\";\n        _moderationPolicyMock.Setup(x => x.CheckAiDetectAndNotifyAdminsAsync(_testUser, _testChat, _testMessage))\n            .ReturnsAsync(true); // AI детект заблокировал\n\n        var effect = new AllowMessageEffect(\n            _moderationPolicyMock.Object,\n            _loggerMock.Object,\n            _testMessage,\n            _testUser,\n            _testChat,\n            reason);\n\n        // Act\n        await effect.ExecuteAsync(CancellationToken.None);\n\n        // Assert\n        _moderationPolicyMock.Verify(\n            x => x.CheckAiDetectAndNotifyAdminsAsync(_testUser, _testChat, _testMessage),\n            Times.Once);\n\n        _moderationPolicyMock.Verify(\n            x => x.IncrementGoodMessageCountAsync(It.IsAny<User>(), It.IsAny<Chat>(), It.IsAny<string>()),\n            Times.Never);\n    }\n\n    [Test]\n    public async Task AllowMessageEffect_WithCaption_ShouldUseCaptionAsMessageText()\n    {\n        // Arrange\n        var reason = \"Test allow reason\";\n        _testMessage.Text = null;\n        _testMessage.Caption = \"test caption\";\n\n        _moderationPolicyMock.Setup(x => x.CheckAiDetectAndNotifyAdminsAsync(_testUser, _testChat, _testMessage))\n            .ReturnsAsync(false);\n\n        var effect = new AllowMessageEffect(\n            _moderationPolicyMock.Object,\n            _loggerMock.Object,\n            _testMessage,\n            _testUser,\n            _testChat,\n            reason);\n\n        // Act\n        await effect.ExecuteAsync(CancellationToken.None);\n\n        // Assert\n        _moderationPolicyMock.Verify(\n            x => x.IncrementGoodMessageCountAsync(_testUser, _testChat, \"test caption\"),\n            Times.Once);\n    }\n}\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Effects/BanEffectsTest.cs::BanEffectsTest::BanUserEffect_ShouldCallUserFlowLoggerAndUserBanService",
+        "file": "Unit/Effects/BanEffectsTest.cs",
+        "namespace": "ClubDoorman.Test.Unit.Effects",
+        "class": "BanEffectsTest",
+        "test_name": "BanUserEffect_ShouldCallUserFlowLoggerAndUserBanService",
+        "line": 38,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 24,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify"
+        ],
+        "_source_lineno": 273
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Effects/BanEffectsTest.cs\n# Lines 8-64 (test starts at line 38)\n\nnamespace ClubDoorman.Test.Unit.Effects;\n\n[TestFixture]\npublic class BanEffectsTest\n{\n    private Mock<IUserBanService> _userBanServiceMock;\n    private Mock<IUserFlowLogger> _userFlowLoggerMock;\n    private Mock<ILogger<BanUserEffect>> _loggerMock;\n    private Message _testMessage;\n    private User _testUser;\n    private Chat _testChat;\n\n    [SetUp]\n    public void Setup()\n    {\n        _userBanServiceMock = new Mock<IUserBanService>();\n        _userFlowLoggerMock = new Mock<IUserFlowLogger>();\n        _loggerMock = new Mock<ILogger<BanUserEffect>>();\n\n        _testUser = new User { Id = 456, Username = \"testuser\" };\n        _testChat = new Chat { Id = 789, Title = \"Test Chat\" };\n        _testMessage = new Message\n        {\n            Text = \"test message\",\n            From = _testUser,\n            Chat = _testChat\n        };\n    }\n\n    [Test]\n    public async Task BanUserEffect_ShouldCallUserFlowLoggerAndUserBanService()\n    {\n        // Arrange\n        var reason = \"Test ban reason\";\n        var effect = new BanUserEffect(\n            _userBanServiceMock.Object,\n            _userFlowLoggerMock.Object,\n            _loggerMock.Object,\n            _testMessage,\n            _testUser,\n            _testChat,\n            reason);\n\n        // Act\n        await effect.ExecuteAsync(CancellationToken.None);\n\n        // Assert\n        _userFlowLoggerMock.Verify(\n            x => x.LogUserBanned(_testUser, _testChat, reason),\n            Times.Once);\n\n        _userBanServiceMock.Verify(\n            x => x.AutoBanAsync(_testMessage, reason, CancellationToken.None),\n            Times.Once);\n    }\n}\n"
+    }
+  ]
+}

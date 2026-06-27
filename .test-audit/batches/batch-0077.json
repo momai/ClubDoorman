@@ -1,0 +1,506 @@
+{
+  "schema_version": "test-audit-batch-v1",
+  "batch_no": 77,
+  "purpose": "local LLM audit input",
+  "instructions": "Return JSONL only. One audit object per input test. No markdown. No code edits.",
+  "tests": [
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/SimpleFiltersNullTests.cs::SimpleFiltersNullTests::HasStopWords_WithEmptyString_ReturnsFalse",
+        "file": "SimpleFiltersNullTests.cs",
+        "namespace": "ClubDoorman.Test",
+        "class": "SimpleFiltersNullTests",
+        "test_name": "HasStopWords_WithEmptyString_ReturnsFalse",
+        "line": 17,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 7,
+        "declared_area_from_path": "Root",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 116
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/SimpleFiltersNullTests.cs\n# Lines 1-47 (test starts at line 17)\n﻿\nnamespace ClubDoorman.Test;\n\n[TestFixture]\npublic class SimpleFiltersNullTests\n{\n    [Test]\n    public void HasStopWords_WithNullInput_ThrowsArgumentNullException()\n    {\n        // Act & Assert\n        var exception = Assert.Throws<ArgumentNullException>(() =>\n            SimpleFilters.HasStopWords(null!));\n\n        Assert.That(exception.ParamName, Is.EqualTo(\"message\"));\n    }\n\n    [Test]\n    public void HasStopWords_WithEmptyString_ReturnsFalse()\n    {\n        // Act\n        var result = SimpleFilters.HasStopWords(\"\");\n\n        // Assert\n        Assert.That(result, Is.False);\n    }\n\n    [Test]\n    public void HasStopWords_WithNormalText_ReturnsFalse()\n    {\n        // Act\n        var result = SimpleFilters.HasStopWords(\"Привет, как дела?\");\n\n        // Assert\n        Assert.That(result, Is.False);\n    }\n\n    [Test]\n    public void FindAllRussianWordsWithLookalikeSymbols_WithNullInput_ThrowsArgumentNullException()\n    {\n        // Act & Assert\n        var exception = Assert.Throws<ArgumentNullException>(() =>\n            SimpleFilters.FindAllRussianWordsWithLookalikeSymbols(null!));\n\n        Assert.That(exception.ParamName, Is.EqualTo(\"message\"));\n    }\n\n    [Test]\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/SimpleFiltersNullTests.cs::SimpleFiltersNullTests::HasStopWords_WithNormalText_ReturnsFalse",
+        "file": "SimpleFiltersNullTests.cs",
+        "namespace": "ClubDoorman.Test",
+        "class": "SimpleFiltersNullTests",
+        "test_name": "HasStopWords_WithNormalText_ReturnsFalse",
+        "line": 27,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 7,
+        "declared_area_from_path": "Root",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 117
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/SimpleFiltersNullTests.cs\n# Lines 1-57 (test starts at line 27)\n﻿\nnamespace ClubDoorman.Test;\n\n[TestFixture]\npublic class SimpleFiltersNullTests\n{\n    [Test]\n    public void HasStopWords_WithNullInput_ThrowsArgumentNullException()\n    {\n        // Act & Assert\n        var exception = Assert.Throws<ArgumentNullException>(() =>\n            SimpleFilters.HasStopWords(null!));\n\n        Assert.That(exception.ParamName, Is.EqualTo(\"message\"));\n    }\n\n    [Test]\n    public void HasStopWords_WithEmptyString_ReturnsFalse()\n    {\n        // Act\n        var result = SimpleFilters.HasStopWords(\"\");\n\n        // Assert\n        Assert.That(result, Is.False);\n    }\n\n    [Test]\n    public void HasStopWords_WithNormalText_ReturnsFalse()\n    {\n        // Act\n        var result = SimpleFilters.HasStopWords(\"Привет, как дела?\");\n\n        // Assert\n        Assert.That(result, Is.False);\n    }\n\n    [Test]\n    public void FindAllRussianWordsWithLookalikeSymbols_WithNullInput_ThrowsArgumentNullException()\n    {\n        // Act & Assert\n        var exception = Assert.Throws<ArgumentNullException>(() =>\n            SimpleFilters.FindAllRussianWordsWithLookalikeSymbols(null!));\n\n        Assert.That(exception.ParamName, Is.EqualTo(\"message\"));\n    }\n\n    [Test]\n    public void FindAllRussianWordsWithLookalikeSymbols_WithEmptyString_ReturnsEmptyList()\n    {\n        // Act\n        var result = SimpleFilters.FindAllRussianWordsWithLookalikeSymbols(\"\");\n\n        // Assert\n        Assert.That(result, Is.Empty);\n    }\n\n    [Test]\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/SimpleFiltersNullTests.cs::SimpleFiltersNullTests::FindAllRussianWordsWithLookalikeSymbols_WithNullInput_ThrowsArgumentNullException",
+        "file": "SimpleFiltersNullTests.cs",
+        "namespace": "ClubDoorman.Test",
+        "class": "SimpleFiltersNullTests",
+        "test_name": "FindAllRussianWordsWithLookalikeSymbols_WithNullInput_ThrowsArgumentNullException",
+        "line": 37,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 7,
+        "declared_area_from_path": "Root",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": true,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 118
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/SimpleFiltersNullTests.cs\n# Lines 7-67 (test starts at line 37)\n    [Test]\n    public void HasStopWords_WithNullInput_ThrowsArgumentNullException()\n    {\n        // Act & Assert\n        var exception = Assert.Throws<ArgumentNullException>(() =>\n            SimpleFilters.HasStopWords(null!));\n\n        Assert.That(exception.ParamName, Is.EqualTo(\"message\"));\n    }\n\n    [Test]\n    public void HasStopWords_WithEmptyString_ReturnsFalse()\n    {\n        // Act\n        var result = SimpleFilters.HasStopWords(\"\");\n\n        // Assert\n        Assert.That(result, Is.False);\n    }\n\n    [Test]\n    public void HasStopWords_WithNormalText_ReturnsFalse()\n    {\n        // Act\n        var result = SimpleFilters.HasStopWords(\"Привет, как дела?\");\n\n        // Assert\n        Assert.That(result, Is.False);\n    }\n\n    [Test]\n    public void FindAllRussianWordsWithLookalikeSymbols_WithNullInput_ThrowsArgumentNullException()\n    {\n        // Act & Assert\n        var exception = Assert.Throws<ArgumentNullException>(() =>\n            SimpleFilters.FindAllRussianWordsWithLookalikeSymbols(null!));\n\n        Assert.That(exception.ParamName, Is.EqualTo(\"message\"));\n    }\n\n    [Test]\n    public void FindAllRussianWordsWithLookalikeSymbols_WithEmptyString_ReturnsEmptyList()\n    {\n        // Act\n        var result = SimpleFilters.FindAllRussianWordsWithLookalikeSymbols(\"\");\n\n        // Assert\n        Assert.That(result, Is.Empty);\n    }\n\n    [Test]\n    public void FindAllRussianWordsWithLookalikeSymbolsInNormalizedText_WithNullInput_ThrowsArgumentNullException()\n    {\n        // Act & Assert\n        var exception = Assert.Throws<ArgumentNullException>(() =>\n            SimpleFilters.FindAllRussianWordsWithLookalikeSymbolsInNormalizedText(null!));\n\n        Assert.That(exception.ParamName, Is.EqualTo(\"message\"));\n    }\n\n    [Test]\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/SimpleFiltersNullTests.cs::SimpleFiltersNullTests::FindAllRussianWordsWithLookalikeSymbols_WithEmptyString_ReturnsEmptyList",
+        "file": "SimpleFiltersNullTests.cs",
+        "namespace": "ClubDoorman.Test",
+        "class": "SimpleFiltersNullTests",
+        "test_name": "FindAllRussianWordsWithLookalikeSymbols_WithEmptyString_ReturnsEmptyList",
+        "line": 47,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 7,
+        "declared_area_from_path": "Root",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 119
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/SimpleFiltersNullTests.cs\n# Lines 17-77 (test starts at line 47)\n    [Test]\n    public void HasStopWords_WithEmptyString_ReturnsFalse()\n    {\n        // Act\n        var result = SimpleFilters.HasStopWords(\"\");\n\n        // Assert\n        Assert.That(result, Is.False);\n    }\n\n    [Test]\n    public void HasStopWords_WithNormalText_ReturnsFalse()\n    {\n        // Act\n        var result = SimpleFilters.HasStopWords(\"Привет, как дела?\");\n\n        // Assert\n        Assert.That(result, Is.False);\n    }\n\n    [Test]\n    public void FindAllRussianWordsWithLookalikeSymbols_WithNullInput_ThrowsArgumentNullException()\n    {\n        // Act & Assert\n        var exception = Assert.Throws<ArgumentNullException>(() =>\n            SimpleFilters.FindAllRussianWordsWithLookalikeSymbols(null!));\n\n        Assert.That(exception.ParamName, Is.EqualTo(\"message\"));\n    }\n\n    [Test]\n    public void FindAllRussianWordsWithLookalikeSymbols_WithEmptyString_ReturnsEmptyList()\n    {\n        // Act\n        var result = SimpleFilters.FindAllRussianWordsWithLookalikeSymbols(\"\");\n\n        // Assert\n        Assert.That(result, Is.Empty);\n    }\n\n    [Test]\n    public void FindAllRussianWordsWithLookalikeSymbolsInNormalizedText_WithNullInput_ThrowsArgumentNullException()\n    {\n        // Act & Assert\n        var exception = Assert.Throws<ArgumentNullException>(() =>\n            SimpleFilters.FindAllRussianWordsWithLookalikeSymbolsInNormalizedText(null!));\n\n        Assert.That(exception.ParamName, Is.EqualTo(\"message\"));\n    }\n\n    [Test]\n    public void FindAllRussianWordsWithLookalikeSymbolsInNormalizedText_WithEmptyString_ReturnsEmptyList()\n    {\n        // Act\n        var result = SimpleFilters.FindAllRussianWordsWithLookalikeSymbolsInNormalizedText(\"\");\n\n        // Assert\n        Assert.That(result, Is.Empty);\n    }\n\n    [Test]\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/SimpleFiltersNullTests.cs::SimpleFiltersNullTests::FindAllRussianWordsWithLookalikeSymbolsInNormalizedText_WithNullInput_ThrowsArgumentNullException",
+        "file": "SimpleFiltersNullTests.cs",
+        "namespace": "ClubDoorman.Test",
+        "class": "SimpleFiltersNullTests",
+        "test_name": "FindAllRussianWordsWithLookalikeSymbolsInNormalizedText_WithNullInput_ThrowsArgumentNullException",
+        "line": 57,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 7,
+        "declared_area_from_path": "Root",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": true,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 120
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/SimpleFiltersNullTests.cs\n# Lines 27-87 (test starts at line 57)\n    [Test]\n    public void HasStopWords_WithNormalText_ReturnsFalse()\n    {\n        // Act\n        var result = SimpleFilters.HasStopWords(\"Привет, как дела?\");\n\n        // Assert\n        Assert.That(result, Is.False);\n    }\n\n    [Test]\n    public void FindAllRussianWordsWithLookalikeSymbols_WithNullInput_ThrowsArgumentNullException()\n    {\n        // Act & Assert\n        var exception = Assert.Throws<ArgumentNullException>(() =>\n            SimpleFilters.FindAllRussianWordsWithLookalikeSymbols(null!));\n\n        Assert.That(exception.ParamName, Is.EqualTo(\"message\"));\n    }\n\n    [Test]\n    public void FindAllRussianWordsWithLookalikeSymbols_WithEmptyString_ReturnsEmptyList()\n    {\n        // Act\n        var result = SimpleFilters.FindAllRussianWordsWithLookalikeSymbols(\"\");\n\n        // Assert\n        Assert.That(result, Is.Empty);\n    }\n\n    [Test]\n    public void FindAllRussianWordsWithLookalikeSymbolsInNormalizedText_WithNullInput_ThrowsArgumentNullException()\n    {\n        // Act & Assert\n        var exception = Assert.Throws<ArgumentNullException>(() =>\n            SimpleFilters.FindAllRussianWordsWithLookalikeSymbolsInNormalizedText(null!));\n\n        Assert.That(exception.ParamName, Is.EqualTo(\"message\"));\n    }\n\n    [Test]\n    public void FindAllRussianWordsWithLookalikeSymbolsInNormalizedText_WithEmptyString_ReturnsEmptyList()\n    {\n        // Act\n        var result = SimpleFilters.FindAllRussianWordsWithLookalikeSymbolsInNormalizedText(\"\");\n\n        // Assert\n        Assert.That(result, Is.Empty);\n    }\n\n    [Test]\n    public void TooManyEmojis_WithNullInput_ThrowsArgumentNullException()\n    {\n        // Act & Assert\n        var exception = Assert.Throws<ArgumentNullException>(() =>\n            SimpleFilters.TooManyEmojis(null!));\n\n        Assert.That(exception.ParamName, Is.EqualTo(\"message\"));\n    }\n\n    [Test]\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/SimpleFiltersNullTests.cs::SimpleFiltersNullTests::FindAllRussianWordsWithLookalikeSymbolsInNormalizedText_WithEmptyString_ReturnsEmptyList",
+        "file": "SimpleFiltersNullTests.cs",
+        "namespace": "ClubDoorman.Test",
+        "class": "SimpleFiltersNullTests",
+        "test_name": "FindAllRussianWordsWithLookalikeSymbolsInNormalizedText_WithEmptyString_ReturnsEmptyList",
+        "line": 67,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 7,
+        "declared_area_from_path": "Root",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 121
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/SimpleFiltersNullTests.cs\n# Lines 37-96 (test starts at line 67)\n    [Test]\n    public void FindAllRussianWordsWithLookalikeSymbols_WithNullInput_ThrowsArgumentNullException()\n    {\n        // Act & Assert\n        var exception = Assert.Throws<ArgumentNullException>(() =>\n            SimpleFilters.FindAllRussianWordsWithLookalikeSymbols(null!));\n\n        Assert.That(exception.ParamName, Is.EqualTo(\"message\"));\n    }\n\n    [Test]\n    public void FindAllRussianWordsWithLookalikeSymbols_WithEmptyString_ReturnsEmptyList()\n    {\n        // Act\n        var result = SimpleFilters.FindAllRussianWordsWithLookalikeSymbols(\"\");\n\n        // Assert\n        Assert.That(result, Is.Empty);\n    }\n\n    [Test]\n    public void FindAllRussianWordsWithLookalikeSymbolsInNormalizedText_WithNullInput_ThrowsArgumentNullException()\n    {\n        // Act & Assert\n        var exception = Assert.Throws<ArgumentNullException>(() =>\n            SimpleFilters.FindAllRussianWordsWithLookalikeSymbolsInNormalizedText(null!));\n\n        Assert.That(exception.ParamName, Is.EqualTo(\"message\"));\n    }\n\n    [Test]\n    public void FindAllRussianWordsWithLookalikeSymbolsInNormalizedText_WithEmptyString_ReturnsEmptyList()\n    {\n        // Act\n        var result = SimpleFilters.FindAllRussianWordsWithLookalikeSymbolsInNormalizedText(\"\");\n\n        // Assert\n        Assert.That(result, Is.Empty);\n    }\n\n    [Test]\n    public void TooManyEmojis_WithNullInput_ThrowsArgumentNullException()\n    {\n        // Act & Assert\n        var exception = Assert.Throws<ArgumentNullException>(() =>\n            SimpleFilters.TooManyEmojis(null!));\n\n        Assert.That(exception.ParamName, Is.EqualTo(\"message\"));\n    }\n\n    [Test]\n    public void TooManyEmojis_WithEmptyString_ReturnsFalse()\n    {\n        // Act\n        var result = SimpleFilters.TooManyEmojis(\"\");\n\n        // Assert\n        Assert.That(result, Is.False);\n    }\n}"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/SimpleFiltersNullTests.cs::SimpleFiltersNullTests::TooManyEmojis_WithNullInput_ThrowsArgumentNullException",
+        "file": "SimpleFiltersNullTests.cs",
+        "namespace": "ClubDoorman.Test",
+        "class": "SimpleFiltersNullTests",
+        "test_name": "TooManyEmojis_WithNullInput_ThrowsArgumentNullException",
+        "line": 77,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 7,
+        "declared_area_from_path": "Root",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": true,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 122
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/SimpleFiltersNullTests.cs\n# Lines 47-96 (test starts at line 77)\n    [Test]\n    public void FindAllRussianWordsWithLookalikeSymbols_WithEmptyString_ReturnsEmptyList()\n    {\n        // Act\n        var result = SimpleFilters.FindAllRussianWordsWithLookalikeSymbols(\"\");\n\n        // Assert\n        Assert.That(result, Is.Empty);\n    }\n\n    [Test]\n    public void FindAllRussianWordsWithLookalikeSymbolsInNormalizedText_WithNullInput_ThrowsArgumentNullException()\n    {\n        // Act & Assert\n        var exception = Assert.Throws<ArgumentNullException>(() =>\n            SimpleFilters.FindAllRussianWordsWithLookalikeSymbolsInNormalizedText(null!));\n\n        Assert.That(exception.ParamName, Is.EqualTo(\"message\"));\n    }\n\n    [Test]\n    public void FindAllRussianWordsWithLookalikeSymbolsInNormalizedText_WithEmptyString_ReturnsEmptyList()\n    {\n        // Act\n        var result = SimpleFilters.FindAllRussianWordsWithLookalikeSymbolsInNormalizedText(\"\");\n\n        // Assert\n        Assert.That(result, Is.Empty);\n    }\n\n    [Test]\n    public void TooManyEmojis_WithNullInput_ThrowsArgumentNullException()\n    {\n        // Act & Assert\n        var exception = Assert.Throws<ArgumentNullException>(() =>\n            SimpleFilters.TooManyEmojis(null!));\n\n        Assert.That(exception.ParamName, Is.EqualTo(\"message\"));\n    }\n\n    [Test]\n    public void TooManyEmojis_WithEmptyString_ReturnsFalse()\n    {\n        // Act\n        var result = SimpleFilters.TooManyEmojis(\"\");\n\n        // Assert\n        Assert.That(result, Is.False);\n    }\n}"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/SimpleFiltersNullTests.cs::SimpleFiltersNullTests::TooManyEmojis_WithEmptyString_ReturnsFalse",
+        "file": "SimpleFiltersNullTests.cs",
+        "namespace": "ClubDoorman.Test",
+        "class": "SimpleFiltersNullTests",
+        "test_name": "TooManyEmojis_WithEmptyString_ReturnsFalse",
+        "line": 87,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 7,
+        "declared_area_from_path": "Root",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 123
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/SimpleFiltersNullTests.cs\n# Lines 57-96 (test starts at line 87)\n    [Test]\n    public void FindAllRussianWordsWithLookalikeSymbolsInNormalizedText_WithNullInput_ThrowsArgumentNullException()\n    {\n        // Act & Assert\n        var exception = Assert.Throws<ArgumentNullException>(() =>\n            SimpleFilters.FindAllRussianWordsWithLookalikeSymbolsInNormalizedText(null!));\n\n        Assert.That(exception.ParamName, Is.EqualTo(\"message\"));\n    }\n\n    [Test]\n    public void FindAllRussianWordsWithLookalikeSymbolsInNormalizedText_WithEmptyString_ReturnsEmptyList()\n    {\n        // Act\n        var result = SimpleFilters.FindAllRussianWordsWithLookalikeSymbolsInNormalizedText(\"\");\n\n        // Assert\n        Assert.That(result, Is.Empty);\n    }\n\n    [Test]\n    public void TooManyEmojis_WithNullInput_ThrowsArgumentNullException()\n    {\n        // Act & Assert\n        var exception = Assert.Throws<ArgumentNullException>(() =>\n            SimpleFilters.TooManyEmojis(null!));\n\n        Assert.That(exception.ParamName, Is.EqualTo(\"message\"));\n    }\n\n    [Test]\n    public void TooManyEmojis_WithEmptyString_ReturnsFalse()\n    {\n        // Act\n        var result = SimpleFilters.TooManyEmojis(\"\");\n\n        // Assert\n        Assert.That(result, Is.False);\n    }\n}"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/SimpleFiltersTests.cs::Tests::HasLookAlikeSymbols_Tests",
+        "file": "SimpleFiltersTests.cs",
+        "namespace": "ClubDoorman.Test",
+        "class": "Tests",
+        "test_name": "HasLookAlikeSymbols_Tests",
+        "line": 24,
+        "attributes": [
+          "TestCase",
+          "TestCase",
+          "TestCase",
+          "TestCase",
+          "TestCase",
+          "TestCase",
+          "TestCase",
+          "TestCase",
+          "TestCase",
+          "TestCase",
+          "TestCase",
+          "TestCase",
+          "TestCase",
+          "TestCase",
+          "TestCase",
+          "TestCase",
+          "TestCase",
+          "TestCase",
+          "TestCase"
+        ],
+        "categories": [],
+        "body_lines": 4,
+        "declared_area_from_path": "Root",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "very_short_test",
+          "multiple_test_cases"
+        ],
+        "_source_lineno": 124
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/SimpleFiltersTests.cs\n# Lines 1-49 (test starts at line 24)\n﻿\nnamespace ClubDoorman.Test;\n\npublic class Tests\n{\n    [TestCase(\"привет\", false, TestName = \"CyrillicWord_NoLookAlikes\")]\n    [TestCase(\"приве7\", false, TestName = \"CyrillicWord_WithDigit\")]\n    [TestCase(\"вас3к\", false, TestName = \"CyrillicWord_WithMixedLookAlikes\")]\n    [TestCase(\"мирu\", true, TestName = \"MostlyCyrillicWord_WithLookAlikes\")]\n    [TestCase(\"Прuвет!\", true, TestName = \"MostlyCyrillicWord_WithLookAlikes2\")]\n    [TestCase(\"privет\", false, TestName = \"PartiallyCyrillicWord_WithLookAlikes\")]\n    [TestCase(\"hello\", false, TestName = \"PurelyNonCyrillicWord\")]\n    [TestCase(\"\", false, TestName = \"EmptyString\")]\n    [TestCase(\"д\", false, TestName = \"SingleCyrillicCharacter\")]\n    [TestCase(\"a\", false, TestName = \"SingleNonCyrillicCharacter\")]\n    [TestCase(\"ПриВет!\", false, TestName = \"CyrillicWord_WithPunctuation\")]\n    [TestCase(\"Ищy людeй в комaнду, прuятный заработоk, мuнuмум затpат по верменu, подpобностu в лuчку\", true, TestName = \"BigSentence\")]\n    [TestCase(\"Ищyлюдeйαπό\", true, TestName = \"Greek\")]\n    [TestCase(\"это русское слово и в нём есть\", false, TestName = \"Cyrillic Small Letter Io\")]\n    [TestCase(\"хей\", false, TestName = \"IKratkoe\")]\n    [TestCase(\"адказ на пытанне хто вы з гэтай кнігі\", false, TestName = \"Belarus\")]\n    [TestCase(\"натомість використовують код альтернативних клієнтів\", false, TestName = \"Ukrainian\")]\n    [TestCase(\"Велико Търново, Зелено дърво\", false, TestName = \"Bulgarian\")]\n    [TestCase(\"Дорћол, Љекар, Њега\", false, TestName = \"Serbian\")]\n    public void HasLookAlikeSymbols_Tests(string word, bool expectedResult)\n    {\n        var result = SimpleFilters.FindAllRussianWordsWithLookalikeSymbols(word);\n        Assert.That(result.Count > 0, Is.EqualTo(expectedResult), string.Join(\", \", result));\n    }\n\n    [TestCase(\"Набор в команду для заинтересованых в доп.доходе удаленно, за информацией в лс\", true)]\n    [TestCase(\"В поске 5-6 людей в команду по дистанционному заработку, от 20 лет. По вопросам писать в лс.\", true)]\n    [TestCase(\"Тихий час. Набегался\", false)]\n    public void HasStopWords_Test(string message, bool expectedResult)\n    {\n        var norm = TextProcessor.NormalizeText(message);\n        var result = SimpleFilters.HasStopWords(norm);\n        Assert.That(result, Is.EqualTo(expectedResult));\n    }\n\n    [TestCase]\n    public void FormatStripped()\n    {\n        const string spam =\n            \"\\u2068g\\u2068o\\u2068 \\u2068f\\u2068a\\u2068\\u2068\\u2068\\u2068\\u2068\\u2068\\u2068s\\u2068t\\u2068\\ud83e\\udd71  F\\u2068\\u2068R\\u2068\\u2068E\\u2068EC\\u2068L\\u2068\\u2068A\\u2068\\u2068\\u2068I\\u2068\\u2068M\\u2068\\u2068 N\\u2068\\u2068F\\u2068\\u2068\\u2068T\\u2068\\u2068  I\\u2068\\u2068F \\u2068\\u2068\\u2068AL\\u2068\\u2068RE\\u2068\\u2068A\\u2068\\u2068D\\u2068Y 5\\u2068\\u20680\\u2068\\u20680\\u2068\\u20680\\u2068\\u2068\\u2068\\u2068/\\u2068\\u206850\\u2068\\u20680\\u2068\\u20680\\u2068\\u2068\\u2068 \\u2068yo\\u2068u\\u2068 ar\\u2068e t\\u2068\\u2068o\\u2068\\u2068o \\u2068l\\u2068ate,\\u2068 so\\u2068r\\u2068\\u2068r\\u2068y\";\n        var norm = TextProcessor.NormalizeText(spam);\n        Assert.That(norm, Has.Length.LessThan(70));\n    }\n}\n"
+    }
+  ]
+}

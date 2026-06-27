@@ -1,0 +1,401 @@
+{
+  "schema_version": "test-audit-batch-v1",
+  "batch_no": 15,
+  "purpose": "local LLM audit input",
+  "instructions": "Return JSONL only. One audit object per input test. No markdown. No code edits.",
+  "tests": [
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Handlers/MessageHandlerFakeTests.cs::MessageHandlerFakeTests::HandleAsync_BotMessage_Ignores",
+        "file": "Unit/Handlers/MessageHandlerFakeTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Handlers",
+        "class": "MessageHandlerFakeTests",
+        "test_name": "HandleAsync_BotMessage_Ignores",
+        "line": 174,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 15,
+        "declared_area_from_path": "Unit",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": true,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify",
+          "message_handler_test_factory"
+        ],
+        "_source_lineno": 354
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Handlers/MessageHandlerFakeTests.cs\n# Lines 144-204 (test starts at line 174)\n\n        var update = new Update { Message = message };\n        var service = _factory.CreateMessageHandlerWithFake(fakeClient);\n\n        // Настройка моков через билдеры\n        var moderationResult = TestKitBuilders.CreateModerationResult()\n            .AsAllow()\n            .WithReason(\"Valid username\")\n            .Build();\n\n        _factory.ModerationServiceMock\n            .Setup(x => x.CheckUserNameAsync(It.IsAny<User>()))\n            .ReturnsAsync(moderationResult);\n\n        _factory.ModerationServiceMock\n            .Setup(x => x.IsUserApproved(It.IsAny<long>(), It.IsAny<long>()))\n            .Returns(false);\n\n        // Act\n        await service.HandleAsync(update);\n\n        // Assert\n        // Проверяем, что был вызван UserJoinFacade\n        _factory.UserJoinFacadeMock.Verify(\n            x => x.HandleNewMembersAsync(\n                It.IsAny<Message>(),\n                It.IsAny<CancellationToken>()),\n            Times.Once);\n    }\n\n    [Test]\n    public async Task HandleAsync_BotMessage_Ignores()\n    {\n        // Arrange\n        var service = _factory.CreateMessageHandlerWithFake(_fakeClient);\n        var message = TK.CreateBotMessage();\n\n        // Act\n        var update = new Update { Message = message };\n        await service.HandleAsync(update);\n\n        // Assert\n        // Бот сообщения игнорируются - моки не вызываются\n        _factory.ModerationServiceMock.Verify(\n            x => x.CheckMessageAsync(It.IsAny<Message>()),\n            Times.Never);\n    }\n\n    [Test]\n    public async Task HandleAsync_ServiceMessage_Ignores()\n    {\n        // Arrange\n        var service = _factory.CreateMessageHandlerWithFake(_fakeClient);\n        var message = TK.CreateNewUserJoinMessage();\n\n        // Настройка моков для ProcessNewUserAsync\n        _factory.ModerationServiceMock\n            .Setup(x => x.CheckUserNameAsync(It.IsAny<User>()))\n            .ReturnsAsync(new ModerationResult(ModerationAction.Allow, \"Valid username\"));\n\n        _factory.UserManagerMock\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Handlers/MessageHandlerFakeTests.cs::MessageHandlerFakeTests::HandleAsync_ServiceMessage_Ignores",
+        "file": "Unit/Handlers/MessageHandlerFakeTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Handlers",
+        "class": "MessageHandlerFakeTests",
+        "test_name": "HandleAsync_ServiceMessage_Ignores",
+        "line": 192,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 38,
+        "declared_area_from_path": "Unit",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": true,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify",
+          "message_handler_test_factory"
+        ],
+        "_source_lineno": 355
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Handlers/MessageHandlerFakeTests.cs\n# Lines 162-222 (test starts at line 192)\n        // Act\n        await service.HandleAsync(update);\n\n        // Assert\n        // Проверяем, что был вызван UserJoinFacade\n        _factory.UserJoinFacadeMock.Verify(\n            x => x.HandleNewMembersAsync(\n                It.IsAny<Message>(),\n                It.IsAny<CancellationToken>()),\n            Times.Once);\n    }\n\n    [Test]\n    public async Task HandleAsync_BotMessage_Ignores()\n    {\n        // Arrange\n        var service = _factory.CreateMessageHandlerWithFake(_fakeClient);\n        var message = TK.CreateBotMessage();\n\n        // Act\n        var update = new Update { Message = message };\n        await service.HandleAsync(update);\n\n        // Assert\n        // Бот сообщения игнорируются - моки не вызываются\n        _factory.ModerationServiceMock.Verify(\n            x => x.CheckMessageAsync(It.IsAny<Message>()),\n            Times.Never);\n    }\n\n    [Test]\n    public async Task HandleAsync_ServiceMessage_Ignores()\n    {\n        // Arrange\n        var service = _factory.CreateMessageHandlerWithFake(_fakeClient);\n        var message = TK.CreateNewUserJoinMessage();\n\n        // Настройка моков для ProcessNewUserAsync\n        _factory.ModerationServiceMock\n            .Setup(x => x.CheckUserNameAsync(It.IsAny<User>()))\n            .ReturnsAsync(new ModerationResult(ModerationAction.Allow, \"Valid username\"));\n\n        _factory.UserManagerMock\n            .Setup(x => x.GetClubUsername(It.IsAny<long>()))\n            .ReturnsAsync((string?)null);\n\n        _factory.UserManagerMock\n            .Setup(x => x.InBanlist(It.IsAny<long>()))\n            .ReturnsAsync(false);\n\n        _factory.CaptchaServiceMock\n            .Setup(x => x.GenerateKey(It.IsAny<long>(), It.IsAny<long>()))\n            .Returns(\"test-key\");\n\n        _factory.CaptchaServiceMock\n            .Setup(x => x.GetCaptchaInfo(It.IsAny<string>()))\n            .Returns((CaptchaInfo?)null);\n\n        // Act\n        var update = new Update { Message = message };\n        await service.HandleAsync(update);\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Handlers/MessageHandlerFakeTests.cs::MessageHandlerFakeTests::HandleAsync_TelegramError_HandlesGracefully",
+        "file": "Unit/Handlers/MessageHandlerFakeTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Handlers",
+        "class": "MessageHandlerFakeTests",
+        "test_name": "HandleAsync_TelegramError_HandlesGracefully",
+        "line": 293,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 32,
+        "declared_area_from_path": "Unit",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": true,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify",
+          "message_handler_test_factory"
+        ],
+        "_source_lineno": 358
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Handlers/MessageHandlerFakeTests.cs\n# Lines 263-323 (test starts at line 293)\n            .Returns(\"test-key\");\n\n        _factory.CaptchaServiceMock\n            .Setup(x => x.GetCaptchaInfo(It.IsAny<string>()))\n            .Returns((CaptchaInfo?)null);\n\n        // Настройка моков для UserManager\n        _factory.UserManagerMock\n            .Setup(x => x.GetClubUsername(It.IsAny<long>()))\n            .ReturnsAsync((string?)null);\n\n        // Act & Assert\n        // Ошибка должна быть обработана gracefully (не проброшена наружу)\n        Assert.DoesNotThrowAsync(async () =>\n        {\n            var update = new Update { Message = message };\n            await service.HandleAsync(update);\n        });\n\n        // Проверяем, что ошибка была залогирована\n        _factory.LoggerMock.Verify(\n            x => x.Log(\n                LogLevel.Error,\n                It.IsAny<EventId>(),\n                It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains(\"Ошибка при модерации сообщения\")),\n                It.IsAny<Exception>(),\n                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),\n            Times.Once);\n    }\n\n    [Test]\n    public async Task HandleAsync_TelegramError_HandlesGracefully()\n    {\n        // Arrange\n        _fakeClient.ShouldThrowException = true;\n        _fakeClient.ExceptionToThrow = new Exception(\"Telegram API error\");\n\n        var service = _factory.CreateMessageHandlerWithFake(_fakeClient);\n        var message = TK.CreateValidMessage();\n\n        // Настройка моков\n        _factory.ModerationServiceMock\n            .Setup(x => x.CheckMessageAsync(It.IsAny<Message>()))\n            .ReturnsAsync(new ModerationResult(ModerationAction.Delete, \"Spam\"));\n\n        _factory.ModerationServiceMock\n            .Setup(x => x.IsUserApproved(It.IsAny<long>(), It.IsAny<long>()))\n            .Returns(true);\n\n        // Act\n        var update = new Update { Message = message };\n        await service.HandleAsync(update);\n\n        // Assert\n        // Ошибка Telegram обработана, исключение не проброшено\n        _factory.LoggerMock.Verify(\n            x => x.Log(\n                It.IsAny<LogLevel>(),\n                It.IsAny<EventId>(),\n                It.IsAny<It.IsAnyType>(),\n                It.IsAny<Exception>(),\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Handlers/MessageHandlerFakeTests.cs::MessageHandlerFakeTests::HandleAsync_StartCommand_ProcessesCommand",
+        "file": "Unit/Handlers/MessageHandlerFakeTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Handlers",
+        "class": "MessageHandlerFakeTests",
+        "test_name": "HandleAsync_StartCommand_ProcessesCommand",
+        "line": 328,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 25,
+        "declared_area_from_path": "Unit",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": true,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": true,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": true,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "assert_pass",
+          "message_handler_test_factory",
+          "real_env_or_api"
+        ],
+        "_source_lineno": 359
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Handlers/MessageHandlerFakeTests.cs\n# Lines 298-358 (test starts at line 328)\n        _fakeClient.ExceptionToThrow = new Exception(\"Telegram API error\");\n\n        var service = _factory.CreateMessageHandlerWithFake(_fakeClient);\n        var message = TK.CreateValidMessage();\n\n        // Настройка моков\n        _factory.ModerationServiceMock\n            .Setup(x => x.CheckMessageAsync(It.IsAny<Message>()))\n            .ReturnsAsync(new ModerationResult(ModerationAction.Delete, \"Spam\"));\n\n        _factory.ModerationServiceMock\n            .Setup(x => x.IsUserApproved(It.IsAny<long>(), It.IsAny<long>()))\n            .Returns(true);\n\n        // Act\n        var update = new Update { Message = message };\n        await service.HandleAsync(update);\n\n        // Assert\n        // Ошибка Telegram обработана, исключение не проброшено\n        _factory.LoggerMock.Verify(\n            x => x.Log(\n                It.IsAny<LogLevel>(),\n                It.IsAny<EventId>(),\n                It.IsAny<It.IsAnyType>(),\n                It.IsAny<Exception>(),\n                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),\n            Times.AtLeastOnce);\n    }\n\n    [Test]\n    public async Task HandleAsync_StartCommand_ProcessesCommand()\n    {\n        // Arrange\n        var service = _factory.CreateMessageHandlerWithFake(_fakeClient);\n        var message = TK.CreateStartCommandMessage();\n\n        // Настройка ServiceProvider для команд\n        var mockStartCommandHandler = new Mock<StartCommandHandler>(\n            MockBehavior.Loose,\n            new TelegramBotClientWrapper(new TelegramBotClient(\"1234567890:ABCdefGHIjklMNOpqrsTUVwxyz\"), Microsoft.Extensions.Logging.Abstractions.NullLogger<TelegramBotClientWrapper>.Instance),\n            NullLogger<StartCommandHandler>.Instance,\n            new Mock<IMessageService>().Object,\n            new Mock<IAppConfig>().Object\n        );\n        _factory.ServiceProviderMock\n            .Setup(x => x.GetService(typeof(StartCommandHandler)))\n            .Returns(mockStartCommandHandler.Object);\n\n        // Act\n        var update = new Update { Message = message };\n        await service.HandleAsync(update);\n\n        // Assert\n        // Команда обработана без исключений\n        Assert.Pass(\"Команда /start обработана успешно\");\n    }\n\n    [Test]\n    public async Task HandleAsync_ApprovedUser_ProcessesNormally()\n    {\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Handlers/MessageHandlerFakeTests.cs::MessageHandlerFakeTests::HandleAsync_ApprovedUser_ProcessesNormally",
+        "file": "Unit/Handlers/MessageHandlerFakeTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Handlers",
+        "class": "MessageHandlerFakeTests",
+        "test_name": "HandleAsync_ApprovedUser_ProcessesNormally",
+        "line": 356,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 24,
+        "declared_area_from_path": "Unit",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": true,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify",
+          "message_handler_test_factory"
+        ],
+        "_source_lineno": 360
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Handlers/MessageHandlerFakeTests.cs\n# Lines 326-386 (test starts at line 356)\n    }\n\n    [Test]\n    public async Task HandleAsync_StartCommand_ProcessesCommand()\n    {\n        // Arrange\n        var service = _factory.CreateMessageHandlerWithFake(_fakeClient);\n        var message = TK.CreateStartCommandMessage();\n\n        // Настройка ServiceProvider для команд\n        var mockStartCommandHandler = new Mock<StartCommandHandler>(\n            MockBehavior.Loose,\n            new TelegramBotClientWrapper(new TelegramBotClient(\"1234567890:ABCdefGHIjklMNOpqrsTUVwxyz\"), Microsoft.Extensions.Logging.Abstractions.NullLogger<TelegramBotClientWrapper>.Instance),\n            NullLogger<StartCommandHandler>.Instance,\n            new Mock<IMessageService>().Object,\n            new Mock<IAppConfig>().Object\n        );\n        _factory.ServiceProviderMock\n            .Setup(x => x.GetService(typeof(StartCommandHandler)))\n            .Returns(mockStartCommandHandler.Object);\n\n        // Act\n        var update = new Update { Message = message };\n        await service.HandleAsync(update);\n\n        // Assert\n        // Команда обработана без исключений\n        Assert.Pass(\"Команда /start обработана успешно\");\n    }\n\n    [Test]\n    public async Task HandleAsync_ApprovedUser_ProcessesNormally()\n    {\n        // Arrange\n        var service = _factory.CreateMessageHandlerWithFake(_fakeClient);\n        var message = TK.CreateValidMessage();\n\n        // Настройка моков - пользователь одобрен\n        _factory.ModerationServiceMock\n            .Setup(x => x.IsUserApproved(It.IsAny<long>(), It.IsAny<long>()))\n            .Returns(true);\n\n        _factory.ModerationServiceMock\n            .Setup(x => x.CheckMessageAsync(It.IsAny<Message>()))\n            .ReturnsAsync(new ModerationResult(ModerationAction.Allow, \"Valid message\"));\n\n        // Act\n        var update = new Update { Message = message };\n        await service.HandleAsync(update);\n\n        // Assert\n        // Капча не отправляется для одобренных пользователей\n        _factory.CaptchaServiceMock.Verify(\n            x => x.CreateCaptchaAsync(It.IsAny<CreateCaptchaRequest>()),\n            Times.Never);\n    }\n\n    [Test]\n    public async Task HandleAsync_EmptyMessage_ProcessesCorrectly()\n    {\n        // Arrange\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Handlers/MessageHandlerFakeTests.cs::MessageHandlerFakeTests::HandleAsync_EmptyMessage_ProcessesCorrectly",
+        "file": "Unit/Handlers/MessageHandlerFakeTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Handlers",
+        "class": "MessageHandlerFakeTests",
+        "test_name": "HandleAsync_EmptyMessage_ProcessesCorrectly",
+        "line": 383,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 38,
+        "declared_area_from_path": "Unit",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": true,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify",
+          "message_handler_test_factory"
+        ],
+        "_source_lineno": 361
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Handlers/MessageHandlerFakeTests.cs\n# Lines 353-413 (test starts at line 383)\n        Assert.Pass(\"Команда /start обработана успешно\");\n    }\n\n    [Test]\n    public async Task HandleAsync_ApprovedUser_ProcessesNormally()\n    {\n        // Arrange\n        var service = _factory.CreateMessageHandlerWithFake(_fakeClient);\n        var message = TK.CreateValidMessage();\n\n        // Настройка моков - пользователь одобрен\n        _factory.ModerationServiceMock\n            .Setup(x => x.IsUserApproved(It.IsAny<long>(), It.IsAny<long>()))\n            .Returns(true);\n\n        _factory.ModerationServiceMock\n            .Setup(x => x.CheckMessageAsync(It.IsAny<Message>()))\n            .ReturnsAsync(new ModerationResult(ModerationAction.Allow, \"Valid message\"));\n\n        // Act\n        var update = new Update { Message = message };\n        await service.HandleAsync(update);\n\n        // Assert\n        // Капча не отправляется для одобренных пользователей\n        _factory.CaptchaServiceMock.Verify(\n            x => x.CreateCaptchaAsync(It.IsAny<CreateCaptchaRequest>()),\n            Times.Never);\n    }\n\n    [Test]\n    public async Task HandleAsync_EmptyMessage_ProcessesCorrectly()\n    {\n        // Arrange\n        var service = _factory.CreateMessageHandlerWithFake(_fakeClient);\n        var message = TK.CreateEmptyMessage();\n\n        // Настройка моков - пользователь НЕ одобрен, чтобы дойти до модерации\n        _factory.ModerationServiceMock\n            .Setup(x => x.CheckMessageAsync(It.IsAny<Message>()))\n            .ReturnsAsync(new ModerationResult(ModerationAction.Allow, \"Empty message allowed\"));\n\n        _factory.ModerationServiceMock\n            .Setup(x => x.IsUserApproved(It.IsAny<long>(), It.IsAny<long>()))\n            .Returns(false);\n\n        // Настройка моков для CaptchaService\n        _factory.CaptchaServiceMock\n            .Setup(x => x.GenerateKey(It.IsAny<long>(), It.IsAny<long>()))\n            .Returns(\"test-key\");\n\n        _factory.CaptchaServiceMock\n            .Setup(x => x.GetCaptchaInfo(It.IsAny<string>()))\n            .Returns((CaptchaInfo?)null);\n\n        // Настройка моков для UserManager\n        _factory.UserManagerMock\n            .Setup(x => x.GetClubUsername(It.IsAny<long>()))\n            .ReturnsAsync((string?)null);\n\n        // Act\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Handlers/MessageHandlerHandleAsyncBasicTests.cs::MessageHandlerHandleAsyncBasicTests::HandleAsync_ValidTextMessage_CallsModerationAndLogs",
+        "file": "Unit/Handlers/MessageHandlerHandleAsyncBasicTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Handlers",
+        "class": "MessageHandlerHandleAsyncBasicTests",
+        "test_name": "HandleAsync_ValidTextMessage_CallsModerationAndLogs",
+        "line": 89,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 31,
+        "declared_area_from_path": "Unit",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify",
+          "message_handler_test_factory"
+        ],
+        "_source_lineno": 363
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Handlers/MessageHandlerHandleAsyncBasicTests.cs\n# Lines 59-119 (test starts at line 89)\n        _factory.AiCascadeServiceMock.Setup(x => x.PerformAiProfileAnalysisAsync(It.IsAny<Message>(), It.IsAny<User>(), It.IsAny<Chat>(), It.IsAny<CancellationToken>()))\n            .ReturnsAsync(false); // false означает, что профиль не подозрительный\n\n        _messageHandler = _factory.CreateMessageHandler();\n    }\n\n    /// <summary>\n    /// Тест для HandleAsync с null Update\n    /// Проверяет, что метод выбрасывает ArgumentNullException для null Update\n    /// <tags>golden-master, production, handle-async, null-update, error-handling</tags>\n    /// </summary>\n    [Test]\n    public async Task HandleAsync_NullUpdate_ThrowsArgumentNullException()\n    {\n        // Arrange: Передаем null\n        Update? update = null;\n\n        // Act & Assert: Проверяем исключение\n        var exception = Assert.ThrowsAsync<ArgumentNullException>(\n            async () => await _messageHandler.HandleAsync(update));\n\n        Assert.That(exception.ParamName, Is.EqualTo(\"update\"),\n            \"Параметр исключения должен быть 'update'\");\n    }\n\n    /// <summary>\n    /// Тест для HandleAsync с валидным текстовым сообщением\n    /// Проверяет, что метод обрабатывает обычное текстовое сообщение и вызывает модерацию\n    /// <tags>golden-master, production, handle-async, valid-message, moderation</tags>\n    /// </summary>\n    [Test]\n    public async Task HandleAsync_ValidTextMessage_CallsModerationAndLogs()\n    {\n        // Arrange: Используем готовый сценарий из TestKit\n        var (user, chat, message) = TK.Specialized.Messages.TextOnlyScenario();\n        var update = new Update { Message = message };\n\n        // Act: Вызываем метод\n        await _messageHandler.HandleAsync(update);\n\n        // Assert: Проверяем вызовы модерации - используем конкретный объект\n        _factory.ModerationFacadeMock.Verify(\n            x => x.CheckMessageAsync(message),\n            Times.Once,\n            \"Должна вызваться проверка сообщения\");\n\n        // CheckUserNameAsync вызывается только для новых участников, не для обычных сообщений\n        _factory.ModerationFacadeMock.Verify(\n            x => x.CheckUserNameAsync(It.IsAny<User>()),\n            Times.Never,\n            \"CheckUserNameAsync не должен вызываться для обычных сообщений\");\n\n        // Проверяем логирование - используем реальные сообщения из логов\n        _factory.LoggerMock.Verify(\n            x => x.Log(\n                LogLevel.Debug,\n                It.IsAny<EventId>(),\n                It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains(\"MessageHandler получил сообщение\")),\n                It.IsAny<Exception>(),\n                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),\n            Times.Once,\n"
+    }
+  ]
+}

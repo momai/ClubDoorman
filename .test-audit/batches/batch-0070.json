@@ -1,0 +1,438 @@
+{
+  "schema_version": "test-audit-batch-v1",
+  "batch_no": 70,
+  "purpose": "local LLM audit input",
+  "instructions": "Return JSONL only. One audit object per input test. No markdown. No code edits.",
+  "tests": [
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/AiChecksExtendedTests.cs::AiChecksExtendedTests::GetSpamProbability_MessageWithoutText_ReturnsSpamProbability",
+        "file": "Unit/Services/AiChecksExtendedTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "AiChecksExtendedTests",
+        "test_name": "GetSpamProbability_MessageWithoutText_ReturnsSpamProbability",
+        "line": 397,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 18,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 551
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/AiChecksExtendedTests.cs\n# Lines 367-427 (test starts at line 397)\n\n        // Assert\n        Assert.That(result, Is.Not.Null);\n        Assert.That(result.Probability, Is.GreaterThanOrEqualTo(0.0));\n        Assert.That(result.Probability, Is.LessThanOrEqualTo(1.0));\n    }\n\n    [Test]\n    public async Task GetSuspiciousUserSpamProbability_LowMimicryScore_ReturnsSpamProbability()\n    {\n        // Arrange\n        var service = _factory.CreateAiChecks();\n        var message = TK.CreateValidMessage();\n        var user = TK.CreateValidUser();\n        var firstMessages = new List<string> { \"Hello\" };\n        var mimicryScore = 0.1; // Низкий score\n\n        // Act\n        var result = await service.GetSuspiciousUserSpamProbability(message, user, firstMessages, mimicryScore);\n\n        // Assert\n        Assert.That(result, Is.Not.Null);\n        Assert.That(result.Probability, Is.GreaterThanOrEqualTo(0.0));\n        Assert.That(result.Probability, Is.LessThanOrEqualTo(1.0));\n    }\n\n    #endregion\n\n    #region Edge Cases and Error Handling\n\n    [Test]\n    public async Task GetSpamProbability_MessageWithoutText_ReturnsSpamProbability()\n    {\n        // Arrange\n        var service = _factory.CreateAiChecks();\n        var message = new Message\n        {\n            From = TK.CreateValidUser(),\n            Chat = TK.CreateGroupChat(),\n            Text = null\n        };\n\n        // Act\n        var result = await service.GetSpamProbability(message);\n\n        // Assert\n        Assert.That(result, Is.Not.Null);\n        Assert.That(result.Probability, Is.GreaterThanOrEqualTo(0.0));\n        Assert.That(result.Probability, Is.LessThanOrEqualTo(1.0));\n    }\n\n    [Test]\n    public async Task GetSpamProbability_MessageWithoutFrom_ReturnsSpamProbability()\n    {\n        // Arrange\n        var service = _factory.CreateAiChecks();\n        var message = new Message\n        {\n            From = null,\n            Chat = TK.CreateGroupChat(),\n            Text = \"Test message\"\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/AiChecksExtendedTests.cs::AiChecksExtendedTests::GetSpamProbability_MessageWithoutFrom_ReturnsSpamProbability",
+        "file": "Unit/Services/AiChecksExtendedTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "AiChecksExtendedTests",
+        "test_name": "GetSpamProbability_MessageWithoutFrom_ReturnsSpamProbability",
+        "line": 418,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 18,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 552
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/AiChecksExtendedTests.cs\n# Lines 388-448 (test starts at line 418)\n        Assert.That(result, Is.Not.Null);\n        Assert.That(result.Probability, Is.GreaterThanOrEqualTo(0.0));\n        Assert.That(result.Probability, Is.LessThanOrEqualTo(1.0));\n    }\n\n    #endregion\n\n    #region Edge Cases and Error Handling\n\n    [Test]\n    public async Task GetSpamProbability_MessageWithoutText_ReturnsSpamProbability()\n    {\n        // Arrange\n        var service = _factory.CreateAiChecks();\n        var message = new Message\n        {\n            From = TK.CreateValidUser(),\n            Chat = TK.CreateGroupChat(),\n            Text = null\n        };\n\n        // Act\n        var result = await service.GetSpamProbability(message);\n\n        // Assert\n        Assert.That(result, Is.Not.Null);\n        Assert.That(result.Probability, Is.GreaterThanOrEqualTo(0.0));\n        Assert.That(result.Probability, Is.LessThanOrEqualTo(1.0));\n    }\n\n    [Test]\n    public async Task GetSpamProbability_MessageWithoutFrom_ReturnsSpamProbability()\n    {\n        // Arrange\n        var service = _factory.CreateAiChecks();\n        var message = new Message\n        {\n            From = null,\n            Chat = TK.CreateGroupChat(),\n            Text = \"Test message\"\n        };\n\n        // Act\n        var result = await service.GetSpamProbability(message);\n\n        // Assert\n        Assert.That(result, Is.Not.Null);\n        Assert.That(result.Probability, Is.GreaterThanOrEqualTo(0.0));\n        Assert.That(result.Probability, Is.LessThanOrEqualTo(1.0));\n    }\n\n    [Test]\n    public async Task GetSpamProbability_ConcurrentCalls_HandlesCorrectly()\n    {\n        // Arrange\n        var service = _factory.CreateAiChecks();\n        var message = TK.CreateValidMessage();\n        var tasks = new List<ValueTask<SpamProbability>>();\n\n        // Act\n        for (int i = 0; i < 5; i++)\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/AiChecksExtendedTests.cs::AiChecksExtendedTests::MarkUserOkay_ThenGetAttentionBaitProbability_ReturnsCachedResult",
+        "file": "Unit/Services/AiChecksExtendedTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "AiChecksExtendedTests",
+        "test_name": "MarkUserOkay_ThenGetAttentionBaitProbability_ReturnsCachedResult",
+        "line": 464,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 14,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 554
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/AiChecksExtendedTests.cs\n# Lines 434-494 (test starts at line 464)\n        Assert.That(result, Is.Not.Null);\n        Assert.That(result.Probability, Is.GreaterThanOrEqualTo(0.0));\n        Assert.That(result.Probability, Is.LessThanOrEqualTo(1.0));\n    }\n\n    [Test]\n    public async Task GetSpamProbability_ConcurrentCalls_HandlesCorrectly()\n    {\n        // Arrange\n        var service = _factory.CreateAiChecks();\n        var message = TK.CreateValidMessage();\n        var tasks = new List<ValueTask<SpamProbability>>();\n\n        // Act\n        for (int i = 0; i < 5; i++)\n        {\n            tasks.Add(service.GetSpamProbability(message));\n        }\n\n        var results = await Task.WhenAll(tasks.Select(t => t.AsTask()));\n\n        // Assert\n        Assert.That(results, Has.Length.EqualTo(5));\n        Assert.That(results.All(r => r.Probability >= 0.0 && r.Probability <= 1.0), Is.True);\n    }\n\n    #endregion\n\n    #region Integration Tests\n\n    [Test]\n    public async Task MarkUserOkay_ThenGetAttentionBaitProbability_ReturnsCachedResult()\n    {\n        // Arrange\n        var service = _factory.CreateAiChecks();\n        var user = TK.CreateValidUser();\n        var userId = user.Id;\n\n        // Act\n        service.MarkUserOkay(userId);\n        var result = await service.GetAttentionBaitProbability(user);\n\n        // Assert\n        Assert.That(result, Is.Not.Null);\n        Assert.That(result.SpamProbability, Is.Not.Null);\n    }\n\n    [Test]\n    public async Task MultipleCalls_GetSpamProbability_ReturnsConsistentResults()\n    {\n        // Arrange\n        var service = _factory.CreateAiChecks();\n        var message = TK.CreateValidMessage();\n\n        // Act\n        var result1 = await service.GetSpamProbability(message);\n        var result2 = await service.GetSpamProbability(message);\n\n        // Assert\n        Assert.That(result1, Is.Not.Null);\n        Assert.That(result2, Is.Not.Null);\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/AiChecksExtendedTests.cs::AiChecksExtendedTests::MultipleCalls_GetSpamProbability_ReturnsConsistentResults",
+        "file": "Unit/Services/AiChecksExtendedTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "AiChecksExtendedTests",
+        "test_name": "MultipleCalls_GetSpamProbability_ReturnsConsistentResults",
+        "line": 481,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 17,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 555
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/AiChecksExtendedTests.cs\n# Lines 451-502 (test starts at line 481)\n        }\n\n        var results = await Task.WhenAll(tasks.Select(t => t.AsTask()));\n\n        // Assert\n        Assert.That(results, Has.Length.EqualTo(5));\n        Assert.That(results.All(r => r.Probability >= 0.0 && r.Probability <= 1.0), Is.True);\n    }\n\n    #endregion\n\n    #region Integration Tests\n\n    [Test]\n    public async Task MarkUserOkay_ThenGetAttentionBaitProbability_ReturnsCachedResult()\n    {\n        // Arrange\n        var service = _factory.CreateAiChecks();\n        var user = TK.CreateValidUser();\n        var userId = user.Id;\n\n        // Act\n        service.MarkUserOkay(userId);\n        var result = await service.GetAttentionBaitProbability(user);\n\n        // Assert\n        Assert.That(result, Is.Not.Null);\n        Assert.That(result.SpamProbability, Is.Not.Null);\n    }\n\n    [Test]\n    public async Task MultipleCalls_GetSpamProbability_ReturnsConsistentResults()\n    {\n        // Arrange\n        var service = _factory.CreateAiChecks();\n        var message = TK.CreateValidMessage();\n\n        // Act\n        var result1 = await service.GetSpamProbability(message);\n        var result2 = await service.GetSpamProbability(message);\n\n        // Assert\n        Assert.That(result1, Is.Not.Null);\n        Assert.That(result2, Is.Not.Null);\n        Assert.That(result1.Probability, Is.GreaterThanOrEqualTo(0.0));\n        Assert.That(result1.Probability, Is.LessThanOrEqualTo(1.0));\n        Assert.That(result2.Probability, Is.GreaterThanOrEqualTo(0.0));\n        Assert.That(result2.Probability, Is.LessThanOrEqualTo(1.0));\n    }\n\n    #endregion\n}"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/BotPermissionsServiceTests.cs::BotPermissionsServiceTests::Constructor_WithValidParameters_CreatesInstance",
+        "file": "Unit/Services/BotPermissionsServiceTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "BotPermissionsServiceTests",
+        "test_name": "Constructor_WithValidParameters_CreatesInstance",
+        "line": 55,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "fast",
+          "critical",
+          "uses:bot-permissions"
+        ],
+        "body_lines": 7,
+        "declared_area_from_path": "Unit",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 571
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/BotPermissionsServiceTests.cs\n# Lines 25-85 (test starts at line 55)\n    private const long LogAdminChatIdConst = 223456789; // deterministic test value\n\n    public BotPermissionsServiceTests()\n    {\n        _mockBot = new Mock<ITelegramBotClientWrapper>();\n        _mockLogger = new Mock<ILogger<BotPermissionsService>>();\n    _mockAppConfig = new Mock<IAppConfig>();\n    _mockAppConfig.SetupGet(x => x.AdminChatId).Returns(AdminChatIdConst);\n    _mockAppConfig.SetupGet(x => x.LogAdminChatId).Returns(LogAdminChatIdConst);\n    _service = new BotPermissionsService(_mockBot.Object, _mockLogger.Object, _mockAppConfig.Object);\n    }\n\n    [Test]\n    public void Constructor_WithNullBot_ThrowsArgumentNullException()\n    {\n        // Act & Assert\n        var exception = Assert.Throws<ArgumentNullException>(() =>\n            new BotPermissionsService(null!, _mockLogger.Object, _mockAppConfig.Object));\n        Assert.That(exception.ParamName, Is.EqualTo(\"bot\"));\n    }\n\n    [Test]\n    public void Constructor_WithNullLogger_ThrowsArgumentNullException()\n    {\n        // Act & Assert\n        var exception = Assert.Throws<ArgumentNullException>(() =>\n            new BotPermissionsService(_mockBot.Object, null!, _mockAppConfig.Object));\n        Assert.That(exception.ParamName, Is.EqualTo(\"logger\"));\n    }\n\n    [Test]\n    public void Constructor_WithValidParameters_CreatesInstance()\n    {\n        // Act\n    var service = new BotPermissionsService(_mockBot.Object, _mockLogger.Object, _mockAppConfig.Object);\n\n        // Assert\n        Assert.That(service, Is.Not.Null);\n    }\n\n    [TestCase(ChatMemberStatus.Administrator, true)]\n    [TestCase(ChatMemberStatus.Member, false)]\n    [TestCase(ChatMemberStatus.Left, false)]\n    [TestCase(ChatMemberStatus.Kicked, false)]\n    [TestCase(ChatMemberStatus.Creator, false)]\n    public async Task IsBotAdminAsync_WithDifferentStatuses_ReturnsExpectedResult(\n        ChatMemberStatus status, bool expectedResult)\n    {\n        // Arrange\n        var chatId = 1000L + (long)status; // Уникальный chatId для каждого статуса\n        ChatMember chatMember = status switch\n        {\n            ChatMemberStatus.Administrator => new ChatMemberAdministrator(),\n            ChatMemberStatus.Creator => new ChatMemberOwner(),\n            _ => new ChatMemberMember()\n        };\n\n        _mockBot.Setup(x => x.BotId).Returns(456L);\n        _mockBot.Setup(x => x.GetChatMember(chatId, 456L, It.IsAny<CancellationToken>()))\n            .ReturnsAsync(chatMember);\n\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/CaptchaServiceExtendedTests.cs::CaptchaServiceExtendedTests::CreateCaptchaAsync_ValidParameters_CreatesCaptchaSuccessfully",
+        "file": "Unit/Services/CaptchaServiceExtendedTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "CaptchaServiceExtendedTests",
+        "test_name": "CreateCaptchaAsync_ValidParameters_CreatesCaptchaSuccessfully",
+        "line": 66,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "extended"
+        ],
+        "body_lines": 20,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 587
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/CaptchaServiceExtendedTests.cs\n# Lines 36-96 (test starts at line 66)\n    [SetUp]\n    public void Setup()\n    {\n        _factory = new CaptchaServiceTestFactory()\n            .WithAppConfigSetup(mock =>\n            {\n                mock.Setup(x => x.NoCaptchaGroups).Returns(new HashSet<long>());\n                mock.Setup(x => x.NoVpnAdGroups).Returns(new HashSet<long>());\n                mock.Setup(x => x.CaptchaViolationsBeforeBan).Returns(3);\n            })\n            .WithMessageServiceSetup(mock =>\n            {\n                mock.Setup(x => x.SendCaptchaMessageAsync(It.IsAny<SendCaptchaMessageRequest>()))\n                    .ReturnsAsync(new Message\n                    {\n                        Chat = new Chat { Id = 123456 },\n                        Date = DateTime.UtcNow\n                    });\n            })\n            .WithViolationTrackerSetup(mock =>\n            {\n                mock.Setup(x => x.RegisterViolation(It.IsAny<long>(), It.IsAny<long>(), It.IsAny<ViolationType>()))\n                    .Returns(false);\n            });\n\n        _logger = LoggerFactory.Create(builder => builder.AddConsole()).CreateLogger<CaptchaServiceExtendedTests>();\n    }\n\n    #region CreateCaptchaAsync Tests\n\n    [Test]\n    public async Task CreateCaptchaAsync_ValidParameters_CreatesCaptchaSuccessfully()\n    {\n        // Arrange\n        var service = _factory.CreateCaptchaService();\n        var chat = CreateTestChat();\n        var user = CreateTestUser();\n        var joinMessage = CreateTestMessage();\n\n        // Act\n        var request = new CreateCaptchaRequest(chat, user, joinMessage);\n        var result = await service.CreateCaptchaAsync(request);\n\n        // Assert\n        Assert.That(result, Is.Not.Null);\n        Assert.That(result.ChatId, Is.EqualTo(chat.Id));\n        Assert.That(result.User.Id, Is.EqualTo(user.Id));\n        Assert.That(result.CorrectAnswer, Is.GreaterThanOrEqualTo(0));\n        Assert.That(result.CorrectAnswer, Is.LessThan(30)); // Captcha.CaptchaList.Count = 30\n        Assert.That(result.Timestamp, Is.EqualTo(DateTime.UtcNow).Within(TimeSpan.FromSeconds(5)));\n        Assert.That(result.UserJoinedMessage, Is.EqualTo(joinMessage));\n    }\n\n    [Test]\n    public async Task CreateCaptchaAsync_NullChat_ThrowsArgumentNullException()\n    {\n        // Arrange\n        var service = _factory.CreateCaptchaService();\n        var user = CreateTestUser();\n\n        // Act & Assert\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/CaptchaServiceExtendedTests.cs::CaptchaServiceExtendedTests::CreateCaptchaAsync_UserWithInappropriateName_UsesGenericName",
+        "file": "Unit/Services/CaptchaServiceExtendedTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "CaptchaServiceExtendedTests",
+        "test_name": "CreateCaptchaAsync_UserWithInappropriateName_UsesGenericName",
+        "line": 121,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 15,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 590
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/CaptchaServiceExtendedTests.cs\n# Lines 91-151 (test starts at line 121)\n    {\n        // Arrange\n        var service = _factory.CreateCaptchaService();\n        var user = CreateTestUser();\n\n        // Act & Assert\n        var ex = Assert.ThrowsAsync<ArgumentNullException>(() =>\n        {\n            var request = new CreateCaptchaRequest(null!, user, null);\n            return service.CreateCaptchaAsync(request);\n        });\n        Assert.That(ex.ParamName, Is.EqualTo(\"chat\"));\n    }\n\n    [Test]\n    public async Task CreateCaptchaAsync_NullUser_ThrowsArgumentNullException()\n    {\n        // Arrange\n        var service = _factory.CreateCaptchaService();\n        var chat = CreateTestChat();\n\n        // Act & Assert\n        var ex = Assert.ThrowsAsync<ArgumentNullException>(() =>\n        {\n            var request = new CreateCaptchaRequest(chat, null!, null);\n            return service.CreateCaptchaAsync(request);\n        });\n        Assert.That(ex.ParamName, Is.EqualTo(\"user\"));\n    }\n\n    [Test]\n    public async Task CreateCaptchaAsync_UserWithInappropriateName_UsesGenericName()\n    {\n        // Arrange\n        var service = _factory.CreateCaptchaService();\n        var chat = CreateTestChat();\n        var user = CreateTestUser(firstName: \"p0rn\", lastName: \"user\");\n\n        // Act\n        var request = new CreateCaptchaRequest(chat, user, null);\n        var result = await service.CreateCaptchaAsync(request);\n\n        // Assert\n        Assert.That(result, Is.Not.Null);\n        // Проверяем, что имя было заменено на \"новый участник чата\"\n        // Это проверяется косвенно через логику сервиса\n    }\n\n    [Test]\n    public async Task CreateCaptchaAsync_UserWithInappropriateUsername_UsesGenericName()\n    {\n        // Arrange\n        var service = _factory.CreateCaptchaService();\n        var chat = CreateTestChat();\n        var user = CreateTestUser(username: \"porn_user\");\n\n        // Act\n        var request = new CreateCaptchaRequest(chat, user, null);\n        var result = await service.CreateCaptchaAsync(request);\n\n        // Assert\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/CaptchaServiceExtendedTests.cs::CaptchaServiceExtendedTests::CreateCaptchaAsync_UserWithInappropriateUsername_UsesGenericName",
+        "file": "Unit/Services/CaptchaServiceExtendedTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "CaptchaServiceExtendedTests",
+        "test_name": "CreateCaptchaAsync_UserWithInappropriateUsername_UsesGenericName",
+        "line": 139,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 14,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 591
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/CaptchaServiceExtendedTests.cs\n# Lines 109-169 (test starts at line 139)\n        var service = _factory.CreateCaptchaService();\n        var chat = CreateTestChat();\n\n        // Act & Assert\n        var ex = Assert.ThrowsAsync<ArgumentNullException>(() =>\n        {\n            var request = new CreateCaptchaRequest(chat, null!, null);\n            return service.CreateCaptchaAsync(request);\n        });\n        Assert.That(ex.ParamName, Is.EqualTo(\"user\"));\n    }\n\n    [Test]\n    public async Task CreateCaptchaAsync_UserWithInappropriateName_UsesGenericName()\n    {\n        // Arrange\n        var service = _factory.CreateCaptchaService();\n        var chat = CreateTestChat();\n        var user = CreateTestUser(firstName: \"p0rn\", lastName: \"user\");\n\n        // Act\n        var request = new CreateCaptchaRequest(chat, user, null);\n        var result = await service.CreateCaptchaAsync(request);\n\n        // Assert\n        Assert.That(result, Is.Not.Null);\n        // Проверяем, что имя было заменено на \"новый участник чата\"\n        // Это проверяется косвенно через логику сервиса\n    }\n\n    [Test]\n    public async Task CreateCaptchaAsync_UserWithInappropriateUsername_UsesGenericName()\n    {\n        // Arrange\n        var service = _factory.CreateCaptchaService();\n        var chat = CreateTestChat();\n        var user = CreateTestUser(username: \"porn_user\");\n\n        // Act\n        var request = new CreateCaptchaRequest(chat, user, null);\n        var result = await service.CreateCaptchaAsync(request);\n\n        // Assert\n        Assert.That(result, Is.Not.Null);\n        // Проверяем, что имя было заменено на \"новый участник чата\"\n    }\n\n    [Test]\n    public async Task CreateCaptchaAsync_WithoutJoinMessage_CreatesCaptchaSuccessfully()\n    {\n        // Arrange\n        var service = _factory.CreateCaptchaService();\n        var chat = CreateTestChat();\n        var user = CreateTestUser();\n\n        // Act\n        var request = new CreateCaptchaRequest(chat, user, null);\n        var result = await service.CreateCaptchaAsync(request);\n\n        // Assert\n        Assert.That(result, Is.Not.Null);\n"
+    }
+  ]
+}

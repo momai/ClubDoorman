@@ -1,0 +1,442 @@
+{
+  "schema_version": "test-audit-batch-v1",
+  "batch_no": 79,
+  "purpose": "local LLM audit input",
+  "instructions": "Return JSONL only. One audit object per input test. No markdown. No code edits.",
+  "tests": [
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestInfrastructure/ConfigurationExceptionTestFactoryTests.cs::ConfigurationExceptionTestFactoryTests::CreateConfigurationException_CreatesFreshInstanceEachTime",
+        "file": "TestInfrastructure/ConfigurationExceptionTestFactoryTests.cs",
+        "namespace": "ClubDoorman.TestInfrastructure",
+        "class": "ConfigurationExceptionTestFactoryTests",
+        "test_name": "CreateConfigurationException_CreatesFreshInstanceEachTime",
+        "line": 46,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "test-infrastructure"
+        ],
+        "body_lines": 11,
+        "declared_area_from_path": "TestInfrastructure",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 163
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestInfrastructure/ConfigurationExceptionTestFactoryTests.cs\n# Lines 16-59 (test starts at line 46)\npublic class ConfigurationExceptionTestFactoryTests\n{\n    [Test]\n    public void CreateConfigurationException_ReturnsWorkingInstance()\n    {\n        // Arrange\n        var factory = new ConfigurationExceptionTestFactory();\n\n        // Act\n        var instance = factory.CreateConfigurationException();\n\n        // Assert\n        Assert.That(instance, Is.Not.Null);\n        Assert.That(instance, Is.InstanceOf<ConfigurationException>());\n    }\n\n    [Test]\n    public void CreateConfigurationException_ConfiguresAllDependencies()\n    {\n        // Arrange\n        var factory = new ConfigurationExceptionTestFactory();\n\n        // Act\n        var instance = factory.CreateConfigurationException();\n\n        // Assert\n        // Проверяем что все зависимости настроены\n        Assert.That(instance, Is.Not.Null);\n    }\n\n    [Test]\n    public void CreateConfigurationException_CreatesFreshInstanceEachTime()\n    {\n        // Arrange\n        var factory = new ConfigurationExceptionTestFactory();\n\n        // Act\n        var instance1 = factory.CreateConfigurationException();\n        var instance2 = factory.CreateConfigurationException();\n\n        // Assert\n        Assert.That(instance1, Is.Not.SameAs(instance2));\n    }\n}\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestInfrastructure/MimicryClassifierTestFactoryTests.cs::MimicryClassifierTestFactoryTests::CreateMimicryClassifier_CreatesFreshInstanceEachTime",
+        "file": "TestInfrastructure/MimicryClassifierTestFactoryTests.cs",
+        "namespace": "ClubDoorman.TestInfrastructure",
+        "class": "MimicryClassifierTestFactoryTests",
+        "test_name": "CreateMimicryClassifier_CreatesFreshInstanceEachTime",
+        "line": 48,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "test-infrastructure"
+        ],
+        "body_lines": 11,
+        "declared_area_from_path": "TestInfrastructure",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 179
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestInfrastructure/MimicryClassifierTestFactoryTests.cs\n# Lines 18-72 (test starts at line 48)\npublic class MimicryClassifierTestFactoryTests\n{\n    [Test]\n    public void CreateMimicryClassifier_ReturnsWorkingInstance()\n    {\n        // Arrange\n        var factory = new MimicryClassifierTestFactory();\n\n        // Act\n        var instance = factory.CreateMimicryClassifier();\n\n        // Assert\n        Assert.That(instance, Is.Not.Null);\n        Assert.That(instance, Is.InstanceOf<MimicryClassifier>());\n    }\n\n    [Test]\n    public void CreateMimicryClassifier_ConfiguresAllDependencies()\n    {\n        // Arrange\n        var factory = new MimicryClassifierTestFactory();\n\n        // Act\n        var instance = factory.CreateMimicryClassifier();\n\n        // Assert\n        // Проверяем что все зависимости настроены\n        Assert.That(instance, Is.Not.Null);\n    }\n\n    [Test]\n    public void CreateMimicryClassifier_CreatesFreshInstanceEachTime()\n    {\n        // Arrange\n        var factory = new MimicryClassifierTestFactory();\n\n        // Act\n        var instance1 = factory.CreateMimicryClassifier();\n        var instance2 = factory.CreateMimicryClassifier();\n\n        // Assert\n        Assert.That(instance1, Is.Not.SameAs(instance2));\n    }\n\n    [Test]\n    public void LoggerMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new MimicryClassifierTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.LoggerMock, Is.Not.Null);\n        Assert.That(factory.LoggerMock.Object, Is.Not.Null);\n    }\n}\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestInfrastructure/MockAiChecksFactoryTests.cs::MockAiChecksTests::GetSpamProbability_ReturnsConfiguredValue",
+        "file": "TestInfrastructure/MockAiChecksFactoryTests.cs",
+        "namespace": "ClubDoorman.TestInfrastructure",
+        "class": "MockAiChecksTests",
+        "test_name": "GetSpamProbability_ReturnsConfiguredValue",
+        "line": 107,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "fast"
+        ],
+        "body_lines": 13,
+        "declared_area_from_path": "TestInfrastructure",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 188
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestInfrastructure/MockAiChecksFactoryTests.cs\n# Lines 77-137 (test starts at line 107)\n    [Test]\n    public void CreateErrorScenario_ReturnsMockThatThrowsException()\n    {\n        // Act\n        var mockAi = TK.CreateErrorAiChecks();\n\n        // Assert\n        Assert.That(mockAi, Is.Not.Null);\n        Assert.That(mockAi, Is.InstanceOf<Mock<IAiChecks>>());\n    }\n\n    [Test]\n    public void CreateErrorScenario_WithCustomException_ReturnsMockThatThrowsCustomException()\n    {\n        // Arrange\n        var customException = new InvalidOperationException(\"Custom error\");\n\n        // Act\n        var mockAi = TK.CreateErrorAiChecks(customException);\n\n        // Assert\n        Assert.That(mockAi, Is.Not.Null);\n        Assert.That(mockAi, Is.InstanceOf<Mock<IAiChecks>>());\n    }\n}\n\n[TestFixture]\n[Category(\"fast\")]\npublic class MockAiChecksTests\n{\n    [Test]\n    public async Task GetSpamProbability_ReturnsConfiguredValue()\n    {\n        // Arrange\n        var expectedProbability = 0.75;\n        var mockAi = TK.CreateMockAiChecks(expectedProbability, 0.1, 0.1, 0.1);\n        var message = new Message { Text = \"test message\" };\n\n        // Act\n        var result = await mockAi.Object.GetSpamProbability(message);\n\n        // Assert\n        Assert.That(result.Probability, Is.EqualTo(expectedProbability));\n        Assert.That(result.Reason, Is.EqualTo(\"Mock spam check\"));\n    }\n\n    [Test]\n    public async Task GetAttentionBaitProbability_ReturnsConfiguredValue()\n    {\n        // Arrange\n        var expectedProbability = 0.65;\n        var mockAi = TK.CreateMockAiChecks(0.1, expectedProbability, 0.1, 0.1);\n        var user = new User { Id = 123, FirstName = \"Test\", Username = \"testuser\" };\n\n        // Act\n        var result = await mockAi.Object.GetAttentionBaitProbability(user);\n\n        // Assert\n        Assert.That(result.SpamProbability.Probability, Is.EqualTo(expectedProbability));\n        Assert.That(result.SpamProbability.Reason, Is.EqualTo(\"Mock attention bait check\"));\n    }\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestInfrastructure/MockAiChecksFactoryTests.cs::MockAiChecksTests::GetAttentionBaitProbability_ReturnsConfiguredValue",
+        "file": "TestInfrastructure/MockAiChecksFactoryTests.cs",
+        "namespace": "ClubDoorman.TestInfrastructure",
+        "class": "MockAiChecksTests",
+        "test_name": "GetAttentionBaitProbability_ReturnsConfiguredValue",
+        "line": 123,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "fast"
+        ],
+        "body_lines": 13,
+        "declared_area_from_path": "TestInfrastructure",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 189
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestInfrastructure/MockAiChecksFactoryTests.cs\n# Lines 93-153 (test starts at line 123)\n\n        // Act\n        var mockAi = TK.CreateErrorAiChecks(customException);\n\n        // Assert\n        Assert.That(mockAi, Is.Not.Null);\n        Assert.That(mockAi, Is.InstanceOf<Mock<IAiChecks>>());\n    }\n}\n\n[TestFixture]\n[Category(\"fast\")]\npublic class MockAiChecksTests\n{\n    [Test]\n    public async Task GetSpamProbability_ReturnsConfiguredValue()\n    {\n        // Arrange\n        var expectedProbability = 0.75;\n        var mockAi = TK.CreateMockAiChecks(expectedProbability, 0.1, 0.1, 0.1);\n        var message = new Message { Text = \"test message\" };\n\n        // Act\n        var result = await mockAi.Object.GetSpamProbability(message);\n\n        // Assert\n        Assert.That(result.Probability, Is.EqualTo(expectedProbability));\n        Assert.That(result.Reason, Is.EqualTo(\"Mock spam check\"));\n    }\n\n    [Test]\n    public async Task GetAttentionBaitProbability_ReturnsConfiguredValue()\n    {\n        // Arrange\n        var expectedProbability = 0.65;\n        var mockAi = TK.CreateMockAiChecks(0.1, expectedProbability, 0.1, 0.1);\n        var user = new User { Id = 123, FirstName = \"Test\", Username = \"testuser\" };\n\n        // Act\n        var result = await mockAi.Object.GetAttentionBaitProbability(user);\n\n        // Assert\n        Assert.That(result.SpamProbability.Probability, Is.EqualTo(expectedProbability));\n        Assert.That(result.SpamProbability.Reason, Is.EqualTo(\"Mock attention bait check\"));\n    }\n\n    [Test]\n    public void MarkUserOkay_DoesNotThrowException()\n    {\n        // Arrange\n        var mockAi = TK.CreateMockAiChecks(0.1, 0.1, 0.1, 0.1);\n\n        // Act & Assert\n        Assert.DoesNotThrow(() => mockAi.Object.MarkUserOkay(123));\n    }\n\n    [Test]\n    public async Task GetSuspiciousUserSpamProbability_ReturnsConfiguredValue()\n    {\n        // Arrange\n        var expectedProbability = 0.85;\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestInfrastructure/MockAiChecksFactoryTests.cs::MockAiChecksTests::GetSuspiciousUserSpamProbability_ReturnsConfiguredValue",
+        "file": "TestInfrastructure/MockAiChecksFactoryTests.cs",
+        "namespace": "ClubDoorman.TestInfrastructure",
+        "class": "MockAiChecksTests",
+        "test_name": "GetSuspiciousUserSpamProbability_ReturnsConfiguredValue",
+        "line": 149,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "fast"
+        ],
+        "body_lines": 15,
+        "declared_area_from_path": "TestInfrastructure",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 191
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestInfrastructure/MockAiChecksFactoryTests.cs\n# Lines 119-179 (test starts at line 149)\n        Assert.That(result.Probability, Is.EqualTo(expectedProbability));\n        Assert.That(result.Reason, Is.EqualTo(\"Mock spam check\"));\n    }\n\n    [Test]\n    public async Task GetAttentionBaitProbability_ReturnsConfiguredValue()\n    {\n        // Arrange\n        var expectedProbability = 0.65;\n        var mockAi = TK.CreateMockAiChecks(0.1, expectedProbability, 0.1, 0.1);\n        var user = new User { Id = 123, FirstName = \"Test\", Username = \"testuser\" };\n\n        // Act\n        var result = await mockAi.Object.GetAttentionBaitProbability(user);\n\n        // Assert\n        Assert.That(result.SpamProbability.Probability, Is.EqualTo(expectedProbability));\n        Assert.That(result.SpamProbability.Reason, Is.EqualTo(\"Mock attention bait check\"));\n    }\n\n    [Test]\n    public void MarkUserOkay_DoesNotThrowException()\n    {\n        // Arrange\n        var mockAi = TK.CreateMockAiChecks(0.1, 0.1, 0.1, 0.1);\n\n        // Act & Assert\n        Assert.DoesNotThrow(() => mockAi.Object.MarkUserOkay(123));\n    }\n\n    [Test]\n    public async Task GetSuspiciousUserSpamProbability_ReturnsConfiguredValue()\n    {\n        // Arrange\n        var expectedProbability = 0.85;\n        var mockAi = TK.CreateMockAiChecks(0.1, 0.1, 0.1, expectedProbability);\n        var message = new Message { Text = \"test message\" };\n        var user = new User { Id = 123, FirstName = \"Suspicious\", Username = \"suspicious_user\" };\n        var firstMessages = new List<string> { \"Hello\", \"How are you?\" };\n\n        // Act\n        var result = await mockAi.Object.GetSuspiciousUserSpamProbability(message, user, firstMessages, 0.5);\n\n        // Assert\n        Assert.That(result.Probability, Is.EqualTo(expectedProbability));\n        Assert.That(result.Reason, Is.EqualTo(\"Mock suspicious user check\"));\n    }\n\n    [Test]\n    public async Task GetSuspiciousUserSpamProbabilityWithPhoto_ReturnsCombinedProbability()\n    {\n        // Arrange\n        var suspiciousProb = 0.8;\n        var eroticProb = 0.6;\n        var mockAi = TK.CreateMockAiChecks(0.1, 0.1, eroticProb, suspiciousProb);\n        var message = new Message { Text = \"test message\" };\n        var user = new User { Id = 123, FirstName = \"User\", Username = \"user\" };\n        var firstMessages = new List<string> { \"Hello\" };\n\n        // Act\n        var result = await mockAi.Object.GetSuspiciousUserSpamProbability(message, user, firstMessages, 0.5);\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestInfrastructure/MockAiChecksFactoryTests.cs::MockAiChecksTests::GetSuspiciousUserSpamProbabilityWithPhoto_ReturnsCombinedProbability",
+        "file": "TestInfrastructure/MockAiChecksFactoryTests.cs",
+        "namespace": "ClubDoorman.TestInfrastructure",
+        "class": "MockAiChecksTests",
+        "test_name": "GetSuspiciousUserSpamProbabilityWithPhoto_ReturnsCombinedProbability",
+        "line": 167,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 16,
+        "declared_area_from_path": "TestInfrastructure",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 192
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestInfrastructure/MockAiChecksFactoryTests.cs\n# Lines 137-197 (test starts at line 167)\n    }\n\n    [Test]\n    public void MarkUserOkay_DoesNotThrowException()\n    {\n        // Arrange\n        var mockAi = TK.CreateMockAiChecks(0.1, 0.1, 0.1, 0.1);\n\n        // Act & Assert\n        Assert.DoesNotThrow(() => mockAi.Object.MarkUserOkay(123));\n    }\n\n    [Test]\n    public async Task GetSuspiciousUserSpamProbability_ReturnsConfiguredValue()\n    {\n        // Arrange\n        var expectedProbability = 0.85;\n        var mockAi = TK.CreateMockAiChecks(0.1, 0.1, 0.1, expectedProbability);\n        var message = new Message { Text = \"test message\" };\n        var user = new User { Id = 123, FirstName = \"Suspicious\", Username = \"suspicious_user\" };\n        var firstMessages = new List<string> { \"Hello\", \"How are you?\" };\n\n        // Act\n        var result = await mockAi.Object.GetSuspiciousUserSpamProbability(message, user, firstMessages, 0.5);\n\n        // Assert\n        Assert.That(result.Probability, Is.EqualTo(expectedProbability));\n        Assert.That(result.Reason, Is.EqualTo(\"Mock suspicious user check\"));\n    }\n\n    [Test]\n    public async Task GetSuspiciousUserSpamProbabilityWithPhoto_ReturnsCombinedProbability()\n    {\n        // Arrange\n        var suspiciousProb = 0.8;\n        var eroticProb = 0.6;\n        var mockAi = TK.CreateMockAiChecks(0.1, 0.1, eroticProb, suspiciousProb);\n        var message = new Message { Text = \"test message\" };\n        var user = new User { Id = 123, FirstName = \"User\", Username = \"user\" };\n        var firstMessages = new List<string> { \"Hello\" };\n\n        // Act\n        var result = await mockAi.Object.GetSuspiciousUserSpamProbability(message, user, firstMessages, 0.5);\n\n        // Assert\n        Assert.That(result.Probability, Is.EqualTo(suspiciousProb));\n        Assert.That(result.Reason, Is.EqualTo(\"Mock suspicious user check\"));\n    }\n\n    [Test]\n    public void GetSpamProbability_WhenShouldThrowException_ThrowsException()\n    {\n        // Arrange\n        var mockAi = TK.CreateMockAiChecks(0.1, 0.1, 0.1, 0.1, shouldThrowException: true);\n        var message = new Message { Text = \"test\" };\n\n        // Act & Assert\n        Assert.ThrowsAsync<AiServiceException>(async () =>\n            await mockAi.Object.GetSpamProbability(message));\n    }\n\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestInfrastructure/MockAiChecksFactoryTests.cs::MockAiChecksTests::GetSpamProbability_WhenShouldThrowException_ThrowsException",
+        "file": "TestInfrastructure/MockAiChecksFactoryTests.cs",
+        "namespace": "ClubDoorman.TestInfrastructure",
+        "class": "MockAiChecksTests",
+        "test_name": "GetSpamProbability_WhenShouldThrowException_ThrowsException",
+        "line": 186,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 9,
+        "declared_area_from_path": "TestInfrastructure",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": true,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 193
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestInfrastructure/MockAiChecksFactoryTests.cs\n# Lines 156-216 (test starts at line 186)\n        var user = new User { Id = 123, FirstName = \"Suspicious\", Username = \"suspicious_user\" };\n        var firstMessages = new List<string> { \"Hello\", \"How are you?\" };\n\n        // Act\n        var result = await mockAi.Object.GetSuspiciousUserSpamProbability(message, user, firstMessages, 0.5);\n\n        // Assert\n        Assert.That(result.Probability, Is.EqualTo(expectedProbability));\n        Assert.That(result.Reason, Is.EqualTo(\"Mock suspicious user check\"));\n    }\n\n    [Test]\n    public async Task GetSuspiciousUserSpamProbabilityWithPhoto_ReturnsCombinedProbability()\n    {\n        // Arrange\n        var suspiciousProb = 0.8;\n        var eroticProb = 0.6;\n        var mockAi = TK.CreateMockAiChecks(0.1, 0.1, eroticProb, suspiciousProb);\n        var message = new Message { Text = \"test message\" };\n        var user = new User { Id = 123, FirstName = \"User\", Username = \"user\" };\n        var firstMessages = new List<string> { \"Hello\" };\n\n        // Act\n        var result = await mockAi.Object.GetSuspiciousUserSpamProbability(message, user, firstMessages, 0.5);\n\n        // Assert\n        Assert.That(result.Probability, Is.EqualTo(suspiciousProb));\n        Assert.That(result.Reason, Is.EqualTo(\"Mock suspicious user check\"));\n    }\n\n    [Test]\n    public void GetSpamProbability_WhenShouldThrowException_ThrowsException()\n    {\n        // Arrange\n        var mockAi = TK.CreateMockAiChecks(0.1, 0.1, 0.1, 0.1, shouldThrowException: true);\n        var message = new Message { Text = \"test\" };\n\n        // Act & Assert\n        Assert.ThrowsAsync<AiServiceException>(async () =>\n            await mockAi.Object.GetSpamProbability(message));\n    }\n\n    [Test]\n    public void GetSpamProbability_WhenShouldThrowException_ThrowsCustomException()\n    {\n        // Arrange\n        var customException = new InvalidOperationException(\"Custom error\");\n        var mockAi = TK.CreateMockAiChecks(0.1, 0.1, 0.1, 0.1, shouldThrowException: true, customException);\n        var message = new Message { Text = \"test\" };\n\n        // Act & Assert\n        Assert.ThrowsAsync<InvalidOperationException>(async () =>\n            await mockAi.Object.GetSpamProbability(message));\n    }\n\n    [Test]\n    public async Task AllMethods_WhenNotThrowingException_ReturnConfiguredValues()\n    {\n        // Arrange\n        var mockAi = TK.CreateMockAiChecks(0.5, 0.4, 0.3, 0.6);\n        var message = new Message { Text = \"test\" };\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestInfrastructure/MockAiChecksFactoryTests.cs::MockAiChecksTests::GetSpamProbability_WhenShouldThrowException_ThrowsCustomException",
+        "file": "TestInfrastructure/MockAiChecksFactoryTests.cs",
+        "namespace": "ClubDoorman.TestInfrastructure",
+        "class": "MockAiChecksTests",
+        "test_name": "GetSpamProbability_WhenShouldThrowException_ThrowsCustomException",
+        "line": 198,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 10,
+        "declared_area_from_path": "TestInfrastructure",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": true,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 194
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestInfrastructure/MockAiChecksFactoryTests.cs\n# Lines 168-228 (test starts at line 198)\n    public async Task GetSuspiciousUserSpamProbabilityWithPhoto_ReturnsCombinedProbability()\n    {\n        // Arrange\n        var suspiciousProb = 0.8;\n        var eroticProb = 0.6;\n        var mockAi = TK.CreateMockAiChecks(0.1, 0.1, eroticProb, suspiciousProb);\n        var message = new Message { Text = \"test message\" };\n        var user = new User { Id = 123, FirstName = \"User\", Username = \"user\" };\n        var firstMessages = new List<string> { \"Hello\" };\n\n        // Act\n        var result = await mockAi.Object.GetSuspiciousUserSpamProbability(message, user, firstMessages, 0.5);\n\n        // Assert\n        Assert.That(result.Probability, Is.EqualTo(suspiciousProb));\n        Assert.That(result.Reason, Is.EqualTo(\"Mock suspicious user check\"));\n    }\n\n    [Test]\n    public void GetSpamProbability_WhenShouldThrowException_ThrowsException()\n    {\n        // Arrange\n        var mockAi = TK.CreateMockAiChecks(0.1, 0.1, 0.1, 0.1, shouldThrowException: true);\n        var message = new Message { Text = \"test\" };\n\n        // Act & Assert\n        Assert.ThrowsAsync<AiServiceException>(async () =>\n            await mockAi.Object.GetSpamProbability(message));\n    }\n\n    [Test]\n    public void GetSpamProbability_WhenShouldThrowException_ThrowsCustomException()\n    {\n        // Arrange\n        var customException = new InvalidOperationException(\"Custom error\");\n        var mockAi = TK.CreateMockAiChecks(0.1, 0.1, 0.1, 0.1, shouldThrowException: true, customException);\n        var message = new Message { Text = \"test\" };\n\n        // Act & Assert\n        Assert.ThrowsAsync<InvalidOperationException>(async () =>\n            await mockAi.Object.GetSpamProbability(message));\n    }\n\n    [Test]\n    public async Task AllMethods_WhenNotThrowingException_ReturnConfiguredValues()\n    {\n        // Arrange\n        var mockAi = TK.CreateMockAiChecks(0.5, 0.4, 0.3, 0.6);\n        var message = new Message { Text = \"test\" };\n        var user = new User { Id = 123, FirstName = \"Test\", Username = \"test_user\" };\n        var firstMessages = new List<string> { \"Hello\" };\n\n        // Act\n        var spamResult = await mockAi.Object.GetSpamProbability(message);\n        var attentionResult = await mockAi.Object.GetAttentionBaitProbability(user);\n        var suspiciousResult = await mockAi.Object.GetSuspiciousUserSpamProbability(message, user, firstMessages, 0.5);\n\n        // Assert\n        Assert.That(spamResult.Probability, Is.EqualTo(0.5));\n        Assert.That(attentionResult.SpamProbability.Probability, Is.EqualTo(0.4));\n        Assert.That(suspiciousResult.Probability, Is.EqualTo(0.6));\n"
+    }
+  ]
+}

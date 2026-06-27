@@ -1,0 +1,440 @@
+{
+  "schema_version": "test-audit-batch-v1",
+  "batch_no": 74,
+  "purpose": "local LLM audit input",
+  "instructions": "Return JSONL only. One audit object per input test. No markdown. No code edits.",
+  "tests": [
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/ErrorHandlingTests.cs::ErrorHandlingTests::ModerationService_IncrementGoodMessageCountAsync_WithEmptyMessageText_ThrowsArgumentException",
+        "file": "ErrorHandlingTests.cs",
+        "namespace": "ClubDoorman.Test",
+        "class": "ErrorHandlingTests",
+        "test_name": "ModerationService_IncrementGoodMessageCountAsync_WithEmptyMessageText_ThrowsArgumentException",
+        "line": 101,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 14,
+        "declared_area_from_path": "Root",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": true,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 16
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/ErrorHandlingTests.cs\n# Lines 71-131 (test starts at line 101)\n    {\n        // Arrange\n        var moderationFacade = CreateModerationFacade();\n        var chat = new Chat { Id = 456, Title = \"Test Chat\" };\n\n        // Act & Assert\n        var exception = Assert.ThrowsAsync<ArgumentNullException>(async () =>\n        {\n            await moderationFacade.IncrementGoodMessageCountAsync(null!, chat, \"test message\");\n        });\n\n        Assert.That(exception!.Message, Does.Contain(\"Пользователь не может быть null\"));\n    }\n\n    [Test]\n    public void ModerationService_IncrementGoodMessageCountAsync_WithNullChat_ThrowsArgumentNullException()\n    {\n        // Arrange\n        var moderationFacade = CreateModerationFacade();\n        var user = new User { Id = 123, FirstName = \"Test\", LastName = \"User\" };\n\n        // Act & Assert\n        var exception = Assert.ThrowsAsync<ArgumentNullException>(async () =>\n        {\n            await moderationFacade.IncrementGoodMessageCountAsync(user, null!, \"test message\");\n        });\n\n        Assert.That(exception!.Message, Does.Contain(\"Чат не может быть null\"));\n    }\n\n    [Test]\n    public void ModerationService_IncrementGoodMessageCountAsync_WithEmptyMessageText_ThrowsArgumentException()\n    {\n        // Arrange\n        var moderationFacade = CreateModerationFacade();\n        var user = new User { Id = 123, FirstName = \"Test\", LastName = \"User\" };\n        var chat = new Chat { Id = 456, Title = \"Test Chat\" };\n\n        // Act & Assert\n        var exception = Assert.ThrowsAsync<ArgumentException>(async () =>\n        {\n            await moderationFacade.IncrementGoodMessageCountAsync(user, chat, \"\");\n        });\n\n        Assert.That(exception!.Message, Does.Contain(\"Текст сообщения не может быть пустым\"));\n    }\n\n    [Test]\n    public void AiChecks_GetSpamProbability_WithNullMessage_ThrowsArgumentNullException()\n    {\n        // Arrange\n        var aiChecks = CreateAiChecks();\n\n        // Act & Assert\n        var exception = Assert.ThrowsAsync<ArgumentNullException>(async () =>\n        {\n            await aiChecks.GetSpamProbability(null!);\n        });\n\n        Assert.That(exception!.Message, Does.Contain(\"Сообщение не может быть null\"));\n    }\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/ErrorHandlingTests.cs::ErrorHandlingTests::AiChecks_GetSpamProbability_WithNullMessage_ThrowsArgumentNullException",
+        "file": "ErrorHandlingTests.cs",
+        "namespace": "ClubDoorman.Test",
+        "class": "ErrorHandlingTests",
+        "test_name": "AiChecks_GetSpamProbability_WithNullMessage_ThrowsArgumentNullException",
+        "line": 118,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 12,
+        "declared_area_from_path": "Root",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": true,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 17
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/ErrorHandlingTests.cs\n# Lines 88-148 (test starts at line 118)\n        // Arrange\n        var moderationFacade = CreateModerationFacade();\n        var user = new User { Id = 123, FirstName = \"Test\", LastName = \"User\" };\n\n        // Act & Assert\n        var exception = Assert.ThrowsAsync<ArgumentNullException>(async () =>\n        {\n            await moderationFacade.IncrementGoodMessageCountAsync(user, null!, \"test message\");\n        });\n\n        Assert.That(exception!.Message, Does.Contain(\"Чат не может быть null\"));\n    }\n\n    [Test]\n    public void ModerationService_IncrementGoodMessageCountAsync_WithEmptyMessageText_ThrowsArgumentException()\n    {\n        // Arrange\n        var moderationFacade = CreateModerationFacade();\n        var user = new User { Id = 123, FirstName = \"Test\", LastName = \"User\" };\n        var chat = new Chat { Id = 456, Title = \"Test Chat\" };\n\n        // Act & Assert\n        var exception = Assert.ThrowsAsync<ArgumentException>(async () =>\n        {\n            await moderationFacade.IncrementGoodMessageCountAsync(user, chat, \"\");\n        });\n\n        Assert.That(exception!.Message, Does.Contain(\"Текст сообщения не может быть пустым\"));\n    }\n\n    [Test]\n    public void AiChecks_GetSpamProbability_WithNullMessage_ThrowsArgumentNullException()\n    {\n        // Arrange\n        var aiChecks = CreateAiChecks();\n\n        // Act & Assert\n        var exception = Assert.ThrowsAsync<ArgumentNullException>(async () =>\n        {\n            await aiChecks.GetSpamProbability(null!);\n        });\n\n        Assert.That(exception!.Message, Does.Contain(\"Сообщение не может быть null\"));\n    }\n\n    [Test]\n    public void UserManager_InBanlist_WithInvalidUserId_ReturnsFalse()\n    {\n        // Arrange\n        // UserManager internal, поэтому тестируем через интерфейс\n        // Этот тест показывает, что валидация работает на уровне сервиса\n\n        // Act & Assert\n        // Проверяем, что валидация ID работает корректно\n        Assert.That(-1, Is.LessThan(0));\n        Assert.That(0, Is.EqualTo(0));\n    }\n\n    [Test]\n    public void UserManager_InBanlist_WithZeroUserId_ReturnsFalse()\n    {\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/ErrorHandlingTests.cs::ErrorHandlingTests::UserManager_InBanlist_WithInvalidUserId_ReturnsFalse",
+        "file": "ErrorHandlingTests.cs",
+        "namespace": "ClubDoorman.Test",
+        "class": "ErrorHandlingTests",
+        "test_name": "UserManager_InBanlist_WithInvalidUserId_ReturnsFalse",
+        "line": 133,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 10,
+        "declared_area_from_path": "Root",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 18
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/ErrorHandlingTests.cs\n# Lines 103-163 (test starts at line 133)\n    {\n        // Arrange\n        var moderationFacade = CreateModerationFacade();\n        var user = new User { Id = 123, FirstName = \"Test\", LastName = \"User\" };\n        var chat = new Chat { Id = 456, Title = \"Test Chat\" };\n\n        // Act & Assert\n        var exception = Assert.ThrowsAsync<ArgumentException>(async () =>\n        {\n            await moderationFacade.IncrementGoodMessageCountAsync(user, chat, \"\");\n        });\n\n        Assert.That(exception!.Message, Does.Contain(\"Текст сообщения не может быть пустым\"));\n    }\n\n    [Test]\n    public void AiChecks_GetSpamProbability_WithNullMessage_ThrowsArgumentNullException()\n    {\n        // Arrange\n        var aiChecks = CreateAiChecks();\n\n        // Act & Assert\n        var exception = Assert.ThrowsAsync<ArgumentNullException>(async () =>\n        {\n            await aiChecks.GetSpamProbability(null!);\n        });\n\n        Assert.That(exception!.Message, Does.Contain(\"Сообщение не может быть null\"));\n    }\n\n    [Test]\n    public void UserManager_InBanlist_WithInvalidUserId_ReturnsFalse()\n    {\n        // Arrange\n        // UserManager internal, поэтому тестируем через интерфейс\n        // Этот тест показывает, что валидация работает на уровне сервиса\n\n        // Act & Assert\n        // Проверяем, что валидация ID работает корректно\n        Assert.That(-1, Is.LessThan(0));\n        Assert.That(0, Is.EqualTo(0));\n    }\n\n    [Test]\n    public void UserManager_InBanlist_WithZeroUserId_ReturnsFalse()\n    {\n        // Arrange\n        // UserManager internal, поэтому тестируем через интерфейс\n        // Этот тест показывает, что валидация работает на уровне сервиса\n\n        // Act & Assert\n        // Проверяем, что валидация ID работает корректно\n        Assert.That(0, Is.EqualTo(0));\n    }\n\n    [Test]\n    public void CustomExceptions_CanBeCreated()\n    {\n        // Arrange & Act\n        var moderationException = new ModerationException(\"Test moderation error\");\n        var userManagementException = new UserManagementException(\"Test user management error\");\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/ErrorHandlingTests.cs::ErrorHandlingTests::UserManager_InBanlist_WithZeroUserId_ReturnsFalse",
+        "file": "ErrorHandlingTests.cs",
+        "namespace": "ClubDoorman.Test",
+        "class": "ErrorHandlingTests",
+        "test_name": "UserManager_InBanlist_WithZeroUserId_ReturnsFalse",
+        "line": 146,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 9,
+        "declared_area_from_path": "Root",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 19
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/ErrorHandlingTests.cs\n# Lines 116-176 (test starts at line 146)\n    }\n\n    [Test]\n    public void AiChecks_GetSpamProbability_WithNullMessage_ThrowsArgumentNullException()\n    {\n        // Arrange\n        var aiChecks = CreateAiChecks();\n\n        // Act & Assert\n        var exception = Assert.ThrowsAsync<ArgumentNullException>(async () =>\n        {\n            await aiChecks.GetSpamProbability(null!);\n        });\n\n        Assert.That(exception!.Message, Does.Contain(\"Сообщение не может быть null\"));\n    }\n\n    [Test]\n    public void UserManager_InBanlist_WithInvalidUserId_ReturnsFalse()\n    {\n        // Arrange\n        // UserManager internal, поэтому тестируем через интерфейс\n        // Этот тест показывает, что валидация работает на уровне сервиса\n\n        // Act & Assert\n        // Проверяем, что валидация ID работает корректно\n        Assert.That(-1, Is.LessThan(0));\n        Assert.That(0, Is.EqualTo(0));\n    }\n\n    [Test]\n    public void UserManager_InBanlist_WithZeroUserId_ReturnsFalse()\n    {\n        // Arrange\n        // UserManager internal, поэтому тестируем через интерфейс\n        // Этот тест показывает, что валидация работает на уровне сервиса\n\n        // Act & Assert\n        // Проверяем, что валидация ID работает корректно\n        Assert.That(0, Is.EqualTo(0));\n    }\n\n    [Test]\n    public void CustomExceptions_CanBeCreated()\n    {\n        // Arrange & Act\n        var moderationException = new ModerationException(\"Test moderation error\");\n        var userManagementException = new UserManagementException(\"Test user management error\");\n        var aiServiceException = new AiServiceException(\"Test AI service error\");\n        var telegramApiException = new TelegramApiException(\"Test Telegram API error\");\n        var configurationException = new ConfigurationException(\"Test configuration error\");\n\n        // Assert\n        Assert.That(moderationException.Message, Is.EqualTo(\"Test moderation error\"));\n        Assert.That(userManagementException.Message, Is.EqualTo(\"Test user management error\"));\n        Assert.That(aiServiceException.Message, Is.EqualTo(\"Test AI service error\"));\n        Assert.That(telegramApiException.Message, Is.EqualTo(\"Test Telegram API error\"));\n        Assert.That(configurationException.Message, Is.EqualTo(\"Test configuration error\"));\n    }\n\n    [Test]\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/ErrorHandlingTests.cs::ErrorHandlingTests::CustomExceptions_CanBeCreated",
+        "file": "ErrorHandlingTests.cs",
+        "namespace": "ClubDoorman.Test",
+        "class": "ErrorHandlingTests",
+        "test_name": "CustomExceptions_CanBeCreated",
+        "line": 158,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 15,
+        "declared_area_from_path": "Root",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 20
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/ErrorHandlingTests.cs\n# Lines 128-188 (test starts at line 158)\n        });\n\n        Assert.That(exception!.Message, Does.Contain(\"Сообщение не может быть null\"));\n    }\n\n    [Test]\n    public void UserManager_InBanlist_WithInvalidUserId_ReturnsFalse()\n    {\n        // Arrange\n        // UserManager internal, поэтому тестируем через интерфейс\n        // Этот тест показывает, что валидация работает на уровне сервиса\n\n        // Act & Assert\n        // Проверяем, что валидация ID работает корректно\n        Assert.That(-1, Is.LessThan(0));\n        Assert.That(0, Is.EqualTo(0));\n    }\n\n    [Test]\n    public void UserManager_InBanlist_WithZeroUserId_ReturnsFalse()\n    {\n        // Arrange\n        // UserManager internal, поэтому тестируем через интерфейс\n        // Этот тест показывает, что валидация работает на уровне сервиса\n\n        // Act & Assert\n        // Проверяем, что валидация ID работает корректно\n        Assert.That(0, Is.EqualTo(0));\n    }\n\n    [Test]\n    public void CustomExceptions_CanBeCreated()\n    {\n        // Arrange & Act\n        var moderationException = new ModerationException(\"Test moderation error\");\n        var userManagementException = new UserManagementException(\"Test user management error\");\n        var aiServiceException = new AiServiceException(\"Test AI service error\");\n        var telegramApiException = new TelegramApiException(\"Test Telegram API error\");\n        var configurationException = new ConfigurationException(\"Test configuration error\");\n\n        // Assert\n        Assert.That(moderationException.Message, Is.EqualTo(\"Test moderation error\"));\n        Assert.That(userManagementException.Message, Is.EqualTo(\"Test user management error\"));\n        Assert.That(aiServiceException.Message, Is.EqualTo(\"Test AI service error\"));\n        Assert.That(telegramApiException.Message, Is.EqualTo(\"Test Telegram API error\"));\n        Assert.That(configurationException.Message, Is.EqualTo(\"Test configuration error\"));\n    }\n\n    [Test]\n    [Category(\"ErrorHandling\")]\n    public async Task SpamHamClassifier_Timeout_ReturnsGracefulFallback()\n    {\n        // Arrange\n        var logger = new Mock<ILogger<SpamHamClassifier>>().Object;\n        var classifier = new SpamHamClassifier(logger);\n\n        // Act & Assert - должен вернуть fallback результат без зависания\n        var result = await classifier.IsSpam(\"test message\").WaitAsync(TimeSpan.FromSeconds(20));\n\n        // Должен вернуть результат (даже если fallback)\n        Assert.That(result.Spam, Is.TypeOf<bool>());\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/ErrorHandlingTests.cs::ErrorHandlingTests::SpamHamClassifier_Timeout_ReturnsGracefulFallback",
+        "file": "ErrorHandlingTests.cs",
+        "namespace": "ClubDoorman.Test",
+        "class": "ErrorHandlingTests",
+        "test_name": "SpamHamClassifier_Timeout_ReturnsGracefulFallback",
+        "line": 178,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "ErrorHandling"
+        ],
+        "body_lines": 12,
+        "declared_area_from_path": "Root",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 21
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/ErrorHandlingTests.cs\n# Lines 148-208 (test starts at line 178)\n    {\n        // Arrange\n        // UserManager internal, поэтому тестируем через интерфейс\n        // Этот тест показывает, что валидация работает на уровне сервиса\n\n        // Act & Assert\n        // Проверяем, что валидация ID работает корректно\n        Assert.That(0, Is.EqualTo(0));\n    }\n\n    [Test]\n    public void CustomExceptions_CanBeCreated()\n    {\n        // Arrange & Act\n        var moderationException = new ModerationException(\"Test moderation error\");\n        var userManagementException = new UserManagementException(\"Test user management error\");\n        var aiServiceException = new AiServiceException(\"Test AI service error\");\n        var telegramApiException = new TelegramApiException(\"Test Telegram API error\");\n        var configurationException = new ConfigurationException(\"Test configuration error\");\n\n        // Assert\n        Assert.That(moderationException.Message, Is.EqualTo(\"Test moderation error\"));\n        Assert.That(userManagementException.Message, Is.EqualTo(\"Test user management error\"));\n        Assert.That(aiServiceException.Message, Is.EqualTo(\"Test AI service error\"));\n        Assert.That(telegramApiException.Message, Is.EqualTo(\"Test Telegram API error\"));\n        Assert.That(configurationException.Message, Is.EqualTo(\"Test configuration error\"));\n    }\n\n    [Test]\n    [Category(\"ErrorHandling\")]\n    public async Task SpamHamClassifier_Timeout_ReturnsGracefulFallback()\n    {\n        // Arrange\n        var logger = new Mock<ILogger<SpamHamClassifier>>().Object;\n        var classifier = new SpamHamClassifier(logger);\n\n        // Act & Assert - должен вернуть fallback результат без зависания\n        var result = await classifier.IsSpam(\"test message\").WaitAsync(TimeSpan.FromSeconds(20));\n\n        // Должен вернуть результат (даже если fallback)\n        Assert.That(result.Spam, Is.TypeOf<bool>());\n        Assert.That(result.Score, Is.TypeOf<float>());\n    }\n\n    private static IModerationService CreateModerationService()\n    {\n        // Используем TestFactory для создания сервиса с моками\n        var factory = new ModerationServiceTestFactory();\n        return factory.CreateModerationService();\n    }\n\n    private static ClubDoorman.Features.Moderation.IModerationFacade CreateModerationFacade()\n    {\n        // Создаем мок фасада напрямую с настройкой исключений\n        var mockFacade = new Mock<ClubDoorman.Features.Moderation.IModerationFacade>();\n\n        // Настраиваем CheckMessageAsync для выброса исключений\n        mockFacade.Setup(f => f.CheckMessageAsync(null!))\n            .ThrowsAsync(new ArgumentNullException(\"message\", \"Сообщение не может быть null\"));\n\n        // Настраиваем CheckUserNameAsync для выброса исключений\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Integration/EnvironmentTest.cs::EnvironmentTest::EnvironmentVariables_ShouldBeAccessible",
+        "file": "Integration/EnvironmentTest.cs",
+        "namespace": "ClubDoorman.Test.Integration",
+        "class": "EnvironmentTest",
+        "test_name": "EnvironmentVariables_ShouldBeAccessible",
+        "line": 76,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 22,
+        "declared_area_from_path": "Integration",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "real_env_or_api"
+        ],
+        "_source_lineno": 42
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Integration/EnvironmentTest.cs\n# Lines 46-100 (test starts at line 76)\n    [Test]\n    public void LoadEnvironmentVariables_ShouldLoadFromEnvFile()\n    {\n        // Arrange & Act\n        var envPath = FindEnvFile();\n        if (envPath == null)\n        {\n            Assert.Ignore(\"Файл .env не найден, пропускаем тест\");\n        }\n        DotNetEnv.Env.Load(envPath);\n\n        // Assert\n        var apiKey = DotNetEnv.Env.GetString(\"DOORMAN_OPENROUTER_API\");\n        var botToken = DotNetEnv.Env.GetString(\"DOORMAN_BOT_API\");\n        var adminChat = DotNetEnv.Env.GetString(\"DOORMAN_ADMIN_CHAT\");\n\n        // DON'T log full secrets; mask to prevent leaking into test artifacts\n        string Mask(string? v) => string.IsNullOrEmpty(v) ? \"<empty>\" : (v!.Length <= 6 ? \"******\" : v[..3] + \"***\" + v[^3..]);\n        Console.WriteLine($\"API Key: {Mask(apiKey)}\");\n        Console.WriteLine($\"Bot Token: {Mask(botToken)}\");\n        Console.WriteLine($\"Admin Chat: {adminChat}\");\n\n        Assert.That(apiKey, Is.Not.Null);\n        Assert.That(apiKey, Is.Not.Empty);\n        Assert.That(botToken, Is.Not.Null);\n        Assert.That(botToken, Is.Not.Empty);\n        Assert.That(adminChat, Is.Not.Null);\n        Assert.That(adminChat, Is.Not.Empty);\n    }\n\n    [Test]\n    public void EnvironmentVariables_ShouldBeAccessible()\n    {\n        // Arrange & Act\n        var envPath = FindEnvFile();\n        if (envPath == null)\n        {\n            Assert.Ignore(\"Файл .env не найден, пропускаем тест\");\n        }\n        DotNetEnv.Env.Load(envPath);\n\n        // Assert\n        var apiKey = Environment.GetEnvironmentVariable(\"DOORMAN_OPENROUTER_API\");\n        var botToken = Environment.GetEnvironmentVariable(\"DOORMAN_BOT_API\");\n        var adminChat = Environment.GetEnvironmentVariable(\"DOORMAN_ADMIN_CHAT\");\n\n        string Mask(string? v) => string.IsNullOrEmpty(v) ? \"<empty>\" : (v!.Length <= 6 ? \"******\" : v[..3] + \"***\" + v[^3..]);\n        Console.WriteLine($\"Environment API Key: {Mask(apiKey)}\");\n        Console.WriteLine($\"Environment Bot Token: {Mask(botToken)}\");\n        Console.WriteLine($\"Environment Admin Chat: {adminChat}\");\n\n        // Эти переменные могут быть null, так как они не загружены в Environment\n        // но должны быть доступны через DotNetEnv.Env.GetString\n    }\n}"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Integration/FakeTelegramClientExtendedTests.cs::FakeTelegramClientExtendedTests::FakeTelegramClient_ShouldTrackCallbackQueryAnswers",
+        "file": "Integration/FakeTelegramClientExtendedTests.cs",
+        "namespace": "ClubDoorman.Test.Integration",
+        "class": "FakeTelegramClientExtendedTests",
+        "test_name": "FakeTelegramClient_ShouldTrackCallbackQueryAnswers",
+        "line": 29,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "integration",
+          "e2e",
+          "infrastructure"
+        ],
+        "body_lines": 16,
+        "declared_area_from_path": "Integration",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": true,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 43
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Integration/FakeTelegramClientExtendedTests.cs\n# Lines 1-59 (test starts at line 29)\nusing ClubDoorman.Services.UserBan;\nusing ClubDoorman.TestInfrastructure;\nusing FluentAssertions;\nusing NUnit.Framework;\nusing Telegram.Bot.Types;\nusing Telegram.Bot.Types.Enums;\nusing Telegram.Bot.Types.ReplyMarkups;\n\nnamespace ClubDoorman.Test.Integration;\n\n/// <summary>\n/// Тесты для расширенного FakeTelegramClient\n/// Проверяет новые возможности: callback queries, фото, редактирование сообщений\n/// </summary>\n[TestFixture]\n[Category(\"integration\")]\n[Category(\"e2e\")]\n[Category(\"infrastructure\")]\npublic class FakeTelegramClientExtendedTests : TestBase\n{\n    private FakeTelegramClient _fakeBot = null!;\n\n    [SetUp]\n    public void SetUp()\n    {\n        _fakeBot = FakeTelegramClientFactory.Create();\n    }\n\n    [Test]\n    public async Task FakeTelegramClient_ShouldTrackCallbackQueryAnswers()\n    {\n        // Arrange\n        var callbackQueryId = \"test_callback_123\";\n        var answerText = \"Операция выполнена!\";\n\n        // Act\n        await _fakeBot.AnswerCallbackQuery(callbackQueryId, answerText, showAlert: true);\n\n        // Assert\n        _fakeBot.AnsweredCallbackQueries.Should().HaveCount(1);\n        _fakeBot.AnsweredCallbackQueries.First().CallbackQueryId.Should().Be(callbackQueryId);\n        _fakeBot.AnsweredCallbackQueries.First().Text.Should().Be(answerText);\n        _fakeBot.AnsweredCallbackQueries.First().ShowAlert.Should().Be(true);\n\n        _fakeBot.WasCallbackQueryAnswered(callbackQueryId).Should().BeTrue();\n    }\n\n    [Test]\n    public async Task FakeTelegramClient_ShouldTrackMessageEdits()\n    {\n        // Arrange\n        var chatId = new ChatId(123456789);\n        var messageId = 42;\n        var newText = \"Обновленный текст сообщения\";\n\n        // Act\n        await _fakeBot.EditMessageText(chatId, messageId, newText);\n\n        // Assert\n"
+    }
+  ]
+}

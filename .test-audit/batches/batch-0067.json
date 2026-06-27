@@ -1,0 +1,453 @@
+{
+  "schema_version": "test-audit-batch-v1",
+  "batch_no": 67,
+  "purpose": "local LLM audit input",
+  "instructions": "Return JSONL only. One audit object per input test. No markdown. No code edits.",
+  "tests": [
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Golden/GoldenDeterminismTests.cs::GoldenDeterminismTests::StableUsernameHash_IsDeterministic_AndCaseSensitive",
+        "file": "Unit/Golden/GoldenDeterminismTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Golden",
+        "class": "GoldenDeterminismTests",
+        "test_name": "StableUsernameHash_IsDeterministic_AndCaseSensitive",
+        "line": 27,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "GoldenManifest",
+          "GoldenNorm"
+        ],
+        "body_lines": 23,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": true,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 283
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Golden/GoldenDeterminismTests.cs\n# Lines 1-57 (test starts at line 27)\nusing System.Reflection;\nusing NUnit.Framework;\nusing ClubDoorman.Services.Logging; // Access GoldenMasterRecorder type for reflection\n\nnamespace ClubDoorman.Test.Unit.Golden;\n\n[TestFixture]\npublic class GoldenDeterminismTests\n{\n    private const string FixedTimestamp = \"2025-01-01T00:00:00Z\"; // must mirror baseline harness value\n\n    [Test]\n    [Category(\"GoldenManifest\")] // picked up by workflow filter\n    public void ManifestTimestamp_ShouldMatchFixedEnv_WhenFixedTimestampIsSet()\n    {\n        var solutionRoot = FindSolutionRoot();\n        var manifestPath = Path.Combine(solutionRoot, \"ClubDoorman.Baseline\", \"golden\", \"manifest.json\");\n        Assert.That(File.Exists(manifestPath), $\"Manifest not found at {manifestPath}. Run baseline harness first.\");\n        using var doc = System.Text.Json.JsonDocument.Parse(File.ReadAllText(manifestPath));\n        var generatedAt = doc.RootElement.GetProperty(\"GeneratedAtUtc\").GetDateTime();\n        var expected = DateTime.Parse(FixedTimestamp, null, System.Globalization.DateTimeStyles.AdjustToUniversal | System.Globalization.DateTimeStyles.AssumeUniversal);\n        Assert.That(generatedAt, Is.EqualTo(expected), \"Manifest GeneratedAtUtc must equal fixed timestamp for deterministic golden baselines.\");\n    }\n\n    [Test]\n    [Category(\"GoldenNorm\")] // also executed in workflow\n    public void StableUsernameHash_IsDeterministic_AndCaseSensitive()\n    {\n        var method = typeof(GoldenMasterRecorder).GetMethod(\"StableUsernameHash\", BindingFlags.NonPublic | BindingFlags.Static);\n        Assert.That(method, Is.Not.Null, \"StableUsernameHash method not found via reflection (structure changed?)\");\n\n        string Hash(string s) => (string)method!.Invoke(null, new object[] { s })!;\n\n        var samples = new[] { \"Alice\", \"alice\", \"Bob_123\", \"пример\", new string('x', 256) };\n        foreach (var s in samples)\n        {\n            var h1 = Hash(s);\n            var h2 = Hash(s);\n            Assert.Multiple(() =>\n            {\n                Assert.That(h1, Is.EqualTo(h2), $\"Hash not stable for input '{s}'\");\n                Assert.That(h1.Length, Is.EqualTo(8), \"Hash must be first 8 hex chars of SHA256\");\n                Assert.That(h1, Is.EqualTo(h1.ToLowerInvariant()), \"Hash must be lowercase hex\");\n            });\n        }\n\n        var upper = Hash(\"TestUser\");\n        var lower = Hash(\"testuser\");\n        Assert.That(upper, Is.Not.EqualTo(lower), \"Username hash should be case-sensitive (SHA256 on UTF8 bytes)\");\n    }\n\n    private static string FindSolutionRoot()\n    {\n        var dir = TestContext.CurrentContext.TestDirectory;\n        for (int i = 0; i < 8; i++)\n        {\n            if (Directory.GetFiles(dir, \"ClubDoorman.sln\").Any()) return dir;\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Handlers/MessageHandlerTryFindUserIdTests.cs::MessageHandlerTryFindUserIdTests::TryFindUserIdByUsername_DebugCache_InvestigatesCacheBehavior",
+        "file": "Unit/Handlers/MessageHandlerTryFindUserIdTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Handlers",
+        "class": "MessageHandlerTryFindUserIdTests",
+        "test_name": "TryFindUserIdByUsername_DebugCache_InvestigatesCacheBehavior",
+        "line": 280,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 34,
+        "declared_area_from_path": "Unit",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 440
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Handlers/MessageHandlerTryFindUserIdTests.cs\n# Lines 250-310 (test starts at line 280)\n    }\n\n    /// <summary>\n    /// Тест для TryFindUserIdByUsername с username без @ символа\n    /// Проверяет, что метод находит username даже без @ символа\n    /// <tags>user-search, username-without-at, behavior</tags>\n    /// </summary>\n    [Test]\n    public void TryFindUserIdByUsername_WithUsernameWithoutAtSymbol_FindsUser()\n    {\n        // Arrange\n        var username = \"testuser8\";\n        var chatId = 123456L;\n        var userId = 789012L;\n        var cacheKey = $\"{chatId}_{userId}\";\n        var cacheValue = $\"Message from {username}\"; // Без @ символа\n\n        MemoryCache.Default.Add(cacheKey, cacheValue, new CacheItemPolicy { AbsoluteExpiration = DateTimeOffset.UtcNow.AddHours(1) });\n\n        // Act\n        var result = _userIndex.TryFindUserIdByUsername(username);\n\n        // Assert\n        Assert.That(result, Is.EqualTo(userId));\n    }\n\n    /// <summary>\n    /// Отладочный тест для понимания работы кэша\n    /// <tags>debug, cache-investigation</tags>\n    /// </summary>\n    [Test]\n    public void TryFindUserIdByUsername_DebugCache_InvestigatesCacheBehavior()\n    {\n        // Arrange\n        var username = \"testuser9\";\n        var chatId = 123456L;\n        var userId = 789012L;\n        var cacheKey = $\"{chatId}_{userId}\";\n        var cacheValue = $\"Message from @{username}\";\n\n        // Добавляем в кэш\n        MemoryCache.Default.Add(cacheKey, cacheValue, new CacheItemPolicy { AbsoluteExpiration = DateTimeOffset.UtcNow.AddHours(1) });\n\n        // Проверяем, что кэш содержит данные\n        var cacheItem = MemoryCache.Default.Get(cacheKey);\n        Assert.That(cacheItem, Is.Not.Null, \"Кэш должен содержать добавленный элемент\");\n        Assert.That(cacheItem, Is.EqualTo(cacheValue), \"Значение в кэше должно совпадать\");\n\n        // Проверяем количество элементов в кэше\n        var cacheCount = MemoryCache.Default.GetCount();\n        Assert.That(cacheCount, Is.GreaterThan(0), \"Кэш должен содержать элементы\");\n\n        // Выводим все элементы кэша для отладки\n        Console.WriteLine($\"Количество элементов в кэше: {cacheCount}\");\n        foreach (var item in MemoryCache.Default)\n        {\n            Console.WriteLine($\"Кэш: ключ='{item.Key}', значение='{item.Value}'\");\n        }\n\n        // Act\n        var result = _userIndex.TryFindUserIdByUsername(username);\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Infrastructure/TelegramBotClientWrapperTests.cs::TelegramBotClientWrapperTests::TelegramBotClientWrapper_Constructor_AcceptsTelegramBotClient",
+        "file": "Unit/Infrastructure/TelegramBotClientWrapperTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Infrastructure",
+        "class": "TelegramBotClientWrapperTests",
+        "test_name": "TelegramBotClientWrapper_Constructor_AcceptsTelegramBotClient",
+        "line": 29,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "unit",
+          "infrastructure"
+        ],
+        "body_lines": 8,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "real_env_or_api"
+        ],
+        "_source_lineno": 448
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Infrastructure/TelegramBotClientWrapperTests.cs\n# Lines 1-59 (test starts at line 29)\nusing ClubDoorman.Services;\nusing ClubDoorman.TestInfrastructure;\nusing Microsoft.Extensions.Logging;\nusing NUnit.Framework;\nusing Telegram.Bot;\nusing Telegram.Bot.Types;\nusing Telegram.Bot.Types.Enums;\nusing ClubDoorman.Services.Telegram;\n\nnamespace ClubDoorman.Test.Unit.Infrastructure;\n\n[TestFixture]\n[Category(\"unit\")]\n[Category(\"infrastructure\")]\npublic class TelegramBotClientWrapperTests\n{\n    private TelegramBotClientWrapperTestFactory _factory;\n    private TelegramBotClientWrapper _wrapper;\n\n    [SetUp]\n    public void Setup()\n    {\n        _factory = new TelegramBotClientWrapperTestFactory();\n        // Создаем реальный TelegramBotClient для wrapper'а\n    var realBotClient = new TelegramBotClient(\"1234567890:ABCdefGHIjklMNOpqrsTUVwxyz\");\n    _wrapper = new TelegramBotClientWrapper(realBotClient, Microsoft.Extensions.Logging.Abstractions.NullLogger<TelegramBotClientWrapper>.Instance);\n    }\n\n    [Test]\n    public void TelegramBotClientWrapper_Constructor_AcceptsTelegramBotClient()\n    {\n        // Arrange & Act\n        var botClient = new TelegramBotClient(\"1234567890:ABCdefGHIjklMNOpqrsTUVwxyz\");\n    var wrapper = new TelegramBotClientWrapper(botClient, Microsoft.Extensions.Logging.Abstractions.NullLogger<TelegramBotClientWrapper>.Instance);\n\n        // Assert\n        Assert.That(wrapper, Is.Not.Null);\n    }\n\n    [Test]\n    public void TelegramBotClientWrapper_Constructor_ThrowsOnNullBot()\n    {\n        // Act & Assert\n    Assert.Throws<ArgumentNullException>(() => new TelegramBotClientWrapper(null!, Microsoft.Extensions.Logging.Abstractions.NullLogger<TelegramBotClientWrapper>.Instance));\n    }\n\n    [Test]\n    public void TelegramBotClientWrapper_BotId_ReturnsCorrectId()\n    {\n        // Arrange\n        var botClient = new TelegramBotClient(\"1234567890:ABCdefGHIjklMNOpqrsTUVwxyz\");\n    var wrapper = new TelegramBotClientWrapper(botClient, Microsoft.Extensions.Logging.Abstractions.NullLogger<TelegramBotClientWrapper>.Instance);\n\n        // Act\n        var botId = wrapper.BotId;\n\n        // Assert\n        Assert.That(botId, Is.EqualTo(1234567890));\n    }\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Infrastructure/TelegramBotClientWrapperTests.cs::TelegramBotClientWrapperTests::TelegramBotClientWrapper_GetChatFullInfo_CopiesPhotoProperty",
+        "file": "Unit/Infrastructure/TelegramBotClientWrapperTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Infrastructure",
+        "class": "TelegramBotClientWrapperTests",
+        "test_name": "TelegramBotClientWrapper_GetChatFullInfo_CopiesPhotoProperty",
+        "line": 61,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "unit",
+          "infrastructure"
+        ],
+        "body_lines": 29,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": true,
+          "uses_real_env_or_api": true,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "real_env_or_api"
+        ],
+        "_source_lineno": 451
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Infrastructure/TelegramBotClientWrapperTests.cs\n# Lines 31-91 (test starts at line 61)\n    {\n        // Arrange & Act\n        var botClient = new TelegramBotClient(\"1234567890:ABCdefGHIjklMNOpqrsTUVwxyz\");\n    var wrapper = new TelegramBotClientWrapper(botClient, Microsoft.Extensions.Logging.Abstractions.NullLogger<TelegramBotClientWrapper>.Instance);\n\n        // Assert\n        Assert.That(wrapper, Is.Not.Null);\n    }\n\n    [Test]\n    public void TelegramBotClientWrapper_Constructor_ThrowsOnNullBot()\n    {\n        // Act & Assert\n    Assert.Throws<ArgumentNullException>(() => new TelegramBotClientWrapper(null!, Microsoft.Extensions.Logging.Abstractions.NullLogger<TelegramBotClientWrapper>.Instance));\n    }\n\n    [Test]\n    public void TelegramBotClientWrapper_BotId_ReturnsCorrectId()\n    {\n        // Arrange\n        var botClient = new TelegramBotClient(\"1234567890:ABCdefGHIjklMNOpqrsTUVwxyz\");\n    var wrapper = new TelegramBotClientWrapper(botClient, Microsoft.Extensions.Logging.Abstractions.NullLogger<TelegramBotClientWrapper>.Instance);\n\n        // Act\n        var botId = wrapper.BotId;\n\n        // Assert\n        Assert.That(botId, Is.EqualTo(1234567890));\n    }\n\n    [Test]\n    public void TelegramBotClientWrapper_GetChatFullInfo_CopiesPhotoProperty()\n    {\n        // Arrange\n        var chatId = new ChatId(123456789);\n\n        // Создаем тестовый Chat с Photo\n        var testPhoto = new ChatPhoto\n        {\n            SmallFileId = \"test_small_id\",\n            SmallFileUniqueId = \"test_small_unique\",\n            BigFileId = \"test_big_id\",\n            BigFileUniqueId = \"test_big_unique\"\n        };\n\n        // Act & Assert\n        // Этот тест проверяет, что метод GetChatFullInfo правильно копирует Photo\n        // Мы не можем вызвать реальный API, но можем проверить структуру кода\n\n        // Проверяем, что в TelegramBotClientWrapper.GetChatFullInfo есть строка Photo = chat.Photo\n        var wrapperCode = File.ReadAllText(\"../../../../ClubDoorman/Services/Telegram/TelegramBotClientWrapper.cs\");\n        Assert.That(wrapperCode, Does.Contain(\"Photo = chat.Photo\"),\n            \"TelegramBotClientWrapper.GetChatFullInfo должен копировать Photo из Chat\");\n\n        // Проверяем, что ChatFullInfo имеет свойство Photo\n        var chatFullInfoType = typeof(ChatFullInfo);\n        var photoProperty = chatFullInfoType.GetProperty(\"Photo\");\n        Assert.That(photoProperty, Is.Not.Null, \"ChatFullInfo должен иметь свойство Photo\");\n        Assert.That(photoProperty!.PropertyType, Is.EqualTo(typeof(ChatPhoto)),\n            \"Свойство Photo должно быть типа ChatPhoto\");\n    }\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Infrastructure/WorkerTests.cs::WorkerTests::Worker_StaticMethods_AreAccessible",
+        "file": "Unit/Infrastructure/WorkerTests.cs",
+        "namespace": "ClubDoorman.Test.Unit",
+        "class": "WorkerTests",
+        "test_name": "Worker_StaticMethods_AreAccessible",
+        "line": 131,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 11,
+        "declared_area_from_path": "Unit",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 474
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Infrastructure/WorkerTests.cs\n# Lines 101-144 (test starts at line 131)\n    }\n\n    [Test]\n    public void AdminDisplayName_WithoutUsername_ReturnsFullName()\n    {\n        // Arrange\n        var user = new User { Id = 123, FirstName = \"John\", LastName = \"Doe\" };\n        var method = typeof(Worker).GetMethod(\"AdminDisplayName\", BindingFlags.NonPublic | BindingFlags.Static);\n\n        // Act\n        var result = method!.Invoke(null, new object[] { user });\n\n        // Assert\n        Assert.That(result, Is.EqualTo(\"John Doe\"));\n    }\n\n    [Test]\n    public void AdminDisplayName_WithFirstNameOnly_ReturnsFirstName()\n    {\n        // Arrange\n        var user = new User { Id = 123, FirstName = \"John\" };\n        var method = typeof(Worker).GetMethod(\"AdminDisplayName\", BindingFlags.NonPublic | BindingFlags.Static);\n\n        // Act\n        var result = method!.Invoke(null, new object[] { user });\n\n        // Assert\n        Assert.That(result, Is.EqualTo(\"John\"));\n    }\n\n    [Test]\n    public void Worker_StaticMethods_AreAccessible()\n    {\n        // Arrange\n        var fullNameMethod = typeof(Worker).GetMethod(\"FullName\", BindingFlags.NonPublic | BindingFlags.Static);\n        var userToKeyMethod = typeof(Worker).GetMethod(\"UserToKey\", BindingFlags.NonPublic | BindingFlags.Static);\n        var adminDisplayNameMethod = typeof(Worker).GetMethod(\"AdminDisplayName\", BindingFlags.NonPublic | BindingFlags.Static);\n\n        // Assert\n        Assert.That(fullNameMethod, Is.Not.Null, \"FullName method should be accessible\");\n        Assert.That(userToKeyMethod, Is.Not.Null, \"UserToKey method should be accessible\");\n        Assert.That(adminDisplayNameMethod, Is.Not.Null, \"AdminDisplayName method should be accessible\");\n    }\n}"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Moderation/ModerationServiceTests.cs::ModerationServiceTests::CreateModerationService_WithFactory_ReturnsWorkingService",
+        "file": "Unit/Moderation/ModerationServiceTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Moderation",
+        "class": "ModerationServiceTests",
+        "test_name": "CreateModerationService_WithFactory_ReturnsWorkingService",
+        "line": 30,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "unit",
+          "moderation",
+          "critical"
+        ],
+        "body_lines": 8,
+        "declared_area_from_path": "Unit",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 500
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Moderation/ModerationServiceTests.cs\n# Lines 1-60 (test starts at line 30)\nusing ClubDoorman.Services.SuspiciousUsers;\nusing ClubDoorman.Services.BadMessage;\nusing ClubDoorman.Services.Moderation;\nusing ClubDoorman.Services.UserBan;\nusing ClubDoorman.Models;\nusing ClubDoorman.Services;\nusing ClubDoorman.Services.UserBan;\nusing ClubDoorman.TestInfrastructure;\nusing NUnit.Framework;\nusing Telegram.Bot.Types;\nusing Moq;\nusing System;\n\nnamespace ClubDoorman.Test.Unit.Moderation;\n\n[TestFixture]\n[Category(\"unit\")]\n[Category(\"moderation\")]\n[Category(\"critical\")]\npublic class ModerationServiceTests\n{\n    private ModerationServiceTestFactory _factory = null!;\n\n    [SetUp]\n    public void Setup()\n    {\n        _factory = new ModerationServiceTestFactory();\n    }\n\n    [Test]\n    public void CreateModerationService_WithFactory_ReturnsWorkingService()\n    {\n        // Arrange & Act\n        var service = _factory.CreateModerationService();\n\n        // Assert\n        Assert.That(service, Is.Not.Null);\n        Assert.That(service, Is.InstanceOf<IModerationService>());\n    }\n\n    [Test]\n    public async Task CheckMessageAsync_ValidMessage_ReturnsAllow()\n    {\n        // Arrange\n        _factory.WithClassifierSetup(mock =>\n            mock.Setup(x => x.IsSpam(It.IsAny<string>()))\n                .ReturnsAsync((false, -1.5f))); // Уверенный ham (не спам)\n\n        var service = _factory.CreateModerationService();\n        var message = new Message\n        {\n            Text = \"Hello, this is a valid message!\",\n            From = new User { Id = 123, FirstName = \"Test\" },\n            Chat = new Chat { Id = 456, Type = Telegram.Bot.Types.Enums.ChatType.Group }\n        };\n\n        // Act\n        var result = await service.CheckMessageAsync(message);\n\n        // Assert\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Moderation/ModerationServiceTests.cs::ModerationServiceTests::CheckMessageAsync_ValidMessage_ReturnsAllow",
+        "file": "Unit/Moderation/ModerationServiceTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Moderation",
+        "class": "ModerationServiceTests",
+        "test_name": "CheckMessageAsync_ValidMessage_ReturnsAllow",
+        "line": 41,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "unit",
+          "moderation",
+          "critical"
+        ],
+        "body_lines": 21,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": true,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 501
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Moderation/ModerationServiceTests.cs\n# Lines 11-71 (test starts at line 41)\nusing Moq;\nusing System;\n\nnamespace ClubDoorman.Test.Unit.Moderation;\n\n[TestFixture]\n[Category(\"unit\")]\n[Category(\"moderation\")]\n[Category(\"critical\")]\npublic class ModerationServiceTests\n{\n    private ModerationServiceTestFactory _factory = null!;\n\n    [SetUp]\n    public void Setup()\n    {\n        _factory = new ModerationServiceTestFactory();\n    }\n\n    [Test]\n    public void CreateModerationService_WithFactory_ReturnsWorkingService()\n    {\n        // Arrange & Act\n        var service = _factory.CreateModerationService();\n\n        // Assert\n        Assert.That(service, Is.Not.Null);\n        Assert.That(service, Is.InstanceOf<IModerationService>());\n    }\n\n    [Test]\n    public async Task CheckMessageAsync_ValidMessage_ReturnsAllow()\n    {\n        // Arrange\n        _factory.WithClassifierSetup(mock =>\n            mock.Setup(x => x.IsSpam(It.IsAny<string>()))\n                .ReturnsAsync((false, -1.5f))); // Уверенный ham (не спам)\n\n        var service = _factory.CreateModerationService();\n        var message = new Message\n        {\n            Text = \"Hello, this is a valid message!\",\n            From = new User { Id = 123, FirstName = \"Test\" },\n            Chat = new Chat { Id = 456, Type = Telegram.Bot.Types.Enums.ChatType.Group }\n        };\n\n        // Act\n        var result = await service.CheckMessageAsync(message);\n\n        // Assert\n        Assert.That(result.Action, Is.EqualTo(ModerationAction.Allow));\n        Assert.That(result.Reason, Is.Not.Empty);\n    }\n\n    [Test]\n    public async Task CheckMessageAsync_SpamMessage_ReturnsDelete()\n    {\n        // Arrange\n        _factory.WithClassifierSetup(mock =>\n            mock.Setup(x => x.IsSpam(It.IsAny<string>()))\n                .ReturnsAsync((true, 0.9f)));\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Moderation/ModerationServiceTests.cs::ModerationServiceTests::ModerationTestFactory_ConfiguresAllDependencies",
+        "file": "Unit/Moderation/ModerationServiceTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Moderation",
+        "class": "ModerationServiceTests",
+        "test_name": "ModerationTestFactory_ConfiguresAllDependencies",
+        "line": 176,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 14,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 508
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Moderation/ModerationServiceTests.cs\n# Lines 146-192 (test starts at line 176)\n        // Arrange\n        _factory.WithClassifierSetup(mock =>\n            mock.Setup(x => x.IsSpam(It.IsAny<string>()))\n                .ThrowsAsync(new Exception(\"Classifier error\")));\n        var service = _factory.CreateModerationService();\n        var message = new Message\n        {\n            Text = \"Test message\",\n            From = new User { Id = 123, FirstName = \"Test\" },\n            Chat = new Chat { Id = 456, Type = Telegram.Bot.Types.Enums.ChatType.Group }\n        };\n\n        // Act & Assert\n        var exception = Assert.ThrowsAsync<Exception>(async () =>\n            await service.CheckMessageAsync(message));\n\n        Assert.That(exception.Message, Is.EqualTo(\"Classifier error\"));\n    }\n\n    [Test]\n    public void ModerationTestFactory_CreatesFreshInstanceEachTime()\n    {\n        // Arrange & Act\n        var service1 = _factory.CreateModerationService();\n        var service2 = _factory.CreateModerationService();\n\n        // Assert\n        Assert.That(service1, Is.Not.SameAs(service2));\n    }\n\n    [Test]\n    public void ModerationTestFactory_ConfiguresAllDependencies()\n    {\n        // Arrange & Act\n        var service = _factory.CreateModerationService();\n\n        // Assert - проверяем что все моки настроены\n        Assert.That(_factory.ClassifierMock, Is.Not.Null);\n        Assert.That(_factory.MimicryClassifierMock, Is.Not.Null);\n        Assert.That(_factory.BadMessageManagerMock, Is.Not.Null);\n        Assert.That(_factory.UserManagerMock, Is.Not.Null);\n        Assert.That(_factory.AiChecksMock, Is.Not.Null);\n        Assert.That(_factory.SuspiciousUsersStorageMock, Is.Not.Null);\n        Assert.That(_factory.BotClientMock, Is.Not.Null);\n        Assert.That(_factory.LoggerMock, Is.Not.Null);\n    }\n}"
+    }
+  ]
+}

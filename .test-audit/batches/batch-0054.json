@@ -1,0 +1,511 @@
+{
+  "schema_version": "test-audit-batch-v1",
+  "batch_no": 54,
+  "purpose": "local LLM audit input",
+  "instructions": "Return JSONL only. One audit object per input test. No markdown. No code edits.",
+  "tests": [
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/UserManagerExtendedTests.cs::UserManagerExtendedTests::Approved_NegativeUserId_ReturnsApprovalStatus",
+        "file": "Unit/Services/UserManagerExtendedTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "UserManagerExtendedTests",
+        "test_name": "Approved_NegativeUserId_ReturnsApprovalStatus",
+        "line": 62,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "unit",
+          "services",
+          "extended"
+        ],
+        "body_lines": 13,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify"
+        ],
+        "_source_lineno": 814
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/UserManagerExtendedTests.cs\n# Lines 32-92 (test starts at line 62)\n    {\n        // Arrange\n        var userId = 12345L;\n        _userManagerMock.Setup(x => x.Approved(userId, null))\n            .Returns(true);\n\n        // Act\n        var result = _userManagerMock.Object.Approved(userId);\n\n        // Assert\n        Assert.That(result, Is.True);\n        _userManagerMock.Verify(x => x.Approved(userId, null), Times.Once);\n    }\n\n    [Test]\n    public void Approved_ZeroUserId_ReturnsApprovalStatus()\n    {\n        // Arrange\n        var userId = 0L;\n        _userManagerMock.Setup(x => x.Approved(userId, null))\n            .Returns(false);\n\n        // Act\n        var result = _userManagerMock.Object.Approved(userId);\n\n        // Assert\n        Assert.That(result, Is.False);\n        _userManagerMock.Verify(x => x.Approved(userId, null), Times.Once);\n    }\n\n    [Test]\n    public void Approved_NegativeUserId_ReturnsApprovalStatus()\n    {\n        // Arrange\n        var userId = -12345L;\n        _userManagerMock.Setup(x => x.Approved(userId, null))\n            .Returns(false);\n\n        // Act\n        var result = _userManagerMock.Object.Approved(userId);\n\n        // Assert\n        Assert.That(result, Is.False);\n        _userManagerMock.Verify(x => x.Approved(userId, null), Times.Once);\n    }\n\n    [Test]\n    public void Approved_WithGroupId_ReturnsApprovalStatus()\n    {\n        // Arrange\n        var userId = 12345L;\n        var groupId = 67890L;\n        _userManagerMock.Setup(x => x.Approved(userId, groupId))\n            .Returns(true);\n\n        // Act\n        var result = _userManagerMock.Object.Approved(userId, groupId);\n\n        // Assert\n        Assert.That(result, Is.True);\n        _userManagerMock.Verify(x => x.Approved(userId, groupId), Times.Once);\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/UserManagerExtendedTests.cs::UserManagerExtendedTests::Approved_WithGroupId_ReturnsApprovalStatus",
+        "file": "Unit/Services/UserManagerExtendedTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "UserManagerExtendedTests",
+        "test_name": "Approved_WithGroupId_ReturnsApprovalStatus",
+        "line": 78,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "unit",
+          "services",
+          "extended"
+        ],
+        "body_lines": 14,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify"
+        ],
+        "_source_lineno": 815
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/UserManagerExtendedTests.cs\n# Lines 48-108 (test starts at line 78)\n    {\n        // Arrange\n        var userId = 0L;\n        _userManagerMock.Setup(x => x.Approved(userId, null))\n            .Returns(false);\n\n        // Act\n        var result = _userManagerMock.Object.Approved(userId);\n\n        // Assert\n        Assert.That(result, Is.False);\n        _userManagerMock.Verify(x => x.Approved(userId, null), Times.Once);\n    }\n\n    [Test]\n    public void Approved_NegativeUserId_ReturnsApprovalStatus()\n    {\n        // Arrange\n        var userId = -12345L;\n        _userManagerMock.Setup(x => x.Approved(userId, null))\n            .Returns(false);\n\n        // Act\n        var result = _userManagerMock.Object.Approved(userId);\n\n        // Assert\n        Assert.That(result, Is.False);\n        _userManagerMock.Verify(x => x.Approved(userId, null), Times.Once);\n    }\n\n    [Test]\n    public void Approved_WithGroupId_ReturnsApprovalStatus()\n    {\n        // Arrange\n        var userId = 12345L;\n        var groupId = 67890L;\n        _userManagerMock.Setup(x => x.Approved(userId, groupId))\n            .Returns(true);\n\n        // Act\n        var result = _userManagerMock.Object.Approved(userId, groupId);\n\n        // Assert\n        Assert.That(result, Is.True);\n        _userManagerMock.Verify(x => x.Approved(userId, groupId), Times.Once);\n    }\n\n    [Test]\n    public void Approved_MaxLongUserId_ReturnsApprovalStatus()\n    {\n        // Arrange\n        var userId = long.MaxValue;\n        _userManagerMock.Setup(x => x.Approved(userId, null))\n            .Returns(false);\n\n        // Act\n        var result = _userManagerMock.Object.Approved(userId);\n\n        // Assert\n        Assert.That(result, Is.False);\n        _userManagerMock.Verify(x => x.Approved(userId, null), Times.Once);\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/UserManagerExtendedTests.cs::UserManagerExtendedTests::Approved_MaxLongUserId_ReturnsApprovalStatus",
+        "file": "Unit/Services/UserManagerExtendedTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "UserManagerExtendedTests",
+        "test_name": "Approved_MaxLongUserId_ReturnsApprovalStatus",
+        "line": 95,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 13,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify"
+        ],
+        "_source_lineno": 816
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/UserManagerExtendedTests.cs\n# Lines 65-125 (test starts at line 95)\n        // Arrange\n        var userId = -12345L;\n        _userManagerMock.Setup(x => x.Approved(userId, null))\n            .Returns(false);\n\n        // Act\n        var result = _userManagerMock.Object.Approved(userId);\n\n        // Assert\n        Assert.That(result, Is.False);\n        _userManagerMock.Verify(x => x.Approved(userId, null), Times.Once);\n    }\n\n    [Test]\n    public void Approved_WithGroupId_ReturnsApprovalStatus()\n    {\n        // Arrange\n        var userId = 12345L;\n        var groupId = 67890L;\n        _userManagerMock.Setup(x => x.Approved(userId, groupId))\n            .Returns(true);\n\n        // Act\n        var result = _userManagerMock.Object.Approved(userId, groupId);\n\n        // Assert\n        Assert.That(result, Is.True);\n        _userManagerMock.Verify(x => x.Approved(userId, groupId), Times.Once);\n    }\n\n    [Test]\n    public void Approved_MaxLongUserId_ReturnsApprovalStatus()\n    {\n        // Arrange\n        var userId = long.MaxValue;\n        _userManagerMock.Setup(x => x.Approved(userId, null))\n            .Returns(false);\n\n        // Act\n        var result = _userManagerMock.Object.Approved(userId);\n\n        // Assert\n        Assert.That(result, Is.False);\n        _userManagerMock.Verify(x => x.Approved(userId, null), Times.Once);\n    }\n\n    #endregion\n\n    #region Approve Tests\n\n    [Test]\n    public async Task Approve_ValidUserId_ApprovesUser()\n    {\n        // Arrange\n        var userId = 12345L;\n        _userManagerMock.Setup(x => x.Approve(userId, null))\n            .Returns(ValueTask.CompletedTask);\n\n        // Act\n        await _userManagerMock.Object.Approve(userId);\n\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/UserManagerExtendedTests.cs::UserManagerExtendedTests::Approve_ValidUserId_ApprovesUser",
+        "file": "Unit/Services/UserManagerExtendedTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "UserManagerExtendedTests",
+        "test_name": "Approve_ValidUserId_ApprovesUser",
+        "line": 115,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 12,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify"
+        ],
+        "_source_lineno": 817
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/UserManagerExtendedTests.cs\n# Lines 85-145 (test starts at line 115)\n            .Returns(true);\n\n        // Act\n        var result = _userManagerMock.Object.Approved(userId, groupId);\n\n        // Assert\n        Assert.That(result, Is.True);\n        _userManagerMock.Verify(x => x.Approved(userId, groupId), Times.Once);\n    }\n\n    [Test]\n    public void Approved_MaxLongUserId_ReturnsApprovalStatus()\n    {\n        // Arrange\n        var userId = long.MaxValue;\n        _userManagerMock.Setup(x => x.Approved(userId, null))\n            .Returns(false);\n\n        // Act\n        var result = _userManagerMock.Object.Approved(userId);\n\n        // Assert\n        Assert.That(result, Is.False);\n        _userManagerMock.Verify(x => x.Approved(userId, null), Times.Once);\n    }\n\n    #endregion\n\n    #region Approve Tests\n\n    [Test]\n    public async Task Approve_ValidUserId_ApprovesUser()\n    {\n        // Arrange\n        var userId = 12345L;\n        _userManagerMock.Setup(x => x.Approve(userId, null))\n            .Returns(ValueTask.CompletedTask);\n\n        // Act\n        await _userManagerMock.Object.Approve(userId);\n\n        // Assert\n        _userManagerMock.Verify(x => x.Approve(userId, null), Times.Once);\n    }\n\n    [Test]\n    public async Task Approve_ZeroUserId_ApprovesUser()\n    {\n        // Arrange\n        var userId = 0L;\n        _userManagerMock.Setup(x => x.Approve(userId, null))\n            .Returns(ValueTask.CompletedTask);\n\n        // Act\n        await _userManagerMock.Object.Approve(userId);\n\n        // Assert\n        _userManagerMock.Verify(x => x.Approve(userId, null), Times.Once);\n    }\n\n    [Test]\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/UserManagerExtendedTests.cs::UserManagerExtendedTests::Approve_ZeroUserId_ApprovesUser",
+        "file": "Unit/Services/UserManagerExtendedTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "UserManagerExtendedTests",
+        "test_name": "Approve_ZeroUserId_ApprovesUser",
+        "line": 130,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 12,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify"
+        ],
+        "_source_lineno": 818
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/UserManagerExtendedTests.cs\n# Lines 100-160 (test starts at line 130)\n        _userManagerMock.Setup(x => x.Approved(userId, null))\n            .Returns(false);\n\n        // Act\n        var result = _userManagerMock.Object.Approved(userId);\n\n        // Assert\n        Assert.That(result, Is.False);\n        _userManagerMock.Verify(x => x.Approved(userId, null), Times.Once);\n    }\n\n    #endregion\n\n    #region Approve Tests\n\n    [Test]\n    public async Task Approve_ValidUserId_ApprovesUser()\n    {\n        // Arrange\n        var userId = 12345L;\n        _userManagerMock.Setup(x => x.Approve(userId, null))\n            .Returns(ValueTask.CompletedTask);\n\n        // Act\n        await _userManagerMock.Object.Approve(userId);\n\n        // Assert\n        _userManagerMock.Verify(x => x.Approve(userId, null), Times.Once);\n    }\n\n    [Test]\n    public async Task Approve_ZeroUserId_ApprovesUser()\n    {\n        // Arrange\n        var userId = 0L;\n        _userManagerMock.Setup(x => x.Approve(userId, null))\n            .Returns(ValueTask.CompletedTask);\n\n        // Act\n        await _userManagerMock.Object.Approve(userId);\n\n        // Assert\n        _userManagerMock.Verify(x => x.Approve(userId, null), Times.Once);\n    }\n\n    [Test]\n    public async Task Approve_NegativeUserId_ApprovesUser()\n    {\n        // Arrange\n        var userId = -12345L;\n        _userManagerMock.Setup(x => x.Approve(userId, null))\n            .Returns(ValueTask.CompletedTask);\n\n        // Act\n        await _userManagerMock.Object.Approve(userId);\n\n        // Assert\n        _userManagerMock.Verify(x => x.Approve(userId, null), Times.Once);\n    }\n\n    [Test]\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/UserManagerExtendedTests.cs::UserManagerExtendedTests::Approve_NegativeUserId_ApprovesUser",
+        "file": "Unit/Services/UserManagerExtendedTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "UserManagerExtendedTests",
+        "test_name": "Approve_NegativeUserId_ApprovesUser",
+        "line": 145,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 12,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify"
+        ],
+        "_source_lineno": 819
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/UserManagerExtendedTests.cs\n# Lines 115-175 (test starts at line 145)\n    [Test]\n    public async Task Approve_ValidUserId_ApprovesUser()\n    {\n        // Arrange\n        var userId = 12345L;\n        _userManagerMock.Setup(x => x.Approve(userId, null))\n            .Returns(ValueTask.CompletedTask);\n\n        // Act\n        await _userManagerMock.Object.Approve(userId);\n\n        // Assert\n        _userManagerMock.Verify(x => x.Approve(userId, null), Times.Once);\n    }\n\n    [Test]\n    public async Task Approve_ZeroUserId_ApprovesUser()\n    {\n        // Arrange\n        var userId = 0L;\n        _userManagerMock.Setup(x => x.Approve(userId, null))\n            .Returns(ValueTask.CompletedTask);\n\n        // Act\n        await _userManagerMock.Object.Approve(userId);\n\n        // Assert\n        _userManagerMock.Verify(x => x.Approve(userId, null), Times.Once);\n    }\n\n    [Test]\n    public async Task Approve_NegativeUserId_ApprovesUser()\n    {\n        // Arrange\n        var userId = -12345L;\n        _userManagerMock.Setup(x => x.Approve(userId, null))\n            .Returns(ValueTask.CompletedTask);\n\n        // Act\n        await _userManagerMock.Object.Approve(userId);\n\n        // Assert\n        _userManagerMock.Verify(x => x.Approve(userId, null), Times.Once);\n    }\n\n    [Test]\n    public async Task Approve_WithGroupId_ApprovesUserInGroup()\n    {\n        // Arrange\n        var userId = 12345L;\n        var groupId = 67890L;\n        _userManagerMock.Setup(x => x.Approve(userId, groupId))\n            .Returns(ValueTask.CompletedTask);\n\n        // Act\n        await _userManagerMock.Object.Approve(userId, groupId);\n\n        // Assert\n        _userManagerMock.Verify(x => x.Approve(userId, groupId), Times.Once);\n    }\n\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/UserManagerExtendedTests.cs::UserManagerExtendedTests::Approve_WithGroupId_ApprovesUserInGroup",
+        "file": "Unit/Services/UserManagerExtendedTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "UserManagerExtendedTests",
+        "test_name": "Approve_WithGroupId_ApprovesUserInGroup",
+        "line": 160,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 13,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify"
+        ],
+        "_source_lineno": 820
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/UserManagerExtendedTests.cs\n# Lines 130-190 (test starts at line 160)\n    [Test]\n    public async Task Approve_ZeroUserId_ApprovesUser()\n    {\n        // Arrange\n        var userId = 0L;\n        _userManagerMock.Setup(x => x.Approve(userId, null))\n            .Returns(ValueTask.CompletedTask);\n\n        // Act\n        await _userManagerMock.Object.Approve(userId);\n\n        // Assert\n        _userManagerMock.Verify(x => x.Approve(userId, null), Times.Once);\n    }\n\n    [Test]\n    public async Task Approve_NegativeUserId_ApprovesUser()\n    {\n        // Arrange\n        var userId = -12345L;\n        _userManagerMock.Setup(x => x.Approve(userId, null))\n            .Returns(ValueTask.CompletedTask);\n\n        // Act\n        await _userManagerMock.Object.Approve(userId);\n\n        // Assert\n        _userManagerMock.Verify(x => x.Approve(userId, null), Times.Once);\n    }\n\n    [Test]\n    public async Task Approve_WithGroupId_ApprovesUserInGroup()\n    {\n        // Arrange\n        var userId = 12345L;\n        var groupId = 67890L;\n        _userManagerMock.Setup(x => x.Approve(userId, groupId))\n            .Returns(ValueTask.CompletedTask);\n\n        // Act\n        await _userManagerMock.Object.Approve(userId, groupId);\n\n        // Assert\n        _userManagerMock.Verify(x => x.Approve(userId, groupId), Times.Once);\n    }\n\n    [Test]\n    public async Task Approve_MaxLongUserId_ApprovesUser()\n    {\n        // Arrange\n        var userId = long.MaxValue;\n        _userManagerMock.Setup(x => x.Approve(userId, null))\n            .Returns(ValueTask.CompletedTask);\n\n        // Act\n        await _userManagerMock.Object.Approve(userId);\n\n        // Assert\n        _userManagerMock.Verify(x => x.Approve(userId, null), Times.Once);\n    }\n\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/UserManagerExtendedTests.cs::UserManagerExtendedTests::Approve_MaxLongUserId_ApprovesUser",
+        "file": "Unit/Services/UserManagerExtendedTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "UserManagerExtendedTests",
+        "test_name": "Approve_MaxLongUserId_ApprovesUser",
+        "line": 176,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 12,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify"
+        ],
+        "_source_lineno": 821
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/UserManagerExtendedTests.cs\n# Lines 146-206 (test starts at line 176)\n    public async Task Approve_NegativeUserId_ApprovesUser()\n    {\n        // Arrange\n        var userId = -12345L;\n        _userManagerMock.Setup(x => x.Approve(userId, null))\n            .Returns(ValueTask.CompletedTask);\n\n        // Act\n        await _userManagerMock.Object.Approve(userId);\n\n        // Assert\n        _userManagerMock.Verify(x => x.Approve(userId, null), Times.Once);\n    }\n\n    [Test]\n    public async Task Approve_WithGroupId_ApprovesUserInGroup()\n    {\n        // Arrange\n        var userId = 12345L;\n        var groupId = 67890L;\n        _userManagerMock.Setup(x => x.Approve(userId, groupId))\n            .Returns(ValueTask.CompletedTask);\n\n        // Act\n        await _userManagerMock.Object.Approve(userId, groupId);\n\n        // Assert\n        _userManagerMock.Verify(x => x.Approve(userId, groupId), Times.Once);\n    }\n\n    [Test]\n    public async Task Approve_MaxLongUserId_ApprovesUser()\n    {\n        // Arrange\n        var userId = long.MaxValue;\n        _userManagerMock.Setup(x => x.Approve(userId, null))\n            .Returns(ValueTask.CompletedTask);\n\n        // Act\n        await _userManagerMock.Object.Approve(userId);\n\n        // Assert\n        _userManagerMock.Verify(x => x.Approve(userId, null), Times.Once);\n    }\n\n    #endregion\n\n    #region RemoveApproval Tests\n\n    [Test]\n    public void RemoveApproval_ValidUserId_ReturnsRemovalResult()\n    {\n        // Arrange\n        var userId = 12345L;\n        _userManagerMock.Setup(x => x.RemoveApproval(userId, null, false))\n            .Returns(true);\n\n        // Act\n        var result = _userManagerMock.Object.RemoveApproval(userId);\n\n        // Assert\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/UserManagerExtendedTests.cs::UserManagerExtendedTests::RemoveApproval_ValidUserId_ReturnsRemovalResult",
+        "file": "Unit/Services/UserManagerExtendedTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "UserManagerExtendedTests",
+        "test_name": "RemoveApproval_ValidUserId_ReturnsRemovalResult",
+        "line": 195,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 13,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify"
+        ],
+        "_source_lineno": 822
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/UserManagerExtendedTests.cs\n# Lines 165-225 (test starts at line 195)\n        var groupId = 67890L;\n        _userManagerMock.Setup(x => x.Approve(userId, groupId))\n            .Returns(ValueTask.CompletedTask);\n\n        // Act\n        await _userManagerMock.Object.Approve(userId, groupId);\n\n        // Assert\n        _userManagerMock.Verify(x => x.Approve(userId, groupId), Times.Once);\n    }\n\n    [Test]\n    public async Task Approve_MaxLongUserId_ApprovesUser()\n    {\n        // Arrange\n        var userId = long.MaxValue;\n        _userManagerMock.Setup(x => x.Approve(userId, null))\n            .Returns(ValueTask.CompletedTask);\n\n        // Act\n        await _userManagerMock.Object.Approve(userId);\n\n        // Assert\n        _userManagerMock.Verify(x => x.Approve(userId, null), Times.Once);\n    }\n\n    #endregion\n\n    #region RemoveApproval Tests\n\n    [Test]\n    public void RemoveApproval_ValidUserId_ReturnsRemovalResult()\n    {\n        // Arrange\n        var userId = 12345L;\n        _userManagerMock.Setup(x => x.RemoveApproval(userId, null, false))\n            .Returns(true);\n\n        // Act\n        var result = _userManagerMock.Object.RemoveApproval(userId);\n\n        // Assert\n        Assert.That(result, Is.True);\n        _userManagerMock.Verify(x => x.RemoveApproval(userId, null, false), Times.Once);\n    }\n\n    [Test]\n    public void RemoveApproval_ZeroUserId_ReturnsRemovalResult()\n    {\n        // Arrange\n        var userId = 0L;\n        _userManagerMock.Setup(x => x.RemoveApproval(userId, null, false))\n            .Returns(false);\n\n        // Act\n        var result = _userManagerMock.Object.RemoveApproval(userId);\n\n        // Assert\n        Assert.That(result, Is.False);\n        _userManagerMock.Verify(x => x.RemoveApproval(userId, null, false), Times.Once);\n    }\n"
+    }
+  ]
+}

@@ -1,0 +1,475 @@
+{
+  "schema_version": "test-audit-batch-v1",
+  "batch_no": 102,
+  "purpose": "local LLM audit input",
+  "instructions": "Return JSONL only. One audit object per input test. No markdown. No code edits.",
+  "tests": [
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/ServiceChatDispatcherTests.cs::ServiceChatDispatcherTests::ShouldSendToAdminChat_SuspiciousMessageData_ReturnsTrue",
+        "file": "Unit/Services/ServiceChatDispatcherTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "ServiceChatDispatcherTests",
+        "test_name": "ShouldSendToAdminChat_SuspiciousMessageData_ReturnsTrue",
+        "line": 92,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "admin-chat",
+          "admin-chat",
+          "log-chat",
+          "routing"
+        ],
+        "body_lines": 10,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 713
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/ServiceChatDispatcherTests.cs\n# Lines 62-122 (test starts at line 92)\n        _factory.LoggerMock.Verify(x => x.Log(\n            LogLevel.Debug,\n            It.IsAny<EventId>(),\n            It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains(\"используем специальную обработку для AI анализа профиля\")),\n            It.IsAny<Exception>(),\n            It.IsAny<Func<It.IsAnyType, Exception?, string>>()), Times.Once);\n    }\n\n    [Test]\n    [Category(\"log-chat\")]\n    public async Task SendToLogChatAsync_ValidNotification_SendsMessage()\n    {\n        // Arrange\n        var notification = ServiceChatDispatcherTestFactory.CreateTestNotificationData();\n\n        // Act\n        await _dispatcher.SendToLogChatAsync(notification);\n\n        // Assert\n        _factory.BotClientMock.Verify(x => x.SendMessageAsync(\n            It.IsAny<ChatId>(),\n            It.IsAny<string>(),\n            It.IsAny<ParseMode>(),\n            It.IsAny<ReplyParameters>(),\n            It.IsAny<ReplyMarkup>(),\n            It.IsAny<CancellationToken>()), Times.Once);\n    }\n\n    [Test]\n    [Category(\"routing\")]\n    public void ShouldSendToAdminChat_SuspiciousMessageData_ReturnsTrue()\n    {\n        // Arrange\n        var notification = ServiceChatDispatcherTestFactory.CreateSuspiciousMessageData();\n\n        // Act\n        var result = _dispatcher.ShouldSendToAdminChat(notification);\n\n        // Assert\n        Assert.That(result, Is.True);\n    }\n\n    [Test]\n    [Category(\"routing\")]\n    public void ShouldSendToAdminChat_SuspiciousUserData_ReturnsTrue()\n    {\n        // Arrange\n        var notification = ServiceChatDispatcherTestFactory.CreateSuspiciousUserData();\n\n        // Act\n        var result = _dispatcher.ShouldSendToAdminChat(notification);\n\n        // Assert\n        Assert.That(result, Is.True);\n    }\n\n    [Test]\n    [Category(\"routing\")]\n    public void ShouldSendToAdminChat_AutoBanData_ReturnsFalse()\n    {\n        // Arrange\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/ServiceChatDispatcherTests.cs::ServiceChatDispatcherTests::ShouldSendToAdminChat_SuspiciousUserData_ReturnsTrue",
+        "file": "Unit/Services/ServiceChatDispatcherTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "ServiceChatDispatcherTests",
+        "test_name": "ShouldSendToAdminChat_SuspiciousUserData_ReturnsTrue",
+        "line": 106,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "admin-chat",
+          "log-chat",
+          "routing",
+          "routing"
+        ],
+        "body_lines": 10,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 714
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/ServiceChatDispatcherTests.cs\n# Lines 76-136 (test starts at line 106)\n\n        // Act\n        await _dispatcher.SendToLogChatAsync(notification);\n\n        // Assert\n        _factory.BotClientMock.Verify(x => x.SendMessageAsync(\n            It.IsAny<ChatId>(),\n            It.IsAny<string>(),\n            It.IsAny<ParseMode>(),\n            It.IsAny<ReplyParameters>(),\n            It.IsAny<ReplyMarkup>(),\n            It.IsAny<CancellationToken>()), Times.Once);\n    }\n\n    [Test]\n    [Category(\"routing\")]\n    public void ShouldSendToAdminChat_SuspiciousMessageData_ReturnsTrue()\n    {\n        // Arrange\n        var notification = ServiceChatDispatcherTestFactory.CreateSuspiciousMessageData();\n\n        // Act\n        var result = _dispatcher.ShouldSendToAdminChat(notification);\n\n        // Assert\n        Assert.That(result, Is.True);\n    }\n\n    [Test]\n    [Category(\"routing\")]\n    public void ShouldSendToAdminChat_SuspiciousUserData_ReturnsTrue()\n    {\n        // Arrange\n        var notification = ServiceChatDispatcherTestFactory.CreateSuspiciousUserData();\n\n        // Act\n        var result = _dispatcher.ShouldSendToAdminChat(notification);\n\n        // Assert\n        Assert.That(result, Is.True);\n    }\n\n    [Test]\n    [Category(\"routing\")]\n    public void ShouldSendToAdminChat_AutoBanData_ReturnsFalse()\n    {\n        // Arrange\n        var notification = ServiceChatDispatcherTestFactory.CreateAutoBanData();\n\n        // Act\n        var result = _dispatcher.ShouldSendToAdminChat(notification);\n\n        // Assert\n        Assert.That(result, Is.False);\n    }\n\n    [Test]\n    [Category(\"routing\")]\n    public void ShouldSendToAdminChat_ErrorData_ReturnsTrue()\n    {\n        // Arrange\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/ServiceChatDispatcherTests.cs::ServiceChatDispatcherTests::ShouldSendToAdminChat_AutoBanData_ReturnsFalse",
+        "file": "Unit/Services/ServiceChatDispatcherTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "ServiceChatDispatcherTests",
+        "test_name": "ShouldSendToAdminChat_AutoBanData_ReturnsFalse",
+        "line": 120,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "log-chat",
+          "routing",
+          "routing",
+          "routing"
+        ],
+        "body_lines": 10,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 715
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/ServiceChatDispatcherTests.cs\n# Lines 90-150 (test starts at line 120)\n    [Test]\n    [Category(\"routing\")]\n    public void ShouldSendToAdminChat_SuspiciousMessageData_ReturnsTrue()\n    {\n        // Arrange\n        var notification = ServiceChatDispatcherTestFactory.CreateSuspiciousMessageData();\n\n        // Act\n        var result = _dispatcher.ShouldSendToAdminChat(notification);\n\n        // Assert\n        Assert.That(result, Is.True);\n    }\n\n    [Test]\n    [Category(\"routing\")]\n    public void ShouldSendToAdminChat_SuspiciousUserData_ReturnsTrue()\n    {\n        // Arrange\n        var notification = ServiceChatDispatcherTestFactory.CreateSuspiciousUserData();\n\n        // Act\n        var result = _dispatcher.ShouldSendToAdminChat(notification);\n\n        // Assert\n        Assert.That(result, Is.True);\n    }\n\n    [Test]\n    [Category(\"routing\")]\n    public void ShouldSendToAdminChat_AutoBanData_ReturnsFalse()\n    {\n        // Arrange\n        var notification = ServiceChatDispatcherTestFactory.CreateAutoBanData();\n\n        // Act\n        var result = _dispatcher.ShouldSendToAdminChat(notification);\n\n        // Assert\n        Assert.That(result, Is.False);\n    }\n\n    [Test]\n    [Category(\"routing\")]\n    public void ShouldSendToAdminChat_ErrorData_ReturnsTrue()\n    {\n        // Arrange\n        var notification = ServiceChatDispatcherTestFactory.CreateErrorData();\n\n        // Act\n        var result = _dispatcher.ShouldSendToAdminChat(notification);\n\n        // Assert\n        Assert.That(result, Is.True);\n    }\n\n    [Test]\n    [Category(\"routing\")]\n    public void ShouldSendToAdminChat_SimpleNotificationData_ReturnsFalse()\n    {\n        // Arrange\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/ServiceChatDispatcherTests.cs::ServiceChatDispatcherTests::ShouldSendToAdminChat_ErrorData_ReturnsTrue",
+        "file": "Unit/Services/ServiceChatDispatcherTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "ServiceChatDispatcherTests",
+        "test_name": "ShouldSendToAdminChat_ErrorData_ReturnsTrue",
+        "line": 134,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "log-chat",
+          "routing",
+          "routing",
+          "routing",
+          "routing"
+        ],
+        "body_lines": 10,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 716
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/ServiceChatDispatcherTests.cs\n# Lines 104-164 (test starts at line 134)\n    [Test]\n    [Category(\"routing\")]\n    public void ShouldSendToAdminChat_SuspiciousUserData_ReturnsTrue()\n    {\n        // Arrange\n        var notification = ServiceChatDispatcherTestFactory.CreateSuspiciousUserData();\n\n        // Act\n        var result = _dispatcher.ShouldSendToAdminChat(notification);\n\n        // Assert\n        Assert.That(result, Is.True);\n    }\n\n    [Test]\n    [Category(\"routing\")]\n    public void ShouldSendToAdminChat_AutoBanData_ReturnsFalse()\n    {\n        // Arrange\n        var notification = ServiceChatDispatcherTestFactory.CreateAutoBanData();\n\n        // Act\n        var result = _dispatcher.ShouldSendToAdminChat(notification);\n\n        // Assert\n        Assert.That(result, Is.False);\n    }\n\n    [Test]\n    [Category(\"routing\")]\n    public void ShouldSendToAdminChat_ErrorData_ReturnsTrue()\n    {\n        // Arrange\n        var notification = ServiceChatDispatcherTestFactory.CreateErrorData();\n\n        // Act\n        var result = _dispatcher.ShouldSendToAdminChat(notification);\n\n        // Assert\n        Assert.That(result, Is.True);\n    }\n\n    [Test]\n    [Category(\"routing\")]\n    public void ShouldSendToAdminChat_SimpleNotificationData_ReturnsFalse()\n    {\n        // Arrange\n        var notification = ServiceChatDispatcherTestFactory.CreateTestNotificationData();\n\n        // Act\n        var result = _dispatcher.ShouldSendToAdminChat(notification);\n\n        // Assert\n        Assert.That(result, Is.False);\n    }\n\n    [Test]\n    [Category(\"error-handling\")]\n    public async Task SendToAdminChatAsync_BotClientThrowsException_LogsErrorAndRethrows()\n    {\n        // Arrange\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/ServiceChatDispatcherTests.cs::ServiceChatDispatcherTests::ShouldSendToAdminChat_SimpleNotificationData_ReturnsFalse",
+        "file": "Unit/Services/ServiceChatDispatcherTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "ServiceChatDispatcherTests",
+        "test_name": "ShouldSendToAdminChat_SimpleNotificationData_ReturnsFalse",
+        "line": 148,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "routing",
+          "routing",
+          "routing",
+          "routing",
+          "routing"
+        ],
+        "body_lines": 10,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 717
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/ServiceChatDispatcherTests.cs\n# Lines 118-178 (test starts at line 148)\n    [Test]\n    [Category(\"routing\")]\n    public void ShouldSendToAdminChat_AutoBanData_ReturnsFalse()\n    {\n        // Arrange\n        var notification = ServiceChatDispatcherTestFactory.CreateAutoBanData();\n\n        // Act\n        var result = _dispatcher.ShouldSendToAdminChat(notification);\n\n        // Assert\n        Assert.That(result, Is.False);\n    }\n\n    [Test]\n    [Category(\"routing\")]\n    public void ShouldSendToAdminChat_ErrorData_ReturnsTrue()\n    {\n        // Arrange\n        var notification = ServiceChatDispatcherTestFactory.CreateErrorData();\n\n        // Act\n        var result = _dispatcher.ShouldSendToAdminChat(notification);\n\n        // Assert\n        Assert.That(result, Is.True);\n    }\n\n    [Test]\n    [Category(\"routing\")]\n    public void ShouldSendToAdminChat_SimpleNotificationData_ReturnsFalse()\n    {\n        // Arrange\n        var notification = ServiceChatDispatcherTestFactory.CreateTestNotificationData();\n\n        // Act\n        var result = _dispatcher.ShouldSendToAdminChat(notification);\n\n        // Assert\n        Assert.That(result, Is.False);\n    }\n\n    [Test]\n    [Category(\"error-handling\")]\n    public async Task SendToAdminChatAsync_BotClientThrowsException_LogsErrorAndRethrows()\n    {\n        // Arrange\n        var notification = ServiceChatDispatcherTestFactory.CreateTestNotificationData();\n\n        _factory.BotClientMock.Setup(x => x.SendMessageAsync(It.IsAny<ChatId>(), It.IsAny<string>(), It.IsAny<ParseMode>(), It.IsAny<ReplyParameters>(), It.IsAny<ReplyMarkup>(), It.IsAny<CancellationToken>()))\n            .ThrowsAsync(new Exception(\"Bot API error\"));\n\n        // Act & Assert\n        var exception = Assert.ThrowsAsync<Exception>(async () =>\n            await _dispatcher.SendToAdminChatAsync(notification));\n\n        Assert.That(exception.Message, Is.EqualTo(\"Bot API error\"));\n\n        _factory.LoggerMock.Verify(x => x.Log(\n            LogLevel.Error,\n            It.IsAny<EventId>(),\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/ServiceChatDispatcherTests.cs::ServiceChatDispatcherTests::ShouldSendToAdminChat_NullNotification_ReturnsFalse",
+        "file": "Unit/Services/ServiceChatDispatcherTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "ServiceChatDispatcherTests",
+        "test_name": "ShouldSendToAdminChat_NullNotification_ReturnsFalse",
+        "line": 303,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "logging",
+          "logging",
+          "edge-cases"
+        ],
+        "body_lines": 7,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 724
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/ServiceChatDispatcherTests.cs\n# Lines 273-333 (test starts at line 303)\n\n        _factory.LoggerMock.Verify(x => x.Log(\n            LogLevel.Debug,\n            It.IsAny<EventId>(),\n            It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains(\"Уведомление отправлено в админ-чат\")),\n            It.IsAny<Exception>(),\n            It.IsAny<Func<It.IsAnyType, Exception?, string>>()), Times.Once);\n    }\n\n    [Test]\n    [Category(\"logging\")]\n    public async Task SendToLogChatAsync_ValidNotification_LogsDebugMessage()\n    {\n        // Arrange\n        var notification = ServiceChatDispatcherTestFactory.CreateTestNotificationData();\n\n        // Act\n        await _dispatcher.SendToLogChatAsync(notification);\n\n        // Assert\n        _factory.LoggerMock.Verify(x => x.Log(\n            LogLevel.Debug,\n            It.IsAny<EventId>(),\n            It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains(\"Уведомление отправлено в лог-чат\")),\n            It.IsAny<Exception>(),\n            It.IsAny<Func<It.IsAnyType, Exception?, string>>()), Times.Once);\n    }\n\n    [Test]\n    [Category(\"edge-cases\")]\n    public void ShouldSendToAdminChat_NullNotification_ReturnsFalse()\n    {\n        // Act\n        var result = _dispatcher.ShouldSendToAdminChat(null!);\n\n        // Assert\n        Assert.That(result, Is.False);\n    }\n\n    [Test]\n    [Category(\"edge-cases\")]\n    public async Task SendToAdminChatAsync_NullNotification_ThrowsNullReferenceException()\n    {\n        // Act & Assert\n        var exception = Assert.ThrowsAsync<NullReferenceException>(async () =>\n            await _dispatcher.SendToAdminChatAsync(null!));\n\n        Assert.That(exception, Is.Not.Null);\n    }\n\n    [Test]\n    [Category(\"edge-cases\")]\n    public async Task SendToLogChatAsync_NullNotification_ThrowsNullReferenceException()\n    {\n        // Act & Assert\n        var exception = Assert.ThrowsAsync<NullReferenceException>(async () =>\n            await _dispatcher.SendToLogChatAsync(null!));\n\n        Assert.That(exception, Is.Not.Null);\n    }\n\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/ServiceChatDispatcherTests.cs::ServiceChatDispatcherTests::Constructor_NullBotClient_ThrowsArgumentNullException",
+        "file": "Unit/Services/ServiceChatDispatcherTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "ServiceChatDispatcherTests",
+        "test_name": "Constructor_NullBotClient_ThrowsArgumentNullException",
+        "line": 336,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "logging",
+          "edge-cases",
+          "edge-cases",
+          "edge-cases",
+          "constructor"
+        ],
+        "body_lines": 7,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": true,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 727
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/ServiceChatDispatcherTests.cs\n# Lines 306-366 (test starts at line 336)\n        var result = _dispatcher.ShouldSendToAdminChat(null!);\n\n        // Assert\n        Assert.That(result, Is.False);\n    }\n\n    [Test]\n    [Category(\"edge-cases\")]\n    public async Task SendToAdminChatAsync_NullNotification_ThrowsNullReferenceException()\n    {\n        // Act & Assert\n        var exception = Assert.ThrowsAsync<NullReferenceException>(async () =>\n            await _dispatcher.SendToAdminChatAsync(null!));\n\n        Assert.That(exception, Is.Not.Null);\n    }\n\n    [Test]\n    [Category(\"edge-cases\")]\n    public async Task SendToLogChatAsync_NullNotification_ThrowsNullReferenceException()\n    {\n        // Act & Assert\n        var exception = Assert.ThrowsAsync<NullReferenceException>(async () =>\n            await _dispatcher.SendToLogChatAsync(null!));\n\n        Assert.That(exception, Is.Not.Null);\n    }\n\n    [Test]\n    [Category(\"constructor\")]\n    public void Constructor_NullBotClient_ThrowsArgumentNullException()\n    {\n        // Act & Assert\n        var exception = Assert.Throws<ArgumentNullException>(() =>\n            new ServiceChatDispatcher(null!, _factory.LoggerMock.Object, _factory.AppConfigMock.Object));\n\n        Assert.That(exception.ParamName, Is.EqualTo(\"bot\"));\n    }\n\n    [Test]\n    [Category(\"constructor\")]\n    public void Constructor_NullLogger_ThrowsArgumentNullException()\n    {\n        // Act & Assert\n        var exception = Assert.Throws<ArgumentNullException>(() =>\n            new ServiceChatDispatcher(_factory.BotClientMock.Object, null!, _factory.AppConfigMock.Object));\n\n        Assert.That(exception.ParamName, Is.EqualTo(\"logger\"));\n    }\n\n    [Test]\n    [Category(\"routing\")]\n    public void ShouldSendToAdminChat_AiDetectData_ReturnsTrue()\n    {\n        // Arrange\n        var notification = ServiceChatDispatcherTestFactory.CreateAiDetectData();\n\n        // Act\n        var result = _dispatcher.ShouldSendToAdminChat(notification);\n\n        // Assert\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/ServiceChatDispatcherTests.cs::ServiceChatDispatcherTests::Constructor_NullLogger_ThrowsArgumentNullException",
+        "file": "Unit/Services/ServiceChatDispatcherTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "ServiceChatDispatcherTests",
+        "test_name": "Constructor_NullLogger_ThrowsArgumentNullException",
+        "line": 347,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "edge-cases",
+          "edge-cases",
+          "edge-cases",
+          "constructor",
+          "constructor"
+        ],
+        "body_lines": 7,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": true,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 728
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/ServiceChatDispatcherTests.cs\n# Lines 317-377 (test starts at line 347)\n        var exception = Assert.ThrowsAsync<NullReferenceException>(async () =>\n            await _dispatcher.SendToAdminChatAsync(null!));\n\n        Assert.That(exception, Is.Not.Null);\n    }\n\n    [Test]\n    [Category(\"edge-cases\")]\n    public async Task SendToLogChatAsync_NullNotification_ThrowsNullReferenceException()\n    {\n        // Act & Assert\n        var exception = Assert.ThrowsAsync<NullReferenceException>(async () =>\n            await _dispatcher.SendToLogChatAsync(null!));\n\n        Assert.That(exception, Is.Not.Null);\n    }\n\n    [Test]\n    [Category(\"constructor\")]\n    public void Constructor_NullBotClient_ThrowsArgumentNullException()\n    {\n        // Act & Assert\n        var exception = Assert.Throws<ArgumentNullException>(() =>\n            new ServiceChatDispatcher(null!, _factory.LoggerMock.Object, _factory.AppConfigMock.Object));\n\n        Assert.That(exception.ParamName, Is.EqualTo(\"bot\"));\n    }\n\n    [Test]\n    [Category(\"constructor\")]\n    public void Constructor_NullLogger_ThrowsArgumentNullException()\n    {\n        // Act & Assert\n        var exception = Assert.Throws<ArgumentNullException>(() =>\n            new ServiceChatDispatcher(_factory.BotClientMock.Object, null!, _factory.AppConfigMock.Object));\n\n        Assert.That(exception.ParamName, Is.EqualTo(\"logger\"));\n    }\n\n    [Test]\n    [Category(\"routing\")]\n    public void ShouldSendToAdminChat_AiDetectData_ReturnsTrue()\n    {\n        // Arrange\n        var notification = ServiceChatDispatcherTestFactory.CreateAiDetectData();\n\n        // Act\n        var result = _dispatcher.ShouldSendToAdminChat(notification);\n\n        // Assert\n        Assert.That(result, Is.True);\n    }\n\n    [Test]\n    [Category(\"integration\")]\n    public async Task SendToAdminChatAsync_AllNotificationTypes_HandledCorrectly()\n    {\n        // Arrange\n        var notifications = new NotificationData[]\n        {\n            ServiceChatDispatcherTestFactory.CreateTestNotificationData(),\n"
+    }
+  ]
+}

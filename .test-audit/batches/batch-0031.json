@@ -1,0 +1,451 @@
+{
+  "schema_version": "test-audit-batch-v1",
+  "batch_no": 31,
+  "purpose": "local LLM audit input",
+  "instructions": "Return JSONL only. One audit object per input test. No markdown. No code edits.",
+  "tests": [
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/AiChecksTests.cs::AiChecksTests::GetAttentionBaitProbability_WithValidUser_ReturnsSpamPhotoBio",
+        "file": "Unit/Services/AiChecksTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "AiChecksTests",
+        "test_name": "GetAttentionBaitProbability_WithValidUser_ReturnsSpamPhotoBio",
+        "line": 104,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 19,
+        "declared_area_from_path": "Unit",
+        "construction_path": "custom_local_world",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": true,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "real_env_or_api"
+        ],
+        "_source_lineno": 561
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/AiChecksTests.cs\n# Lines 74-134 (test starts at line 104)\n    [Test]\n    public void GetSpamProbability_WithNullMessage_ThrowsArgumentNullException()\n    {\n        // Arrange\n        Message? message = null;\n\n        // Act & Assert\n        Assert.ThrowsAsync<ArgumentNullException>(async () =>\n            await _aiChecks.GetSpamProbability(message!));\n    }\n\n    [Test]\n    public async Task GetSpamProbability_WithEmptyMessage_ReturnsDefaultProbability()\n    {\n        // Arrange\n        var message = new Message\n        {\n            Text = \"\",\n            Chat = new Chat { Id = 123 },\n            From = new User { Id = 456, FirstName = \"Test\" }\n        };\n\n        // Act\n        var result = await _aiChecks.GetSpamProbability(message);\n\n        // Assert\n        Assert.That(result, Is.Not.Null);\n        Assert.That(result.Probability, Is.EqualTo(0.0));\n    }\n\n    [Test]\n    public async Task GetAttentionBaitProbability_WithValidUser_ReturnsSpamPhotoBio()\n    {\n        // Arrange\n        var user = new User\n        {\n            Id = 123,\n            FirstName = \"Test\",\n            Username = \"testuser\"\n        };\n\n        // Act\n        var result = await _aiChecks.GetAttentionBaitProbability(user);\n\n        // Assert\n        Assert.That(result, Is.Not.Null);\n        Assert.That(result, Is.InstanceOf<SpamPhotoBio>());\n        Assert.That(result.SpamProbability, Is.Not.Null);\n        Assert.That(result.Photo, Is.Not.Null);\n        Assert.That(result.NameBio, Is.Not.Null);\n    }\n\n    [Test]\n    public async Task GetAttentionBaitProbability_WithNullUser_ReturnsDefaultResult()\n    {\n        // Arrange\n        User? user = null;\n\n        // Act\n        var result = await _aiChecks.GetAttentionBaitProbability(user!);\n\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/AiChecksTests.cs::AiChecksTests::GetAttentionBaitProbability_WithNullUser_ReturnsDefaultResult",
+        "file": "Unit/Services/AiChecksTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "AiChecksTests",
+        "test_name": "GetAttentionBaitProbability_WithNullUser_ReturnsDefaultResult",
+        "line": 126,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 13,
+        "declared_area_from_path": "Unit",
+        "construction_path": "custom_local_world",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": true,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "real_env_or_api"
+        ],
+        "_source_lineno": 562
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/AiChecksTests.cs\n# Lines 96-156 (test starts at line 126)\n        // Act\n        var result = await _aiChecks.GetSpamProbability(message);\n\n        // Assert\n        Assert.That(result, Is.Not.Null);\n        Assert.That(result.Probability, Is.EqualTo(0.0));\n    }\n\n    [Test]\n    public async Task GetAttentionBaitProbability_WithValidUser_ReturnsSpamPhotoBio()\n    {\n        // Arrange\n        var user = new User\n        {\n            Id = 123,\n            FirstName = \"Test\",\n            Username = \"testuser\"\n        };\n\n        // Act\n        var result = await _aiChecks.GetAttentionBaitProbability(user);\n\n        // Assert\n        Assert.That(result, Is.Not.Null);\n        Assert.That(result, Is.InstanceOf<SpamPhotoBio>());\n        Assert.That(result.SpamProbability, Is.Not.Null);\n        Assert.That(result.Photo, Is.Not.Null);\n        Assert.That(result.NameBio, Is.Not.Null);\n    }\n\n    [Test]\n    public async Task GetAttentionBaitProbability_WithNullUser_ReturnsDefaultResult()\n    {\n        // Arrange\n        User? user = null;\n\n        // Act\n        var result = await _aiChecks.GetAttentionBaitProbability(user!);\n\n        // Assert\n        Assert.That(result, Is.Not.Null);\n        Assert.That(result.SpamProbability.Probability, Is.EqualTo(0.0));\n        Assert.That(result.Photo, Is.Empty);\n        Assert.That(result.NameBio, Is.Empty);\n    }\n\n    [Test]\n    public async Task GetSuspiciousUserSpamProbability_WithValidInput_ReturnsSpamProbability()\n    {\n        // Arrange\n        var message = new Message\n        {\n            Text = \"Test message\",\n            Chat = new Chat { Id = 123 },\n            From = new User { Id = 456, FirstName = \"Test\" }\n        };\n        var user = new User { Id = 456, FirstName = \"Test\" };\n        var firstMessages = new List<string> { \"Hello\", \"How are you?\" };\n        var mimicryScore = 0.5;\n\n        // Act\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/AiChecksTests.cs::AiChecksTests::GetSuspiciousUserSpamProbability_WithValidInput_ReturnsSpamProbability",
+        "file": "Unit/Services/AiChecksTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "AiChecksTests",
+        "test_name": "GetSuspiciousUserSpamProbability_WithValidInput_ReturnsSpamProbability",
+        "line": 142,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 21,
+        "declared_area_from_path": "Unit",
+        "construction_path": "custom_local_world",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": true,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "real_env_or_api"
+        ],
+        "_source_lineno": 563
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/AiChecksTests.cs\n# Lines 112-172 (test starts at line 142)\n            Username = \"testuser\"\n        };\n\n        // Act\n        var result = await _aiChecks.GetAttentionBaitProbability(user);\n\n        // Assert\n        Assert.That(result, Is.Not.Null);\n        Assert.That(result, Is.InstanceOf<SpamPhotoBio>());\n        Assert.That(result.SpamProbability, Is.Not.Null);\n        Assert.That(result.Photo, Is.Not.Null);\n        Assert.That(result.NameBio, Is.Not.Null);\n    }\n\n    [Test]\n    public async Task GetAttentionBaitProbability_WithNullUser_ReturnsDefaultResult()\n    {\n        // Arrange\n        User? user = null;\n\n        // Act\n        var result = await _aiChecks.GetAttentionBaitProbability(user!);\n\n        // Assert\n        Assert.That(result, Is.Not.Null);\n        Assert.That(result.SpamProbability.Probability, Is.EqualTo(0.0));\n        Assert.That(result.Photo, Is.Empty);\n        Assert.That(result.NameBio, Is.Empty);\n    }\n\n    [Test]\n    public async Task GetSuspiciousUserSpamProbability_WithValidInput_ReturnsSpamProbability()\n    {\n        // Arrange\n        var message = new Message\n        {\n            Text = \"Test message\",\n            Chat = new Chat { Id = 123 },\n            From = new User { Id = 456, FirstName = \"Test\" }\n        };\n        var user = new User { Id = 456, FirstName = \"Test\" };\n        var firstMessages = new List<string> { \"Hello\", \"How are you?\" };\n        var mimicryScore = 0.5;\n\n        // Act\n        var result = await _aiChecks.GetSuspiciousUserSpamProbability(message, user, firstMessages, mimicryScore);\n\n        // Assert\n        Assert.That(result, Is.Not.Null);\n        Assert.That(result, Is.InstanceOf<SpamProbability>());\n        Assert.That(result.Probability, Is.GreaterThanOrEqualTo(0.0));\n        Assert.That(result.Probability, Is.LessThanOrEqualTo(1.0));\n    }\n\n    [Test]\n    public async Task GetSuspiciousUserSpamProbability_WithEmptyMessages_ReturnsSpamProbability()\n    {\n        // Arrange\n        var message = new Message\n        {\n            Text = \"Test message\",\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/AiChecksTests.cs::AiChecksTests::GetSuspiciousUserSpamProbability_WithEmptyMessages_ReturnsSpamProbability",
+        "file": "Unit/Services/AiChecksTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "AiChecksTests",
+        "test_name": "GetSuspiciousUserSpamProbability_WithEmptyMessages_ReturnsSpamProbability",
+        "line": 166,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 20,
+        "declared_area_from_path": "Unit",
+        "construction_path": "custom_local_world",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": true,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "real_env_or_api"
+        ],
+        "_source_lineno": 564
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/AiChecksTests.cs\n# Lines 136-196 (test starts at line 166)\n        Assert.That(result, Is.Not.Null);\n        Assert.That(result.SpamProbability.Probability, Is.EqualTo(0.0));\n        Assert.That(result.Photo, Is.Empty);\n        Assert.That(result.NameBio, Is.Empty);\n    }\n\n    [Test]\n    public async Task GetSuspiciousUserSpamProbability_WithValidInput_ReturnsSpamProbability()\n    {\n        // Arrange\n        var message = new Message\n        {\n            Text = \"Test message\",\n            Chat = new Chat { Id = 123 },\n            From = new User { Id = 456, FirstName = \"Test\" }\n        };\n        var user = new User { Id = 456, FirstName = \"Test\" };\n        var firstMessages = new List<string> { \"Hello\", \"How are you?\" };\n        var mimicryScore = 0.5;\n\n        // Act\n        var result = await _aiChecks.GetSuspiciousUserSpamProbability(message, user, firstMessages, mimicryScore);\n\n        // Assert\n        Assert.That(result, Is.Not.Null);\n        Assert.That(result, Is.InstanceOf<SpamProbability>());\n        Assert.That(result.Probability, Is.GreaterThanOrEqualTo(0.0));\n        Assert.That(result.Probability, Is.LessThanOrEqualTo(1.0));\n    }\n\n    [Test]\n    public async Task GetSuspiciousUserSpamProbability_WithEmptyMessages_ReturnsSpamProbability()\n    {\n        // Arrange\n        var message = new Message\n        {\n            Text = \"Test message\",\n            Chat = new Chat { Id = 123 },\n            From = new User { Id = 456, FirstName = \"Test\" }\n        };\n        var user = new User { Id = 456, FirstName = \"Test\" };\n        var firstMessages = new List<string>();\n        var mimicryScore = 0.0;\n\n        // Act\n        var result = await _aiChecks.GetSuspiciousUserSpamProbability(message, user, firstMessages, mimicryScore);\n\n        // Assert\n        Assert.That(result, Is.Not.Null);\n        Assert.That(result.Probability, Is.GreaterThanOrEqualTo(0.0));\n        Assert.That(result.Probability, Is.LessThanOrEqualTo(1.0));\n    }\n\n    [Test]\n    public async Task GetSuspiciousUserSpamProbability_WithNullMessages_ReturnsSpamProbability()\n    {\n        // Arrange\n        var message = new Message\n        {\n            Text = \"Test message\",\n            Chat = new Chat { Id = 123 },\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/AiChecksTests.cs::AiChecksTests::GetSuspiciousUserSpamProbability_WithNullMessages_ReturnsSpamProbability",
+        "file": "Unit/Services/AiChecksTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "AiChecksTests",
+        "test_name": "GetSuspiciousUserSpamProbability_WithNullMessages_ReturnsSpamProbability",
+        "line": 189,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 20,
+        "declared_area_from_path": "Unit",
+        "construction_path": "custom_local_world",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": true,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "real_env_or_api"
+        ],
+        "_source_lineno": 565
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/AiChecksTests.cs\n# Lines 159-219 (test starts at line 189)\n        // Assert\n        Assert.That(result, Is.Not.Null);\n        Assert.That(result, Is.InstanceOf<SpamProbability>());\n        Assert.That(result.Probability, Is.GreaterThanOrEqualTo(0.0));\n        Assert.That(result.Probability, Is.LessThanOrEqualTo(1.0));\n    }\n\n    [Test]\n    public async Task GetSuspiciousUserSpamProbability_WithEmptyMessages_ReturnsSpamProbability()\n    {\n        // Arrange\n        var message = new Message\n        {\n            Text = \"Test message\",\n            Chat = new Chat { Id = 123 },\n            From = new User { Id = 456, FirstName = \"Test\" }\n        };\n        var user = new User { Id = 456, FirstName = \"Test\" };\n        var firstMessages = new List<string>();\n        var mimicryScore = 0.0;\n\n        // Act\n        var result = await _aiChecks.GetSuspiciousUserSpamProbability(message, user, firstMessages, mimicryScore);\n\n        // Assert\n        Assert.That(result, Is.Not.Null);\n        Assert.That(result.Probability, Is.GreaterThanOrEqualTo(0.0));\n        Assert.That(result.Probability, Is.LessThanOrEqualTo(1.0));\n    }\n\n    [Test]\n    public async Task GetSuspiciousUserSpamProbability_WithNullMessages_ReturnsSpamProbability()\n    {\n        // Arrange\n        var message = new Message\n        {\n            Text = \"Test message\",\n            Chat = new Chat { Id = 123 },\n            From = new User { Id = 456, FirstName = \"Test\" }\n        };\n        var user = new User { Id = 456, FirstName = \"Test\" };\n        List<string>? firstMessages = null;\n        var mimicryScore = 0.0;\n\n        // Act\n        var result = await _aiChecks.GetSuspiciousUserSpamProbability(message, user, firstMessages!, mimicryScore);\n\n        // Assert\n        Assert.That(result, Is.Not.Null);\n        Assert.That(result.Probability, Is.GreaterThanOrEqualTo(0.0));\n        Assert.That(result.Probability, Is.LessThanOrEqualTo(1.0));\n    }\n\n    [Test]\n    public void MarkUserOkay_MultipleCalls_DoNotInterfere()\n    {\n        // Arrange\n        var userId1 = 123L;\n        var userId2 = 456L;\n\n        // Act & Assert\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/AiChecksTests.cs::AiChecksTests::GetSpamProbability_WithSpecialCharacters_ReturnsSpamProbability",
+        "file": "Unit/Services/AiChecksTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "AiChecksTests",
+        "test_name": "GetSpamProbability_WithSpecialCharacters_ReturnsSpamProbability",
+        "line": 225,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 17,
+        "declared_area_from_path": "Unit",
+        "construction_path": "custom_local_world",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": true,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "real_env_or_api"
+        ],
+        "_source_lineno": 567
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/AiChecksTests.cs\n# Lines 195-255 (test starts at line 225)\n            Text = \"Test message\",\n            Chat = new Chat { Id = 123 },\n            From = new User { Id = 456, FirstName = \"Test\" }\n        };\n        var user = new User { Id = 456, FirstName = \"Test\" };\n        List<string>? firstMessages = null;\n        var mimicryScore = 0.0;\n\n        // Act\n        var result = await _aiChecks.GetSuspiciousUserSpamProbability(message, user, firstMessages!, mimicryScore);\n\n        // Assert\n        Assert.That(result, Is.Not.Null);\n        Assert.That(result.Probability, Is.GreaterThanOrEqualTo(0.0));\n        Assert.That(result.Probability, Is.LessThanOrEqualTo(1.0));\n    }\n\n    [Test]\n    public void MarkUserOkay_MultipleCalls_DoNotInterfere()\n    {\n        // Arrange\n        var userId1 = 123L;\n        var userId2 = 456L;\n\n        // Act & Assert\n        Assert.DoesNotThrow(() => _aiChecks.MarkUserOkay(userId1));\n        Assert.DoesNotThrow(() => _aiChecks.MarkUserOkay(userId2));\n        Assert.DoesNotThrow(() => _aiChecks.MarkUserOkay(userId1)); // Повторный вызов\n    }\n\n    [Test]\n    public async Task GetSpamProbability_WithSpecialCharacters_ReturnsSpamProbability()\n    {\n        // Arrange\n        var message = new Message\n        {\n            Text = \"Test message with special chars: !@#$%^&*()\",\n            Chat = new Chat { Id = 123 },\n            From = new User { Id = 456, FirstName = \"Test\" }\n        };\n\n        // Act\n        var result = await _aiChecks.GetSpamProbability(message);\n\n        // Assert\n        Assert.That(result, Is.Not.Null);\n        Assert.That(result.Probability, Is.GreaterThanOrEqualTo(0.0));\n        Assert.That(result.Probability, Is.LessThanOrEqualTo(1.0));\n    }\n\n    [Test]\n    public async Task GetSpamProbability_WithLongMessage_ReturnsSpamProbability()\n    {\n        // Arrange\n        var longText = new string('a', 1000); // 1000 символов\n        var message = new Message\n        {\n            Text = longText,\n            Chat = new Chat { Id = 123 },\n            From = new User { Id = 456, FirstName = \"Test\" }\n        };\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/AiChecksTests.cs::AiChecksTests::GetSpamProbability_WithLongMessage_ReturnsSpamProbability",
+        "file": "Unit/Services/AiChecksTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "AiChecksTests",
+        "test_name": "GetSpamProbability_WithLongMessage_ReturnsSpamProbability",
+        "line": 245,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 18,
+        "declared_area_from_path": "Unit",
+        "construction_path": "custom_local_world",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": true,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "real_env_or_api"
+        ],
+        "_source_lineno": 568
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/AiChecksTests.cs\n# Lines 215-265 (test starts at line 245)\n        // Arrange\n        var userId1 = 123L;\n        var userId2 = 456L;\n\n        // Act & Assert\n        Assert.DoesNotThrow(() => _aiChecks.MarkUserOkay(userId1));\n        Assert.DoesNotThrow(() => _aiChecks.MarkUserOkay(userId2));\n        Assert.DoesNotThrow(() => _aiChecks.MarkUserOkay(userId1)); // Повторный вызов\n    }\n\n    [Test]\n    public async Task GetSpamProbability_WithSpecialCharacters_ReturnsSpamProbability()\n    {\n        // Arrange\n        var message = new Message\n        {\n            Text = \"Test message with special chars: !@#$%^&*()\",\n            Chat = new Chat { Id = 123 },\n            From = new User { Id = 456, FirstName = \"Test\" }\n        };\n\n        // Act\n        var result = await _aiChecks.GetSpamProbability(message);\n\n        // Assert\n        Assert.That(result, Is.Not.Null);\n        Assert.That(result.Probability, Is.GreaterThanOrEqualTo(0.0));\n        Assert.That(result.Probability, Is.LessThanOrEqualTo(1.0));\n    }\n\n    [Test]\n    public async Task GetSpamProbability_WithLongMessage_ReturnsSpamProbability()\n    {\n        // Arrange\n        var longText = new string('a', 1000); // 1000 символов\n        var message = new Message\n        {\n            Text = longText,\n            Chat = new Chat { Id = 123 },\n            From = new User { Id = 456, FirstName = \"Test\" }\n        };\n\n        // Act\n        var result = await _aiChecks.GetSpamProbability(message);\n\n        // Assert\n        Assert.That(result, Is.Not.Null);\n        Assert.That(result.Probability, Is.GreaterThanOrEqualTo(0.0));\n        Assert.That(result.Probability, Is.LessThanOrEqualTo(1.0));\n    }\n}"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/CaptchaModuleTests.cs::CaptchaModuleTests::AddCaptchaServices_ShouldRegisterICaptchaService",
+        "file": "Unit/Services/CaptchaModuleTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services.Captcha",
+        "class": "CaptchaModuleTests",
+        "test_name": "AddCaptchaServices_ShouldRegisterICaptchaService",
+        "line": 47,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "unit",
+          "captcha-module"
+        ],
+        "body_lines": 9,
+        "declared_area_from_path": "Unit",
+        "construction_path": "service_collection_di",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": true,
+          "uses_real_service_provider": true,
+          "uses_app_config_test_factory": true,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "real_env_or_api"
+        ],
+        "_source_lineno": 584
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/CaptchaModuleTests.cs\n# Lines 17-77 (test starts at line 47)\n[Category(\"unit\")]\n[Category(\"captcha-module\")]\npublic class CaptchaModuleTests\n{\n    private IServiceCollection _services = null!;\n\n    [SetUp]\n    public void Setup()\n    {\n        _services = new ServiceCollection();\n\n        // Добавляем необходимые зависимости для тестирования\n        _services.AddSingleton(Mock.Of<ITelegramBotClientWrapper>());\n        _services.AddSingleton(Mock.Of<IMessageService>());\n    // Регистрируем валидный AppConfig вместо пустого мок-а, т.к. UserManager теперь требует не-null IAppConfig\n    var appConfig = AppConfigTestFactory.CreateDefault();\n    _services.AddSingleton<IAppConfig>(appConfig);\n\n    // UserManager (transitively via CaptchaModule) требует ApprovedUsersStorage\n    _services.AddSingleton<ApprovedUsersStorage>();\n    // Больше не подменяем IUserManager/IUserBanService — проверяем реальные регистрации CaptchaModule\n\n        // Добавляем логгеры\n        _services.AddLogging();\n    }\n\n    /// <summary>\n    /// POC: Проверка регистрации ICaptchaService\n    /// <tags>poc, captcha-service, di-registration</tags>\n    /// </summary>\n    [Test]\n    public void AddCaptchaServices_ShouldRegisterICaptchaService()\n    {\n        // Act\n        _services.AddCaptchaServices();\n\n        // Assert\n        var serviceProvider = _services.BuildServiceProvider();\n        var captchaService = serviceProvider.GetService<ICaptchaService>();\n        Assert.That(captchaService, Is.Not.Null);\n    }\n\n    /// <summary>\n    /// POC: Проверка регистрации CaptchaService через интерфейс\n    /// <tags>poc, captcha-service, di-registration</tags>\n    /// </summary>\n    [Test]\n    public void AddCaptchaServices_ShouldRegisterCaptchaServiceAsICaptchaService()\n    {\n        // Act\n        _services.AddCaptchaServices();\n\n        // Assert\n        var serviceProvider = _services.BuildServiceProvider();\n        var captchaService = serviceProvider.GetService<ICaptchaService>();\n        Assert.That(captchaService, Is.InstanceOf<CaptchaService>());\n    }\n\n\n\n    /// <summary>\n"
+    }
+  ]
+}

@@ -1,0 +1,485 @@
+{
+  "schema_version": "test-audit-batch-v1",
+  "batch_no": 104,
+  "purpose": "local LLM audit input",
+  "instructions": "Return JSONL only. One audit object per input test. No markdown. No code edits.",
+  "tests": [
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/SuspiciousUsersStorageTests.cs::SuspiciousUsersStorageTests::RemoveSuspiciousUser_ZeroUserId_HandlesGracefully",
+        "file": "Unit/Services/SuspiciousUsersStorageTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "SuspiciousUsersStorageTests",
+        "test_name": "RemoveSuspiciousUser_ZeroUserId_HandlesGracefully",
+        "line": 234,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 13,
+        "declared_area_from_path": "Unit",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 743
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/SuspiciousUsersStorageTests.cs\n# Lines 204-264 (test starts at line 234)\n            true,\n            0\n        );\n        _storage.AddSuspicious(userId, chatId, info);\n\n        // Act\n        var result = _storage.RemoveSuspicious(userId, chatId);\n\n        // Assert\n        Assert.That(result, Is.True);\n        var isSuspicious = _storage.IsSuspicious(userId, chatId);\n        Assert.That(isSuspicious, Is.False);\n    }\n\n    [Test]\n    public void RemoveSuspiciousUser_NonExistentUser_HandlesGracefully()\n    {\n        // Arrange\n        var userId = 12345L;\n        var chatId = 67890L;\n\n        // Act\n        var result = _storage.RemoveSuspicious(userId, chatId);\n\n        // Assert\n        Assert.That(result, Is.False);\n        var isSuspicious = _storage.IsSuspicious(userId, chatId);\n        Assert.That(isSuspicious, Is.False);\n    }\n\n    [Test]\n    public void RemoveSuspiciousUser_ZeroUserId_HandlesGracefully()\n    {\n        // Arrange\n        var userId = 0L;\n        var chatId = 67890L;\n\n        // Act\n        var result = _storage.RemoveSuspicious(userId, chatId);\n\n        // Assert\n        Assert.That(result, Is.False);\n        var isSuspicious = _storage.IsSuspicious(userId, chatId);\n        Assert.That(isSuspicious, Is.False);\n    }\n\n    [Test]\n    public void RemoveSuspiciousUser_NegativeUserId_HandlesGracefully()\n    {\n        // Arrange\n        var userId = -12345L;\n        var chatId = 67890L;\n\n        // Act\n        var result = _storage.RemoveSuspicious(userId, chatId);\n\n        // Assert\n        Assert.That(result, Is.False);\n        var isSuspicious = _storage.IsSuspicious(userId, chatId);\n        Assert.That(isSuspicious, Is.False);\n    }\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/SuspiciousUsersStorageTests.cs::SuspiciousUsersStorageTests::RemoveSuspiciousUser_NegativeUserId_HandlesGracefully",
+        "file": "Unit/Services/SuspiciousUsersStorageTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "SuspiciousUsersStorageTests",
+        "test_name": "RemoveSuspiciousUser_NegativeUserId_HandlesGracefully",
+        "line": 250,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 13,
+        "declared_area_from_path": "Unit",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 744
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/SuspiciousUsersStorageTests.cs\n# Lines 220-280 (test starts at line 250)\n    {\n        // Arrange\n        var userId = 12345L;\n        var chatId = 67890L;\n\n        // Act\n        var result = _storage.RemoveSuspicious(userId, chatId);\n\n        // Assert\n        Assert.That(result, Is.False);\n        var isSuspicious = _storage.IsSuspicious(userId, chatId);\n        Assert.That(isSuspicious, Is.False);\n    }\n\n    [Test]\n    public void RemoveSuspiciousUser_ZeroUserId_HandlesGracefully()\n    {\n        // Arrange\n        var userId = 0L;\n        var chatId = 67890L;\n\n        // Act\n        var result = _storage.RemoveSuspicious(userId, chatId);\n\n        // Assert\n        Assert.That(result, Is.False);\n        var isSuspicious = _storage.IsSuspicious(userId, chatId);\n        Assert.That(isSuspicious, Is.False);\n    }\n\n    [Test]\n    public void RemoveSuspiciousUser_NegativeUserId_HandlesGracefully()\n    {\n        // Arrange\n        var userId = -12345L;\n        var chatId = 67890L;\n\n        // Act\n        var result = _storage.RemoveSuspicious(userId, chatId);\n\n        // Assert\n        Assert.That(result, Is.False);\n        var isSuspicious = _storage.IsSuspicious(userId, chatId);\n        Assert.That(isSuspicious, Is.False);\n    }\n\n    #endregion\n\n    #region IsSuspiciousUser Tests\n\n    [Test]\n    public void IsSuspiciousUser_ExistingUser_ReturnsTrue()\n    {\n        // Arrange\n        var userId = 12345L;\n        var chatId = 67890L;\n        var info = new SuspiciousUserInfo(\n            DateTime.UtcNow,\n            new List<string> { \"Test message\" },\n            0.5,\n            true,\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/SuspiciousUsersStorageTests.cs::SuspiciousUsersStorageTests::IsSuspiciousUser_ExistingUser_ReturnsTrue",
+        "file": "Unit/Services/SuspiciousUsersStorageTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "SuspiciousUsersStorageTests",
+        "test_name": "IsSuspiciousUser_ExistingUser_ReturnsTrue",
+        "line": 270,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 19,
+        "declared_area_from_path": "Unit",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 745
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/SuspiciousUsersStorageTests.cs\n# Lines 240-300 (test starts at line 270)\n\n        // Act\n        var result = _storage.RemoveSuspicious(userId, chatId);\n\n        // Assert\n        Assert.That(result, Is.False);\n        var isSuspicious = _storage.IsSuspicious(userId, chatId);\n        Assert.That(isSuspicious, Is.False);\n    }\n\n    [Test]\n    public void RemoveSuspiciousUser_NegativeUserId_HandlesGracefully()\n    {\n        // Arrange\n        var userId = -12345L;\n        var chatId = 67890L;\n\n        // Act\n        var result = _storage.RemoveSuspicious(userId, chatId);\n\n        // Assert\n        Assert.That(result, Is.False);\n        var isSuspicious = _storage.IsSuspicious(userId, chatId);\n        Assert.That(isSuspicious, Is.False);\n    }\n\n    #endregion\n\n    #region IsSuspiciousUser Tests\n\n    [Test]\n    public void IsSuspiciousUser_ExistingUser_ReturnsTrue()\n    {\n        // Arrange\n        var userId = 12345L;\n        var chatId = 67890L;\n        var info = new SuspiciousUserInfo(\n            DateTime.UtcNow,\n            new List<string> { \"Test message\" },\n            0.5,\n            true,\n            0\n        );\n        _storage.AddSuspicious(userId, chatId, info);\n\n        // Act\n        var result = _storage.IsSuspicious(userId, chatId);\n\n        // Assert\n        Assert.That(result, Is.True);\n    }\n\n    [Test]\n    public void IsSuspiciousUser_NonExistentUser_ReturnsFalse()\n    {\n        // Arrange\n        var userId = 12345L;\n        var chatId = 67890L;\n\n        // Act\n        var result = _storage.IsSuspicious(userId, chatId);\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/SuspiciousUsersStorageTests.cs::SuspiciousUsersStorageTests::IsSuspiciousUser_NonExistentUser_ReturnsFalse",
+        "file": "Unit/Services/SuspiciousUsersStorageTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "SuspiciousUsersStorageTests",
+        "test_name": "IsSuspiciousUser_NonExistentUser_ReturnsFalse",
+        "line": 292,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 11,
+        "declared_area_from_path": "Unit",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 746
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/SuspiciousUsersStorageTests.cs\n# Lines 262-322 (test starts at line 292)\n        var isSuspicious = _storage.IsSuspicious(userId, chatId);\n        Assert.That(isSuspicious, Is.False);\n    }\n\n    #endregion\n\n    #region IsSuspiciousUser Tests\n\n    [Test]\n    public void IsSuspiciousUser_ExistingUser_ReturnsTrue()\n    {\n        // Arrange\n        var userId = 12345L;\n        var chatId = 67890L;\n        var info = new SuspiciousUserInfo(\n            DateTime.UtcNow,\n            new List<string> { \"Test message\" },\n            0.5,\n            true,\n            0\n        );\n        _storage.AddSuspicious(userId, chatId, info);\n\n        // Act\n        var result = _storage.IsSuspicious(userId, chatId);\n\n        // Assert\n        Assert.That(result, Is.True);\n    }\n\n    [Test]\n    public void IsSuspiciousUser_NonExistentUser_ReturnsFalse()\n    {\n        // Arrange\n        var userId = 12345L;\n        var chatId = 67890L;\n\n        // Act\n        var result = _storage.IsSuspicious(userId, chatId);\n\n        // Assert\n        Assert.That(result, Is.False);\n    }\n\n    [Test]\n    public void IsSuspiciousUser_ZeroUserId_ReturnsFalse()\n    {\n        // Arrange\n        var userId = 0L;\n        var chatId = 67890L;\n\n        // Act\n        var result = _storage.IsSuspicious(userId, chatId);\n\n        // Assert\n        Assert.That(result, Is.False);\n    }\n\n    [Test]\n    public void IsSuspiciousUser_NegativeUserId_ReturnsFalse()\n    {\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/SuspiciousUsersStorageTests.cs::SuspiciousUsersStorageTests::IsSuspiciousUser_ZeroUserId_ReturnsFalse",
+        "file": "Unit/Services/SuspiciousUsersStorageTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "SuspiciousUsersStorageTests",
+        "test_name": "IsSuspiciousUser_ZeroUserId_ReturnsFalse",
+        "line": 306,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 11,
+        "declared_area_from_path": "Unit",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 747
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/SuspiciousUsersStorageTests.cs\n# Lines 276-336 (test starts at line 306)\n        var info = new SuspiciousUserInfo(\n            DateTime.UtcNow,\n            new List<string> { \"Test message\" },\n            0.5,\n            true,\n            0\n        );\n        _storage.AddSuspicious(userId, chatId, info);\n\n        // Act\n        var result = _storage.IsSuspicious(userId, chatId);\n\n        // Assert\n        Assert.That(result, Is.True);\n    }\n\n    [Test]\n    public void IsSuspiciousUser_NonExistentUser_ReturnsFalse()\n    {\n        // Arrange\n        var userId = 12345L;\n        var chatId = 67890L;\n\n        // Act\n        var result = _storage.IsSuspicious(userId, chatId);\n\n        // Assert\n        Assert.That(result, Is.False);\n    }\n\n    [Test]\n    public void IsSuspiciousUser_ZeroUserId_ReturnsFalse()\n    {\n        // Arrange\n        var userId = 0L;\n        var chatId = 67890L;\n\n        // Act\n        var result = _storage.IsSuspicious(userId, chatId);\n\n        // Assert\n        Assert.That(result, Is.False);\n    }\n\n    [Test]\n    public void IsSuspiciousUser_NegativeUserId_ReturnsFalse()\n    {\n        // Arrange\n        var userId = -12345L;\n        var chatId = 67890L;\n\n        // Act\n        var result = _storage.IsSuspicious(userId, chatId);\n\n        // Assert\n        Assert.That(result, Is.False);\n    }\n\n    [Test]\n    public void IsSuspiciousUser_RemovedUser_ReturnsFalse()\n    {\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/SuspiciousUsersStorageTests.cs::SuspiciousUsersStorageTests::IsSuspiciousUser_NegativeUserId_ReturnsFalse",
+        "file": "Unit/Services/SuspiciousUsersStorageTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "SuspiciousUsersStorageTests",
+        "test_name": "IsSuspiciousUser_NegativeUserId_ReturnsFalse",
+        "line": 320,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 11,
+        "declared_area_from_path": "Unit",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 748
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/SuspiciousUsersStorageTests.cs\n# Lines 290-350 (test starts at line 320)\n    }\n\n    [Test]\n    public void IsSuspiciousUser_NonExistentUser_ReturnsFalse()\n    {\n        // Arrange\n        var userId = 12345L;\n        var chatId = 67890L;\n\n        // Act\n        var result = _storage.IsSuspicious(userId, chatId);\n\n        // Assert\n        Assert.That(result, Is.False);\n    }\n\n    [Test]\n    public void IsSuspiciousUser_ZeroUserId_ReturnsFalse()\n    {\n        // Arrange\n        var userId = 0L;\n        var chatId = 67890L;\n\n        // Act\n        var result = _storage.IsSuspicious(userId, chatId);\n\n        // Assert\n        Assert.That(result, Is.False);\n    }\n\n    [Test]\n    public void IsSuspiciousUser_NegativeUserId_ReturnsFalse()\n    {\n        // Arrange\n        var userId = -12345L;\n        var chatId = 67890L;\n\n        // Act\n        var result = _storage.IsSuspicious(userId, chatId);\n\n        // Assert\n        Assert.That(result, Is.False);\n    }\n\n    [Test]\n    public void IsSuspiciousUser_RemovedUser_ReturnsFalse()\n    {\n        // Arrange\n        var userId = 12345L;\n        var chatId = 67890L;\n        var info = new SuspiciousUserInfo(\n            DateTime.UtcNow,\n            new List<string> { \"Test message\" },\n            0.5,\n            true,\n            0\n        );\n        _storage.AddSuspicious(userId, chatId, info);\n        _storage.RemoveSuspicious(userId, chatId);\n\n        // Act\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/SuspiciousUsersStorageTests.cs::SuspiciousUsersStorageTests::IsSuspiciousUser_RemovedUser_ReturnsFalse",
+        "file": "Unit/Services/SuspiciousUsersStorageTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "SuspiciousUsersStorageTests",
+        "test_name": "IsSuspiciousUser_RemovedUser_ReturnsFalse",
+        "line": 334,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 20,
+        "declared_area_from_path": "Unit",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 749
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/SuspiciousUsersStorageTests.cs\n# Lines 304-364 (test starts at line 334)\n    }\n\n    [Test]\n    public void IsSuspiciousUser_ZeroUserId_ReturnsFalse()\n    {\n        // Arrange\n        var userId = 0L;\n        var chatId = 67890L;\n\n        // Act\n        var result = _storage.IsSuspicious(userId, chatId);\n\n        // Assert\n        Assert.That(result, Is.False);\n    }\n\n    [Test]\n    public void IsSuspiciousUser_NegativeUserId_ReturnsFalse()\n    {\n        // Arrange\n        var userId = -12345L;\n        var chatId = 67890L;\n\n        // Act\n        var result = _storage.IsSuspicious(userId, chatId);\n\n        // Assert\n        Assert.That(result, Is.False);\n    }\n\n    [Test]\n    public void IsSuspiciousUser_RemovedUser_ReturnsFalse()\n    {\n        // Arrange\n        var userId = 12345L;\n        var chatId = 67890L;\n        var info = new SuspiciousUserInfo(\n            DateTime.UtcNow,\n            new List<string> { \"Test message\" },\n            0.5,\n            true,\n            0\n        );\n        _storage.AddSuspicious(userId, chatId, info);\n        _storage.RemoveSuspicious(userId, chatId);\n\n        // Act\n        var result = _storage.IsSuspicious(userId, chatId);\n\n        // Assert\n        Assert.That(result, Is.False);\n    }\n\n    #endregion\n\n    #region GetAiDetectUsers Tests\n\n    [Test]\n    public void GetAiDetectUsers_EmptyStorage_ReturnsEmptyList()\n    {\n        // Act\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/SuspiciousUsersStorageTests.cs::SuspiciousUsersStorageTests::GetAiDetectUsers_EmptyStorage_ReturnsEmptyList",
+        "file": "Unit/Services/SuspiciousUsersStorageTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "SuspiciousUsersStorageTests",
+        "test_name": "GetAiDetectUsers_EmptyStorage_ReturnsEmptyList",
+        "line": 361,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 7,
+        "declared_area_from_path": "Unit",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 750
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/SuspiciousUsersStorageTests.cs\n# Lines 331-391 (test starts at line 361)\n        Assert.That(result, Is.False);\n    }\n\n    [Test]\n    public void IsSuspiciousUser_RemovedUser_ReturnsFalse()\n    {\n        // Arrange\n        var userId = 12345L;\n        var chatId = 67890L;\n        var info = new SuspiciousUserInfo(\n            DateTime.UtcNow,\n            new List<string> { \"Test message\" },\n            0.5,\n            true,\n            0\n        );\n        _storage.AddSuspicious(userId, chatId, info);\n        _storage.RemoveSuspicious(userId, chatId);\n\n        // Act\n        var result = _storage.IsSuspicious(userId, chatId);\n\n        // Assert\n        Assert.That(result, Is.False);\n    }\n\n    #endregion\n\n    #region GetAiDetectUsers Tests\n\n    [Test]\n    public void GetAiDetectUsers_EmptyStorage_ReturnsEmptyList()\n    {\n        // Act\n        var users = _storage.GetAiDetectUsers();\n\n        // Assert\n        Assert.That(users, Is.Empty);\n    }\n\n    [Test]\n    public void GetAiDetectUsers_WithUsers_ReturnsAllUsers()\n    {\n        // Arrange\n        var userId1 = 12345L;\n        var userId2 = 67890L;\n        var chatId = 11111L;\n        var info1 = new SuspiciousUserInfo(\n            DateTime.UtcNow,\n            new List<string> { \"Test reason 1\" },\n            0.5,\n            true,\n            0\n        );\n        var info2 = new SuspiciousUserInfo(\n            DateTime.UtcNow,\n            new List<string> { \"Test reason 2\" },\n            0.5,\n            true,\n            0\n        );\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/SuspiciousUsersStorageTests.cs::SuspiciousUsersStorageTests::GetAiDetectUsers_WithUsers_ReturnsAllUsers",
+        "file": "Unit/Services/SuspiciousUsersStorageTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "SuspiciousUsersStorageTests",
+        "test_name": "GetAiDetectUsers_WithUsers_ReturnsAllUsers",
+        "line": 371,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 30,
+        "declared_area_from_path": "Unit",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 751
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/SuspiciousUsersStorageTests.cs\n# Lines 341-401 (test starts at line 371)\n            DateTime.UtcNow,\n            new List<string> { \"Test message\" },\n            0.5,\n            true,\n            0\n        );\n        _storage.AddSuspicious(userId, chatId, info);\n        _storage.RemoveSuspicious(userId, chatId);\n\n        // Act\n        var result = _storage.IsSuspicious(userId, chatId);\n\n        // Assert\n        Assert.That(result, Is.False);\n    }\n\n    #endregion\n\n    #region GetAiDetectUsers Tests\n\n    [Test]\n    public void GetAiDetectUsers_EmptyStorage_ReturnsEmptyList()\n    {\n        // Act\n        var users = _storage.GetAiDetectUsers();\n\n        // Assert\n        Assert.That(users, Is.Empty);\n    }\n\n    [Test]\n    public void GetAiDetectUsers_WithUsers_ReturnsAllUsers()\n    {\n        // Arrange\n        var userId1 = 12345L;\n        var userId2 = 67890L;\n        var chatId = 11111L;\n        var info1 = new SuspiciousUserInfo(\n            DateTime.UtcNow,\n            new List<string> { \"Test reason 1\" },\n            0.5,\n            true,\n            0\n        );\n        var info2 = new SuspiciousUserInfo(\n            DateTime.UtcNow,\n            new List<string> { \"Test reason 2\" },\n            0.5,\n            true,\n            0\n        );\n        _storage.AddSuspicious(userId1, chatId, info1);\n        _storage.AddSuspicious(userId2, chatId, info2);\n\n        // Act\n        var users = _storage.GetAiDetectUsers();\n\n        // Assert\n        Assert.That(users, Has.Count.EqualTo(2));\n        Assert.That(users, Does.Contain((userId1, chatId)));\n        Assert.That(users, Does.Contain((userId2, chatId)));\n"
+    }
+  ]
+}

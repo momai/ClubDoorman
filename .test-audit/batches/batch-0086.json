@@ -1,0 +1,441 @@
+{
+  "schema_version": "test-audit-batch-v1",
+  "batch_no": 86,
+  "purpose": "local LLM audit input",
+  "instructions": "Return JSONL only. One audit object per input test. No markdown. No code edits.",
+  "tests": [
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Handlers/MessageHandlerTryFindUserIdTests.cs::MessageHandlerTryFindUserIdTests::TryFindUserIdByUsername_WithMultipleCacheEntries_FindsCorrectUser",
+        "file": "Unit/Handlers/MessageHandlerTryFindUserIdTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Handlers",
+        "class": "MessageHandlerTryFindUserIdTests",
+        "test_name": "TryFindUserIdByUsername_WithMultipleCacheEntries_FindsCorrectUser",
+        "line": 165,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 18,
+        "declared_area_from_path": "Unit",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 435
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Handlers/MessageHandlerTryFindUserIdTests.cs\n# Lines 135-195 (test starts at line 165)\n\n    /// <summary>\n    /// Тест для TryFindUserIdByUsername с регистронезависимым поиском\n    /// Проверяет, что поиск не зависит от регистра\n    /// <tags>user-search, case-insensitive, behavior</tags>\n    /// </summary>\n    [Test]\n    public void TryFindUserIdByUsername_WithCaseInsensitiveSearch_FindsUser()\n    {\n        // Arrange\n        var username = \"TestUser3\";\n        var chatId = 123456L;\n        var userId = 789012L;\n        var cacheKey = $\"{chatId}_{userId}\";\n        var cacheValue = $\"Message from @{username.ToLower()}\";\n\n        MemoryCache.Default.Add(cacheKey, cacheValue, new CacheItemPolicy { AbsoluteExpiration = DateTimeOffset.UtcNow.AddHours(1) });\n\n        // Act\n        var result = _userIndex.TryFindUserIdByUsername(username.ToLower());\n\n        // Assert\n        Assert.That(result, Is.EqualTo(userId));\n    }\n\n    /// <summary>\n    /// Тест для TryFindUserIdByUsername с множественными записями в кэше\n    /// Проверяет, что метод находит правильного пользователя среди множества записей\n    /// <tags>user-search, multiple-cache-entries, behavior</tags>\n    /// </summary>\n    [Test]\n    public void TryFindUserIdByUsername_WithMultipleCacheEntries_FindsCorrectUser()\n    {\n        // Arrange\n        var targetUsername = \"targetuser4\";\n        var otherUsername = \"otheruser4\";\n        var chatId1 = 123456L;\n        var chatId2 = 789012L;\n        var userId1 = 111111L;\n        var userId2 = 222222L;\n\n        MemoryCache.Default.Add($\"{chatId1}_{userId1}\", $\"Message from @{targetUsername}\", new CacheItemPolicy { AbsoluteExpiration = DateTimeOffset.UtcNow.AddHours(1) });\n        MemoryCache.Default.Add($\"{chatId2}_{userId2}\", $\"Message from @{otherUsername}\", new CacheItemPolicy { AbsoluteExpiration = DateTimeOffset.UtcNow.AddHours(1) });\n\n        // Act\n        var result = _userIndex.TryFindUserIdByUsername(targetUsername);\n\n        // Assert\n        Assert.That(result, Is.EqualTo(userId1));\n    }\n\n    /// <summary>\n    /// Тест для TryFindUserIdByUsername с некорректным форматом ключа кэша\n    /// Проверяет, что метод игнорирует записи с неправильным форматом ключа\n    /// <tags>user-search, invalid-cache-key, edge-case</tags>\n    /// </summary>\n    [Test]\n    public void TryFindUserIdByUsername_WithInvalidCacheKey_ReturnsNull()\n    {\n        // Arrange\n        var username = \"testuser5\";\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Handlers/MessageHandlerTryFindUserIdTests.cs::MessageHandlerTryFindUserIdTests::TryFindUserIdByUsername_WithInvalidCacheKey_ReturnsNull",
+        "file": "Unit/Handlers/MessageHandlerTryFindUserIdTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Handlers",
+        "class": "MessageHandlerTryFindUserIdTests",
+        "test_name": "TryFindUserIdByUsername_WithInvalidCacheKey_ReturnsNull",
+        "line": 191,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 14,
+        "declared_area_from_path": "Unit",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 436
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Handlers/MessageHandlerTryFindUserIdTests.cs\n# Lines 161-221 (test starts at line 191)\n    /// Тест для TryFindUserIdByUsername с множественными записями в кэше\n    /// Проверяет, что метод находит правильного пользователя среди множества записей\n    /// <tags>user-search, multiple-cache-entries, behavior</tags>\n    /// </summary>\n    [Test]\n    public void TryFindUserIdByUsername_WithMultipleCacheEntries_FindsCorrectUser()\n    {\n        // Arrange\n        var targetUsername = \"targetuser4\";\n        var otherUsername = \"otheruser4\";\n        var chatId1 = 123456L;\n        var chatId2 = 789012L;\n        var userId1 = 111111L;\n        var userId2 = 222222L;\n\n        MemoryCache.Default.Add($\"{chatId1}_{userId1}\", $\"Message from @{targetUsername}\", new CacheItemPolicy { AbsoluteExpiration = DateTimeOffset.UtcNow.AddHours(1) });\n        MemoryCache.Default.Add($\"{chatId2}_{userId2}\", $\"Message from @{otherUsername}\", new CacheItemPolicy { AbsoluteExpiration = DateTimeOffset.UtcNow.AddHours(1) });\n\n        // Act\n        var result = _userIndex.TryFindUserIdByUsername(targetUsername);\n\n        // Assert\n        Assert.That(result, Is.EqualTo(userId1));\n    }\n\n    /// <summary>\n    /// Тест для TryFindUserIdByUsername с некорректным форматом ключа кэша\n    /// Проверяет, что метод игнорирует записи с неправильным форматом ключа\n    /// <tags>user-search, invalid-cache-key, edge-case</tags>\n    /// </summary>\n    [Test]\n    public void TryFindUserIdByUsername_WithInvalidCacheKey_ReturnsNull()\n    {\n        // Arrange\n        var username = \"testuser5\";\n        var invalidCacheKey = \"invalid_key_format\";\n        var cacheValue = $\"Message from @{username}\";\n\n        MemoryCache.Default.Add(invalidCacheKey, cacheValue, new CacheItemPolicy { AbsoluteExpiration = DateTimeOffset.UtcNow.AddHours(1) });\n\n        // Act\n        var result = _userIndex.TryFindUserIdByUsername(username);\n\n        // Assert\n        Assert.That(result, Is.Null);\n    }\n\n    /// <summary>\n    /// Тест для TryFindUserIdByUsername с некорректным userId в ключе\n    /// Проверяет, что метод игнорирует записи с некорректным userId\n    /// <tags>user-search, invalid-user-id, edge-case</tags>\n    /// </summary>\n    [Test]\n    public void TryFindUserIdByUsername_WithInvalidUserId_ReturnsNull()\n    {\n        // Arrange\n        var username = \"testuser6\";\n        var chatId = 123456L;\n        var invalidUserId = \"invalid_user_id\";\n        var cacheKey = $\"{chatId}_{invalidUserId}\";\n        var cacheValue = $\"Message from @{username}\";\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Handlers/MessageHandlerTryFindUserIdTests.cs::MessageHandlerTryFindUserIdTests::TryFindUserIdByUsername_WithInvalidUserId_ReturnsNull",
+        "file": "Unit/Handlers/MessageHandlerTryFindUserIdTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Handlers",
+        "class": "MessageHandlerTryFindUserIdTests",
+        "test_name": "TryFindUserIdByUsername_WithInvalidUserId_ReturnsNull",
+        "line": 213,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 16,
+        "declared_area_from_path": "Unit",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 437
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Handlers/MessageHandlerTryFindUserIdTests.cs\n# Lines 183-243 (test starts at line 213)\n        Assert.That(result, Is.EqualTo(userId1));\n    }\n\n    /// <summary>\n    /// Тест для TryFindUserIdByUsername с некорректным форматом ключа кэша\n    /// Проверяет, что метод игнорирует записи с неправильным форматом ключа\n    /// <tags>user-search, invalid-cache-key, edge-case</tags>\n    /// </summary>\n    [Test]\n    public void TryFindUserIdByUsername_WithInvalidCacheKey_ReturnsNull()\n    {\n        // Arrange\n        var username = \"testuser5\";\n        var invalidCacheKey = \"invalid_key_format\";\n        var cacheValue = $\"Message from @{username}\";\n\n        MemoryCache.Default.Add(invalidCacheKey, cacheValue, new CacheItemPolicy { AbsoluteExpiration = DateTimeOffset.UtcNow.AddHours(1) });\n\n        // Act\n        var result = _userIndex.TryFindUserIdByUsername(username);\n\n        // Assert\n        Assert.That(result, Is.Null);\n    }\n\n    /// <summary>\n    /// Тест для TryFindUserIdByUsername с некорректным userId в ключе\n    /// Проверяет, что метод игнорирует записи с некорректным userId\n    /// <tags>user-search, invalid-user-id, edge-case</tags>\n    /// </summary>\n    [Test]\n    public void TryFindUserIdByUsername_WithInvalidUserId_ReturnsNull()\n    {\n        // Arrange\n        var username = \"testuser6\";\n        var chatId = 123456L;\n        var invalidUserId = \"invalid_user_id\";\n        var cacheKey = $\"{chatId}_{invalidUserId}\";\n        var cacheValue = $\"Message from @{username}\";\n\n        MemoryCache.Default.Add(cacheKey, cacheValue, new CacheItemPolicy { AbsoluteExpiration = DateTimeOffset.UtcNow.AddHours(1) });\n\n        // Act\n        var result = _userIndex.TryFindUserIdByUsername(username);\n\n        // Assert\n        Assert.That(result, Is.Null);\n    }\n\n    /// <summary>\n    /// Тест для TryFindUserIdByUsername с пустым кэшем\n    /// Проверяет поведение при пустом кэше\n    /// <tags>user-search, empty-cache, edge-case</tags>\n    /// </summary>\n    [Test]\n    public void TryFindUserIdByUsername_WithEmptyCache_ReturnsNull()\n    {\n        // Arrange\n        var username = \"testuser7\";\n\n        // Кэш пустой\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Handlers/MessageHandlerTryFindUserIdTests.cs::MessageHandlerTryFindUserIdTests::TryFindUserIdByUsername_WithEmptyCache_ReturnsNull",
+        "file": "Unit/Handlers/MessageHandlerTryFindUserIdTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Handlers",
+        "class": "MessageHandlerTryFindUserIdTests",
+        "test_name": "TryFindUserIdByUsername_WithEmptyCache_ReturnsNull",
+        "line": 237,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 12,
+        "declared_area_from_path": "Unit",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 438
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Handlers/MessageHandlerTryFindUserIdTests.cs\n# Lines 207-267 (test starts at line 237)\n\n    /// <summary>\n    /// Тест для TryFindUserIdByUsername с некорректным userId в ключе\n    /// Проверяет, что метод игнорирует записи с некорректным userId\n    /// <tags>user-search, invalid-user-id, edge-case</tags>\n    /// </summary>\n    [Test]\n    public void TryFindUserIdByUsername_WithInvalidUserId_ReturnsNull()\n    {\n        // Arrange\n        var username = \"testuser6\";\n        var chatId = 123456L;\n        var invalidUserId = \"invalid_user_id\";\n        var cacheKey = $\"{chatId}_{invalidUserId}\";\n        var cacheValue = $\"Message from @{username}\";\n\n        MemoryCache.Default.Add(cacheKey, cacheValue, new CacheItemPolicy { AbsoluteExpiration = DateTimeOffset.UtcNow.AddHours(1) });\n\n        // Act\n        var result = _userIndex.TryFindUserIdByUsername(username);\n\n        // Assert\n        Assert.That(result, Is.Null);\n    }\n\n    /// <summary>\n    /// Тест для TryFindUserIdByUsername с пустым кэшем\n    /// Проверяет поведение при пустом кэше\n    /// <tags>user-search, empty-cache, edge-case</tags>\n    /// </summary>\n    [Test]\n    public void TryFindUserIdByUsername_WithEmptyCache_ReturnsNull()\n    {\n        // Arrange\n        var username = \"testuser7\";\n\n        // Кэш пустой\n\n        // Act\n        var result = _userIndex.TryFindUserIdByUsername(username);\n\n        // Assert\n        Assert.That(result, Is.Null);\n    }\n\n    /// <summary>\n    /// Тест для TryFindUserIdByUsername с username без @ символа\n    /// Проверяет, что метод находит username даже без @ символа\n    /// <tags>user-search, username-without-at, behavior</tags>\n    /// </summary>\n    [Test]\n    public void TryFindUserIdByUsername_WithUsernameWithoutAtSymbol_FindsUser()\n    {\n        // Arrange\n        var username = \"testuser8\";\n        var chatId = 123456L;\n        var userId = 789012L;\n        var cacheKey = $\"{chatId}_{userId}\";\n        var cacheValue = $\"Message from {username}\"; // Без @ символа\n\n        MemoryCache.Default.Add(cacheKey, cacheValue, new CacheItemPolicy { AbsoluteExpiration = DateTimeOffset.UtcNow.AddHours(1) });\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Handlers/MessageHandlerTryFindUserIdTests.cs::MessageHandlerTryFindUserIdTests::TryFindUserIdByUsername_WithUsernameWithoutAtSymbol_FindsUser",
+        "file": "Unit/Handlers/MessageHandlerTryFindUserIdTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Handlers",
+        "class": "MessageHandlerTryFindUserIdTests",
+        "test_name": "TryFindUserIdByUsername_WithUsernameWithoutAtSymbol_FindsUser",
+        "line": 257,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 16,
+        "declared_area_from_path": "Unit",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 439
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Handlers/MessageHandlerTryFindUserIdTests.cs\n# Lines 227-287 (test starts at line 257)\n\n        // Assert\n        Assert.That(result, Is.Null);\n    }\n\n    /// <summary>\n    /// Тест для TryFindUserIdByUsername с пустым кэшем\n    /// Проверяет поведение при пустом кэше\n    /// <tags>user-search, empty-cache, edge-case</tags>\n    /// </summary>\n    [Test]\n    public void TryFindUserIdByUsername_WithEmptyCache_ReturnsNull()\n    {\n        // Arrange\n        var username = \"testuser7\";\n\n        // Кэш пустой\n\n        // Act\n        var result = _userIndex.TryFindUserIdByUsername(username);\n\n        // Assert\n        Assert.That(result, Is.Null);\n    }\n\n    /// <summary>\n    /// Тест для TryFindUserIdByUsername с username без @ символа\n    /// Проверяет, что метод находит username даже без @ символа\n    /// <tags>user-search, username-without-at, behavior</tags>\n    /// </summary>\n    [Test]\n    public void TryFindUserIdByUsername_WithUsernameWithoutAtSymbol_FindsUser()\n    {\n        // Arrange\n        var username = \"testuser8\";\n        var chatId = 123456L;\n        var userId = 789012L;\n        var cacheKey = $\"{chatId}_{userId}\";\n        var cacheValue = $\"Message from {username}\"; // Без @ символа\n\n        MemoryCache.Default.Add(cacheKey, cacheValue, new CacheItemPolicy { AbsoluteExpiration = DateTimeOffset.UtcNow.AddHours(1) });\n\n        // Act\n        var result = _userIndex.TryFindUserIdByUsername(username);\n\n        // Assert\n        Assert.That(result, Is.EqualTo(userId));\n    }\n\n    /// <summary>\n    /// Отладочный тест для понимания работы кэша\n    /// <tags>debug, cache-investigation</tags>\n    /// </summary>\n    [Test]\n    public void TryFindUserIdByUsername_DebugCache_InvestigatesCacheBehavior()\n    {\n        // Arrange\n        var username = \"testuser9\";\n        var chatId = 123456L;\n        var userId = 789012L;\n        var cacheKey = $\"{chatId}_{userId}\";\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Infrastructure/StatisticsServiceGetChatLinkTests.cs::StatisticsServiceGetChatLinkTests::GetChatLink_PublicGroupWithUsername_ReturnsMarkdownLink",
+        "file": "Unit/Infrastructure/StatisticsServiceGetChatLinkTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Infrastructure",
+        "class": "StatisticsServiceGetChatLinkTests",
+        "test_name": "GetChatLink_PublicGroupWithUsername_ReturnsMarkdownLink",
+        "line": 24,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "unit",
+          "infrastructure"
+        ],
+        "body_lines": 5,
+        "declared_area_from_path": "Unit",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 441
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Infrastructure/StatisticsServiceGetChatLinkTests.cs\n# Lines 1-54 (test starts at line 24)\nusing ClubDoorman.Services.UserBan;\nusing NUnit.Framework;\nusing Telegram.Bot.Types;\nusing ClubDoorman.Services;\nusing ClubDoorman.Services.UserBan;\nusing ClubDoorman.Services.Messaging;\nusing ClubDoorman.Services.LinkFormatting;\n\nnamespace ClubDoorman.Test.Unit.Infrastructure;\n\n[TestFixture]\n[Category(\"unit\")]\n[Category(\"infrastructure\")]\npublic class StatisticsServiceGetChatLinkTests\n{\n    private IChatLinkFormatter _chatLinkFormatter;\n\n    [OneTimeSetUp]\n    public void SetUp()\n    {\n        _chatLinkFormatter = new ChatLinkFormatter();\n    }\n\n    [Test]\n    public void GetChatLink_PublicGroupWithUsername_ReturnsMarkdownLink()\n    {\n        var chat = new Chat { Id = 123456789, Username = \"testgroup\", Title = \"Test Group\" };\n        var result = _chatLinkFormatter.GetChatLink(chat);\n        Assert.That(result, Is.EqualTo(\"[Test Group](https://t.me/testgroup)\"));\n    }\n\n    [Test]\n    public void GetChatLink_SupergroupWithoutUsername_ReturnsTelegramLink()\n    {\n        var chat = new Chat { Id = -100123456789, Title = \"Super Group\" };\n        var result = _chatLinkFormatter.GetChatLink(chat);\n        Assert.That(result, Is.EqualTo(\"[Super Group](https://t.me/c/123456789)\"));\n    }\n\n    [Test]\n    public void GetChatLink_RegularGroupWithoutUsername_ReturnsBoldTitle()\n    {\n        var chat = new Chat { Id = -123456789, Title = \"Regular Group\" };\n        var result = _chatLinkFormatter.GetChatLink(chat);\n        Assert.That(result, Is.EqualTo(\"*Regular Group*\"));\n    }\n\n    [Test]\n    public void GetChatLink_ChannelWithoutUsername_ReturnsBoldTitle()\n    {\n        var chat = new Chat { Id = 123456789, Title = \"Test Channel\" };\n        var result = _chatLinkFormatter.GetChatLink(chat);\n        Assert.That(result, Is.EqualTo(\"*Test Channel*\"));\n    }\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Infrastructure/StatisticsServiceGetChatLinkTests.cs::StatisticsServiceGetChatLinkTests::GetChatLink_SupergroupWithoutUsername_ReturnsTelegramLink",
+        "file": "Unit/Infrastructure/StatisticsServiceGetChatLinkTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Infrastructure",
+        "class": "StatisticsServiceGetChatLinkTests",
+        "test_name": "GetChatLink_SupergroupWithoutUsername_ReturnsTelegramLink",
+        "line": 32,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "unit",
+          "infrastructure"
+        ],
+        "body_lines": 5,
+        "declared_area_from_path": "Unit",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 442
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Infrastructure/StatisticsServiceGetChatLinkTests.cs\n# Lines 2-62 (test starts at line 32)\nusing NUnit.Framework;\nusing Telegram.Bot.Types;\nusing ClubDoorman.Services;\nusing ClubDoorman.Services.UserBan;\nusing ClubDoorman.Services.Messaging;\nusing ClubDoorman.Services.LinkFormatting;\n\nnamespace ClubDoorman.Test.Unit.Infrastructure;\n\n[TestFixture]\n[Category(\"unit\")]\n[Category(\"infrastructure\")]\npublic class StatisticsServiceGetChatLinkTests\n{\n    private IChatLinkFormatter _chatLinkFormatter;\n\n    [OneTimeSetUp]\n    public void SetUp()\n    {\n        _chatLinkFormatter = new ChatLinkFormatter();\n    }\n\n    [Test]\n    public void GetChatLink_PublicGroupWithUsername_ReturnsMarkdownLink()\n    {\n        var chat = new Chat { Id = 123456789, Username = \"testgroup\", Title = \"Test Group\" };\n        var result = _chatLinkFormatter.GetChatLink(chat);\n        Assert.That(result, Is.EqualTo(\"[Test Group](https://t.me/testgroup)\"));\n    }\n\n    [Test]\n    public void GetChatLink_SupergroupWithoutUsername_ReturnsTelegramLink()\n    {\n        var chat = new Chat { Id = -100123456789, Title = \"Super Group\" };\n        var result = _chatLinkFormatter.GetChatLink(chat);\n        Assert.That(result, Is.EqualTo(\"[Super Group](https://t.me/c/123456789)\"));\n    }\n\n    [Test]\n    public void GetChatLink_RegularGroupWithoutUsername_ReturnsBoldTitle()\n    {\n        var chat = new Chat { Id = -123456789, Title = \"Regular Group\" };\n        var result = _chatLinkFormatter.GetChatLink(chat);\n        Assert.That(result, Is.EqualTo(\"*Regular Group*\"));\n    }\n\n    [Test]\n    public void GetChatLink_ChannelWithoutUsername_ReturnsBoldTitle()\n    {\n        var chat = new Chat { Id = 123456789, Title = \"Test Channel\" };\n        var result = _chatLinkFormatter.GetChatLink(chat);\n        Assert.That(result, Is.EqualTo(\"*Test Channel*\"));\n    }\n\n    [Test]\n    public void GetChatLink_NullTitle_UsesDefaultTitle()\n    {\n        var chat = new Chat { Id = 123456789, Username = \"testgroup\", Title = null };\n        var result = _chatLinkFormatter.GetChatLink(chat);\n        Assert.That(result, Is.EqualTo(\"[Неизвестный чат](https://t.me/testgroup)\"));\n    }\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Infrastructure/StatisticsServiceGetChatLinkTests.cs::StatisticsServiceGetChatLinkTests::GetChatLink_RegularGroupWithoutUsername_ReturnsBoldTitle",
+        "file": "Unit/Infrastructure/StatisticsServiceGetChatLinkTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Infrastructure",
+        "class": "StatisticsServiceGetChatLinkTests",
+        "test_name": "GetChatLink_RegularGroupWithoutUsername_ReturnsBoldTitle",
+        "line": 40,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "unit",
+          "infrastructure"
+        ],
+        "body_lines": 5,
+        "declared_area_from_path": "Unit",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 443
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Infrastructure/StatisticsServiceGetChatLinkTests.cs\n# Lines 10-70 (test starts at line 40)\n\n[TestFixture]\n[Category(\"unit\")]\n[Category(\"infrastructure\")]\npublic class StatisticsServiceGetChatLinkTests\n{\n    private IChatLinkFormatter _chatLinkFormatter;\n\n    [OneTimeSetUp]\n    public void SetUp()\n    {\n        _chatLinkFormatter = new ChatLinkFormatter();\n    }\n\n    [Test]\n    public void GetChatLink_PublicGroupWithUsername_ReturnsMarkdownLink()\n    {\n        var chat = new Chat { Id = 123456789, Username = \"testgroup\", Title = \"Test Group\" };\n        var result = _chatLinkFormatter.GetChatLink(chat);\n        Assert.That(result, Is.EqualTo(\"[Test Group](https://t.me/testgroup)\"));\n    }\n\n    [Test]\n    public void GetChatLink_SupergroupWithoutUsername_ReturnsTelegramLink()\n    {\n        var chat = new Chat { Id = -100123456789, Title = \"Super Group\" };\n        var result = _chatLinkFormatter.GetChatLink(chat);\n        Assert.That(result, Is.EqualTo(\"[Super Group](https://t.me/c/123456789)\"));\n    }\n\n    [Test]\n    public void GetChatLink_RegularGroupWithoutUsername_ReturnsBoldTitle()\n    {\n        var chat = new Chat { Id = -123456789, Title = \"Regular Group\" };\n        var result = _chatLinkFormatter.GetChatLink(chat);\n        Assert.That(result, Is.EqualTo(\"*Regular Group*\"));\n    }\n\n    [Test]\n    public void GetChatLink_ChannelWithoutUsername_ReturnsBoldTitle()\n    {\n        var chat = new Chat { Id = 123456789, Title = \"Test Channel\" };\n        var result = _chatLinkFormatter.GetChatLink(chat);\n        Assert.That(result, Is.EqualTo(\"*Test Channel*\"));\n    }\n\n    [Test]\n    public void GetChatLink_NullTitle_UsesDefaultTitle()\n    {\n        var chat = new Chat { Id = 123456789, Username = \"testgroup\", Title = null };\n        var result = _chatLinkFormatter.GetChatLink(chat);\n        Assert.That(result, Is.EqualTo(\"[Неизвестный чат](https://t.me/testgroup)\"));\n    }\n\n    [Test]\n    public void GetChatLink_EmptyTitle_ReturnsEmptyBrackets()\n    {\n        var chat = new Chat { Id = 123456789, Username = \"testgroup\", Title = \"\" };\n        var result = _chatLinkFormatter.GetChatLink(chat);\n        Assert.That(result, Is.EqualTo(\"[](https://t.me/testgroup)\"));\n    }\n"
+    }
+  ]
+}

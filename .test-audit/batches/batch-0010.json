@@ -1,0 +1,420 @@
+{
+  "schema_version": "test-audit-batch-v1",
+  "batch_no": 10,
+  "purpose": "local LLM audit input",
+  "instructions": "Return JSONL only. One audit object per input test. No markdown. No code edits.",
+  "tests": [
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestKit/TestKit.BuilderTests.cs::TestKitBuilderTests::MessageHandlerBuilder_ComplexScenario_CreatesValidHandler",
+        "file": "TestKit/TestKit.BuilderTests.cs",
+        "namespace": "ClubDoorman.Test.TestKit",
+        "class": "TestKitBuilderTests",
+        "test_name": "MessageHandlerBuilder_ComplexScenario_CreatesValidHandler",
+        "line": 211,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 18,
+        "declared_area_from_path": "TestKit",
+        "construction_path": "testkit_message_handler_builder",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": true,
+          "uses_testkit_autofixture": true,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "testkit_autofixture"
+        ],
+        "_source_lineno": 255
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestKit/TestKit.BuilderTests.cs\n# Lines 181-241 (test starts at line 211)\n        Assert.That(mock, Is.Not.Null);\n        Assert.That(mock.Object, Is.InstanceOf<ICaptchaService>());\n    }\n\n    [Test]\n    public void AiChecksMockBuilder_ThatApprovesPhoto_CreatesCorrectMock()\n    {\n        // Arrange & Act\n        var mock = TK.CreateAiChecksMock()\n            .ThatApprovesPhoto()\n            .Build();\n\n        // Assert\n        Assert.That(mock, Is.Not.Null);\n        Assert.That(mock.Object, Is.InstanceOf<IAiChecks>());\n    }\n\n    [Test]\n    public void TelegramBotMockBuilder_ThatSendsMessageSuccessfully_CreatesCorrectMock()\n    {\n        // Arrange & Act\n        var mock = TK.CreateTelegramBotMock()\n            .ThatSendsMessageSuccessfully()\n            .Build();\n\n        // Assert\n        Assert.That(mock, Is.Not.Null);\n        Assert.That(mock.Object, Is.InstanceOf<ITelegramBotClientWrapper>());\n    }\n\n    [Test]\n    public void MessageHandlerBuilder_ComplexScenario_CreatesValidHandler()\n    {\n        // Arrange & Act\n        var handler = TK.CreateMessageHandlerBuilder()\n            .WithUserManager(builder => builder\n                .ThatRejectsUser(12345)\n                .ThatIsInBanlist(12345))\n            .WithCaptchaService(builder => builder\n                .ThatFails())\n            .WithAiChecks(builder => builder\n                .ThatRejectsPhoto())\n            .WithTelegramBot(builder => builder\n                .ThatSendsMessageSuccessfully())\n            .Build();\n\n        // Assert\n        Assert.That(handler, Is.Not.Null);\n        Assert.That(handler, Is.InstanceOf<MessageHandler>());\n    }\n\n    [Test]\n    [Category(TestCategories.TestInfrastructure)]\n    [Category(\"scenarios\")]\n    public void ModerationScenarios_CompleteSetup_WorksCorrectly()\n    {\n        // Act\n        var setup = TK.Specialized.ModerationScenarios.CompleteSetup();\n\n        // Assert\n        Assert.That(setup.Service, Is.Not.Null);\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Handlers/MessageHandlerDeleteMessageLaterTests.cs::MessageHandlerDeleteMessageLaterTests::DeleteMessageLater_WithCustomTimeout_SchedulesMessageDeletion",
+        "file": "Unit/Handlers/MessageHandlerDeleteMessageLaterTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Handlers",
+        "class": "MessageHandlerDeleteMessageLaterTests",
+        "test_name": "DeleteMessageLater_WithCustomTimeout_SchedulesMessageDeletion",
+        "line": 33,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "unit",
+          "handlers",
+          "delete-message-later"
+        ],
+        "body_lines": 6,
+        "declared_area_from_path": "Unit",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": true,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "assert_pass",
+          "message_handler_test_factory"
+        ],
+        "_source_lineno": 306
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Handlers/MessageHandlerDeleteMessageLaterTests.cs\n# Lines 3-63 (test starts at line 33)\nusing System.Threading;\nusing System.Threading.Tasks;\nusing ClubDoorman.Test.TestData;\nusing ClubDoorman.Test.TestInfrastructure;\nusing ClubDoorman.Test.TestKit;\nusing Microsoft.Extensions.Logging;\nusing Moq;\nusing NUnit.Framework;\nusing Telegram.Bot.Types;\nusing ClubDoorman.Services.Handlers;\nusing ClubDoorman.Services.Telegram;\n\nnamespace ClubDoorman.Test.Unit.Handlers;\n\n[TestFixture]\n[Category(\"unit\")]\n[Category(\"handlers\")]\n[Category(\"delete-message-later\")]\npublic class MessageHandlerDeleteMessageLaterTests\n{\n    private MessageHandlerTestFactory _factory = null!;\n    private MessageHandler _messageHandler = null!;\n\n    [SetUp]\n    public void SetUp()\n    {\n        _factory = new MessageHandlerTestFactory();\n        _messageHandler = _factory.CreateMessageHandler();\n    }\n\n    [Test]\n    public void DeleteMessageLater_WithCustomTimeout_SchedulesMessageDeletion()\n    {\n        var (_, _, message) = TK.Specialized.Messages.TextOnlyScenario();\n        var custom = TimeSpan.FromMilliseconds(80);\n        _messageHandler.DeleteMessageLater(message, custom, CancellationToken.None);\n        Assert.Pass();\n    }\n\n    [Test]\n    public void DeleteMessageLater_WithDefaultTimeout_UsesFiveMinutes()\n    {\n        var (_, _, message) = TK.Specialized.Messages.TextOnlyScenario();\n        _messageHandler.DeleteMessageLater(message, default, CancellationToken.None);\n        Assert.Pass();\n    }\n\n    [Test]\n    public void DeleteMessageLater_WithNullMessage_NoThrow()\n    {\n        Assert.DoesNotThrow(() => _messageHandler.DeleteMessageLater(null!, TimeSpan.FromMilliseconds(10), CancellationToken.None));\n    }\n\n    [Test]\n    public void DeleteMessageLater_WithZeroTimeout_NoThrow()\n    {\n        var (_, _, message) = TK.Specialized.Messages.TextOnlyScenario();\n        _messageHandler.DeleteMessageLater(message, TimeSpan.Zero, CancellationToken.None);\n        Assert.Pass();\n    }\n\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Handlers/MessageHandlerDeleteMessageLaterTests.cs::MessageHandlerDeleteMessageLaterTests::DeleteMessageLater_WithDefaultTimeout_UsesFiveMinutes",
+        "file": "Unit/Handlers/MessageHandlerDeleteMessageLaterTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Handlers",
+        "class": "MessageHandlerDeleteMessageLaterTests",
+        "test_name": "DeleteMessageLater_WithDefaultTimeout_UsesFiveMinutes",
+        "line": 42,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "unit",
+          "handlers",
+          "delete-message-later"
+        ],
+        "body_lines": 5,
+        "declared_area_from_path": "Unit",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": true,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "assert_pass",
+          "message_handler_test_factory"
+        ],
+        "_source_lineno": 307
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Handlers/MessageHandlerDeleteMessageLaterTests.cs\n# Lines 12-72 (test starts at line 42)\nusing ClubDoorman.Services.Handlers;\nusing ClubDoorman.Services.Telegram;\n\nnamespace ClubDoorman.Test.Unit.Handlers;\n\n[TestFixture]\n[Category(\"unit\")]\n[Category(\"handlers\")]\n[Category(\"delete-message-later\")]\npublic class MessageHandlerDeleteMessageLaterTests\n{\n    private MessageHandlerTestFactory _factory = null!;\n    private MessageHandler _messageHandler = null!;\n\n    [SetUp]\n    public void SetUp()\n    {\n        _factory = new MessageHandlerTestFactory();\n        _messageHandler = _factory.CreateMessageHandler();\n    }\n\n    [Test]\n    public void DeleteMessageLater_WithCustomTimeout_SchedulesMessageDeletion()\n    {\n        var (_, _, message) = TK.Specialized.Messages.TextOnlyScenario();\n        var custom = TimeSpan.FromMilliseconds(80);\n        _messageHandler.DeleteMessageLater(message, custom, CancellationToken.None);\n        Assert.Pass();\n    }\n\n    [Test]\n    public void DeleteMessageLater_WithDefaultTimeout_UsesFiveMinutes()\n    {\n        var (_, _, message) = TK.Specialized.Messages.TextOnlyScenario();\n        _messageHandler.DeleteMessageLater(message, default, CancellationToken.None);\n        Assert.Pass();\n    }\n\n    [Test]\n    public void DeleteMessageLater_WithNullMessage_NoThrow()\n    {\n        Assert.DoesNotThrow(() => _messageHandler.DeleteMessageLater(null!, TimeSpan.FromMilliseconds(10), CancellationToken.None));\n    }\n\n    [Test]\n    public void DeleteMessageLater_WithZeroTimeout_NoThrow()\n    {\n        var (_, _, message) = TK.Specialized.Messages.TextOnlyScenario();\n        _messageHandler.DeleteMessageLater(message, TimeSpan.Zero, CancellationToken.None);\n        Assert.Pass();\n    }\n\n    [Test]\n    public void DeleteMessageLater_WithNegativeTimeout_NoThrow()\n    {\n        var (_, _, message) = TK.Specialized.Messages.TextOnlyScenario();\n        _messageHandler.DeleteMessageLater(message, TimeSpan.FromMilliseconds(-10), CancellationToken.None);\n        Assert.Pass();\n    }\n\n    [Test]\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Handlers/MessageHandlerDeleteMessageLaterTests.cs::MessageHandlerDeleteMessageLaterTests::DeleteMessageLater_WithNullMessage_NoThrow",
+        "file": "Unit/Handlers/MessageHandlerDeleteMessageLaterTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Handlers",
+        "class": "MessageHandlerDeleteMessageLaterTests",
+        "test_name": "DeleteMessageLater_WithNullMessage_NoThrow",
+        "line": 50,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "unit",
+          "handlers",
+          "delete-message-later"
+        ],
+        "body_lines": 3,
+        "declared_area_from_path": "Unit",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": true,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "does_not_throw",
+          "message_handler_test_factory",
+          "very_short_test"
+        ],
+        "_source_lineno": 308
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Handlers/MessageHandlerDeleteMessageLaterTests.cs\n# Lines 20-80 (test starts at line 50)\n[Category(\"delete-message-later\")]\npublic class MessageHandlerDeleteMessageLaterTests\n{\n    private MessageHandlerTestFactory _factory = null!;\n    private MessageHandler _messageHandler = null!;\n\n    [SetUp]\n    public void SetUp()\n    {\n        _factory = new MessageHandlerTestFactory();\n        _messageHandler = _factory.CreateMessageHandler();\n    }\n\n    [Test]\n    public void DeleteMessageLater_WithCustomTimeout_SchedulesMessageDeletion()\n    {\n        var (_, _, message) = TK.Specialized.Messages.TextOnlyScenario();\n        var custom = TimeSpan.FromMilliseconds(80);\n        _messageHandler.DeleteMessageLater(message, custom, CancellationToken.None);\n        Assert.Pass();\n    }\n\n    [Test]\n    public void DeleteMessageLater_WithDefaultTimeout_UsesFiveMinutes()\n    {\n        var (_, _, message) = TK.Specialized.Messages.TextOnlyScenario();\n        _messageHandler.DeleteMessageLater(message, default, CancellationToken.None);\n        Assert.Pass();\n    }\n\n    [Test]\n    public void DeleteMessageLater_WithNullMessage_NoThrow()\n    {\n        Assert.DoesNotThrow(() => _messageHandler.DeleteMessageLater(null!, TimeSpan.FromMilliseconds(10), CancellationToken.None));\n    }\n\n    [Test]\n    public void DeleteMessageLater_WithZeroTimeout_NoThrow()\n    {\n        var (_, _, message) = TK.Specialized.Messages.TextOnlyScenario();\n        _messageHandler.DeleteMessageLater(message, TimeSpan.Zero, CancellationToken.None);\n        Assert.Pass();\n    }\n\n    [Test]\n    public void DeleteMessageLater_WithNegativeTimeout_NoThrow()\n    {\n        var (_, _, message) = TK.Specialized.Messages.TextOnlyScenario();\n        _messageHandler.DeleteMessageLater(message, TimeSpan.FromMilliseconds(-10), CancellationToken.None);\n        Assert.Pass();\n    }\n\n    [Test]\n    public async Task DeleteMessageLater_WithShortTimeout_InvokesDelete()\n    {\n        var fakeClient = TestKitTelegram.CreateFakeClient();\n        var envelope = MessageEnvelope.CreateTest(messageId: 12345, chatId: 67890);\n        var message = TestKitTelegram.CreateMessageFromEnvelope(fakeClient, envelope);\n        var messageHandler = _factory.CreateMessageHandlerWithFake(fakeClient);\n\n        messageHandler.DeleteMessageLater(message, TimeSpan.FromMilliseconds(40), CancellationToken.None);\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Handlers/MessageHandlerDeleteMessageLaterTests.cs::MessageHandlerDeleteMessageLaterTests::DeleteMessageLater_WithZeroTimeout_NoThrow",
+        "file": "Unit/Handlers/MessageHandlerDeleteMessageLaterTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Handlers",
+        "class": "MessageHandlerDeleteMessageLaterTests",
+        "test_name": "DeleteMessageLater_WithZeroTimeout_NoThrow",
+        "line": 56,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "unit",
+          "handlers",
+          "delete-message-later"
+        ],
+        "body_lines": 5,
+        "declared_area_from_path": "Unit",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": true,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "assert_pass",
+          "message_handler_test_factory"
+        ],
+        "_source_lineno": 309
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Handlers/MessageHandlerDeleteMessageLaterTests.cs\n# Lines 26-86 (test starts at line 56)\n    [SetUp]\n    public void SetUp()\n    {\n        _factory = new MessageHandlerTestFactory();\n        _messageHandler = _factory.CreateMessageHandler();\n    }\n\n    [Test]\n    public void DeleteMessageLater_WithCustomTimeout_SchedulesMessageDeletion()\n    {\n        var (_, _, message) = TK.Specialized.Messages.TextOnlyScenario();\n        var custom = TimeSpan.FromMilliseconds(80);\n        _messageHandler.DeleteMessageLater(message, custom, CancellationToken.None);\n        Assert.Pass();\n    }\n\n    [Test]\n    public void DeleteMessageLater_WithDefaultTimeout_UsesFiveMinutes()\n    {\n        var (_, _, message) = TK.Specialized.Messages.TextOnlyScenario();\n        _messageHandler.DeleteMessageLater(message, default, CancellationToken.None);\n        Assert.Pass();\n    }\n\n    [Test]\n    public void DeleteMessageLater_WithNullMessage_NoThrow()\n    {\n        Assert.DoesNotThrow(() => _messageHandler.DeleteMessageLater(null!, TimeSpan.FromMilliseconds(10), CancellationToken.None));\n    }\n\n    [Test]\n    public void DeleteMessageLater_WithZeroTimeout_NoThrow()\n    {\n        var (_, _, message) = TK.Specialized.Messages.TextOnlyScenario();\n        _messageHandler.DeleteMessageLater(message, TimeSpan.Zero, CancellationToken.None);\n        Assert.Pass();\n    }\n\n    [Test]\n    public void DeleteMessageLater_WithNegativeTimeout_NoThrow()\n    {\n        var (_, _, message) = TK.Specialized.Messages.TextOnlyScenario();\n        _messageHandler.DeleteMessageLater(message, TimeSpan.FromMilliseconds(-10), CancellationToken.None);\n        Assert.Pass();\n    }\n\n    [Test]\n    public async Task DeleteMessageLater_WithShortTimeout_InvokesDelete()\n    {\n        var fakeClient = TestKitTelegram.CreateFakeClient();\n        var envelope = MessageEnvelope.CreateTest(messageId: 12345, chatId: 67890);\n        var message = TestKitTelegram.CreateMessageFromEnvelope(fakeClient, envelope);\n        var messageHandler = _factory.CreateMessageHandlerWithFake(fakeClient);\n\n        messageHandler.DeleteMessageLater(message, TimeSpan.FromMilliseconds(40), CancellationToken.None);\n\n        await Task.Delay(120);\n        Assert.That(fakeClient.WasMessageDeleted(envelope), Is.True);\n    }\n\n    [Test]\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Handlers/MessageHandlerDeleteMessageLaterTests.cs::MessageHandlerDeleteMessageLaterTests::DeleteMessageLater_WithNegativeTimeout_NoThrow",
+        "file": "Unit/Handlers/MessageHandlerDeleteMessageLaterTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Handlers",
+        "class": "MessageHandlerDeleteMessageLaterTests",
+        "test_name": "DeleteMessageLater_WithNegativeTimeout_NoThrow",
+        "line": 64,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "unit",
+          "handlers",
+          "delete-message-later"
+        ],
+        "body_lines": 5,
+        "declared_area_from_path": "Unit",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": true,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "assert_pass",
+          "message_handler_test_factory"
+        ],
+        "_source_lineno": 310
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Handlers/MessageHandlerDeleteMessageLaterTests.cs\n# Lines 34-94 (test starts at line 64)\n    public void DeleteMessageLater_WithCustomTimeout_SchedulesMessageDeletion()\n    {\n        var (_, _, message) = TK.Specialized.Messages.TextOnlyScenario();\n        var custom = TimeSpan.FromMilliseconds(80);\n        _messageHandler.DeleteMessageLater(message, custom, CancellationToken.None);\n        Assert.Pass();\n    }\n\n    [Test]\n    public void DeleteMessageLater_WithDefaultTimeout_UsesFiveMinutes()\n    {\n        var (_, _, message) = TK.Specialized.Messages.TextOnlyScenario();\n        _messageHandler.DeleteMessageLater(message, default, CancellationToken.None);\n        Assert.Pass();\n    }\n\n    [Test]\n    public void DeleteMessageLater_WithNullMessage_NoThrow()\n    {\n        Assert.DoesNotThrow(() => _messageHandler.DeleteMessageLater(null!, TimeSpan.FromMilliseconds(10), CancellationToken.None));\n    }\n\n    [Test]\n    public void DeleteMessageLater_WithZeroTimeout_NoThrow()\n    {\n        var (_, _, message) = TK.Specialized.Messages.TextOnlyScenario();\n        _messageHandler.DeleteMessageLater(message, TimeSpan.Zero, CancellationToken.None);\n        Assert.Pass();\n    }\n\n    [Test]\n    public void DeleteMessageLater_WithNegativeTimeout_NoThrow()\n    {\n        var (_, _, message) = TK.Specialized.Messages.TextOnlyScenario();\n        _messageHandler.DeleteMessageLater(message, TimeSpan.FromMilliseconds(-10), CancellationToken.None);\n        Assert.Pass();\n    }\n\n    [Test]\n    public async Task DeleteMessageLater_WithShortTimeout_InvokesDelete()\n    {\n        var fakeClient = TestKitTelegram.CreateFakeClient();\n        var envelope = MessageEnvelope.CreateTest(messageId: 12345, chatId: 67890);\n        var message = TestKitTelegram.CreateMessageFromEnvelope(fakeClient, envelope);\n        var messageHandler = _factory.CreateMessageHandlerWithFake(fakeClient);\n\n        messageHandler.DeleteMessageLater(message, TimeSpan.FromMilliseconds(40), CancellationToken.None);\n\n        await Task.Delay(120);\n        Assert.That(fakeClient.WasMessageDeleted(envelope), Is.True);\n    }\n\n    [Test]\n    public async Task DeleteMessageLater_WhenDeleteFails_LogsWarning()\n    {\n        var (_, _, message) = TK.Specialized.Messages.TextOnlyScenario();\n        _factory.WithBotSetup(mock =>\n        {\n            mock.Setup(x => x.DeleteMessageWithOutcomeAsync(It.IsAny<ChatId>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))\n                .ReturnsAsync((ChatId c, int m, CancellationToken ct) => new DeleteMessageResult((long)c.Identifier!, m, DeleteMessageOutcome.UnexpectedError, 5, \"boom\", \"raw\"));\n        });\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Handlers/MessageHandlerDeleteMessageLaterTests.cs::MessageHandlerDeleteMessageLaterTests::DeleteMessageLater_WhenDeleteFails_LogsWarning",
+        "file": "Unit/Handlers/MessageHandlerDeleteMessageLaterTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Handlers",
+        "class": "MessageHandlerDeleteMessageLaterTests",
+        "test_name": "DeleteMessageLater_WhenDeleteFails_LogsWarning",
+        "line": 86,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 18,
+        "declared_area_from_path": "Unit",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": true,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify",
+          "message_handler_test_factory"
+        ],
+        "_source_lineno": 312
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Handlers/MessageHandlerDeleteMessageLaterTests.cs\n# Lines 56-116 (test starts at line 86)\n    [Test]\n    public void DeleteMessageLater_WithZeroTimeout_NoThrow()\n    {\n        var (_, _, message) = TK.Specialized.Messages.TextOnlyScenario();\n        _messageHandler.DeleteMessageLater(message, TimeSpan.Zero, CancellationToken.None);\n        Assert.Pass();\n    }\n\n    [Test]\n    public void DeleteMessageLater_WithNegativeTimeout_NoThrow()\n    {\n        var (_, _, message) = TK.Specialized.Messages.TextOnlyScenario();\n        _messageHandler.DeleteMessageLater(message, TimeSpan.FromMilliseconds(-10), CancellationToken.None);\n        Assert.Pass();\n    }\n\n    [Test]\n    public async Task DeleteMessageLater_WithShortTimeout_InvokesDelete()\n    {\n        var fakeClient = TestKitTelegram.CreateFakeClient();\n        var envelope = MessageEnvelope.CreateTest(messageId: 12345, chatId: 67890);\n        var message = TestKitTelegram.CreateMessageFromEnvelope(fakeClient, envelope);\n        var messageHandler = _factory.CreateMessageHandlerWithFake(fakeClient);\n\n        messageHandler.DeleteMessageLater(message, TimeSpan.FromMilliseconds(40), CancellationToken.None);\n\n        await Task.Delay(120);\n        Assert.That(fakeClient.WasMessageDeleted(envelope), Is.True);\n    }\n\n    [Test]\n    public async Task DeleteMessageLater_WhenDeleteFails_LogsWarning()\n    {\n        var (_, _, message) = TK.Specialized.Messages.TextOnlyScenario();\n        _factory.WithBotSetup(mock =>\n        {\n            mock.Setup(x => x.DeleteMessageWithOutcomeAsync(It.IsAny<ChatId>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))\n                .ReturnsAsync((ChatId c, int m, CancellationToken ct) => new DeleteMessageResult((long)c.Identifier!, m, DeleteMessageOutcome.UnexpectedError, 5, \"boom\", \"raw\"));\n        });\n        _messageHandler.DeleteMessageLater(message, TimeSpan.FromMilliseconds(30), CancellationToken.None);\n        await Task.Delay(120);\n        _factory.LoggerMock.Verify(\n            x => x.Log(\n                LogLevel.Warning,\n                It.IsAny<EventId>(),\n                It.Is<It.IsAnyType>((v, _) => v!.ToString()!.Contains(\"Не удалось удалить сообщение\")),\n                It.IsAny<Exception?>(),\n                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),\n            Times.AtLeastOnce);\n    }\n\n    [Test]\n    public async Task DeleteMessageLater_WhenCancelled_DoesNotInvokeDelete()\n    {\n        var (_, _, message) = TK.Specialized.Messages.TextOnlyScenario();\n        var cts = new CancellationTokenSource();\n        _messageHandler.DeleteMessageLater(message, TimeSpan.FromMilliseconds(100), cts.Token);\n        cts.Cancel();\n        await Task.Delay(150);\n        _factory.BotMock.Verify(x => x.DeleteMessageWithOutcomeAsync(It.IsAny<ChatId>(), It.IsAny<int>(), It.IsAny<CancellationToken>()), Times.Never);\n    }\n"
+    }
+  ]
+}

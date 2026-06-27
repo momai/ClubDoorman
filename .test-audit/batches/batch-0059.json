@@ -1,0 +1,493 @@
+{
+  "schema_version": "test-audit-batch-v1",
+  "batch_no": 59,
+  "purpose": "local LLM audit input",
+  "instructions": "Return JSONL only. One audit object per input test. No markdown. No code edits.",
+  "tests": [
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestInfrastructure/CallbackQueryHandlerTestFactoryTests.cs::CallbackQueryHandlerTestFactoryTests::CreateCallbackQueryHandler_ConfiguresAllDependencies",
+        "file": "TestInfrastructure/CallbackQueryHandlerTestFactoryTests.cs",
+        "namespace": "ClubDoorman.TestInfrastructure",
+        "class": "CallbackQueryHandlerTestFactoryTests",
+        "test_name": "CreateCallbackQueryHandler_ConfiguresAllDependencies",
+        "line": 39,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "test-infrastructure"
+        ],
+        "body_lines": 11,
+        "declared_area_from_path": "TestInfrastructure",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 140
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestInfrastructure/CallbackQueryHandlerTestFactoryTests.cs\n# Lines 9-69 (test starts at line 39)\nusing Telegram.Bot;\nusing ClubDoorman.Services;\nusing ClubDoorman.Services.UserBan;\nusing ClubDoorman.Services.Captcha;\nusing ClubDoorman.Services.Handlers;\n\nnamespace ClubDoorman.TestInfrastructure;\n\n/// <summary>\n/// Тесты для CallbackQueryHandlerTestFactory\n/// Автоматически сгенерировано\n/// </summary>\n[TestFixture]\n[Category(\"test-infrastructure\")]\npublic class CallbackQueryHandlerTestFactoryTests\n{\n    [Test]\n    public void CreateCallbackQueryHandler_ReturnsWorkingInstance()\n    {\n        // Arrange\n        var factory = new CallbackQueryHandlerTestFactory();\n\n        // Act\n        var instance = factory.CreateCallbackQueryHandler();\n\n        // Assert\n        Assert.That(instance, Is.Not.Null);\n        Assert.That(instance, Is.InstanceOf<CallbackQueryHandler>());\n    }\n\n    [Test]\n    public void CreateCallbackQueryHandler_ConfiguresAllDependencies()\n    {\n        // Arrange\n        var factory = new CallbackQueryHandlerTestFactory();\n\n        // Act\n        var instance = factory.CreateCallbackQueryHandler();\n\n        // Assert\n        // Проверяем что все зависимости настроены\n        Assert.That(instance, Is.Not.Null);\n    }\n\n    [Test]\n    public void CreateCallbackQueryHandler_CreatesFreshInstanceEachTime()\n    {\n        // Arrange\n        var factory = new CallbackQueryHandlerTestFactory();\n\n        // Act\n        var instance1 = factory.CreateCallbackQueryHandler();\n        var instance2 = factory.CreateCallbackQueryHandler();\n\n        // Assert\n        Assert.That(instance1, Is.Not.SameAs(instance2));\n    }\n\n    [Test]\n    public void BotMock_IsProperlyConfigured()\n    {\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestInfrastructure/CallbackQueryHandlerTestFactoryTests.cs::CallbackQueryHandlerTestFactoryTests::BotMock_IsProperlyConfigured",
+        "file": "TestInfrastructure/CallbackQueryHandlerTestFactoryTests.cs",
+        "namespace": "ClubDoorman.TestInfrastructure",
+        "class": "CallbackQueryHandlerTestFactoryTests",
+        "test_name": "BotMock_IsProperlyConfigured",
+        "line": 67,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "test-infrastructure"
+        ],
+        "body_lines": 8,
+        "declared_area_from_path": "TestInfrastructure",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 142
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestInfrastructure/CallbackQueryHandlerTestFactoryTests.cs\n# Lines 37-97 (test starts at line 67)\n    }\n\n    [Test]\n    public void CreateCallbackQueryHandler_ConfiguresAllDependencies()\n    {\n        // Arrange\n        var factory = new CallbackQueryHandlerTestFactory();\n\n        // Act\n        var instance = factory.CreateCallbackQueryHandler();\n\n        // Assert\n        // Проверяем что все зависимости настроены\n        Assert.That(instance, Is.Not.Null);\n    }\n\n    [Test]\n    public void CreateCallbackQueryHandler_CreatesFreshInstanceEachTime()\n    {\n        // Arrange\n        var factory = new CallbackQueryHandlerTestFactory();\n\n        // Act\n        var instance1 = factory.CreateCallbackQueryHandler();\n        var instance2 = factory.CreateCallbackQueryHandler();\n\n        // Assert\n        Assert.That(instance1, Is.Not.SameAs(instance2));\n    }\n\n    [Test]\n    public void BotMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new CallbackQueryHandlerTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.BotMock, Is.Not.Null);\n        Assert.That(factory.BotMock.Object, Is.Not.Null);\n    }\n\n    [Test]\n    public void CaptchaServiceMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new CallbackQueryHandlerTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.CaptchaServiceMock, Is.Not.Null);\n        Assert.That(factory.CaptchaServiceMock.Object, Is.Not.Null);\n    }\n\n    [Test]\n    public void UserManagerMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new CallbackQueryHandlerTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.UserManagerMock, Is.Not.Null);\n        Assert.That(factory.UserManagerMock.Object, Is.Not.Null);\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestInfrastructure/CallbackQueryHandlerTestFactoryTests.cs::CallbackQueryHandlerTestFactoryTests::CaptchaServiceMock_IsProperlyConfigured",
+        "file": "TestInfrastructure/CallbackQueryHandlerTestFactoryTests.cs",
+        "namespace": "ClubDoorman.TestInfrastructure",
+        "class": "CallbackQueryHandlerTestFactoryTests",
+        "test_name": "CaptchaServiceMock_IsProperlyConfigured",
+        "line": 78,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "test-infrastructure"
+        ],
+        "body_lines": 8,
+        "declared_area_from_path": "TestInfrastructure",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 143
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestInfrastructure/CallbackQueryHandlerTestFactoryTests.cs\n# Lines 48-108 (test starts at line 78)\n        // Assert\n        // Проверяем что все зависимости настроены\n        Assert.That(instance, Is.Not.Null);\n    }\n\n    [Test]\n    public void CreateCallbackQueryHandler_CreatesFreshInstanceEachTime()\n    {\n        // Arrange\n        var factory = new CallbackQueryHandlerTestFactory();\n\n        // Act\n        var instance1 = factory.CreateCallbackQueryHandler();\n        var instance2 = factory.CreateCallbackQueryHandler();\n\n        // Assert\n        Assert.That(instance1, Is.Not.SameAs(instance2));\n    }\n\n    [Test]\n    public void BotMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new CallbackQueryHandlerTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.BotMock, Is.Not.Null);\n        Assert.That(factory.BotMock.Object, Is.Not.Null);\n    }\n\n    [Test]\n    public void CaptchaServiceMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new CallbackQueryHandlerTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.CaptchaServiceMock, Is.Not.Null);\n        Assert.That(factory.CaptchaServiceMock.Object, Is.Not.Null);\n    }\n\n    [Test]\n    public void UserManagerMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new CallbackQueryHandlerTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.UserManagerMock, Is.Not.Null);\n        Assert.That(factory.UserManagerMock.Object, Is.Not.Null);\n    }\n\n    [Test]\n    public void BadMessageManagerMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new CallbackQueryHandlerTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.BadMessageManagerMock, Is.Not.Null);\n        Assert.That(factory.BadMessageManagerMock.Object, Is.Not.Null);\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestInfrastructure/CallbackQueryHandlerTestFactoryTests.cs::CallbackQueryHandlerTestFactoryTests::UserManagerMock_IsProperlyConfigured",
+        "file": "TestInfrastructure/CallbackQueryHandlerTestFactoryTests.cs",
+        "namespace": "ClubDoorman.TestInfrastructure",
+        "class": "CallbackQueryHandlerTestFactoryTests",
+        "test_name": "UserManagerMock_IsProperlyConfigured",
+        "line": 89,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "test-infrastructure"
+        ],
+        "body_lines": 8,
+        "declared_area_from_path": "TestInfrastructure",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 144
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestInfrastructure/CallbackQueryHandlerTestFactoryTests.cs\n# Lines 59-119 (test starts at line 89)\n        // Act\n        var instance1 = factory.CreateCallbackQueryHandler();\n        var instance2 = factory.CreateCallbackQueryHandler();\n\n        // Assert\n        Assert.That(instance1, Is.Not.SameAs(instance2));\n    }\n\n    [Test]\n    public void BotMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new CallbackQueryHandlerTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.BotMock, Is.Not.Null);\n        Assert.That(factory.BotMock.Object, Is.Not.Null);\n    }\n\n    [Test]\n    public void CaptchaServiceMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new CallbackQueryHandlerTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.CaptchaServiceMock, Is.Not.Null);\n        Assert.That(factory.CaptchaServiceMock.Object, Is.Not.Null);\n    }\n\n    [Test]\n    public void UserManagerMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new CallbackQueryHandlerTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.UserManagerMock, Is.Not.Null);\n        Assert.That(factory.UserManagerMock.Object, Is.Not.Null);\n    }\n\n    [Test]\n    public void BadMessageManagerMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new CallbackQueryHandlerTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.BadMessageManagerMock, Is.Not.Null);\n        Assert.That(factory.BadMessageManagerMock.Object, Is.Not.Null);\n    }\n\n    [Test]\n    public void StatisticsServiceMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new CallbackQueryHandlerTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.StatisticsServiceMock, Is.Not.Null);\n        Assert.That(factory.StatisticsServiceMock.Object, Is.Not.Null);\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestInfrastructure/CallbackQueryHandlerTestFactoryTests.cs::CallbackQueryHandlerTestFactoryTests::BadMessageManagerMock_IsProperlyConfigured",
+        "file": "TestInfrastructure/CallbackQueryHandlerTestFactoryTests.cs",
+        "namespace": "ClubDoorman.TestInfrastructure",
+        "class": "CallbackQueryHandlerTestFactoryTests",
+        "test_name": "BadMessageManagerMock_IsProperlyConfigured",
+        "line": 100,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 8,
+        "declared_area_from_path": "TestInfrastructure",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 145
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestInfrastructure/CallbackQueryHandlerTestFactoryTests.cs\n# Lines 70-130 (test starts at line 100)\n        // Arrange\n        var factory = new CallbackQueryHandlerTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.BotMock, Is.Not.Null);\n        Assert.That(factory.BotMock.Object, Is.Not.Null);\n    }\n\n    [Test]\n    public void CaptchaServiceMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new CallbackQueryHandlerTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.CaptchaServiceMock, Is.Not.Null);\n        Assert.That(factory.CaptchaServiceMock.Object, Is.Not.Null);\n    }\n\n    [Test]\n    public void UserManagerMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new CallbackQueryHandlerTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.UserManagerMock, Is.Not.Null);\n        Assert.That(factory.UserManagerMock.Object, Is.Not.Null);\n    }\n\n    [Test]\n    public void BadMessageManagerMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new CallbackQueryHandlerTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.BadMessageManagerMock, Is.Not.Null);\n        Assert.That(factory.BadMessageManagerMock.Object, Is.Not.Null);\n    }\n\n    [Test]\n    public void StatisticsServiceMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new CallbackQueryHandlerTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.StatisticsServiceMock, Is.Not.Null);\n        Assert.That(factory.StatisticsServiceMock.Object, Is.Not.Null);\n    }\n\n    [Test]\n    public void AiChecksMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new CallbackQueryHandlerTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.AiChecksMock, Is.Not.Null);\n        Assert.That(factory.AiChecksMock.Object, Is.Not.Null);\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestInfrastructure/CallbackQueryHandlerTestFactoryTests.cs::CallbackQueryHandlerTestFactoryTests::StatisticsServiceMock_IsProperlyConfigured",
+        "file": "TestInfrastructure/CallbackQueryHandlerTestFactoryTests.cs",
+        "namespace": "ClubDoorman.TestInfrastructure",
+        "class": "CallbackQueryHandlerTestFactoryTests",
+        "test_name": "StatisticsServiceMock_IsProperlyConfigured",
+        "line": 111,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 8,
+        "declared_area_from_path": "TestInfrastructure",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 146
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestInfrastructure/CallbackQueryHandlerTestFactoryTests.cs\n# Lines 81-141 (test starts at line 111)\n        // Arrange\n        var factory = new CallbackQueryHandlerTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.CaptchaServiceMock, Is.Not.Null);\n        Assert.That(factory.CaptchaServiceMock.Object, Is.Not.Null);\n    }\n\n    [Test]\n    public void UserManagerMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new CallbackQueryHandlerTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.UserManagerMock, Is.Not.Null);\n        Assert.That(factory.UserManagerMock.Object, Is.Not.Null);\n    }\n\n    [Test]\n    public void BadMessageManagerMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new CallbackQueryHandlerTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.BadMessageManagerMock, Is.Not.Null);\n        Assert.That(factory.BadMessageManagerMock.Object, Is.Not.Null);\n    }\n\n    [Test]\n    public void StatisticsServiceMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new CallbackQueryHandlerTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.StatisticsServiceMock, Is.Not.Null);\n        Assert.That(factory.StatisticsServiceMock.Object, Is.Not.Null);\n    }\n\n    [Test]\n    public void AiChecksMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new CallbackQueryHandlerTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.AiChecksMock, Is.Not.Null);\n        Assert.That(factory.AiChecksMock.Object, Is.Not.Null);\n    }\n\n    [Test]\n    public void ModerationServiceMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new CallbackQueryHandlerTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.ModerationServiceMock, Is.Not.Null);\n        Assert.That(factory.ModerationServiceMock.Object, Is.Not.Null);\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestInfrastructure/CallbackQueryHandlerTestFactoryTests.cs::CallbackQueryHandlerTestFactoryTests::AiChecksMock_IsProperlyConfigured",
+        "file": "TestInfrastructure/CallbackQueryHandlerTestFactoryTests.cs",
+        "namespace": "ClubDoorman.TestInfrastructure",
+        "class": "CallbackQueryHandlerTestFactoryTests",
+        "test_name": "AiChecksMock_IsProperlyConfigured",
+        "line": 122,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 8,
+        "declared_area_from_path": "TestInfrastructure",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 147
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestInfrastructure/CallbackQueryHandlerTestFactoryTests.cs\n# Lines 92-152 (test starts at line 122)\n        // Arrange\n        var factory = new CallbackQueryHandlerTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.UserManagerMock, Is.Not.Null);\n        Assert.That(factory.UserManagerMock.Object, Is.Not.Null);\n    }\n\n    [Test]\n    public void BadMessageManagerMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new CallbackQueryHandlerTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.BadMessageManagerMock, Is.Not.Null);\n        Assert.That(factory.BadMessageManagerMock.Object, Is.Not.Null);\n    }\n\n    [Test]\n    public void StatisticsServiceMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new CallbackQueryHandlerTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.StatisticsServiceMock, Is.Not.Null);\n        Assert.That(factory.StatisticsServiceMock.Object, Is.Not.Null);\n    }\n\n    [Test]\n    public void AiChecksMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new CallbackQueryHandlerTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.AiChecksMock, Is.Not.Null);\n        Assert.That(factory.AiChecksMock.Object, Is.Not.Null);\n    }\n\n    [Test]\n    public void ModerationServiceMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new CallbackQueryHandlerTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.ModerationServiceMock, Is.Not.Null);\n        Assert.That(factory.ModerationServiceMock.Object, Is.Not.Null);\n    }\n\n    [Test]\n    public void LoggerMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new CallbackQueryHandlerTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.LoggerMock, Is.Not.Null);\n        Assert.That(factory.LoggerMock.Object, Is.Not.Null);\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestInfrastructure/CallbackQueryHandlerTestFactoryTests.cs::CallbackQueryHandlerTestFactoryTests::ModerationServiceMock_IsProperlyConfigured",
+        "file": "TestInfrastructure/CallbackQueryHandlerTestFactoryTests.cs",
+        "namespace": "ClubDoorman.TestInfrastructure",
+        "class": "CallbackQueryHandlerTestFactoryTests",
+        "test_name": "ModerationServiceMock_IsProperlyConfigured",
+        "line": 133,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 8,
+        "declared_area_from_path": "TestInfrastructure",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 148
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestInfrastructure/CallbackQueryHandlerTestFactoryTests.cs\n# Lines 103-154 (test starts at line 133)\n        // Arrange\n        var factory = new CallbackQueryHandlerTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.BadMessageManagerMock, Is.Not.Null);\n        Assert.That(factory.BadMessageManagerMock.Object, Is.Not.Null);\n    }\n\n    [Test]\n    public void StatisticsServiceMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new CallbackQueryHandlerTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.StatisticsServiceMock, Is.Not.Null);\n        Assert.That(factory.StatisticsServiceMock.Object, Is.Not.Null);\n    }\n\n    [Test]\n    public void AiChecksMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new CallbackQueryHandlerTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.AiChecksMock, Is.Not.Null);\n        Assert.That(factory.AiChecksMock.Object, Is.Not.Null);\n    }\n\n    [Test]\n    public void ModerationServiceMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new CallbackQueryHandlerTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.ModerationServiceMock, Is.Not.Null);\n        Assert.That(factory.ModerationServiceMock.Object, Is.Not.Null);\n    }\n\n    [Test]\n    public void LoggerMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new CallbackQueryHandlerTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.LoggerMock, Is.Not.Null);\n        Assert.That(factory.LoggerMock.Object, Is.Not.Null);\n    }\n}\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestInfrastructure/CallbackQueryHandlerTestFactoryTests.cs::CallbackQueryHandlerTestFactoryTests::LoggerMock_IsProperlyConfigured",
+        "file": "TestInfrastructure/CallbackQueryHandlerTestFactoryTests.cs",
+        "namespace": "ClubDoorman.TestInfrastructure",
+        "class": "CallbackQueryHandlerTestFactoryTests",
+        "test_name": "LoggerMock_IsProperlyConfigured",
+        "line": 144,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 8,
+        "declared_area_from_path": "TestInfrastructure",
+        "construction_path": "none_or_pure",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": true,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 149
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestInfrastructure/CallbackQueryHandlerTestFactoryTests.cs\n# Lines 114-154 (test starts at line 144)\n        // Arrange\n        var factory = new CallbackQueryHandlerTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.StatisticsServiceMock, Is.Not.Null);\n        Assert.That(factory.StatisticsServiceMock.Object, Is.Not.Null);\n    }\n\n    [Test]\n    public void AiChecksMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new CallbackQueryHandlerTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.AiChecksMock, Is.Not.Null);\n        Assert.That(factory.AiChecksMock.Object, Is.Not.Null);\n    }\n\n    [Test]\n    public void ModerationServiceMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new CallbackQueryHandlerTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.ModerationServiceMock, Is.Not.Null);\n        Assert.That(factory.ModerationServiceMock.Object, Is.Not.Null);\n    }\n\n    [Test]\n    public void LoggerMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new CallbackQueryHandlerTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.LoggerMock, Is.Not.Null);\n        Assert.That(factory.LoggerMock.Object, Is.Not.Null);\n    }\n}\n"
+    }
+  ]
+}

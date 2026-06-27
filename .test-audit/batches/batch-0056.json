@@ -1,0 +1,448 @@
+{
+  "schema_version": "test-audit-batch-v1",
+  "batch_no": 56,
+  "purpose": "local LLM audit input",
+  "instructions": "Return JSONL only. One audit object per input test. No markdown. No code edits.",
+  "tests": [
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/UserManagerExtendedTests.cs::UserManagerExtendedTests::InBanlist_MaxLongUserId_ReturnsBanlistStatus",
+        "file": "Unit/Services/UserManagerExtendedTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "UserManagerExtendedTests",
+        "test_name": "InBanlist_MaxLongUserId_ReturnsBanlistStatus",
+        "line": 347,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 13,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify"
+        ],
+        "_source_lineno": 831
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/UserManagerExtendedTests.cs\n# Lines 317-377 (test starts at line 347)\n    {\n        // Arrange\n        var userId = 0L;\n        _userManagerMock.Setup(x => x.InBanlist(userId))\n            .ReturnsAsync(false);\n\n        // Act\n        var result = await _userManagerMock.Object.InBanlist(userId);\n\n        // Assert\n        Assert.That(result, Is.False);\n        _userManagerMock.Verify(x => x.InBanlist(userId), Times.Once);\n    }\n\n    [Test]\n    public async Task InBanlist_NegativeUserId_ReturnsBanlistStatus()\n    {\n        // Arrange\n        var userId = -12345L;\n        _userManagerMock.Setup(x => x.InBanlist(userId))\n            .ReturnsAsync(false);\n\n        // Act\n        var result = await _userManagerMock.Object.InBanlist(userId);\n\n        // Assert\n        Assert.That(result, Is.False);\n        _userManagerMock.Verify(x => x.InBanlist(userId), Times.Once);\n    }\n\n    [Test]\n    public async Task InBanlist_MaxLongUserId_ReturnsBanlistStatus()\n    {\n        // Arrange\n        var userId = long.MaxValue;\n        _userManagerMock.Setup(x => x.InBanlist(userId))\n            .ReturnsAsync(false);\n\n        // Act\n        var result = await _userManagerMock.Object.InBanlist(userId);\n\n        // Assert\n        Assert.That(result, Is.False);\n        _userManagerMock.Verify(x => x.InBanlist(userId), Times.Once);\n    }\n\n    #endregion\n\n    #region GetClubUsername Tests\n\n    [Test]\n    public async Task GetClubUsername_ValidUserId_ReturnsUsername()\n    {\n        // Arrange\n        var userId = 12345L;\n        var expectedUsername = \"john_doe\";\n        _userManagerMock.Setup(x => x.GetClubUsername(userId))\n            .ReturnsAsync(expectedUsername);\n\n        // Act\n        var result = await _userManagerMock.Object.GetClubUsername(userId);\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/UserManagerExtendedTests.cs::UserManagerExtendedTests::GetClubUsername_ValidUserId_ReturnsUsername",
+        "file": "Unit/Services/UserManagerExtendedTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "UserManagerExtendedTests",
+        "test_name": "GetClubUsername_ValidUserId_ReturnsUsername",
+        "line": 367,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 14,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify"
+        ],
+        "_source_lineno": 832
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/UserManagerExtendedTests.cs\n# Lines 337-397 (test starts at line 367)\n            .ReturnsAsync(false);\n\n        // Act\n        var result = await _userManagerMock.Object.InBanlist(userId);\n\n        // Assert\n        Assert.That(result, Is.False);\n        _userManagerMock.Verify(x => x.InBanlist(userId), Times.Once);\n    }\n\n    [Test]\n    public async Task InBanlist_MaxLongUserId_ReturnsBanlistStatus()\n    {\n        // Arrange\n        var userId = long.MaxValue;\n        _userManagerMock.Setup(x => x.InBanlist(userId))\n            .ReturnsAsync(false);\n\n        // Act\n        var result = await _userManagerMock.Object.InBanlist(userId);\n\n        // Assert\n        Assert.That(result, Is.False);\n        _userManagerMock.Verify(x => x.InBanlist(userId), Times.Once);\n    }\n\n    #endregion\n\n    #region GetClubUsername Tests\n\n    [Test]\n    public async Task GetClubUsername_ValidUserId_ReturnsUsername()\n    {\n        // Arrange\n        var userId = 12345L;\n        var expectedUsername = \"john_doe\";\n        _userManagerMock.Setup(x => x.GetClubUsername(userId))\n            .ReturnsAsync(expectedUsername);\n\n        // Act\n        var result = await _userManagerMock.Object.GetClubUsername(userId);\n\n        // Assert\n        Assert.That(result, Is.EqualTo(expectedUsername));\n        _userManagerMock.Verify(x => x.GetClubUsername(userId), Times.Once);\n    }\n\n    [Test]\n    public async Task GetClubUsername_ZeroUserId_ReturnsUsername()\n    {\n        // Arrange\n        var userId = 0L;\n        _userManagerMock.Setup(x => x.GetClubUsername(userId))\n            .ReturnsAsync((string?)null);\n\n        // Act\n        var result = await _userManagerMock.Object.GetClubUsername(userId);\n\n        // Assert\n        Assert.That(result, Is.Null);\n        _userManagerMock.Verify(x => x.GetClubUsername(userId), Times.Once);\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/UserManagerExtendedTests.cs::UserManagerExtendedTests::GetClubUsername_ZeroUserId_ReturnsUsername",
+        "file": "Unit/Services/UserManagerExtendedTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "UserManagerExtendedTests",
+        "test_name": "GetClubUsername_ZeroUserId_ReturnsUsername",
+        "line": 384,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 13,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify"
+        ],
+        "_source_lineno": 833
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/UserManagerExtendedTests.cs\n# Lines 354-414 (test starts at line 384)\n\n        // Act\n        var result = await _userManagerMock.Object.InBanlist(userId);\n\n        // Assert\n        Assert.That(result, Is.False);\n        _userManagerMock.Verify(x => x.InBanlist(userId), Times.Once);\n    }\n\n    #endregion\n\n    #region GetClubUsername Tests\n\n    [Test]\n    public async Task GetClubUsername_ValidUserId_ReturnsUsername()\n    {\n        // Arrange\n        var userId = 12345L;\n        var expectedUsername = \"john_doe\";\n        _userManagerMock.Setup(x => x.GetClubUsername(userId))\n            .ReturnsAsync(expectedUsername);\n\n        // Act\n        var result = await _userManagerMock.Object.GetClubUsername(userId);\n\n        // Assert\n        Assert.That(result, Is.EqualTo(expectedUsername));\n        _userManagerMock.Verify(x => x.GetClubUsername(userId), Times.Once);\n    }\n\n    [Test]\n    public async Task GetClubUsername_ZeroUserId_ReturnsUsername()\n    {\n        // Arrange\n        var userId = 0L;\n        _userManagerMock.Setup(x => x.GetClubUsername(userId))\n            .ReturnsAsync((string?)null);\n\n        // Act\n        var result = await _userManagerMock.Object.GetClubUsername(userId);\n\n        // Assert\n        Assert.That(result, Is.Null);\n        _userManagerMock.Verify(x => x.GetClubUsername(userId), Times.Once);\n    }\n\n    [Test]\n    public async Task GetClubUsername_NegativeUserId_ReturnsUsername()\n    {\n        // Arrange\n        var userId = -12345L;\n        _userManagerMock.Setup(x => x.GetClubUsername(userId))\n            .ReturnsAsync((string?)null);\n\n        // Act\n        var result = await _userManagerMock.Object.GetClubUsername(userId);\n\n        // Assert\n        Assert.That(result, Is.Null);\n        _userManagerMock.Verify(x => x.GetClubUsername(userId), Times.Once);\n    }\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/UserManagerExtendedTests.cs::UserManagerExtendedTests::GetClubUsername_NegativeUserId_ReturnsUsername",
+        "file": "Unit/Services/UserManagerExtendedTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "UserManagerExtendedTests",
+        "test_name": "GetClubUsername_NegativeUserId_ReturnsUsername",
+        "line": 400,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 13,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify"
+        ],
+        "_source_lineno": 834
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/UserManagerExtendedTests.cs\n# Lines 370-430 (test starts at line 400)\n        // Arrange\n        var userId = 12345L;\n        var expectedUsername = \"john_doe\";\n        _userManagerMock.Setup(x => x.GetClubUsername(userId))\n            .ReturnsAsync(expectedUsername);\n\n        // Act\n        var result = await _userManagerMock.Object.GetClubUsername(userId);\n\n        // Assert\n        Assert.That(result, Is.EqualTo(expectedUsername));\n        _userManagerMock.Verify(x => x.GetClubUsername(userId), Times.Once);\n    }\n\n    [Test]\n    public async Task GetClubUsername_ZeroUserId_ReturnsUsername()\n    {\n        // Arrange\n        var userId = 0L;\n        _userManagerMock.Setup(x => x.GetClubUsername(userId))\n            .ReturnsAsync((string?)null);\n\n        // Act\n        var result = await _userManagerMock.Object.GetClubUsername(userId);\n\n        // Assert\n        Assert.That(result, Is.Null);\n        _userManagerMock.Verify(x => x.GetClubUsername(userId), Times.Once);\n    }\n\n    [Test]\n    public async Task GetClubUsername_NegativeUserId_ReturnsUsername()\n    {\n        // Arrange\n        var userId = -12345L;\n        _userManagerMock.Setup(x => x.GetClubUsername(userId))\n            .ReturnsAsync((string?)null);\n\n        // Act\n        var result = await _userManagerMock.Object.GetClubUsername(userId);\n\n        // Assert\n        Assert.That(result, Is.Null);\n        _userManagerMock.Verify(x => x.GetClubUsername(userId), Times.Once);\n    }\n\n    [Test]\n    public async Task GetClubUsername_UserNotFound_ReturnsNull()\n    {\n        // Arrange\n        var userId = 99999L;\n        _userManagerMock.Setup(x => x.GetClubUsername(userId))\n            .ReturnsAsync((string?)null);\n\n        // Act\n        var result = await _userManagerMock.Object.GetClubUsername(userId);\n\n        // Assert\n        Assert.That(result, Is.Null);\n        _userManagerMock.Verify(x => x.GetClubUsername(userId), Times.Once);\n    }\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/UserManagerExtendedTests.cs::UserManagerExtendedTests::GetClubUsername_UserNotFound_ReturnsNull",
+        "file": "Unit/Services/UserManagerExtendedTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "UserManagerExtendedTests",
+        "test_name": "GetClubUsername_UserNotFound_ReturnsNull",
+        "line": 416,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 13,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify"
+        ],
+        "_source_lineno": 835
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/UserManagerExtendedTests.cs\n# Lines 386-446 (test starts at line 416)\n    {\n        // Arrange\n        var userId = 0L;\n        _userManagerMock.Setup(x => x.GetClubUsername(userId))\n            .ReturnsAsync((string?)null);\n\n        // Act\n        var result = await _userManagerMock.Object.GetClubUsername(userId);\n\n        // Assert\n        Assert.That(result, Is.Null);\n        _userManagerMock.Verify(x => x.GetClubUsername(userId), Times.Once);\n    }\n\n    [Test]\n    public async Task GetClubUsername_NegativeUserId_ReturnsUsername()\n    {\n        // Arrange\n        var userId = -12345L;\n        _userManagerMock.Setup(x => x.GetClubUsername(userId))\n            .ReturnsAsync((string?)null);\n\n        // Act\n        var result = await _userManagerMock.Object.GetClubUsername(userId);\n\n        // Assert\n        Assert.That(result, Is.Null);\n        _userManagerMock.Verify(x => x.GetClubUsername(userId), Times.Once);\n    }\n\n    [Test]\n    public async Task GetClubUsername_UserNotFound_ReturnsNull()\n    {\n        // Arrange\n        var userId = 99999L;\n        _userManagerMock.Setup(x => x.GetClubUsername(userId))\n            .ReturnsAsync((string?)null);\n\n        // Act\n        var result = await _userManagerMock.Object.GetClubUsername(userId);\n\n        // Assert\n        Assert.That(result, Is.Null);\n        _userManagerMock.Verify(x => x.GetClubUsername(userId), Times.Once);\n    }\n\n    [Test]\n    public async Task GetClubUsername_EmptyUsername_ReturnsEmptyString()\n    {\n        // Arrange\n        var userId = 12345L;\n        var expectedUsername = \"\";\n        _userManagerMock.Setup(x => x.GetClubUsername(userId))\n            .ReturnsAsync(expectedUsername);\n\n        // Act\n        var result = await _userManagerMock.Object.GetClubUsername(userId);\n\n        // Assert\n        Assert.That(result, Is.EqualTo(expectedUsername));\n        _userManagerMock.Verify(x => x.GetClubUsername(userId), Times.Once);\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/UserManagerExtendedTests.cs::UserManagerExtendedTests::GetClubUsername_EmptyUsername_ReturnsEmptyString",
+        "file": "Unit/Services/UserManagerExtendedTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "UserManagerExtendedTests",
+        "test_name": "GetClubUsername_EmptyUsername_ReturnsEmptyString",
+        "line": 432,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 14,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify"
+        ],
+        "_source_lineno": 836
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/UserManagerExtendedTests.cs\n# Lines 402-462 (test starts at line 432)\n    {\n        // Arrange\n        var userId = -12345L;\n        _userManagerMock.Setup(x => x.GetClubUsername(userId))\n            .ReturnsAsync((string?)null);\n\n        // Act\n        var result = await _userManagerMock.Object.GetClubUsername(userId);\n\n        // Assert\n        Assert.That(result, Is.Null);\n        _userManagerMock.Verify(x => x.GetClubUsername(userId), Times.Once);\n    }\n\n    [Test]\n    public async Task GetClubUsername_UserNotFound_ReturnsNull()\n    {\n        // Arrange\n        var userId = 99999L;\n        _userManagerMock.Setup(x => x.GetClubUsername(userId))\n            .ReturnsAsync((string?)null);\n\n        // Act\n        var result = await _userManagerMock.Object.GetClubUsername(userId);\n\n        // Assert\n        Assert.That(result, Is.Null);\n        _userManagerMock.Verify(x => x.GetClubUsername(userId), Times.Once);\n    }\n\n    [Test]\n    public async Task GetClubUsername_EmptyUsername_ReturnsEmptyString()\n    {\n        // Arrange\n        var userId = 12345L;\n        var expectedUsername = \"\";\n        _userManagerMock.Setup(x => x.GetClubUsername(userId))\n            .ReturnsAsync(expectedUsername);\n\n        // Act\n        var result = await _userManagerMock.Object.GetClubUsername(userId);\n\n        // Assert\n        Assert.That(result, Is.EqualTo(expectedUsername));\n        _userManagerMock.Verify(x => x.GetClubUsername(userId), Times.Once);\n    }\n\n    #endregion\n\n    #region RefreshBanlist Tests\n\n    [Test]\n    public async Task RefreshBanlist_ExecutesSuccessfully()\n    {\n        // Arrange\n        _userManagerMock.Setup(x => x.RefreshBanlist())\n            .Returns(Task.CompletedTask);\n\n        // Act\n        await _userManagerMock.Object.RefreshBanlist();\n\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/UserManagerExtendedTests.cs::UserManagerExtendedTests::RefreshBanlist_ExecutesSuccessfully",
+        "file": "Unit/Services/UserManagerExtendedTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "UserManagerExtendedTests",
+        "test_name": "RefreshBanlist_ExecutesSuccessfully",
+        "line": 453,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 11,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify"
+        ],
+        "_source_lineno": 837
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/UserManagerExtendedTests.cs\n# Lines 423-483 (test starts at line 453)\n\n        // Act\n        var result = await _userManagerMock.Object.GetClubUsername(userId);\n\n        // Assert\n        Assert.That(result, Is.Null);\n        _userManagerMock.Verify(x => x.GetClubUsername(userId), Times.Once);\n    }\n\n    [Test]\n    public async Task GetClubUsername_EmptyUsername_ReturnsEmptyString()\n    {\n        // Arrange\n        var userId = 12345L;\n        var expectedUsername = \"\";\n        _userManagerMock.Setup(x => x.GetClubUsername(userId))\n            .ReturnsAsync(expectedUsername);\n\n        // Act\n        var result = await _userManagerMock.Object.GetClubUsername(userId);\n\n        // Assert\n        Assert.That(result, Is.EqualTo(expectedUsername));\n        _userManagerMock.Verify(x => x.GetClubUsername(userId), Times.Once);\n    }\n\n    #endregion\n\n    #region RefreshBanlist Tests\n\n    [Test]\n    public async Task RefreshBanlist_ExecutesSuccessfully()\n    {\n        // Arrange\n        _userManagerMock.Setup(x => x.RefreshBanlist())\n            .Returns(Task.CompletedTask);\n\n        // Act\n        await _userManagerMock.Object.RefreshBanlist();\n\n        // Assert\n        _userManagerMock.Verify(x => x.RefreshBanlist(), Times.Once);\n    }\n\n    [Test]\n    public async Task RefreshBanlist_ThrowsException_HandlesGracefully()\n    {\n        // Arrange\n        _userManagerMock.Setup(x => x.RefreshBanlist())\n            .ThrowsAsync(new InvalidOperationException(\"Network error\"));\n\n        // Act & Assert\n        var exception = Assert.ThrowsAsync<InvalidOperationException>(\n            async () => await _userManagerMock.Object.RefreshBanlist());\n\n        Assert.That(exception.Message, Is.EqualTo(\"Network error\"));\n        _userManagerMock.Verify(x => x.RefreshBanlist(), Times.Once);\n    }\n\n    #endregion\n\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/UserManagerExtendedTests.cs::UserManagerExtendedTests::RefreshBanlist_ThrowsException_HandlesGracefully",
+        "file": "Unit/Services/UserManagerExtendedTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "UserManagerExtendedTests",
+        "test_name": "RefreshBanlist_ThrowsException_HandlesGracefully",
+        "line": 467,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 12,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": true,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify"
+        ],
+        "_source_lineno": 838
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/UserManagerExtendedTests.cs\n# Lines 437-497 (test starts at line 467)\n        var expectedUsername = \"\";\n        _userManagerMock.Setup(x => x.GetClubUsername(userId))\n            .ReturnsAsync(expectedUsername);\n\n        // Act\n        var result = await _userManagerMock.Object.GetClubUsername(userId);\n\n        // Assert\n        Assert.That(result, Is.EqualTo(expectedUsername));\n        _userManagerMock.Verify(x => x.GetClubUsername(userId), Times.Once);\n    }\n\n    #endregion\n\n    #region RefreshBanlist Tests\n\n    [Test]\n    public async Task RefreshBanlist_ExecutesSuccessfully()\n    {\n        // Arrange\n        _userManagerMock.Setup(x => x.RefreshBanlist())\n            .Returns(Task.CompletedTask);\n\n        // Act\n        await _userManagerMock.Object.RefreshBanlist();\n\n        // Assert\n        _userManagerMock.Verify(x => x.RefreshBanlist(), Times.Once);\n    }\n\n    [Test]\n    public async Task RefreshBanlist_ThrowsException_HandlesGracefully()\n    {\n        // Arrange\n        _userManagerMock.Setup(x => x.RefreshBanlist())\n            .ThrowsAsync(new InvalidOperationException(\"Network error\"));\n\n        // Act & Assert\n        var exception = Assert.ThrowsAsync<InvalidOperationException>(\n            async () => await _userManagerMock.Object.RefreshBanlist());\n\n        Assert.That(exception.Message, Is.EqualTo(\"Network error\"));\n        _userManagerMock.Verify(x => x.RefreshBanlist(), Times.Once);\n    }\n\n    #endregion\n\n    #region Edge Cases and Error Handling\n\n    [Test]\n    public async Task Approve_ThenRemoveApproval_WorksCorrectly()\n    {\n        // Arrange\n        var userId = 12345L;\n        _userManagerMock.Setup(x => x.Approve(userId, null))\n            .Returns(ValueTask.CompletedTask);\n        _userManagerMock.Setup(x => x.RemoveApproval(userId, null, false))\n            .Returns(true);\n\n        // Act\n        await _userManagerMock.Object.Approve(userId);\n"
+    }
+  ]
+}

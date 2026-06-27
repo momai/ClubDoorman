@@ -1,0 +1,426 @@
+{
+  "schema_version": "test-audit-batch-v1",
+  "batch_no": 6,
+  "purpose": "local LLM audit input",
+  "instructions": "Return JSONL only. One audit object per input test. No markdown. No code edits.",
+  "tests": [
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Integration/MessageHandlerBanTests.cs::MessageHandlerBanTests::HandleBlacklistBan_WhenUserInBlacklist_BansUser",
+        "file": "Integration/MessageHandlerBanTests.cs",
+        "namespace": "ClubDoorman.Test.Integration",
+        "class": "MessageHandlerBanTests",
+        "test_name": "HandleBlacklistBan_WhenUserInBlacklist_BansUser",
+        "line": 158,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 36,
+        "declared_area_from_path": "Integration",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": true,
+          "uses_message_envelope": true,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify",
+          "message_handler_test_factory"
+        ],
+        "_source_lineno": 65
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Integration/MessageHandlerBanTests.cs\n# Lines 128-188 (test starts at line 158)\n        var message = TK.CreateChannelMessage(channel.Id, chat.Id, \"Channel message\");\n        message.SenderChat = channel;\n        message.Chat = chat;\n\n        // Используем стандартную настройку из инфраструктуры\n        factory.SetupChannelTestScenario(chat);\n\n        // Настраиваем UserBanService для вызова AutoBanChannel\n        // ДОЛЖНО быть ПОСЛЕ SetupChannelTestScenario, чтобы не перезаписаться\n        factory.UserBanServiceMock.Setup(x => x.AutoBanChannelAsync(\n            It.IsAny<Message>(),\n            It.IsAny<CancellationToken>()))\n            .Returns(Task.CompletedTask);\n\n        // Config.ChannelAutoBan - статическое свойство, по умолчанию true\n        // Создаем MessageHandler с моком UserBanService\n        var handler = factory.CreateMessageHandler();\n\n        // Act\n        var update = new Update { Message = message };\n        await handler.HandleAsync(update, CancellationToken.None);\n\n        // Assert - проверяем новое поведение через ChannelModerationService\n        factory.ChannelModerationServiceMock.Verify(\n            x => x.HandleChannelMessageAsync(\n                It.IsAny<Message>(),\n                It.IsAny<CancellationToken>()),\n            Times.Once);\n    }\n\n    [Test]\n    public async Task HandleBlacklistBan_WhenUserInBlacklist_BansUser()\n    {\n        // Arrange\n        var user = TK.CreateValidUser();\n        var chat = TK.CreateGroupChat();\n        var message = TK.CreateValidMessage();\n        message.From = user;\n        message.Chat = chat;\n\n        var envelope = new MessageEnvelope(\n            MessageId: 461,\n            ChatId: chat.Id,\n            UserId: user.Id,\n            Text: \"User message\"\n        );\n\n        _fakeClient.RegisterMessageEnvelope(envelope);\n\n        // Настройка моков для сценария обработки бана из блэклиста\n        _factory.SetupBlacklistBanHandlingScenario(user, \"Пользователь в блэклисте\");\n\n        // Создаем MessageHandler с моком UserBanService\n        _handler = _factory.CreateMessageHandler();\n\n        // Act\n        var update = new Update { Message = message };\n        await _handler.HandleAsync(update, CancellationToken.None);\n\n        // Assert - проверяем вызов UserBanService\n        _factory.UserBanServiceMock.Verify(\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Integration/MessageHandlerBanTests.cs::MessageHandlerBanTests::WhenModerationReturnsBan_ShouldCallAutoBanAsync",
+        "file": "Integration/MessageHandlerBanTests.cs",
+        "namespace": "ClubDoorman.Test.Integration",
+        "class": "MessageHandlerBanTests",
+        "test_name": "WhenModerationReturnsBan_ShouldCallAutoBanAsync",
+        "line": 200,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "ban",
+          "moderation"
+        ],
+        "body_lines": 35,
+        "declared_area_from_path": "Integration",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": true,
+          "uses_message_envelope": true,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify",
+          "message_handler_test_factory"
+        ],
+        "_source_lineno": 66
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Integration/MessageHandlerBanTests.cs\n# Lines 170-230 (test starts at line 200)\n            ChatId: chat.Id,\n            UserId: user.Id,\n            Text: \"User message\"\n        );\n\n        _fakeClient.RegisterMessageEnvelope(envelope);\n\n        // Настройка моков для сценария обработки бана из блэклиста\n        _factory.SetupBlacklistBanHandlingScenario(user, \"Пользователь в блэклисте\");\n\n        // Создаем MessageHandler с моком UserBanService\n        _handler = _factory.CreateMessageHandler();\n\n        // Act\n        var update = new Update { Message = message };\n        await _handler.HandleAsync(update, CancellationToken.None);\n\n        // Assert - проверяем вызов UserBanService\n        _factory.UserBanServiceMock.Verify(\n            x => x.HandleBlacklistBanAsync(\n                It.IsAny<Message>(),\n                It.IsAny<User>(),\n                It.IsAny<Chat>(),\n                It.IsAny<CancellationToken>()),\n            Times.Once);\n    }\n\n    [Test]\n    [Category(\"ban\")]\n    [Category(\"moderation\")]\n    public async Task WhenModerationReturnsBan_ShouldCallAutoBanAsync()\n    {\n        // Arrange\n        var user = TK.CreateValidUser();\n        var chat = TK.CreateGroupChat();\n        var message = TK.CreateValidMessage();\n        message.From = user;\n        message.Chat = chat;\n\n        var envelope = new MessageEnvelope(\n            MessageId: 462,\n            ChatId: chat.Id,\n            UserId: user.Id,\n            Text: \"spam message\"\n        );\n\n        _fakeClient.RegisterMessageEnvelope(envelope);\n\n        // Настройка моков для сценария бана по результату модерации\n        _factory.SetupModerationBanScenario(\"Спам сообщение\");\n\n        // Создаем MessageHandler с моком UserBanService\n        _handler = _factory.CreateMessageHandler();\n\n        // Act\n        var update = new Update { Message = message };\n        await _handler.HandleAsync(update, CancellationToken.None);\n\n        // Assert - проверяем вызов UserBanService\n        _factory.UserBanServiceMock.Verify(\n            x => x.AutoBanAsync(\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Integration/MessageHandlerBanTests.cs::MessageHandlerBanTests::WhenModerationReturnsBan_ShouldLogUserBanned",
+        "file": "Integration/MessageHandlerBanTests.cs",
+        "namespace": "ClubDoorman.Test.Integration",
+        "class": "MessageHandlerBanTests",
+        "test_name": "WhenModerationReturnsBan_ShouldLogUserBanned",
+        "line": 240,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "ban",
+          "moderation",
+          "ban",
+          "moderation"
+        ],
+        "body_lines": 23,
+        "declared_area_from_path": "Integration",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": true,
+          "uses_message_envelope": true,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify",
+          "message_handler_test_factory"
+        ],
+        "_source_lineno": 67
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Integration/MessageHandlerBanTests.cs\n# Lines 210-270 (test starts at line 240)\n            MessageId: 462,\n            ChatId: chat.Id,\n            UserId: user.Id,\n            Text: \"spam message\"\n        );\n\n        _fakeClient.RegisterMessageEnvelope(envelope);\n\n        // Настройка моков для сценария бана по результату модерации\n        _factory.SetupModerationBanScenario(\"Спам сообщение\");\n\n        // Создаем MessageHandler с моком UserBanService\n        _handler = _factory.CreateMessageHandler();\n\n        // Act\n        var update = new Update { Message = message };\n        await _handler.HandleAsync(update, CancellationToken.None);\n\n        // Assert - проверяем вызов UserBanService\n        _factory.UserBanServiceMock.Verify(\n            x => x.AutoBanAsync(\n                It.IsAny<Message>(),\n                It.IsAny<string>(),\n                It.IsAny<CancellationToken>()),\n            Times.Once);\n    }\n\n    [Test]\n    [Category(\"ban\")]\n    [Category(\"moderation\")]\n    public async Task WhenModerationReturnsBan_ShouldLogUserBanned()\n    {\n        // Arrange\n        var factory = new MessageHandlerTestFactory();\n        var user = TK.CreateValidUser();\n        var chat = TK.CreateGroupChat();\n        var message = TK.CreateTextMessage(user.Id, chat.Id, \"spam message\");\n        message.Chat = chat;\n\n        // Используем новую настройку для сценария бана по модерации\n        factory.SetupModerationBanScenario(\"Спам сообщение\");\n\n        // Создаем MessageHandler после настройки всех моков\n        var handler = factory.CreateMessageHandlerWithRealUserBanService();\n\n        // Act\n        var update = new Update { Message = message };\n        await handler.HandleAsync(update, CancellationToken.None);\n\n        // Assert\n        factory.UserFlowLoggerMock.Verify(\n            x => x.LogUserBanned(It.IsAny<User>(), It.IsAny<Chat>(), \"Спам сообщение\"),\n            Times.Once);\n    }\n\n    [Test]\n    [Category(\"ban\")]\n    [Category(\"ai\")]\n    [Ignore(\"AI/ML functionality not available in upstream momai version\")]\n    public async Task WhenAiConfirmsMlSuspicion_ShouldCallAutoBanAsync()\n    {\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Integration/MessageHandlerBanTests.cs::MessageHandlerBanTests::WhenAiConfirmsMlSuspicion_ShouldCallAutoBanAsync",
+        "file": "Integration/MessageHandlerBanTests.cs",
+        "namespace": "ClubDoorman.Test.Integration",
+        "class": "MessageHandlerBanTests",
+        "test_name": "WhenAiConfirmsMlSuspicion_ShouldCallAutoBanAsync",
+        "line": 269,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "ban",
+          "moderation",
+          "ban",
+          "ai"
+        ],
+        "body_lines": 35,
+        "declared_area_from_path": "Integration",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": true,
+          "uses_message_envelope": true,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify",
+          "message_handler_test_factory"
+        ],
+        "_source_lineno": 68
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Integration/MessageHandlerBanTests.cs\n# Lines 239-299 (test starts at line 269)\n    [Category(\"moderation\")]\n    public async Task WhenModerationReturnsBan_ShouldLogUserBanned()\n    {\n        // Arrange\n        var factory = new MessageHandlerTestFactory();\n        var user = TK.CreateValidUser();\n        var chat = TK.CreateGroupChat();\n        var message = TK.CreateTextMessage(user.Id, chat.Id, \"spam message\");\n        message.Chat = chat;\n\n        // Используем новую настройку для сценария бана по модерации\n        factory.SetupModerationBanScenario(\"Спам сообщение\");\n\n        // Создаем MessageHandler после настройки всех моков\n        var handler = factory.CreateMessageHandlerWithRealUserBanService();\n\n        // Act\n        var update = new Update { Message = message };\n        await handler.HandleAsync(update, CancellationToken.None);\n\n        // Assert\n        factory.UserFlowLoggerMock.Verify(\n            x => x.LogUserBanned(It.IsAny<User>(), It.IsAny<Chat>(), \"Спам сообщение\"),\n            Times.Once);\n    }\n\n    [Test]\n    [Category(\"ban\")]\n    [Category(\"ai\")]\n    [Ignore(\"AI/ML functionality not available in upstream momai version\")]\n    public async Task WhenAiConfirmsMlSuspicion_ShouldCallAutoBanAsync()\n    {\n        // Arrange\n        var factory = new MessageHandlerTestFactory();\n        var user = TK.CreateValidUser();\n        var chat = TK.CreateGroupChat();\n        var message = TK.CreateTextMessage(user.Id, chat.Id, \"suspicious message\");\n        message.Chat = chat;\n\n        // Используем настройку для AI подтверждения ML подозрения\n        factory.SetupAiMlBanScenario(probability: 0.85, reason: \"ML подозрение подтверждено\");\n\n        // Создаем MessageHandler после настройки всех моков\n        var handler = factory.CreateMessageHandlerWithRealUserBanService();\n\n        // Act\n        var update = new Update { Message = message };\n        await handler.HandleAsync(update, CancellationToken.None);\n\n        // Assert - проверяем legacy поведение (прямые вызовы бота)\n        factory.BotMock.Verify(\n            x => x.BanChatMember(\n                It.IsAny<ChatId>(),\n                It.IsAny<long>(),\n                It.IsAny<DateTime?>(),\n                It.IsAny<bool>(),\n                It.IsAny<CancellationToken>()),\n            Times.Once);\n\n        factory.BotMock.Verify(\n            x => x.DeleteMessage(\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Integration/MessageHandlerBanTests.cs::MessageHandlerBanTests::WhenAiRejectsMlSuspicion_ShouldNotCallAutoBanAsync",
+        "file": "Integration/MessageHandlerBanTests.cs",
+        "namespace": "ClubDoorman.Test.Integration",
+        "class": "MessageHandlerBanTests",
+        "test_name": "WhenAiRejectsMlSuspicion_ShouldNotCallAutoBanAsync",
+        "line": 309,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "ban",
+          "ai",
+          "ban",
+          "ai"
+        ],
+        "body_lines": 23,
+        "declared_area_from_path": "Integration",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": true,
+          "uses_message_envelope": true,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify",
+          "message_handler_test_factory"
+        ],
+        "_source_lineno": 69
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Integration/MessageHandlerBanTests.cs\n# Lines 279-339 (test starts at line 309)\n        factory.SetupAiMlBanScenario(probability: 0.85, reason: \"ML подозрение подтверждено\");\n\n        // Создаем MessageHandler после настройки всех моков\n        var handler = factory.CreateMessageHandlerWithRealUserBanService();\n\n        // Act\n        var update = new Update { Message = message };\n        await handler.HandleAsync(update, CancellationToken.None);\n\n        // Assert - проверяем legacy поведение (прямые вызовы бота)\n        factory.BotMock.Verify(\n            x => x.BanChatMember(\n                It.IsAny<ChatId>(),\n                It.IsAny<long>(),\n                It.IsAny<DateTime?>(),\n                It.IsAny<bool>(),\n                It.IsAny<CancellationToken>()),\n            Times.Once);\n\n        factory.BotMock.Verify(\n            x => x.DeleteMessage(\n                It.IsAny<ChatId>(),\n                It.IsAny<int>(),\n                It.IsAny<CancellationToken>()),\n            Times.Once);\n    }\n\n    [Test]\n    [Category(\"ban\")]\n    [Category(\"ai\")]\n    public async Task WhenAiRejectsMlSuspicion_ShouldNotCallAutoBanAsync()\n    {\n        // Arrange\n        var factory = new MessageHandlerTestFactory();\n        var user = TK.CreateValidUser();\n        var chat = TK.CreateGroupChat();\n        var message = TK.CreateTextMessage(user.Id, chat.Id, \"suspicious message\");\n        message.Chat = chat;\n\n        // Используем настройку для AI отклонения ML подозрения\n        factory.SetupAiMlRejectScenario(probability: 0.25, reason: \"ML подозрение отклонено\");\n\n        // Создаем MessageHandler после настройки всех моков\n        var handler = factory.CreateMessageHandlerWithRealUserBanService();\n\n        // Act\n        var update = new Update { Message = message };\n        await handler.HandleAsync(update, CancellationToken.None);\n\n        // Assert\n        factory.UserBanServiceMock.Verify(\n            x => x.AutoBanAsync(It.IsAny<Message>(), It.IsAny<string>(), It.IsAny<CancellationToken>()),\n            Times.Never);\n    }\n\n    [Test]\n    [Category(\"ban\")]\n    [Category(\"violations\")]\n    public async Task WhenRepeatedViolations_ShouldCallAutoBanAsync()\n    {\n        // Arrange\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Integration/MessageHandlerBanTests.cs::MessageHandlerBanTests::WhenRepeatedViolations_ShouldCallAutoBanAsync",
+        "file": "Integration/MessageHandlerBanTests.cs",
+        "namespace": "ClubDoorman.Test.Integration",
+        "class": "MessageHandlerBanTests",
+        "test_name": "WhenRepeatedViolations_ShouldCallAutoBanAsync",
+        "line": 337,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "ban",
+          "ai",
+          "ban",
+          "violations"
+        ],
+        "body_lines": 65,
+        "declared_area_from_path": "Integration",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": true,
+          "uses_message_envelope": true,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify",
+          "message_handler_test_factory"
+        ],
+        "_source_lineno": 70
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Integration/MessageHandlerBanTests.cs\n# Lines 307-367 (test starts at line 337)\n    [Category(\"ban\")]\n    [Category(\"ai\")]\n    public async Task WhenAiRejectsMlSuspicion_ShouldNotCallAutoBanAsync()\n    {\n        // Arrange\n        var factory = new MessageHandlerTestFactory();\n        var user = TK.CreateValidUser();\n        var chat = TK.CreateGroupChat();\n        var message = TK.CreateTextMessage(user.Id, chat.Id, \"suspicious message\");\n        message.Chat = chat;\n\n        // Используем настройку для AI отклонения ML подозрения\n        factory.SetupAiMlRejectScenario(probability: 0.25, reason: \"ML подозрение отклонено\");\n\n        // Создаем MessageHandler после настройки всех моков\n        var handler = factory.CreateMessageHandlerWithRealUserBanService();\n\n        // Act\n        var update = new Update { Message = message };\n        await handler.HandleAsync(update, CancellationToken.None);\n\n        // Assert\n        factory.UserBanServiceMock.Verify(\n            x => x.AutoBanAsync(It.IsAny<Message>(), It.IsAny<string>(), It.IsAny<CancellationToken>()),\n            Times.Never);\n    }\n\n    [Test]\n    [Category(\"ban\")]\n    [Category(\"violations\")]\n    public async Task WhenRepeatedViolations_ShouldCallAutoBanAsync()\n    {\n        // Arrange\n        var factory = new MessageHandlerTestFactory();\n        var user = TK.CreateValidUser();\n        var chat = TK.CreateGroupChat();\n        var message = TK.CreateValidMessage();\n        message.From = user;\n        message.Chat = chat;\n\n        // Настраиваем базовые моки\n        factory.WithAppConfigSetup(mock =>\n        {\n            mock.Setup(x => x.IsChatAllowed(It.IsAny<long>())).Returns(true);\n            mock.Setup(x => x.DisabledChats).Returns(new HashSet<long>());\n            mock.Setup(x => x.AdminChatId).Returns(123456789);\n            mock.Setup(x => x.LogAdminChatId).Returns(987654321);\n            mock.Setup(x => x.MlViolationsBeforeBan).Returns(1);\n        });\n\n        factory.WithBotPermissionsServiceSetup(mock =>\n        {\n            mock.Setup(x => x.IsSilentModeAsync(It.IsAny<long>(), It.IsAny<CancellationToken>()))\n                .ReturnsAsync(false);\n        });\n\n        factory.WithUserManagerSetup(mock =>\n        {\n            mock.Setup(x => x.InBanlist(It.IsAny<long>())).ReturnsAsync(false);\n            mock.Setup(x => x.GetClubUsername(It.IsAny<long>())).ReturnsAsync((string?)null);\n        });\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Integration/MessageHandlerBanTests.cs::MessageHandlerBanTests::WhenFirstViolation_ShouldNotCallAutoBanAsync",
+        "file": "Integration/MessageHandlerBanTests.cs",
+        "namespace": "ClubDoorman.Test.Integration",
+        "class": "MessageHandlerBanTests",
+        "test_name": "WhenFirstViolation_ShouldNotCallAutoBanAsync",
+        "line": 407,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "ban",
+          "violations"
+        ],
+        "body_lines": 29,
+        "declared_area_from_path": "Integration",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": true,
+          "uses_message_envelope": true,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify",
+          "message_handler_test_factory"
+        ],
+        "_source_lineno": 71
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Integration/MessageHandlerBanTests.cs\n# Lines 377-437 (test starts at line 407)\n        factory.ModerationFacadeMock.Setup(x => x.CheckMessageAsync(It.IsAny<Message>()))\n            .ReturnsAsync(new ModerationResult(ModerationAction.Delete, \"ML решил что это спам\"));\n\n        // Настраиваем ViolationTracker для возврата true (достигнут лимит нарушений)\n        factory.WithViolationTrackerSetup(mock =>\n        {\n            mock.Setup(x => x.RegisterViolation(It.IsAny<long>(), It.IsAny<long>(), It.IsAny<ViolationType>()))\n                .Returns(true); // Достигнут лимит нарушений - бан нужен\n        });\n\n        // Создаем MessageHandler с моком UserBanService\n        var handler = factory.CreateMessageHandler();\n\n        // Act\n        var update = new Update { Message = message };\n        await handler.HandleAsync(update, CancellationToken.None);\n\n        // Assert - проверяем вызов UserBanService\n        factory.UserBanServiceMock.Verify(\n            x => x.TrackViolationAndBanIfNeededAsync(\n                It.IsAny<Message>(),\n                It.IsAny<User>(),\n                It.IsAny<string>(),\n                It.IsAny<CancellationToken>()),\n            Times.Once);\n    }\n\n    [Test]\n    [Category(\"ban\")]\n    [Category(\"violations\")]\n    public async Task WhenFirstViolation_ShouldNotCallAutoBanAsync()\n    {\n        // Arrange\n        var factory = new MessageHandlerTestFactory();\n        var user = TK.CreateValidUser();\n        var chat = TK.CreateGroupChat();\n        var message = TK.CreateValidMessage();\n        message.From = user;\n        message.Chat = chat;\n\n        // Используем стандартную настройку, но ViolationTracker возвращает false (первое нарушение)\n        factory.SetupStandardBanTestScenario();\n        factory.WithViolationTrackerSetup(mock =>\n        {\n            mock.Setup(x => x.RegisterViolation(It.IsAny<long>(), It.IsAny<long>(), It.IsAny<ViolationType>()))\n                .Returns(false); // Первое нарушение - бан не нужен\n        });\n\n        // Создаем MessageHandler с моком UserBanService\n        var handler = factory.CreateMessageHandler();\n\n        // Act\n        var update = new Update { Message = message };\n        await handler.HandleAsync(update, CancellationToken.None);\n\n        // Assert\n        factory.UserBanServiceMock.Verify(\n            x => x.AutoBanAsync(It.IsAny<Message>(), It.IsAny<string>(), It.IsAny<CancellationToken>()),\n            Times.Never);\n    }\n\n"
+    }
+  ]
+}

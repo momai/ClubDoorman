@@ -1,0 +1,452 @@
+{
+  "schema_version": "test-audit-batch-v1",
+  "batch_no": 47,
+  "purpose": "local LLM audit input",
+  "instructions": "Return JSONL only. One audit object per input test. No markdown. No code edits.",
+  "tests": [
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/CaptchaServiceFakeTests.cs::CaptchaServiceFakeTests::ValidateCaptchaAsync_CorrectAnswer_ReturnsTrue",
+        "file": "Unit/Services/CaptchaServiceFakeTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "CaptchaServiceFakeTests",
+        "test_name": "ValidateCaptchaAsync_CorrectAnswer_ReturnsTrue",
+        "line": 98,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 16,
+        "declared_area_from_path": "Unit",
+        "construction_path": "custom_local_world",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": true,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "real_env_or_api"
+        ],
+        "_source_lineno": 622
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/CaptchaServiceFakeTests.cs\n# Lines 68-128 (test starts at line 98)\n        var service = CreateCaptchaService();\n\n        // Act\n        var captchaInfo = await service.CreateCaptchaAsync(new CreateCaptchaRequest(chat, user, null));\n\n        // Assert\n        Assert.That(captchaInfo, Is.Not.Null);\n        Assert.That(captchaInfo.User.Id, Is.EqualTo(789));\n\n        _messageServiceMock.Verify(x => x.SendCaptchaMessageAsync(It.IsAny<SendCaptchaMessageRequest>()), Times.Once);\n    }\n\n    [Test]\n    public async Task CreateCaptchaAsync_UserWithInappropriateName_UsesGenericName()\n    {\n        // Arrange\n        _messageServiceMock.Setup(x => x.SendCaptchaMessageAsync(\n            It.IsAny<SendCaptchaMessageRequest>()))\n        .ReturnsAsync(new global::Telegram.Bot.Types.Message());\n\n        var service = CreateCaptchaService();\n        var userWithInappropriateName = new User { Id = 999, FirstName = \"p0rn\", LastName = \"User\" };\n\n        // Act\n        var captchaInfo = await service.CreateCaptchaAsync(new CreateCaptchaRequest(chat, userWithInappropriateName, null));\n\n        // Assert\n        _messageServiceMock.Verify(x => x.SendCaptchaMessageAsync(It.IsAny<SendCaptchaMessageRequest>()), Times.Once);\n    }\n\n    [Test]\n    public async Task ValidateCaptchaAsync_CorrectAnswer_ReturnsTrue()\n    {\n        // Arrange\n        _messageServiceMock.Setup(x => x.SendCaptchaMessageAsync(\n            It.IsAny<SendCaptchaMessageRequest>()))\n        .ReturnsAsync(new global::Telegram.Bot.Types.Message());\n\n        var service = CreateCaptchaService();\n\n        // Act - сначала создаем капчу\n        var createdCaptcha = await service.CreateCaptchaAsync(new CreateCaptchaRequest(chat, user, null));\n        var key = service.GenerateKey(chat.Id, user.Id);\n        var result = await service.ValidateCaptchaAsync(key, createdCaptcha.CorrectAnswer);\n\n        // Assert\n        Assert.That(result, Is.True);\n    }\n\n    [Test]\n    public async Task ValidateCaptchaAsync_WrongAnswer_ReturnsFalse()\n    {\n        // Arrange\n        _messageServiceMock.Setup(x => x.SendCaptchaMessageAsync(\n            It.IsAny<SendCaptchaMessageRequest>()))\n        .ReturnsAsync(new global::Telegram.Bot.Types.Message());\n\n        var service = CreateCaptchaService();\n        var key = service.GenerateKey(chat.Id, user.Id);\n\n        // Act\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/CaptchaServiceFakeTests.cs::CaptchaServiceFakeTests::ValidateCaptchaAsync_WrongAnswer_ReturnsFalse",
+        "file": "Unit/Services/CaptchaServiceFakeTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "CaptchaServiceFakeTests",
+        "test_name": "ValidateCaptchaAsync_WrongAnswer_ReturnsFalse",
+        "line": 117,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 15,
+        "declared_area_from_path": "Unit",
+        "construction_path": "custom_local_world",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": true,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "real_env_or_api"
+        ],
+        "_source_lineno": 623
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/CaptchaServiceFakeTests.cs\n# Lines 87-147 (test starts at line 117)\n\n        var service = CreateCaptchaService();\n        var userWithInappropriateName = new User { Id = 999, FirstName = \"p0rn\", LastName = \"User\" };\n\n        // Act\n        var captchaInfo = await service.CreateCaptchaAsync(new CreateCaptchaRequest(chat, userWithInappropriateName, null));\n\n        // Assert\n        _messageServiceMock.Verify(x => x.SendCaptchaMessageAsync(It.IsAny<SendCaptchaMessageRequest>()), Times.Once);\n    }\n\n    [Test]\n    public async Task ValidateCaptchaAsync_CorrectAnswer_ReturnsTrue()\n    {\n        // Arrange\n        _messageServiceMock.Setup(x => x.SendCaptchaMessageAsync(\n            It.IsAny<SendCaptchaMessageRequest>()))\n        .ReturnsAsync(new global::Telegram.Bot.Types.Message());\n\n        var service = CreateCaptchaService();\n\n        // Act - сначала создаем капчу\n        var createdCaptcha = await service.CreateCaptchaAsync(new CreateCaptchaRequest(chat, user, null));\n        var key = service.GenerateKey(chat.Id, user.Id);\n        var result = await service.ValidateCaptchaAsync(key, createdCaptcha.CorrectAnswer);\n\n        // Assert\n        Assert.That(result, Is.True);\n    }\n\n    [Test]\n    public async Task ValidateCaptchaAsync_WrongAnswer_ReturnsFalse()\n    {\n        // Arrange\n        _messageServiceMock.Setup(x => x.SendCaptchaMessageAsync(\n            It.IsAny<SendCaptchaMessageRequest>()))\n        .ReturnsAsync(new global::Telegram.Bot.Types.Message());\n\n        var service = CreateCaptchaService();\n        var key = service.GenerateKey(chat.Id, user.Id);\n\n        // Act\n        var result = await service.ValidateCaptchaAsync(key, 999); // Неправильный ответ\n\n        // Assert\n        Assert.That(result, Is.False);\n    }\n\n    [Test]\n    public async Task CreateCaptchaAsync_TelegramError_ThrowsException()\n    {\n        // Arrange\n        _messageServiceMock.Setup(x => x.SendCaptchaMessageAsync(\n            It.IsAny<SendCaptchaMessageRequest>()))\n        .ThrowsAsync(new Exception(\"Telegram API error\"));\n\n        var service = CreateCaptchaService();\n\n        // Act & Assert\n        var caughtException = Assert.ThrowsAsync<Exception>(async () =>\n        {\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/CaptchaServiceFakeTests.cs::CaptchaServiceFakeTests::CreateCaptchaAsync_TelegramError_ThrowsException",
+        "file": "Unit/Services/CaptchaServiceFakeTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "CaptchaServiceFakeTests",
+        "test_name": "CreateCaptchaAsync_TelegramError_ThrowsException",
+        "line": 135,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 16,
+        "declared_area_from_path": "Unit",
+        "construction_path": "custom_local_world",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": true,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": true,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "real_env_or_api"
+        ],
+        "_source_lineno": 624
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/CaptchaServiceFakeTests.cs\n# Lines 105-165 (test starts at line 135)\n\n        var service = CreateCaptchaService();\n\n        // Act - сначала создаем капчу\n        var createdCaptcha = await service.CreateCaptchaAsync(new CreateCaptchaRequest(chat, user, null));\n        var key = service.GenerateKey(chat.Id, user.Id);\n        var result = await service.ValidateCaptchaAsync(key, createdCaptcha.CorrectAnswer);\n\n        // Assert\n        Assert.That(result, Is.True);\n    }\n\n    [Test]\n    public async Task ValidateCaptchaAsync_WrongAnswer_ReturnsFalse()\n    {\n        // Arrange\n        _messageServiceMock.Setup(x => x.SendCaptchaMessageAsync(\n            It.IsAny<SendCaptchaMessageRequest>()))\n        .ReturnsAsync(new global::Telegram.Bot.Types.Message());\n\n        var service = CreateCaptchaService();\n        var key = service.GenerateKey(chat.Id, user.Id);\n\n        // Act\n        var result = await service.ValidateCaptchaAsync(key, 999); // Неправильный ответ\n\n        // Assert\n        Assert.That(result, Is.False);\n    }\n\n    [Test]\n    public async Task CreateCaptchaAsync_TelegramError_ThrowsException()\n    {\n        // Arrange\n        _messageServiceMock.Setup(x => x.SendCaptchaMessageAsync(\n            It.IsAny<SendCaptchaMessageRequest>()))\n        .ThrowsAsync(new Exception(\"Telegram API error\"));\n\n        var service = CreateCaptchaService();\n\n        // Act & Assert\n        var caughtException = Assert.ThrowsAsync<Exception>(async () =>\n        {\n            await service.CreateCaptchaAsync(new CreateCaptchaRequest(chat, user, null));\n        });\n\n        Assert.That(caughtException.Message, Is.EqualTo(\"Telegram API error\"));\n    }\n\n    [Test]\n    public void GenerateKey_ValidIds_ReturnsExpectedKey()\n    {\n        // Arrange\n        var service = _factory.CreateCaptchaService();\n        var chatId = 123456L;\n        var userId = 789L;\n\n        // Act\n        var key = service.GenerateKey(chatId, userId);\n\n        // Assert\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/CaptchaServiceFakeTests.cs::CaptchaServiceFakeTests::GenerateKey_ValidIds_ReturnsExpectedKey",
+        "file": "Unit/Services/CaptchaServiceFakeTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "CaptchaServiceFakeTests",
+        "test_name": "GenerateKey_ValidIds_ReturnsExpectedKey",
+        "line": 154,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 12,
+        "declared_area_from_path": "Unit",
+        "construction_path": "custom_local_world",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": true,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "real_env_or_api"
+        ],
+        "_source_lineno": 625
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/CaptchaServiceFakeTests.cs\n# Lines 124-184 (test starts at line 154)\n\n        var service = CreateCaptchaService();\n        var key = service.GenerateKey(chat.Id, user.Id);\n\n        // Act\n        var result = await service.ValidateCaptchaAsync(key, 999); // Неправильный ответ\n\n        // Assert\n        Assert.That(result, Is.False);\n    }\n\n    [Test]\n    public async Task CreateCaptchaAsync_TelegramError_ThrowsException()\n    {\n        // Arrange\n        _messageServiceMock.Setup(x => x.SendCaptchaMessageAsync(\n            It.IsAny<SendCaptchaMessageRequest>()))\n        .ThrowsAsync(new Exception(\"Telegram API error\"));\n\n        var service = CreateCaptchaService();\n\n        // Act & Assert\n        var caughtException = Assert.ThrowsAsync<Exception>(async () =>\n        {\n            await service.CreateCaptchaAsync(new CreateCaptchaRequest(chat, user, null));\n        });\n\n        Assert.That(caughtException.Message, Is.EqualTo(\"Telegram API error\"));\n    }\n\n    [Test]\n    public void GenerateKey_ValidIds_ReturnsExpectedKey()\n    {\n        // Arrange\n        var service = _factory.CreateCaptchaService();\n        var chatId = 123456L;\n        var userId = 789L;\n\n        // Act\n        var key = service.GenerateKey(chatId, userId);\n\n        // Assert\n        Assert.That(key, Is.EqualTo(\"123456_789\"));\n    }\n\n    [Test]\n    public async Task CreateCaptchaAsync_IncludesVpnAd_ByDefault()\n    {\n        // Arrange\n        _messageServiceMock.Setup(x => x.SendCaptchaMessageAsync(\n            It.IsAny<SendCaptchaMessageRequest>()))\n        .ReturnsAsync(new global::Telegram.Bot.Types.Message());\n\n        var service = CreateCaptchaService();\n\n        // Act\n        var captchaInfo = await service.CreateCaptchaAsync(new CreateCaptchaRequest(chat, user, null));\n\n        // Assert\n        _messageServiceMock.Verify(x => x.SendCaptchaMessageAsync(\n            It.Is<SendCaptchaMessageRequest>(req => req.Chat.Id == 123456 && req.Message.Contains(\"📍 Место для рекламы\"))), Times.Once);\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/CaptchaServiceFakeTests.cs::CaptchaServiceFakeTests::ValidateCaptchaAsync_ExpiredCaptcha_ReturnsFalse",
+        "file": "Unit/Services/CaptchaServiceFakeTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "CaptchaServiceFakeTests",
+        "test_name": "ValidateCaptchaAsync_ExpiredCaptcha_ReturnsFalse",
+        "line": 187,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 15,
+        "declared_area_from_path": "Unit",
+        "construction_path": "custom_local_world",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": true,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "real_env_or_api"
+        ],
+        "_source_lineno": 627
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/CaptchaServiceFakeTests.cs\n# Lines 157-217 (test starts at line 187)\n        // Arrange\n        var service = _factory.CreateCaptchaService();\n        var chatId = 123456L;\n        var userId = 789L;\n\n        // Act\n        var key = service.GenerateKey(chatId, userId);\n\n        // Assert\n        Assert.That(key, Is.EqualTo(\"123456_789\"));\n    }\n\n    [Test]\n    public async Task CreateCaptchaAsync_IncludesVpnAd_ByDefault()\n    {\n        // Arrange\n        _messageServiceMock.Setup(x => x.SendCaptchaMessageAsync(\n            It.IsAny<SendCaptchaMessageRequest>()))\n        .ReturnsAsync(new global::Telegram.Bot.Types.Message());\n\n        var service = CreateCaptchaService();\n\n        // Act\n        var captchaInfo = await service.CreateCaptchaAsync(new CreateCaptchaRequest(chat, user, null));\n\n        // Assert\n        _messageServiceMock.Verify(x => x.SendCaptchaMessageAsync(\n            It.Is<SendCaptchaMessageRequest>(req => req.Chat.Id == 123456 && req.Message.Contains(\"📍 Место для рекламы\"))), Times.Once);\n    }\n\n    [Test]\n    public async Task ValidateCaptchaAsync_ExpiredCaptcha_ReturnsFalse()\n    {\n        // Arrange\n        _messageServiceMock.Setup(x => x.SendCaptchaMessageAsync(\n            It.IsAny<SendCaptchaMessageRequest>()))\n        .ReturnsAsync(new global::Telegram.Bot.Types.Message());\n\n        var service = CreateCaptchaService();\n        var key = service.GenerateKey(chat.Id, user.Id);\n\n        // Act - используем неправильный ответ, чтобы проверить что капча работает\n        var result = await service.ValidateCaptchaAsync(key, 999);\n\n        // Assert\n        Assert.That(result, Is.False);\n    }\n\n    [Test]\n    public async Task ValidateCaptchaAsync_InvalidKey_ReturnsFalse()\n    {\n        // Arrange\n        var service = _factory.CreateCaptchaService();\n        var invalidKey = \"invalid_key\";\n\n        // Act\n        var result = await service.ValidateCaptchaAsync(invalidKey, 123);\n\n        // Assert\n        Assert.That(result, Is.False);\n    }\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/CaptchaServiceFakeTests.cs::CaptchaServiceFakeTests::ValidateCaptchaAsync_InvalidKey_ReturnsFalse",
+        "file": "Unit/Services/CaptchaServiceFakeTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "CaptchaServiceFakeTests",
+        "test_name": "ValidateCaptchaAsync_InvalidKey_ReturnsFalse",
+        "line": 205,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 11,
+        "declared_area_from_path": "Unit",
+        "construction_path": "custom_local_world",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": true,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "real_env_or_api"
+        ],
+        "_source_lineno": 628
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/CaptchaServiceFakeTests.cs\n# Lines 175-235 (test starts at line 205)\n        .ReturnsAsync(new global::Telegram.Bot.Types.Message());\n\n        var service = CreateCaptchaService();\n\n        // Act\n        var captchaInfo = await service.CreateCaptchaAsync(new CreateCaptchaRequest(chat, user, null));\n\n        // Assert\n        _messageServiceMock.Verify(x => x.SendCaptchaMessageAsync(\n            It.Is<SendCaptchaMessageRequest>(req => req.Chat.Id == 123456 && req.Message.Contains(\"📍 Место для рекламы\"))), Times.Once);\n    }\n\n    [Test]\n    public async Task ValidateCaptchaAsync_ExpiredCaptcha_ReturnsFalse()\n    {\n        // Arrange\n        _messageServiceMock.Setup(x => x.SendCaptchaMessageAsync(\n            It.IsAny<SendCaptchaMessageRequest>()))\n        .ReturnsAsync(new global::Telegram.Bot.Types.Message());\n\n        var service = CreateCaptchaService();\n        var key = service.GenerateKey(chat.Id, user.Id);\n\n        // Act - используем неправильный ответ, чтобы проверить что капча работает\n        var result = await service.ValidateCaptchaAsync(key, 999);\n\n        // Assert\n        Assert.That(result, Is.False);\n    }\n\n    [Test]\n    public async Task ValidateCaptchaAsync_InvalidKey_ReturnsFalse()\n    {\n        // Arrange\n        var service = _factory.CreateCaptchaService();\n        var invalidKey = \"invalid_key\";\n\n        // Act\n        var result = await service.ValidateCaptchaAsync(invalidKey, 123);\n\n        // Assert\n        Assert.That(result, Is.False);\n    }\n\n    [Test]\n    public async Task GetCaptchaInfo_ValidKey_ReturnsCaptchaInfo()\n    {\n        // Arrange\n        _messageServiceMock.Setup(x => x.SendCaptchaMessageAsync(\n            It.IsAny<SendCaptchaMessageRequest>()))\n        .ReturnsAsync(new global::Telegram.Bot.Types.Message());\n\n        var service = CreateCaptchaService();\n\n        // Act - сначала создаем капчу\n        var createdCaptcha = await service.CreateCaptchaAsync(new CreateCaptchaRequest(chat, user, null));\n        var key = service.GenerateKey(chat.Id, user.Id);\n        var captchaInfo = service.GetCaptchaInfo(key);\n\n        // Assert\n        Assert.That(captchaInfo, Is.Not.Null);\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/CaptchaServiceFakeTests.cs::CaptchaServiceFakeTests::RemoveCaptcha_ValidKey_ReturnsTrue",
+        "file": "Unit/Services/CaptchaServiceFakeTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "CaptchaServiceFakeTests",
+        "test_name": "RemoveCaptcha_ValidKey_ReturnsTrue",
+        "line": 239,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 17,
+        "declared_area_from_path": "Unit",
+        "construction_path": "custom_local_world",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": true,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "real_env_or_api"
+        ],
+        "_source_lineno": 630
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/CaptchaServiceFakeTests.cs\n# Lines 209-258 (test starts at line 239)\n        var service = _factory.CreateCaptchaService();\n        var invalidKey = \"invalid_key\";\n\n        // Act\n        var result = await service.ValidateCaptchaAsync(invalidKey, 123);\n\n        // Assert\n        Assert.That(result, Is.False);\n    }\n\n    [Test]\n    public async Task GetCaptchaInfo_ValidKey_ReturnsCaptchaInfo()\n    {\n        // Arrange\n        _messageServiceMock.Setup(x => x.SendCaptchaMessageAsync(\n            It.IsAny<SendCaptchaMessageRequest>()))\n        .ReturnsAsync(new global::Telegram.Bot.Types.Message());\n\n        var service = CreateCaptchaService();\n\n        // Act - сначала создаем капчу\n        var createdCaptcha = await service.CreateCaptchaAsync(new CreateCaptchaRequest(chat, user, null));\n        var key = service.GenerateKey(chat.Id, user.Id);\n        var captchaInfo = service.GetCaptchaInfo(key);\n\n        // Assert\n        Assert.That(captchaInfo, Is.Not.Null);\n        Assert.That(captchaInfo.User.Id, Is.EqualTo(789));\n    }\n\n    [Test]\n    public async Task RemoveCaptcha_ValidKey_ReturnsTrue()\n    {\n        // Arrange\n        _messageServiceMock.Setup(x => x.SendCaptchaMessageAsync(\n            It.IsAny<SendCaptchaMessageRequest>()))\n        .ReturnsAsync(new global::Telegram.Bot.Types.Message());\n\n        var service = CreateCaptchaService();\n\n        // Act - сначала создаем капчу\n        var createdCaptcha = await service.CreateCaptchaAsync(new CreateCaptchaRequest(chat, user, null));\n        var key = service.GenerateKey(chat.Id, user.Id);\n        var result = service.RemoveCaptcha(key);\n\n        // Assert\n        Assert.That(result, Is.True);\n        Assert.That(service.GetCaptchaInfo(key), Is.Null);\n    }\n}"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/CommandProcessingServiceTests.cs::CommandProcessingServiceTests::HandleCommandAsync_ValidMessage_ProxiesToMessageHandler",
+        "file": "Unit/Services/CommandProcessingServiceTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "CommandProcessingServiceTests",
+        "test_name": "HandleCommandAsync_ValidMessage_ProxiesToMessageHandler",
+        "line": 40,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "unit",
+          "services",
+          "command-processing"
+        ],
+        "body_lines": 11,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify"
+        ],
+        "_source_lineno": 640
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/CommandProcessingServiceTests.cs\n# Lines 10-53 (test starts at line 40)\nusing ClubDoorman.Features.AdminOps;\n\nnamespace ClubDoorman.Test.Unit.Services;\n\n/// <summary>\n/// Тесты для CommandProcessingService\n/// <tags>unit, services, command-processing, proxy</tags>\n/// </summary>\n[TestFixture]\n[Category(\"unit\")]\n[Category(\"services\")]\n[Category(\"command-processing\")]\npublic class CommandProcessingServiceTests\n{\n    private Mock<ICommandRouter> _commandRouterMock = null!;\n    private Mock<ILogger<CommandProcessingService>> _loggerMock = null!;\n    private CommandProcessingService _service = null!;\n\n    [SetUp]\n    public void Setup()\n    {\n        _commandRouterMock = new Mock<ICommandRouter>();\n        _loggerMock = new Mock<ILogger<CommandProcessingService>>();\n        _service = new CommandProcessingService(_commandRouterMock.Object, _loggerMock.Object);\n    }\n\n    /// <summary>\n    /// POC: Проверка проксирования вызова HandleCommandAsync\n    /// <tags>poc, proxy, command-processing</tags>\n    /// </summary>\n    [Test]\n    public async Task HandleCommandAsync_ValidMessage_ProxiesToMessageHandler()\n    {\n        // Arrange\n        var message = TK.CreateMessage();\n        var cancellationToken = CancellationToken.None;\n\n        // Act\n        await _service.HandleCommandAsync(message, cancellationToken);\n\n        // Assert\n        _commandRouterMock.Verify(x => x.HandleCommandAsync(message, cancellationToken), Times.Once);\n    }\n}"
+    }
+  ]
+}

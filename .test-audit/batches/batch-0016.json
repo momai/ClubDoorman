@@ -1,0 +1,404 @@
+{
+  "schema_version": "test-audit-batch-v1",
+  "batch_no": 16,
+  "purpose": "local LLM audit input",
+  "instructions": "Return JSONL only. One audit object per input test. No markdown. No code edits.",
+  "tests": [
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Handlers/MessageHandlerHandleAsyncBasicTests.cs::MessageHandlerHandleAsyncBasicTests::HandleAsync_EditedMessage_CallsModerationAndLogs",
+        "file": "Unit/Handlers/MessageHandlerHandleAsyncBasicTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Handlers",
+        "class": "MessageHandlerHandleAsyncBasicTests",
+        "test_name": "HandleAsync_EditedMessage_CallsModerationAndLogs",
+        "line": 128,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 31,
+        "declared_area_from_path": "Unit",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify",
+          "message_handler_test_factory"
+        ],
+        "_source_lineno": 364
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Handlers/MessageHandlerHandleAsyncBasicTests.cs\n# Lines 98-158 (test starts at line 128)\n\n        // Assert: Проверяем вызовы модерации - используем конкретный объект\n        _factory.ModerationFacadeMock.Verify(\n            x => x.CheckMessageAsync(message),\n            Times.Once,\n            \"Должна вызваться проверка сообщения\");\n\n        // CheckUserNameAsync вызывается только для новых участников, не для обычных сообщений\n        _factory.ModerationFacadeMock.Verify(\n            x => x.CheckUserNameAsync(It.IsAny<User>()),\n            Times.Never,\n            \"CheckUserNameAsync не должен вызываться для обычных сообщений\");\n\n        // Проверяем логирование - используем реальные сообщения из логов\n        _factory.LoggerMock.Verify(\n            x => x.Log(\n                LogLevel.Debug,\n                It.IsAny<EventId>(),\n                It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains(\"MessageHandler получил сообщение\")),\n                It.IsAny<Exception>(),\n                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),\n            Times.Once,\n            \"Должно залогироваться получение сообщения\");\n    }\n\n    /// <summary>\n    /// Тест для HandleAsync с отредактированным сообщением\n    /// Проверяет, что метод обрабатывает отредактированное сообщение\n    /// <tags>golden-master, production, handle-async, edited-message</tags>\n    /// </summary>\n    [Test]\n    public async Task HandleAsync_EditedMessage_CallsModerationAndLogs()\n    {\n        // Arrange: Используем готовый сценарий из TestKit\n        var (user, chat, message) = TK.Specialized.Messages.TextOnlyScenario();\n        message.EditDate = DateTime.UtcNow;\n        var update = new Update { EditedMessage = message };\n\n        // Act: Вызываем метод\n        await _messageHandler.HandleAsync(update);\n\n        // Assert: Проверяем вызовы модерации - используем конкретный объект\n        _factory.ModerationFacadeMock.Verify(\n            x => x.CheckMessageAsync(message),\n            Times.Once,\n            \"Должна вызваться проверка отредактированного сообщения\");\n\n        _factory.ModerationFacadeMock.Verify(\n            x => x.CheckUserNameAsync(It.IsAny<User>()),\n            Times.Never,\n            \"CheckUserNameAsync не должен вызываться для обычных сообщений\");\n\n        // Проверяем логирование - используем реальные сообщения из логов\n        _factory.LoggerMock.Verify(\n            x => x.Log(\n                LogLevel.Debug,\n                It.IsAny<EventId>(),\n                It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains(\"MessageHandler получил сообщение\")),\n                It.IsAny<Exception>(),\n                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),\n            Times.Once,\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Handlers/MessageHandlerHandleAsyncBasicTests.cs::MessageHandlerHandleAsyncBasicTests::HandleAsync_ValidMessage_VerifiesSpecificCalls",
+        "file": "Unit/Handlers/MessageHandlerHandleAsyncBasicTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Handlers",
+        "class": "MessageHandlerHandleAsyncBasicTests",
+        "test_name": "HandleAsync_ValidMessage_VerifiesSpecificCalls",
+        "line": 167,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 36,
+        "declared_area_from_path": "Unit",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify",
+          "message_handler_test_factory"
+        ],
+        "_source_lineno": 365
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Handlers/MessageHandlerHandleAsyncBasicTests.cs\n# Lines 137-197 (test starts at line 167)\n        await _messageHandler.HandleAsync(update);\n\n        // Assert: Проверяем вызовы модерации - используем конкретный объект\n        _factory.ModerationFacadeMock.Verify(\n            x => x.CheckMessageAsync(message),\n            Times.Once,\n            \"Должна вызваться проверка отредактированного сообщения\");\n\n        _factory.ModerationFacadeMock.Verify(\n            x => x.CheckUserNameAsync(It.IsAny<User>()),\n            Times.Never,\n            \"CheckUserNameAsync не должен вызываться для обычных сообщений\");\n\n        // Проверяем логирование - используем реальные сообщения из логов\n        _factory.LoggerMock.Verify(\n            x => x.Log(\n                LogLevel.Debug,\n                It.IsAny<EventId>(),\n                It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains(\"MessageHandler получил сообщение\")),\n                It.IsAny<Exception>(),\n                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),\n            Times.Once,\n            \"Должно залогироваться получение отредактированного сообщения\");\n    }\n\n    /// <summary>\n    /// Тест для HandleAsync с конкретными проверками для убийства мутантов\n    /// Проверяет конкретные значения и состояния объектов\n    /// <tags>golden-master, production, handle-async, mutation-killing</tags>\n    /// </summary>\n    [Test]\n    public async Task HandleAsync_ValidMessage_VerifiesSpecificCalls()\n    {\n        // Arrange: Создаем конкретные объекты для точных проверок\n        var user = new User { Id = 12345, FirstName = \"Test\", Username = \"testuser\" };\n        var chat = new Chat { Id = -1001234567890, Type = ChatType.Supergroup, Title = \"Test Chat\" };\n        var message = new Message\n        {\n            Date = DateTime.UtcNow,\n            From = user,\n            Chat = chat,\n            Text = \"Hello world\"\n        };\n        var update = new Update { Message = message };\n\n        // Act: Вызываем метод\n        await _messageHandler.HandleAsync(update);\n\n        // Assert: Проверяем конкретные вызовы с точными параметрами\n        _factory.ModerationFacadeMock.Verify(\n            x => x.CheckMessageAsync(It.Is<Message>(m =>\n                m.Text == \"Hello world\" &&\n                m.From!.Id == 12345)),\n            Times.Once,\n            \"Должна вызваться проверка сообщения с точными параметрами\");\n\n        // Проверяем, что пользователь проверяется по блэклисту\n        _factory.UserManagerMock.Verify(\n            x => x.InBanlist(12345),\n            Times.AtLeastOnce(),\n            \"Проверка пользователя по блэклисту должна вызываться (pipeline+legacy могут давать 2 вызова на этапе миграции)\");\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Handlers/MessageHandlerHandleSayCommandTests.cs::MessageHandlerHandleSayCommandTests::HandleSayCommandAsync_WithInsufficientParts_SendsWarningMessage",
+        "file": "Unit/Handlers/MessageHandlerHandleSayCommandTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Handlers",
+        "class": "MessageHandlerHandleSayCommandTests",
+        "test_name": "HandleSayCommandAsync_WithInsufficientParts_SendsWarningMessage",
+        "line": 69,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "unit",
+          "handlers",
+          "say-command"
+        ],
+        "body_lines": 21,
+        "declared_area_from_path": "Unit",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify",
+          "message_handler_test_factory"
+        ],
+        "_source_lineno": 366
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Handlers/MessageHandlerHandleSayCommandTests.cs\n# Lines 39-99 (test starts at line 69)\n        // Настраиваем AppConfig для разрешения команды /say из тестового чата\n        _factory.AppConfigMock.Setup(x => x.AdminChatId).Returns(-1001234567890); // ID тестового чата\n        _factory.AppConfigMock.Setup(x => x.LogAdminChatId).Returns(-1001234567890);\n\n        // Настраиваем CommandRouter для обработки /say команд через SayCommandHandler\n        var sayCommandHandler = new SayCommandHandler(\n            _factory.BotMock.Object,\n            _factory.MessageServiceMock.Object,\n            _factory.AppConfigMock.Object,\n            NullLogger<SayCommandHandler>.Instance\n        );\n\n        _factory.CommandRouterMock.Setup(x => x.HandleCommandAsync(\n            It.Is<Message>(m => m.Text != null && m.Text.StartsWith(\"/say\")),\n            It.IsAny<CancellationToken>()))\n            .Returns<Message, CancellationToken>(async (message, ct) =>\n            {\n                await sayCommandHandler.HandleAsync(message, ct);\n                return true; // Возвращаем true, что команда обработана\n            });\n\n        // Добавляем отдельный setup для null или не-/say сообщений\n        _factory.CommandRouterMock.Setup(x => x.HandleCommandAsync(\n            It.Is<Message>(m => m.Text == null || !m.Text.StartsWith(\"/say\")),\n            It.IsAny<CancellationToken>()))\n            .ReturnsAsync(false); // Команда не обработана\n\n        _messageHandler = _factory.CreateMessageHandler();\n    }\n\n    [Test]\n    public async Task HandleSayCommandAsync_WithInsufficientParts_SendsWarningMessage()\n    {\n        // Arrange\n        var (user, chat, message) = TK.Specialized.Messages.TextOnlyScenario();\n        message.Text = \"/say @username\"; // Недостаточно частей\n\n        // Act\n        await _messageHandler.HandleCommandAsync(message, CancellationToken.None);\n\n        // Assert\n        _factory.MessageServiceMock.Verify(\n            x => x.SendUserNotificationAsync(\n                user,\n                chat,\n                UserNotificationType.Warning,\n                It.Is<SimpleNotificationData>(d => d.Reason!.Contains(\"Формат: /say\")),\n                It.IsAny<CancellationToken>()\n            ),\n            Times.Once,\n            \"Должно быть отправлено предупреждение о неправильном формате\"\n        );\n    }\n\n    [Test]\n    public async Task HandleSayCommandAsync_WithUsername_AttemptsToFindUserAndSendMessage()\n    {\n        // Arrange\n        var (user, chat, message) = TK.Specialized.Messages.TextOnlyScenario();\n        message.Text = \"/say 12345 Привет!\"; // используем userId вместо username\n\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Handlers/MessageHandlerHandleSayCommandTests.cs::MessageHandlerHandleSayCommandTests::HandleSayCommandAsync_WithUsername_AttemptsToFindUserAndSendMessage",
+        "file": "Unit/Handlers/MessageHandlerHandleSayCommandTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Handlers",
+        "class": "MessageHandlerHandleSayCommandTests",
+        "test_name": "HandleSayCommandAsync_WithUsername_AttemptsToFindUserAndSendMessage",
+        "line": 93,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 27,
+        "declared_area_from_path": "Unit",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify",
+          "message_handler_test_factory"
+        ],
+        "_source_lineno": 367
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Handlers/MessageHandlerHandleSayCommandTests.cs\n# Lines 63-123 (test starts at line 93)\n            It.IsAny<CancellationToken>()))\n            .ReturnsAsync(false); // Команда не обработана\n\n        _messageHandler = _factory.CreateMessageHandler();\n    }\n\n    [Test]\n    public async Task HandleSayCommandAsync_WithInsufficientParts_SendsWarningMessage()\n    {\n        // Arrange\n        var (user, chat, message) = TK.Specialized.Messages.TextOnlyScenario();\n        message.Text = \"/say @username\"; // Недостаточно частей\n\n        // Act\n        await _messageHandler.HandleCommandAsync(message, CancellationToken.None);\n\n        // Assert\n        _factory.MessageServiceMock.Verify(\n            x => x.SendUserNotificationAsync(\n                user,\n                chat,\n                UserNotificationType.Warning,\n                It.Is<SimpleNotificationData>(d => d.Reason!.Contains(\"Формат: /say\")),\n                It.IsAny<CancellationToken>()\n            ),\n            Times.Once,\n            \"Должно быть отправлено предупреждение о неправильном формате\"\n        );\n    }\n\n    [Test]\n    public async Task HandleSayCommandAsync_WithUsername_AttemptsToFindUserAndSendMessage()\n    {\n        // Arrange\n        var (user, chat, message) = TK.Specialized.Messages.TextOnlyScenario();\n        message.Text = \"/say 12345 Привет!\"; // используем userId вместо username\n\n        _factory.WithBotSetup(mock =>\n        {\n            mock.Setup(x => x.SendMessage(It.IsAny<ChatId>(), It.IsAny<string>(), It.IsAny<ParseMode>(), null, null, It.IsAny<CancellationToken>()))\n                .ReturnsAsync(message);\n        });\n\n        // Act\n        await _messageHandler.HandleCommandAsync(message, CancellationToken.None);\n\n        // Assert\n        _factory.MessageServiceMock.Verify(\n            x => x.SendUserNotificationAsync(\n                user,\n                chat,\n                UserNotificationType.Success,\n                It.Is<SimpleNotificationData>(d => d.Reason!.Contains(\"Сообщение отправлено\")),\n                It.IsAny<CancellationToken>()\n            ),\n            Times.Once,\n            \"Должно быть отправлено уведомление об успешной отправке\"\n        );\n    }\n\n    [Test]\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Handlers/MessageHandlerHandleSayCommandTests.cs::MessageHandlerHandleSayCommandTests::HandleSayCommandAsync_WithUserId_AttemptsToSendMessage",
+        "file": "Unit/Handlers/MessageHandlerHandleSayCommandTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Handlers",
+        "class": "MessageHandlerHandleSayCommandTests",
+        "test_name": "HandleSayCommandAsync_WithUserId_AttemptsToSendMessage",
+        "line": 123,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 21,
+        "declared_area_from_path": "Unit",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify",
+          "message_handler_test_factory"
+        ],
+        "_source_lineno": 368
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Handlers/MessageHandlerHandleSayCommandTests.cs\n# Lines 93-153 (test starts at line 123)\n    [Test]\n    public async Task HandleSayCommandAsync_WithUsername_AttemptsToFindUserAndSendMessage()\n    {\n        // Arrange\n        var (user, chat, message) = TK.Specialized.Messages.TextOnlyScenario();\n        message.Text = \"/say 12345 Привет!\"; // используем userId вместо username\n\n        _factory.WithBotSetup(mock =>\n        {\n            mock.Setup(x => x.SendMessage(It.IsAny<ChatId>(), It.IsAny<string>(), It.IsAny<ParseMode>(), null, null, It.IsAny<CancellationToken>()))\n                .ReturnsAsync(message);\n        });\n\n        // Act\n        await _messageHandler.HandleCommandAsync(message, CancellationToken.None);\n\n        // Assert\n        _factory.MessageServiceMock.Verify(\n            x => x.SendUserNotificationAsync(\n                user,\n                chat,\n                UserNotificationType.Success,\n                It.Is<SimpleNotificationData>(d => d.Reason!.Contains(\"Сообщение отправлено\")),\n                It.IsAny<CancellationToken>()\n            ),\n            Times.Once,\n            \"Должно быть отправлено уведомление об успешной отправке\"\n        );\n    }\n\n    [Test]\n    public async Task HandleSayCommandAsync_WithUserId_AttemptsToSendMessage()\n    {\n        // Arrange\n        var (user, chat, message) = TK.Specialized.Messages.TextOnlyScenario();\n        message.Text = \"/say 12345 Привет!\";\n\n        _factory.WithBotSetup(mock =>\n        {\n            mock.Setup(x => x.SendMessage(It.IsAny<ChatId>(), It.IsAny<string>(), It.IsAny<ParseMode>(), null, null, It.IsAny<CancellationToken>()))\n                .ReturnsAsync(message);\n        });\n\n        // Act\n        await _messageHandler.HandleCommandAsync(message, CancellationToken.None);\n\n        // Assert\n        _factory.BotMock.Verify(\n            x => x.SendMessage(It.Is<ChatId>(c => c.Identifier == 12345L), \"Привет!\", ParseMode.Markdown, null, null, It.IsAny<CancellationToken>()),\n            Times.Once,\n            \"Должно быть отправлено сообщение пользователю\"\n        );\n    }\n\n    [Test]\n    public async Task HandleSayCommandAsync_WithInvalidUsername_SendsWarningMessage()\n    {\n        // Arrange\n        var (user, chat, message) = TK.Specialized.Messages.TextOnlyScenario();\n        message.Text = \"/say @nonexistentuser Привет!\";\n\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Handlers/MessageHandlerHandleSayCommandTests.cs::MessageHandlerHandleSayCommandTests::HandleSayCommandAsync_WithInvalidUsername_SendsWarningMessage",
+        "file": "Unit/Handlers/MessageHandlerHandleSayCommandTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Handlers",
+        "class": "MessageHandlerHandleSayCommandTests",
+        "test_name": "HandleSayCommandAsync_WithInvalidUsername_SendsWarningMessage",
+        "line": 147,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 21,
+        "declared_area_from_path": "Unit",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify",
+          "message_handler_test_factory"
+        ],
+        "_source_lineno": 369
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Handlers/MessageHandlerHandleSayCommandTests.cs\n# Lines 117-177 (test starts at line 147)\n            ),\n            Times.Once,\n            \"Должно быть отправлено уведомление об успешной отправке\"\n        );\n    }\n\n    [Test]\n    public async Task HandleSayCommandAsync_WithUserId_AttemptsToSendMessage()\n    {\n        // Arrange\n        var (user, chat, message) = TK.Specialized.Messages.TextOnlyScenario();\n        message.Text = \"/say 12345 Привет!\";\n\n        _factory.WithBotSetup(mock =>\n        {\n            mock.Setup(x => x.SendMessage(It.IsAny<ChatId>(), It.IsAny<string>(), It.IsAny<ParseMode>(), null, null, It.IsAny<CancellationToken>()))\n                .ReturnsAsync(message);\n        });\n\n        // Act\n        await _messageHandler.HandleCommandAsync(message, CancellationToken.None);\n\n        // Assert\n        _factory.BotMock.Verify(\n            x => x.SendMessage(It.Is<ChatId>(c => c.Identifier == 12345L), \"Привет!\", ParseMode.Markdown, null, null, It.IsAny<CancellationToken>()),\n            Times.Once,\n            \"Должно быть отправлено сообщение пользователю\"\n        );\n    }\n\n    [Test]\n    public async Task HandleSayCommandAsync_WithInvalidUsername_SendsWarningMessage()\n    {\n        // Arrange\n        var (user, chat, message) = TK.Specialized.Messages.TextOnlyScenario();\n        message.Text = \"/say @nonexistentuser Привет!\";\n\n        // Act\n        await _messageHandler.HandleCommandAsync(message, CancellationToken.None);\n\n        // Assert\n        _factory.MessageServiceMock.Verify(\n            x => x.SendUserNotificationAsync(\n                user,\n                chat,\n                UserNotificationType.Warning,\n                It.Is<SimpleNotificationData>(d => d.Reason!.Contains(\"Не удалось найти пользователя\")),\n                It.IsAny<CancellationToken>()\n            ),\n            Times.Once,\n            \"Должно быть отправлено предупреждение о ненайденном пользователе\"\n        );\n    }\n\n    [Test]\n    public async Task HandleSayCommandAsync_WithInvalidUserId_SendsWarningMessage()\n    {\n        // Arrange\n        var (user, chat, message) = TK.Specialized.Messages.TextOnlyScenario();\n        message.Text = \"/say invalid_id Привет!\";\n\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Handlers/MessageHandlerHandleSayCommandTests.cs::MessageHandlerHandleSayCommandTests::HandleSayCommandAsync_WithInvalidUserId_SendsWarningMessage",
+        "file": "Unit/Handlers/MessageHandlerHandleSayCommandTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Handlers",
+        "class": "MessageHandlerHandleSayCommandTests",
+        "test_name": "HandleSayCommandAsync_WithInvalidUserId_SendsWarningMessage",
+        "line": 171,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 21,
+        "declared_area_from_path": "Unit",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": true,
+          "throws": false,
+          "state_assertion_suspected": false
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "mock_verify",
+          "message_handler_test_factory"
+        ],
+        "_source_lineno": 370
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Handlers/MessageHandlerHandleSayCommandTests.cs\n# Lines 141-201 (test starts at line 171)\n            x => x.SendMessage(It.Is<ChatId>(c => c.Identifier == 12345L), \"Привет!\", ParseMode.Markdown, null, null, It.IsAny<CancellationToken>()),\n            Times.Once,\n            \"Должно быть отправлено сообщение пользователю\"\n        );\n    }\n\n    [Test]\n    public async Task HandleSayCommandAsync_WithInvalidUsername_SendsWarningMessage()\n    {\n        // Arrange\n        var (user, chat, message) = TK.Specialized.Messages.TextOnlyScenario();\n        message.Text = \"/say @nonexistentuser Привет!\";\n\n        // Act\n        await _messageHandler.HandleCommandAsync(message, CancellationToken.None);\n\n        // Assert\n        _factory.MessageServiceMock.Verify(\n            x => x.SendUserNotificationAsync(\n                user,\n                chat,\n                UserNotificationType.Warning,\n                It.Is<SimpleNotificationData>(d => d.Reason!.Contains(\"Не удалось найти пользователя\")),\n                It.IsAny<CancellationToken>()\n            ),\n            Times.Once,\n            \"Должно быть отправлено предупреждение о ненайденном пользователе\"\n        );\n    }\n\n    [Test]\n    public async Task HandleSayCommandAsync_WithInvalidUserId_SendsWarningMessage()\n    {\n        // Arrange\n        var (user, chat, message) = TK.Specialized.Messages.TextOnlyScenario();\n        message.Text = \"/say invalid_id Привет!\";\n\n        // Act\n        await _messageHandler.HandleCommandAsync(message, CancellationToken.None);\n\n        // Assert\n        _factory.MessageServiceMock.Verify(\n            x => x.SendUserNotificationAsync(\n                user,\n                chat,\n                UserNotificationType.Warning,\n                It.Is<SimpleNotificationData>(d => d.Reason!.Contains(\"Не удалось найти пользователя\")),\n                It.IsAny<CancellationToken>()\n            ),\n            Times.Once,\n            \"Должно быть отправлено предупреждение о ненайденном пользователе\"\n        );\n    }\n\n    [Test]\n    public async Task HandleSayCommandAsync_WhenBotThrowsException_SendsErrorMessage()\n    {\n        // Arrange\n        var (user, chat, message) = TK.Specialized.Messages.TextOnlyScenario();\n        message.Text = \"/say 12345 Привет!\";\n        var expectedException = new InvalidOperationException(\"Test exception\");\n"
+    }
+  ]
+}

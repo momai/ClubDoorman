@@ -1,0 +1,438 @@
+{
+  "schema_version": "test-audit-batch-v1",
+  "batch_no": 99,
+  "purpose": "local LLM audit input",
+  "instructions": "Return JSONL only. One audit object per input test. No markdown. No code edits.",
+  "tests": [
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/ChannelModerationServiceTests.cs::ChannelModerationServiceTests::ShouldAllowChannelMessageAsync_WhenChannelDiscussion_ShouldReturnTrue",
+        "file": "Unit/Services/ChannelModerationServiceTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "ChannelModerationServiceTests",
+        "test_name": "ShouldAllowChannelMessageAsync_WhenChannelDiscussion_ShouldReturnTrue",
+        "line": 112,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 14,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "real_env_or_api"
+        ],
+        "_source_lineno": 638
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/ChannelModerationServiceTests.cs\n# Lines 82-142 (test starts at line 112)\n\n        // Act\n        var result = await _service.IsChannelOwnerAsync(message);\n\n        // Assert\n        Assert.That(result, Is.False);\n    }\n\n    [Test]\n    public async Task ShouldAllowChannelMessageAsync_WhenUserIsOwner_ShouldReturnTrue()\n    {\n        // Arrange\n        var message = CreateTestMessage();\n        var channelAdmins = new[]\n        {\n            new ChatMemberOwner { User = new User { Id = 123 } }\n        };\n\n        _botMock.Setup(x => x.GetChatAdministratorsAsync(It.IsAny<ChatId>(), It.IsAny<CancellationToken>()))\n            .ReturnsAsync(channelAdmins);\n        _botMock.Setup(x => x.GetChatAsync(It.IsAny<ChatId>(), It.IsAny<CancellationToken>()))\n            .ReturnsAsync(new Chat { Id = 1, Type = ChatType.Supergroup });\n\n        // Act\n        var result = await _service.ShouldAllowChannelMessageAsync(message);\n\n        // Assert\n        Assert.That(result, Is.True);\n    }\n\n    [Test]\n    public async Task ShouldAllowChannelMessageAsync_WhenChannelDiscussion_ShouldReturnTrue()\n    {\n        // Arrange\n        var message = CreateTestMessage();\n        message.IsAutomaticForward = true;\n\n        _botMock.Setup(x => x.GetChatAsync(It.IsAny<ChatId>(), It.IsAny<CancellationToken>()))\n            .ReturnsAsync(new Chat { Id = 1, Type = ChatType.Supergroup });\n\n        // Act\n        var result = await _service.ShouldAllowChannelMessageAsync(message);\n\n        // Assert\n        Assert.That(result, Is.True);\n    }\n\n    [Test]\n    public async Task ShouldAllowChannelMessageAsync_WhenUnknownChannel_ShouldReturnFalse()\n    {\n        // Arrange\n        var message = CreateTestMessage();\n        var channelAdmins = new[]\n        {\n            new ChatMemberOwner { User = new User { Id = 456 } }\n        };\n\n        _botMock.Setup(x => x.GetChatAdministratorsAsync(It.IsAny<ChatId>(), It.IsAny<CancellationToken>()))\n            .ReturnsAsync(channelAdmins);\n        _botMock.Setup(x => x.GetChatAsync(It.IsAny<ChatId>(), It.IsAny<CancellationToken>()))\n            .ReturnsAsync(new Chat { Id = 1, Type = ChatType.Supergroup });\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/ChannelModerationServiceTests.cs::ChannelModerationServiceTests::ShouldAllowChannelMessageAsync_WhenUnknownChannel_ShouldReturnFalse",
+        "file": "Unit/Services/ChannelModerationServiceTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "ChannelModerationServiceTests",
+        "test_name": "ShouldAllowChannelMessageAsync_WhenUnknownChannel_ShouldReturnFalse",
+        "line": 129,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 19,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": true,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "real_env_or_api"
+        ],
+        "_source_lineno": 639
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/ChannelModerationServiceTests.cs\n# Lines 99-159 (test starts at line 129)\n\n        _botMock.Setup(x => x.GetChatAdministratorsAsync(It.IsAny<ChatId>(), It.IsAny<CancellationToken>()))\n            .ReturnsAsync(channelAdmins);\n        _botMock.Setup(x => x.GetChatAsync(It.IsAny<ChatId>(), It.IsAny<CancellationToken>()))\n            .ReturnsAsync(new Chat { Id = 1, Type = ChatType.Supergroup });\n\n        // Act\n        var result = await _service.ShouldAllowChannelMessageAsync(message);\n\n        // Assert\n        Assert.That(result, Is.True);\n    }\n\n    [Test]\n    public async Task ShouldAllowChannelMessageAsync_WhenChannelDiscussion_ShouldReturnTrue()\n    {\n        // Arrange\n        var message = CreateTestMessage();\n        message.IsAutomaticForward = true;\n\n        _botMock.Setup(x => x.GetChatAsync(It.IsAny<ChatId>(), It.IsAny<CancellationToken>()))\n            .ReturnsAsync(new Chat { Id = 1, Type = ChatType.Supergroup });\n\n        // Act\n        var result = await _service.ShouldAllowChannelMessageAsync(message);\n\n        // Assert\n        Assert.That(result, Is.True);\n    }\n\n    [Test]\n    public async Task ShouldAllowChannelMessageAsync_WhenUnknownChannel_ShouldReturnFalse()\n    {\n        // Arrange\n        var message = CreateTestMessage();\n        var channelAdmins = new[]\n        {\n            new ChatMemberOwner { User = new User { Id = 456 } }\n        };\n\n        _botMock.Setup(x => x.GetChatAdministratorsAsync(It.IsAny<ChatId>(), It.IsAny<CancellationToken>()))\n            .ReturnsAsync(channelAdmins);\n        _botMock.Setup(x => x.GetChatAsync(It.IsAny<ChatId>(), It.IsAny<CancellationToken>()))\n            .ReturnsAsync(new Chat { Id = 1, Type = ChatType.Supergroup });\n\n        // Act\n        var result = await _service.ShouldAllowChannelMessageAsync(message);\n\n        // Assert\n        Assert.That(result, Is.False);\n    }\n\n    private static Message CreateTestMessage()\n    {\n        return new Message\n        {\n            From = new User { Id = 123, FirstName = \"Test\", Username = \"testuser\" },\n            Chat = new Chat { Id = 1, Title = \"Test Chat\", Type = ChatType.Supergroup },\n            SenderChat = new Chat { Id = 2, Title = \"Test Channel\", Type = ChatType.Channel },\n            Text = \"Test message\"\n        };\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/GlobalStatsManagerTests.cs::GlobalStatsManagerTests::Constructor_CreatesDataDirectory_WhenNotExists",
+        "file": "Unit/Services/GlobalStatsManagerTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "GlobalStatsManagerTests",
+        "test_name": "Constructor_CreatesDataDirectory_WhenNotExists",
+        "line": 31,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "business-logic"
+        ],
+        "body_lines": 14,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": true,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 651
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/GlobalStatsManagerTests.cs\n# Lines 1-61 (test starts at line 31)\nusing ClubDoorman.Services.UserBan;\nusing NUnit.Framework;\nusing Moq;\nusing ClubDoorman.Services;\nusing ClubDoorman.Services.UserBan;\nusing ClubDoorman.TestInfrastructure;\nusing Microsoft.Extensions.Logging;\nusing Telegram.Bot;\nusing Telegram.Bot.Types;\nusing ClubDoorman.Services.Telegram;\nusing ClubDoorman.Services.Statistics;\n\nnamespace ClubDoorman.Test.Unit.Services;\n\n[TestFixture]\n[Category(\"business-logic\")]\npublic class GlobalStatsManagerTests\n{\n    private GlobalStatsManagerTestFactory _factory;\n    private GlobalStatsManager _service;\n    private Mock<ITelegramBotClientWrapper> _botClientMock;\n\n    [SetUp]\n    public void Setup()\n    {\n        _factory = new GlobalStatsManagerTestFactory();\n        _service = _factory.CreateDefault();\n        _botClientMock = _factory.BotClientMock;\n    }\n\n    [Test]\n    public void Constructor_CreatesDataDirectory_WhenNotExists()\n    {\n        // Arrange & Act\n        var tempDir = Path.GetTempPath();\n        var testDataDir = Path.Combine(tempDir, \"test_data_global_stats\");\n\n        if (Directory.Exists(testDataDir))\n            Directory.Delete(testDataDir, true);\n\n        // Создаем временный сервис с кастомным путем\n        var service = new GlobalStatsManager();\n\n        // Assert\n        Assert.That(Directory.Exists(\"data\"), Is.True);\n    }\n\n    [Test]\n    public async Task EnsureChatAsync_NewChat_AddsChatToStats()\n    {\n        // Arrange\n        var chatId = 123456L;\n        var chatTitle = \"Test Chat\";\n\n        _factory.WithBotClientSetup(mock =>\n            mock.Setup(x => x.GetChatMemberCount(It.IsAny<ChatId>(), It.IsAny<CancellationToken>()))\n                .ReturnsAsync(100));\n\n        // Act\n        await _service.EnsureChatAsync(chatId, chatTitle, _botClientMock.Object);\n\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/GlobalStatsManagerTests.cs::GlobalStatsManagerTests::GenerateHtml_ValidData_GeneratesHtmlFile",
+        "file": "Unit/Services/GlobalStatsManagerTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "GlobalStatsManagerTests",
+        "test_name": "GenerateHtml_ValidData_GeneratesHtmlFile",
+        "line": 194,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 17,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": true,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 660
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/GlobalStatsManagerTests.cs\n# Lines 164-224 (test starts at line 194)\n\n    [Test]\n    public void IncBan_NewChat_IncrementsBanCount()\n    {\n        // Arrange\n        var chatId = 123456L;\n        var chatTitle = \"Test Chat\";\n\n        // Act\n        _service.IncBan(chatId, chatTitle);\n\n        // Assert\n        Assert.Pass(\"Метод выполнился без исключений\");\n    }\n\n    [Test]\n    public void IncBan_ExistingChat_IncrementsBanCount()\n    {\n        // Arrange\n        var chatId = 123456L;\n        var chatTitle = \"Test Chat\";\n\n        // Act - вызываем дважды\n        _service.IncBan(chatId, chatTitle);\n        _service.IncBan(chatId, chatTitle);\n\n        // Assert\n        Assert.Pass(\"Метод выполнился без исключений\");\n    }\n\n    [Test]\n    public void GenerateHtml_ValidData_GeneratesHtmlFile()\n    {\n        // Arrange\n        var chatId = 123456L;\n        var chatTitle = \"Test Chat\";\n        _service.IncCaptcha(chatId, chatTitle);\n        _service.IncBan(chatId, chatTitle);\n\n        // Act\n        _service.GenerateHtml();\n\n        // Assert\n        var htmlPath = \"data/stats.html\";\n        Assert.That(File.Exists(htmlPath), Is.True);\n\n        var htmlContent = File.ReadAllText(htmlPath);\n        Assert.That(htmlContent, Does.Contain(\"Test Chat\"));\n    }\n\n    [Test]\n    public void GenerateGlobalJson_ValidData_GeneratesJsonFile()\n    {\n        // Arrange\n        var chatId = 123456L;\n        var chatTitle = \"Test Chat\";\n        _service.IncCaptcha(chatId, chatTitle);\n        _service.IncBan(chatId, chatTitle);\n\n        // Act\n        _service.GenerateGlobalJson();\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/GlobalStatsManagerTests.cs::GlobalStatsManagerTests::GenerateGlobalJson_ValidData_GeneratesJsonFile",
+        "file": "Unit/Services/GlobalStatsManagerTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Services",
+        "class": "GlobalStatsManagerTests",
+        "test_name": "GenerateGlobalJson_ValidData_GeneratesJsonFile",
+        "line": 214,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 17,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": true,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 661
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/GlobalStatsManagerTests.cs\n# Lines 184-244 (test starts at line 214)\n        var chatTitle = \"Test Chat\";\n\n        // Act - вызываем дважды\n        _service.IncBan(chatId, chatTitle);\n        _service.IncBan(chatId, chatTitle);\n\n        // Assert\n        Assert.Pass(\"Метод выполнился без исключений\");\n    }\n\n    [Test]\n    public void GenerateHtml_ValidData_GeneratesHtmlFile()\n    {\n        // Arrange\n        var chatId = 123456L;\n        var chatTitle = \"Test Chat\";\n        _service.IncCaptcha(chatId, chatTitle);\n        _service.IncBan(chatId, chatTitle);\n\n        // Act\n        _service.GenerateHtml();\n\n        // Assert\n        var htmlPath = \"data/stats.html\";\n        Assert.That(File.Exists(htmlPath), Is.True);\n\n        var htmlContent = File.ReadAllText(htmlPath);\n        Assert.That(htmlContent, Does.Contain(\"Test Chat\"));\n    }\n\n    [Test]\n    public void GenerateGlobalJson_ValidData_GeneratesJsonFile()\n    {\n        // Arrange\n        var chatId = 123456L;\n        var chatTitle = \"Test Chat\";\n        _service.IncCaptcha(chatId, chatTitle);\n        _service.IncBan(chatId, chatTitle);\n\n        // Act\n        _service.GenerateGlobalJson();\n\n        // Assert\n        var jsonPath = \"data/global_stats.json\";\n        Assert.That(File.Exists(jsonPath), Is.True);\n\n        var jsonContent = File.ReadAllText(jsonPath);\n        Assert.That(jsonContent, Does.Contain(\"Test Chat\"));\n    }\n\n    [Test]\n    public async Task EnsureChatAsync_BotThrowsException_HandlesGracefully()\n    {\n        // Arrange\n        var chatId = 123456L;\n        var chatTitle = \"Test Chat\";\n\n        _factory.WithBotClientSetup(mock =>\n            mock.Setup(x => x.GetChatMemberCount(It.IsAny<ChatId>(), It.IsAny<CancellationToken>()))\n                .ThrowsAsync(new Exception(\"Bot API error\")));\n\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/MessageTemplatesHtmlTests.cs::MessageTemplatesHtmlTests::ModerationWarning_ShouldContainHtmlTags",
+        "file": "Unit/Services/MessageTemplatesHtmlTests.cs",
+        "namespace": "",
+        "class": "MessageTemplatesHtmlTests",
+        "test_name": "ModerationWarning_ShouldContainHtmlTags",
+        "line": 24,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 24,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 665
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/MessageTemplatesHtmlTests.cs\n# Lines 1-54 (test starts at line 24)\nusing ClubDoorman.Models.Notifications;\nusing ClubDoorman.Services;\nusing NUnit.Framework;\nusing Telegram.Bot.Types;\nusing ClubDoorman.Services.Messaging;\nusing Moq;\nusing ClubDoorman.Services.Core.Configuration;\n\nnamespace ClubDoorman.Test.Unit.Services\n{\n    [TestFixture]\n    public class MessageTemplatesHtmlTests\n    {\n        private MessageTemplates _templates;\n\n        [SetUp]\n        public void Setup()\n        {\n            var appConfig = new Moq.Mock<ClubDoorman.Services.Core.Configuration.IAppConfig>();\n            appConfig.SetupGet(x => x.SuspiciousToApprovedMessageCount).Returns(3);\n            _templates = new MessageTemplates(appConfig.Object);\n        }\n\n        [Test]\n        public void ModerationWarning_ShouldContainHtmlTags()\n        {\n            // Arrange\n            var user = new User { Id = 12345, FirstName = \"Test\", LastName = \"User\" };\n            var chat = new Chat { Id = -100123456789, Title = \"Test Chat\" };\n            var data = new SimpleNotificationData(user, chat, \"test reason\");\n\n            // Act\n            var template = _templates.GetUserTemplate(UserNotificationType.ModerationWarning);\n            var result = _templates.FormatNotificationTemplate(template, data);\n\n            // Assert\n            Assert.That(result, Contains.Substring(\"<b>новичок</b>\"));\n            Assert.That(result, Contains.Substring(\"<b>Первые 3 сообщения</b>\"));\n            Assert.That(result, Contains.Substring(\"<b>стоп-слова</b>\"));\n            Assert.That(result, Contains.Substring(\"<a href=\\\"tg://user?id=12345\\\">Test User</a>\"));\n\n            // Проверяем, что нет лишних слешей\n            Assert.That(result, Does.Not.Contain(\"\\\\.\"));\n            Assert.That(result, Does.Not.Contain(\"\\\\-\"));\n\n            // Проверяем, что нет Markdown синтаксиса\n            Assert.That(result, Does.Not.Contain(\"*новичок*\"));\n            Assert.That(result, Does.Not.Contain(\"*Первые 3 сообщения*\"));\n        }\n\n        [Test]\n        public void UserMention_ShouldBeHtmlLink()\n        {\n            // Arrange\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/MessageTemplatesHtmlTests.cs::MessageTemplatesHtmlTests::UserMention_ShouldBeHtmlLink",
+        "file": "Unit/Services/MessageTemplatesHtmlTests.cs",
+        "namespace": "",
+        "class": "MessageTemplatesHtmlTests",
+        "test_name": "UserMention_ShouldBeHtmlLink",
+        "line": 51,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 13,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 666
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/MessageTemplatesHtmlTests.cs\n# Lines 21-81 (test starts at line 51)\n            _templates = new MessageTemplates(appConfig.Object);\n        }\n\n        [Test]\n        public void ModerationWarning_ShouldContainHtmlTags()\n        {\n            // Arrange\n            var user = new User { Id = 12345, FirstName = \"Test\", LastName = \"User\" };\n            var chat = new Chat { Id = -100123456789, Title = \"Test Chat\" };\n            var data = new SimpleNotificationData(user, chat, \"test reason\");\n\n            // Act\n            var template = _templates.GetUserTemplate(UserNotificationType.ModerationWarning);\n            var result = _templates.FormatNotificationTemplate(template, data);\n\n            // Assert\n            Assert.That(result, Contains.Substring(\"<b>новичок</b>\"));\n            Assert.That(result, Contains.Substring(\"<b>Первые 3 сообщения</b>\"));\n            Assert.That(result, Contains.Substring(\"<b>стоп-слова</b>\"));\n            Assert.That(result, Contains.Substring(\"<a href=\\\"tg://user?id=12345\\\">Test User</a>\"));\n\n            // Проверяем, что нет лишних слешей\n            Assert.That(result, Does.Not.Contain(\"\\\\.\"));\n            Assert.That(result, Does.Not.Contain(\"\\\\-\"));\n\n            // Проверяем, что нет Markdown синтаксиса\n            Assert.That(result, Does.Not.Contain(\"*новичок*\"));\n            Assert.That(result, Does.Not.Contain(\"*Первые 3 сообщения*\"));\n        }\n\n        [Test]\n        public void UserMention_ShouldBeHtmlLink()\n        {\n            // Arrange\n            var user = new User { Id = 12345, FirstName = \"Test\", LastName = \"User\" };\n            var chat = new Chat { Id = -100123456789, Title = \"Test Chat\" };\n            var data = new SimpleNotificationData(user, chat, \"test reason\");\n\n            // Act\n            var template = \"Test message with {UserMention}\";\n            var result = _templates.FormatNotificationTemplate(template, data);\n\n            // Assert\n            Assert.That(result, Is.EqualTo(\"Test message with <a href=\\\"tg://user?id=12345\\\">Test User</a>\"));\n        }\n\n        [Test]\n        public void SuspiciousUserTemplate_ShouldUseHtmlCodeTags()\n        {\n            // Arrange\n            var user = new User { Id = 12345, FirstName = \"Test\", LastName = \"User\" };\n            var chat = new Chat { Id = -100123456789, Title = \"Test Chat\" };\n            var messages = new List<string> { \"Test message 1\", \"Test message 2\" };\n            var data = new SuspiciousUserNotificationData(user, chat, 0.5, messages, DateTime.UtcNow);\n\n            // Act\n            var template = _templates.GetAdminTemplate(AdminNotificationType.SuspiciousUser);\n            var result = _templates.FormatNotificationTemplate(template, data);\n\n            // Assert\n            Assert.That(result, Contains.Substring(\"<code>Test message 1</code>\"));\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Services/MessageTemplatesHtmlTests.cs::MessageTemplatesHtmlTests::SuspiciousUserTemplate_ShouldUseHtmlCodeTags",
+        "file": "Unit/Services/MessageTemplatesHtmlTests.cs",
+        "namespace": "",
+        "class": "MessageTemplatesHtmlTests",
+        "test_name": "SuspiciousUserTemplate_ShouldUseHtmlCodeTags",
+        "line": 67,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 15,
+        "declared_area_from_path": "Unit",
+        "construction_path": "unknown",
+        "infra": {
+          "uses_message_handler_test_factory": false,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [],
+        "_source_lineno": 667
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Services/MessageTemplatesHtmlTests.cs\n# Lines 37-85 (test starts at line 67)\n            Assert.That(result, Contains.Substring(\"<b>новичок</b>\"));\n            Assert.That(result, Contains.Substring(\"<b>Первые 3 сообщения</b>\"));\n            Assert.That(result, Contains.Substring(\"<b>стоп-слова</b>\"));\n            Assert.That(result, Contains.Substring(\"<a href=\\\"tg://user?id=12345\\\">Test User</a>\"));\n\n            // Проверяем, что нет лишних слешей\n            Assert.That(result, Does.Not.Contain(\"\\\\.\"));\n            Assert.That(result, Does.Not.Contain(\"\\\\-\"));\n\n            // Проверяем, что нет Markdown синтаксиса\n            Assert.That(result, Does.Not.Contain(\"*новичок*\"));\n            Assert.That(result, Does.Not.Contain(\"*Первые 3 сообщения*\"));\n        }\n\n        [Test]\n        public void UserMention_ShouldBeHtmlLink()\n        {\n            // Arrange\n            var user = new User { Id = 12345, FirstName = \"Test\", LastName = \"User\" };\n            var chat = new Chat { Id = -100123456789, Title = \"Test Chat\" };\n            var data = new SimpleNotificationData(user, chat, \"test reason\");\n\n            // Act\n            var template = \"Test message with {UserMention}\";\n            var result = _templates.FormatNotificationTemplate(template, data);\n\n            // Assert\n            Assert.That(result, Is.EqualTo(\"Test message with <a href=\\\"tg://user?id=12345\\\">Test User</a>\"));\n        }\n\n        [Test]\n        public void SuspiciousUserTemplate_ShouldUseHtmlCodeTags()\n        {\n            // Arrange\n            var user = new User { Id = 12345, FirstName = \"Test\", LastName = \"User\" };\n            var chat = new Chat { Id = -100123456789, Title = \"Test Chat\" };\n            var messages = new List<string> { \"Test message 1\", \"Test message 2\" };\n            var data = new SuspiciousUserNotificationData(user, chat, 0.5, messages, DateTime.UtcNow);\n\n            // Act\n            var template = _templates.GetAdminTemplate(AdminNotificationType.SuspiciousUser);\n            var result = _templates.FormatNotificationTemplate(template, data);\n\n            // Assert\n            Assert.That(result, Contains.Substring(\"<code>Test message 1</code>\"));\n            Assert.That(result, Does.Not.Contain(\"`Test message 1`\"));\n        }\n    }\n}"
+    }
+  ]
+}

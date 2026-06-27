@@ -1,0 +1,455 @@
+{
+  "schema_version": "test-audit-batch-v1",
+  "batch_no": 28,
+  "purpose": "local LLM audit input",
+  "instructions": "Return JSONL only. One audit object per input test. No markdown. No code edits.",
+  "tests": [
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/TestInfrastructure/MessageHandlerTestFactoryTests.cs::MessageHandlerTestFactoryTests::CreateMessageHandler_CreatesFreshInstanceEachTime",
+        "file": "TestInfrastructure/MessageHandlerTestFactoryTests.cs",
+        "namespace": "ClubDoorman.TestInfrastructure",
+        "class": "MessageHandlerTestFactoryTests",
+        "test_name": "CreateMessageHandler_CreatesFreshInstanceEachTime",
+        "line": 53,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "test-infrastructure"
+        ],
+        "body_lines": 11,
+        "declared_area_from_path": "TestInfrastructure",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": false,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": false
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "message_handler_test_factory"
+        ],
+        "_source_lineno": 166
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/TestInfrastructure/MessageHandlerTestFactoryTests.cs\n# Lines 23-83 (test starts at line 53)\npublic class MessageHandlerTestFactoryTests\n{\n    [Test]\n    public void CreateMessageHandler_ReturnsWorkingInstance()\n    {\n        // Arrange\n        var factory = new MessageHandlerTestFactory();\n\n        // Act\n        var instance = factory.CreateMessageHandler();\n\n        // Assert\n        Assert.That(instance, Is.Not.Null);\n        Assert.That(instance, Is.InstanceOf<MessageHandler>());\n    }\n\n    [Test]\n    public void CreateMessageHandler_ConfiguresAllDependencies()\n    {\n        // Arrange\n        var factory = new MessageHandlerTestFactory();\n\n        // Act\n        var instance = factory.CreateMessageHandler();\n\n        // Assert\n        // Проверяем что все зависимости настроены\n        Assert.That(instance, Is.Not.Null);\n    }\n\n    [Test]\n    public void CreateMessageHandler_CreatesFreshInstanceEachTime()\n    {\n        // Arrange\n        var factory = new MessageHandlerTestFactory();\n\n        // Act\n        var instance1 = factory.CreateMessageHandler();\n        var instance2 = factory.CreateMessageHandler();\n\n        // Assert\n        Assert.That(instance1, Is.Not.SameAs(instance2));\n    }\n\n    [Test]\n    public void BotMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new MessageHandlerTestFactory();\n\n        // Act & Assert\n        Assert.That(factory.BotMock, Is.Not.Null);\n        Assert.That(factory.BotMock.Object, Is.Not.Null);\n    }\n\n    [Test]\n    public void ModerationServiceMock_IsProperlyConfigured()\n    {\n        // Arrange\n        var factory = new MessageHandlerTestFactory();\n\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Handlers/MessageHandlerCanHandleTests.cs::MessageHandlerCanHandleTests::CanHandle_ValidMessage_ReturnsTrue",
+        "file": "Unit/Handlers/MessageHandlerCanHandleTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Handlers",
+        "class": "MessageHandlerCanHandleTests",
+        "test_name": "CanHandle_ValidMessage_ReturnsTrue",
+        "line": 66,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [
+          "unit",
+          "handlers",
+          "can-handle",
+          "golden-master"
+        ],
+        "body_lines": 11,
+        "declared_area_from_path": "Unit",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "message_handler_test_factory"
+        ],
+        "_source_lineno": 299
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Handlers/MessageHandlerCanHandleTests.cs\n# Lines 36-96 (test starts at line 66)\n\n        // Настройка базовых моков для предотвращения NullReferenceException\n        _factory.WithModerationFacadeMock(mock =>\n        {\n            mock.Setup(x => x.CheckMessageAsync(It.IsAny<Message>()))\n                .ReturnsAsync(new Models.ModerationResult(Models.ModerationAction.Allow, \"Test\"));\n            mock.Setup(x => x.CheckUserNameAsync(It.IsAny<User>()))\n                .ReturnsAsync(new Models.ModerationResult(Models.ModerationAction.Allow, \"Test name\"));\n            mock.Setup(x => x.IsUserApproved(It.IsAny<long>(), It.IsAny<long>()))\n                .Returns(false);\n        });\n\n        _factory.WithUserManagerSetup(mock =>\n        {\n            mock.Setup(x => x.Approved(It.IsAny<long>(), It.IsAny<long?>()))\n                .Returns(true);\n            mock.Setup(x => x.GetClubUsername(It.IsAny<long>()))\n                .ReturnsAsync((string?)null);\n            mock.Setup(x => x.InBanlist(It.IsAny<long>()))\n                .ReturnsAsync(false);\n        });\n\n        _messageHandler = _factory.CreateMessageHandler();\n    }\n\n    /// <summary>\n    /// Тест для CanHandle с валидным сообщением\n    /// Проверяет, что метод возвращает true для обычного текстового сообщения\n    /// <tags>golden-master, production, can-handle, valid-message</tags>\n    /// </summary>\n    [Test]\n    public void CanHandle_ValidMessage_ReturnsTrue()\n    {\n        // Arrange: Используем готовый сценарий из TestKit\n        var (user, chat, message) = TK.Specialized.Messages.TextOnlyScenario();\n        var update = new Update { Message = message };\n\n        // Act: Вызываем метод\n        var result = _messageHandler.CanHandle(update);\n\n        // Assert: Проверяем результат\n        Assert.That(result, Is.True, \"CanHandle должен возвращать true для валидного сообщения\");\n    }\n\n    /// <summary>\n    /// Тест для CanHandle с отредактированным сообщением\n    /// Проверяет, что метод возвращает true для отредактированного сообщения\n    /// <tags>golden-master, production, can-handle, edited-message</tags>\n    /// </summary>\n    [Test]\n    public void CanHandle_EditedMessage_ReturnsTrue()\n    {\n        // Arrange: Используем готовый сценарий из TestKit\n        var (user, chat, message) = TK.Specialized.Messages.TextOnlyScenario();\n        message.EditDate = DateTime.UtcNow;\n        var update = new Update { EditedMessage = message };\n\n        // Act: Вызываем метод\n        var result = _messageHandler.CanHandle(update);\n\n        // Assert: Проверяем результат\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Handlers/MessageHandlerCanHandleTests.cs::MessageHandlerCanHandleTests::CanHandle_EditedMessage_ReturnsTrue",
+        "file": "Unit/Handlers/MessageHandlerCanHandleTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Handlers",
+        "class": "MessageHandlerCanHandleTests",
+        "test_name": "CanHandle_EditedMessage_ReturnsTrue",
+        "line": 85,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 12,
+        "declared_area_from_path": "Unit",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "message_handler_test_factory"
+        ],
+        "_source_lineno": 300
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Handlers/MessageHandlerCanHandleTests.cs\n# Lines 55-115 (test starts at line 85)\n                .ReturnsAsync(false);\n        });\n\n        _messageHandler = _factory.CreateMessageHandler();\n    }\n\n    /// <summary>\n    /// Тест для CanHandle с валидным сообщением\n    /// Проверяет, что метод возвращает true для обычного текстового сообщения\n    /// <tags>golden-master, production, can-handle, valid-message</tags>\n    /// </summary>\n    [Test]\n    public void CanHandle_ValidMessage_ReturnsTrue()\n    {\n        // Arrange: Используем готовый сценарий из TestKit\n        var (user, chat, message) = TK.Specialized.Messages.TextOnlyScenario();\n        var update = new Update { Message = message };\n\n        // Act: Вызываем метод\n        var result = _messageHandler.CanHandle(update);\n\n        // Assert: Проверяем результат\n        Assert.That(result, Is.True, \"CanHandle должен возвращать true для валидного сообщения\");\n    }\n\n    /// <summary>\n    /// Тест для CanHandle с отредактированным сообщением\n    /// Проверяет, что метод возвращает true для отредактированного сообщения\n    /// <tags>golden-master, production, can-handle, edited-message</tags>\n    /// </summary>\n    [Test]\n    public void CanHandle_EditedMessage_ReturnsTrue()\n    {\n        // Arrange: Используем готовый сценарий из TestKit\n        var (user, chat, message) = TK.Specialized.Messages.TextOnlyScenario();\n        message.EditDate = DateTime.UtcNow;\n        var update = new Update { EditedMessage = message };\n\n        // Act: Вызываем метод\n        var result = _messageHandler.CanHandle(update);\n\n        // Assert: Проверяем результат\n        Assert.That(result, Is.True, \"CanHandle должен возвращать true для отредактированного сообщения\");\n    }\n\n    /// <summary>\n    /// Тест для CanHandle с null Update\n    /// Проверяет, что метод возвращает false для null Update\n    /// <tags>golden-master, production, can-handle, null-update</tags>\n    /// </summary>\n    [Test]\n    public void CanHandle_NullUpdate_ReturnsFalse()\n    {\n        // Arrange: Передаем null\n        Update? update = null;\n\n        // Act: Вызываем метод\n        var result = _messageHandler.CanHandle(update);\n\n        // Assert: Проверяем результат\n        Assert.That(result, Is.False, \"CanHandle должен возвращать false для null Update\");\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Handlers/MessageHandlerCanHandleTests.cs::MessageHandlerCanHandleTests::CanHandle_NullUpdate_ReturnsFalse",
+        "file": "Unit/Handlers/MessageHandlerCanHandleTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Handlers",
+        "class": "MessageHandlerCanHandleTests",
+        "test_name": "CanHandle_NullUpdate_ReturnsFalse",
+        "line": 105,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 10,
+        "declared_area_from_path": "Unit",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "message_handler_test_factory"
+        ],
+        "_source_lineno": 301
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Handlers/MessageHandlerCanHandleTests.cs\n# Lines 75-135 (test starts at line 105)\n\n        // Assert: Проверяем результат\n        Assert.That(result, Is.True, \"CanHandle должен возвращать true для валидного сообщения\");\n    }\n\n    /// <summary>\n    /// Тест для CanHandle с отредактированным сообщением\n    /// Проверяет, что метод возвращает true для отредактированного сообщения\n    /// <tags>golden-master, production, can-handle, edited-message</tags>\n    /// </summary>\n    [Test]\n    public void CanHandle_EditedMessage_ReturnsTrue()\n    {\n        // Arrange: Используем готовый сценарий из TestKit\n        var (user, chat, message) = TK.Specialized.Messages.TextOnlyScenario();\n        message.EditDate = DateTime.UtcNow;\n        var update = new Update { EditedMessage = message };\n\n        // Act: Вызываем метод\n        var result = _messageHandler.CanHandle(update);\n\n        // Assert: Проверяем результат\n        Assert.That(result, Is.True, \"CanHandle должен возвращать true для отредактированного сообщения\");\n    }\n\n    /// <summary>\n    /// Тест для CanHandle с null Update\n    /// Проверяет, что метод возвращает false для null Update\n    /// <tags>golden-master, production, can-handle, null-update</tags>\n    /// </summary>\n    [Test]\n    public void CanHandle_NullUpdate_ReturnsFalse()\n    {\n        // Arrange: Передаем null\n        Update? update = null;\n\n        // Act: Вызываем метод\n        var result = _messageHandler.CanHandle(update);\n\n        // Assert: Проверяем результат\n        Assert.That(result, Is.False, \"CanHandle должен возвращать false для null Update\");\n    }\n\n    /// <summary>\n    /// Тест для CanHandle с Update без сообщений\n    /// Проверяет, что метод возвращает false для Update без Message и EditedMessage\n    /// <tags>golden-master, production, can-handle, no-message</tags>\n    /// </summary>\n    [Test]\n    public void CanHandle_UpdateWithoutMessage_ReturnsFalse()\n    {\n        // Arrange: Создаем Update без сообщений\n        var update = new Update { Message = null, EditedMessage = null };\n\n        // Act: Вызываем метод\n        var result = _messageHandler.CanHandle(update);\n\n        // Assert: Проверяем результат\n        Assert.That(result, Is.False, \"CanHandle должен возвращать false для Update без сообщений\");\n    }\n\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Handlers/MessageHandlerCanHandleTests.cs::MessageHandlerCanHandleTests::CanHandle_UpdateWithoutMessage_ReturnsFalse",
+        "file": "Unit/Handlers/MessageHandlerCanHandleTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Handlers",
+        "class": "MessageHandlerCanHandleTests",
+        "test_name": "CanHandle_UpdateWithoutMessage_ReturnsFalse",
+        "line": 123,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 10,
+        "declared_area_from_path": "Unit",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "message_handler_test_factory"
+        ],
+        "_source_lineno": 302
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Handlers/MessageHandlerCanHandleTests.cs\n# Lines 93-153 (test starts at line 123)\n        // Act: Вызываем метод\n        var result = _messageHandler.CanHandle(update);\n\n        // Assert: Проверяем результат\n        Assert.That(result, Is.True, \"CanHandle должен возвращать true для отредактированного сообщения\");\n    }\n\n    /// <summary>\n    /// Тест для CanHandle с null Update\n    /// Проверяет, что метод возвращает false для null Update\n    /// <tags>golden-master, production, can-handle, null-update</tags>\n    /// </summary>\n    [Test]\n    public void CanHandle_NullUpdate_ReturnsFalse()\n    {\n        // Arrange: Передаем null\n        Update? update = null;\n\n        // Act: Вызываем метод\n        var result = _messageHandler.CanHandle(update);\n\n        // Assert: Проверяем результат\n        Assert.That(result, Is.False, \"CanHandle должен возвращать false для null Update\");\n    }\n\n    /// <summary>\n    /// Тест для CanHandle с Update без сообщений\n    /// Проверяет, что метод возвращает false для Update без Message и EditedMessage\n    /// <tags>golden-master, production, can-handle, no-message</tags>\n    /// </summary>\n    [Test]\n    public void CanHandle_UpdateWithoutMessage_ReturnsFalse()\n    {\n        // Arrange: Создаем Update без сообщений\n        var update = new Update { Message = null, EditedMessage = null };\n\n        // Act: Вызываем метод\n        var result = _messageHandler.CanHandle(update);\n\n        // Assert: Проверяем результат\n        Assert.That(result, Is.False, \"CanHandle должен возвращать false для Update без сообщений\");\n    }\n\n    /// <summary>\n    /// Тест для CanHandle с Update содержащим CallbackQuery\n    /// Проверяет, что метод возвращает false для Update с CallbackQuery\n    /// <tags>golden-master, production, can-handle, callback-query</tags>\n    /// </summary>\n    [Test]\n    public void CanHandle_UpdateWithCallbackQuery_ReturnsFalse()\n    {\n        // Arrange: Создаем Update с CallbackQuery\n        var update = new Update\n        {\n            Message = null,\n            EditedMessage = null,\n            CallbackQuery = new CallbackQuery { Id = \"test\" }\n        };\n\n        // Act: Вызываем метод\n        var result = _messageHandler.CanHandle(update);\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Handlers/MessageHandlerCanHandleTests.cs::MessageHandlerCanHandleTests::CanHandle_UpdateWithCallbackQuery_ReturnsFalse",
+        "file": "Unit/Handlers/MessageHandlerCanHandleTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Handlers",
+        "class": "MessageHandlerCanHandleTests",
+        "test_name": "CanHandle_UpdateWithCallbackQuery_ReturnsFalse",
+        "line": 141,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 15,
+        "declared_area_from_path": "Unit",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "message_handler_test_factory"
+        ],
+        "_source_lineno": 303
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Handlers/MessageHandlerCanHandleTests.cs\n# Lines 111-171 (test starts at line 141)\n        // Act: Вызываем метод\n        var result = _messageHandler.CanHandle(update);\n\n        // Assert: Проверяем результат\n        Assert.That(result, Is.False, \"CanHandle должен возвращать false для null Update\");\n    }\n\n    /// <summary>\n    /// Тест для CanHandle с Update без сообщений\n    /// Проверяет, что метод возвращает false для Update без Message и EditedMessage\n    /// <tags>golden-master, production, can-handle, no-message</tags>\n    /// </summary>\n    [Test]\n    public void CanHandle_UpdateWithoutMessage_ReturnsFalse()\n    {\n        // Arrange: Создаем Update без сообщений\n        var update = new Update { Message = null, EditedMessage = null };\n\n        // Act: Вызываем метод\n        var result = _messageHandler.CanHandle(update);\n\n        // Assert: Проверяем результат\n        Assert.That(result, Is.False, \"CanHandle должен возвращать false для Update без сообщений\");\n    }\n\n    /// <summary>\n    /// Тест для CanHandle с Update содержащим CallbackQuery\n    /// Проверяет, что метод возвращает false для Update с CallbackQuery\n    /// <tags>golden-master, production, can-handle, callback-query</tags>\n    /// </summary>\n    [Test]\n    public void CanHandle_UpdateWithCallbackQuery_ReturnsFalse()\n    {\n        // Arrange: Создаем Update с CallbackQuery\n        var update = new Update\n        {\n            Message = null,\n            EditedMessage = null,\n            CallbackQuery = new CallbackQuery { Id = \"test\" }\n        };\n\n        // Act: Вызываем метод\n        var result = _messageHandler.CanHandle(update);\n\n        // Assert: Проверяем результат\n        Assert.That(result, Is.False, \"CanHandle должен возвращать false для Update с CallbackQuery\");\n    }\n\n    /// <summary>\n    /// Тест для CanHandle с сообщением без текста\n    /// Проверяет, что метод возвращает true для сообщения без текста (медиа)\n    /// <tags>golden-master, production, can-handle, media-message</tags>\n    /// </summary>\n    [Test]\n    public void CanHandle_MessageWithoutText_ReturnsTrue()\n    {\n        // Arrange: Используем готовый сценарий из TestKit\n        var (user, chat, message) = TK.Specialized.Messages.NoTextScenario();\n        var update = new Update { Message = message };\n\n        // Act: Вызываем метод\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Handlers/MessageHandlerCanHandleTests.cs::MessageHandlerCanHandleTests::CanHandle_MessageWithoutText_ReturnsTrue",
+        "file": "Unit/Handlers/MessageHandlerCanHandleTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Handlers",
+        "class": "MessageHandlerCanHandleTests",
+        "test_name": "CanHandle_MessageWithoutText_ReturnsTrue",
+        "line": 164,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 11,
+        "declared_area_from_path": "Unit",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "message_handler_test_factory"
+        ],
+        "_source_lineno": 304
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Handlers/MessageHandlerCanHandleTests.cs\n# Lines 134-194 (test starts at line 164)\n    }\n\n    /// <summary>\n    /// Тест для CanHandle с Update содержащим CallbackQuery\n    /// Проверяет, что метод возвращает false для Update с CallbackQuery\n    /// <tags>golden-master, production, can-handle, callback-query</tags>\n    /// </summary>\n    [Test]\n    public void CanHandle_UpdateWithCallbackQuery_ReturnsFalse()\n    {\n        // Arrange: Создаем Update с CallbackQuery\n        var update = new Update\n        {\n            Message = null,\n            EditedMessage = null,\n            CallbackQuery = new CallbackQuery { Id = \"test\" }\n        };\n\n        // Act: Вызываем метод\n        var result = _messageHandler.CanHandle(update);\n\n        // Assert: Проверяем результат\n        Assert.That(result, Is.False, \"CanHandle должен возвращать false для Update с CallbackQuery\");\n    }\n\n    /// <summary>\n    /// Тест для CanHandle с сообщением без текста\n    /// Проверяет, что метод возвращает true для сообщения без текста (медиа)\n    /// <tags>golden-master, production, can-handle, media-message</tags>\n    /// </summary>\n    [Test]\n    public void CanHandle_MessageWithoutText_ReturnsTrue()\n    {\n        // Arrange: Используем готовый сценарий из TestKit\n        var (user, chat, message) = TK.Specialized.Messages.NoTextScenario();\n        var update = new Update { Message = message };\n\n        // Act: Вызываем метод\n        var result = _messageHandler.CanHandle(update);\n\n        // Assert: Проверяем результат\n        Assert.That(result, Is.True, \"CanHandle должен возвращать true для сообщения без текста\");\n    }\n\n    /// <summary>\n    /// Тест для CanHandle с сообщением с подписью\n    /// Проверяет, что метод возвращает true для сообщения с подписью\n    /// <tags>golden-master, production, can-handle, caption-message</tags>\n    /// </summary>\n    [Test]\n    public void CanHandle_MessageWithCaption_ReturnsTrue()\n    {\n        // Arrange: Используем готовый сценарий из TestKit\n        var (user, chat, message) = TK.Specialized.Messages.CaptionOnlyScenario();\n        var update = new Update { Message = message };\n\n        // Act: Вызываем метод\n        var result = _messageHandler.CanHandle(update);\n\n        // Assert: Проверяем результат\n        Assert.That(result, Is.True, \"CanHandle должен возвращать true для сообщения с подписью\");\n"
+    },
+    {
+      "raw": {
+        "schema_version": "test-raw-v1",
+        "id": "ClubDoorman.Test/Unit/Handlers/MessageHandlerCanHandleTests.cs::MessageHandlerCanHandleTests::CanHandle_MessageWithCaption_ReturnsTrue",
+        "file": "Unit/Handlers/MessageHandlerCanHandleTests.cs",
+        "namespace": "ClubDoorman.Test.Unit.Handlers",
+        "class": "MessageHandlerCanHandleTests",
+        "test_name": "CanHandle_MessageWithCaption_ReturnsTrue",
+        "line": 183,
+        "attributes": [
+          "Test"
+        ],
+        "categories": [],
+        "body_lines": 11,
+        "declared_area_from_path": "Unit",
+        "construction_path": "legacy_message_handler_test_factory",
+        "infra": {
+          "uses_message_handler_test_factory": true,
+          "uses_fake_services_factory": false,
+          "uses_testkit_message_handler_builder": false,
+          "uses_testkit_autofixture": false,
+          "uses_direct_new_message_handler": false,
+          "uses_fake_telegram_client": false,
+          "uses_message_envelope": false,
+          "uses_tk_static_helpers": true,
+          "uses_service_collection_di": false,
+          "uses_real_service_provider": false,
+          "uses_app_config_test_factory": false,
+          "uses_golden_master_recorder": false,
+          "uses_temp_files_or_baselines": false,
+          "uses_real_env_or_api": false,
+          "uses_moq": true
+        },
+        "assertions": {
+          "assert_pass": false,
+          "does_not_throw": false,
+          "weak_not_null": false,
+          "weak_not_empty": false,
+          "mock_verify": false,
+          "throws": false,
+          "state_assertion_suspected": true
+        },
+        "message_id": {
+          "uses_with_message_id": false,
+          "reads_message_message_id": false,
+          "uses_envelope_message_id": false,
+          "id_sensitive_suspected": false
+        },
+        "smells": [
+          "message_handler_test_factory"
+        ],
+        "_source_lineno": 305
+      },
+      "source_excerpt": "# File: ClubDoorman.Test/Unit/Handlers/MessageHandlerCanHandleTests.cs\n# Lines 153-196 (test starts at line 183)\n        var result = _messageHandler.CanHandle(update);\n\n        // Assert: Проверяем результат\n        Assert.That(result, Is.False, \"CanHandle должен возвращать false для Update с CallbackQuery\");\n    }\n\n    /// <summary>\n    /// Тест для CanHandle с сообщением без текста\n    /// Проверяет, что метод возвращает true для сообщения без текста (медиа)\n    /// <tags>golden-master, production, can-handle, media-message</tags>\n    /// </summary>\n    [Test]\n    public void CanHandle_MessageWithoutText_ReturnsTrue()\n    {\n        // Arrange: Используем готовый сценарий из TestKit\n        var (user, chat, message) = TK.Specialized.Messages.NoTextScenario();\n        var update = new Update { Message = message };\n\n        // Act: Вызываем метод\n        var result = _messageHandler.CanHandle(update);\n\n        // Assert: Проверяем результат\n        Assert.That(result, Is.True, \"CanHandle должен возвращать true для сообщения без текста\");\n    }\n\n    /// <summary>\n    /// Тест для CanHandle с сообщением с подписью\n    /// Проверяет, что метод возвращает true для сообщения с подписью\n    /// <tags>golden-master, production, can-handle, caption-message</tags>\n    /// </summary>\n    [Test]\n    public void CanHandle_MessageWithCaption_ReturnsTrue()\n    {\n        // Arrange: Используем готовый сценарий из TestKit\n        var (user, chat, message) = TK.Specialized.Messages.CaptionOnlyScenario();\n        var update = new Update { Message = message };\n\n        // Act: Вызываем метод\n        var result = _messageHandler.CanHandle(update);\n\n        // Assert: Проверяем результат\n        Assert.That(result, Is.True, \"CanHandle должен возвращать true для сообщения с подписью\");\n    }\n}"
+    }
+  ]
+}
