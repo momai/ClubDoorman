@@ -36,11 +36,11 @@ Purpose: files where delete candidates are adjacent to rewrite/quarantine-heavy 
 
 ## `ClubDoorman.Test/Unit/Services/CaptchaServiceExtendedTests.cs`
 
-- Delete candidates: `CreateCaptchaAsync_NullChat_ThrowsArgumentNullException`, `CreateCaptchaAsync_NullUser_ThrowsArgumentNullException`, `GetCaptchaInfo_AfterValidation_ReturnsNull`, `GetCaptchaInfo_NonExistentCaptcha_ReturnsNull`, `RemoveCaptcha_NonExistentCaptcha_ReturnsFalse`, `ValidateCaptchaAsync_EmptyKey_ReturnsFalse`, `ValidateCaptchaAsync_NullKey_ReturnsFalse`.
+- Delete candidates: `CreateCaptchaAsync_NullChat_ThrowsArgumentNullException`, `CreateCaptchaAsync_NullUser_ThrowsArgumentNullException`.
 - Human-review overlap: None remaining.
 - Safe split: no.
 - Classification: `requires-rewrite-first`.
-- Why: low-value no-op/load/key-format slice removed in `8763310`; remaining candidates touch null/invalid-key lifecycle behavior and should be checked against seam coverage before further deletion.
+- Why: low-value no-op/load/key-format slice removed in `8763310`; duplicate invalid-state slice removed in `dff43e8`; remaining candidates assert request validation and should not be deleted without explicit replacement/approval.
 
 ## `ClubDoorman.Test/Unit/Services/ModerationServiceBusinessLogicTests.cs`
 
