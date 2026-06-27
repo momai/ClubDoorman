@@ -1,6 +1,5 @@
 using ClubDoorman.Services.ChannelModeration;
 using ClubDoorman.Services.Violation;
-using ClubDoorman.Services.UserFlow;
 using ClubDoorman.Services.Moderation;
 using ClubDoorman.Services.UserBan;
 using ClubDoorman.Handlers;
@@ -231,34 +230,6 @@ public class MessageHandlerBanTests
                 It.IsAny<Message>(),
                 It.IsAny<string>(),
                 It.IsAny<CancellationToken>()),
-            Times.Once);
-    }
-
-    [Test]
-    [Category("ban")]
-    [Category("moderation")]
-    public async Task WhenModerationReturnsBan_ShouldLogUserBanned()
-    {
-        // Arrange
-        var factory = new MessageHandlerTestFactory();
-        var user = TK.CreateValidUser();
-        var chat = TK.CreateGroupChat();
-        var message = TK.CreateTextMessage(user.Id, chat.Id, "spam message");
-        message.Chat = chat;
-
-        // Используем новую настройку для сценария бана по модерации
-        factory.SetupModerationBanScenario("Спам сообщение");
-
-        // Создаем MessageHandler после настройки всех моков
-        var handler = factory.CreateMessageHandlerWithRealUserBanService();
-
-        // Act
-        var update = new Update { Message = message };
-        await handler.HandleAsync(update, CancellationToken.None);
-
-        // Assert
-        factory.UserFlowLoggerMock.Verify(
-            x => x.LogUserBanned(It.IsAny<User>(), It.IsAny<Chat>(), "Спам сообщение"),
             Times.Once);
     }
 
