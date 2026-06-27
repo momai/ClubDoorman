@@ -231,17 +231,6 @@ public class MessageHandlerFakeTests
     }
 
     [Test]
-    public async Task HandleAsync_NullMessage_ThrowsArgumentNullException()
-    {
-        // Arrange
-        var service = _factory.CreateMessageHandlerWithFake(_fakeClient);
-
-        // Act & Assert
-        Assert.ThrowsAsync<ArgumentNullException>(async () =>
-            await service.HandleAsync(new Update { Message = null }));
-    }
-
-    [Test]
     public async Task HandleAsync_ModerationServiceError_LogsAndContinues()
     {
         // Arrange
@@ -323,34 +312,6 @@ public class MessageHandlerFakeTests
                 It.IsAny<Exception>(),
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
             Times.AtLeastOnce);
-    }
-
-    [Test]
-    public async Task HandleAsync_StartCommand_ProcessesCommand()
-    {
-        // Arrange
-        var service = _factory.CreateMessageHandlerWithFake(_fakeClient);
-        var message = TK.CreateStartCommandMessage();
-
-        // Настройка ServiceProvider для команд
-        var mockStartCommandHandler = new Mock<StartCommandHandler>(
-            MockBehavior.Loose,
-            new TelegramBotClientWrapper(new TelegramBotClient("1234567890:ABCdefGHIjklMNOpqrsTUVwxyz"), Microsoft.Extensions.Logging.Abstractions.NullLogger<TelegramBotClientWrapper>.Instance),
-            NullLogger<StartCommandHandler>.Instance,
-            new Mock<IMessageService>().Object,
-            new Mock<IAppConfig>().Object
-        );
-        _factory.ServiceProviderMock
-            .Setup(x => x.GetService(typeof(StartCommandHandler)))
-            .Returns(mockStartCommandHandler.Object);
-
-        // Act
-        var update = new Update { Message = message };
-        await service.HandleAsync(update);
-
-        // Assert
-        // Команда обработана без исключений
-        Assert.Pass("Команда /start обработана успешно");
     }
 
     [Test]

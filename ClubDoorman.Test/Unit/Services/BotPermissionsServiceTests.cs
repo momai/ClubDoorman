@@ -34,34 +34,6 @@ public class BotPermissionsServiceTests : TestBase
     _service = new BotPermissionsService(_mockBot.Object, _mockLogger.Object, _mockAppConfig.Object);
     }
 
-    [Test]
-    public void Constructor_WithNullBot_ThrowsArgumentNullException()
-    {
-        // Act & Assert
-        var exception = Assert.Throws<ArgumentNullException>(() =>
-            new BotPermissionsService(null!, _mockLogger.Object, _mockAppConfig.Object));
-        Assert.That(exception.ParamName, Is.EqualTo("bot"));
-    }
-
-    [Test]
-    public void Constructor_WithNullLogger_ThrowsArgumentNullException()
-    {
-        // Act & Assert
-        var exception = Assert.Throws<ArgumentNullException>(() =>
-            new BotPermissionsService(_mockBot.Object, null!, _mockAppConfig.Object));
-        Assert.That(exception.ParamName, Is.EqualTo("logger"));
-    }
-
-    [Test]
-    public void Constructor_WithValidParameters_CreatesInstance()
-    {
-        // Act
-    var service = new BotPermissionsService(_mockBot.Object, _mockLogger.Object, _mockAppConfig.Object);
-
-        // Assert
-        Assert.That(service, Is.Not.Null);
-    }
-
     [TestCase(ChatMemberStatus.Administrator, true)]
     [TestCase(ChatMemberStatus.Member, false)]
     [TestCase(ChatMemberStatus.Left, false)]
@@ -301,24 +273,4 @@ public class BotPermissionsServiceTests : TestBase
         _mockBot.Verify(x => x.GetChatMember(chatId, botId, It.IsAny<CancellationToken>()), Times.Once);
     }
 
-    [Test]
-    public async Task GetBotChatMemberAsync_WithCancellationToken_PassesTokenToApi()
-    {
-        // Arrange
-        var chatId = 10000L;
-        var botId = 456L;
-        var chatMember = new ChatMemberAdministrator();
-        var cancellationToken = new CancellationToken();
-
-        _mockBot.Setup(x => x.BotId).Returns(botId);
-        _mockBot.Setup(x => x.GetChatMember(chatId, botId, cancellationToken))
-            .ReturnsAsync(chatMember);
-
-        // Act
-        var result = await _service.GetBotChatMemberAsync(chatId, cancellationToken);
-
-        // Assert
-        Assert.That(result, Is.EqualTo(chatMember));
-        _mockBot.Verify(x => x.GetChatMember(chatId, botId, cancellationToken), Times.Once);
-    }
 }

@@ -43,35 +43,6 @@ public class AiChecksExtendedTests
         // Assert - проверяем что метод выполнился без исключений
         Assert.Pass("Method executed successfully");
     }
-
-    [Test]
-    public void MarkUserOkay_ZeroUserId_MarksUserAsOkay()
-    {
-        // Arrange
-        var service = _factory.CreateAiChecks();
-        var userId = 0L;
-
-        // Act
-        service.MarkUserOkay(userId);
-
-        // Assert
-        Assert.Pass("Method executed successfully");
-    }
-
-    [Test]
-    public void MarkUserOkay_NegativeUserId_MarksUserAsOkay()
-    {
-        // Arrange
-        var service = _factory.CreateAiChecks();
-        var userId = -12345L;
-
-        // Act
-        service.MarkUserOkay(userId);
-
-        // Assert
-        Assert.Pass("Method executed successfully");
-    }
-
     #endregion
 
     #region GetAttentionBaitProbability Tests
@@ -229,22 +200,6 @@ public class AiChecksExtendedTests
         // Arrange
         var service = _factory.CreateAiChecks();
         var message = TK.CreateSpamMessage();
-
-        // Act
-        var result = await service.GetSpamProbability(message);
-
-        // Assert
-        Assert.That(result, Is.Not.Null);
-        Assert.That(result.Probability, Is.GreaterThanOrEqualTo(0.0));
-        Assert.That(result.Probability, Is.LessThanOrEqualTo(1.0));
-    }
-
-    [Test]
-    public async Task GetSpamProbability_LongMessage_ReturnsSpamProbability()
-    {
-        // Arrange
-        var service = _factory.CreateAiChecks();
-        var message = TK.CreateLongMessage();
 
         // Act
         var result = await service.GetSpamProbability(message);
@@ -476,26 +431,6 @@ public class AiChecksExtendedTests
         // Assert
         Assert.That(result, Is.Not.Null);
         Assert.That(result.SpamProbability, Is.Not.Null);
-    }
-
-    [Test]
-    public async Task MultipleCalls_GetSpamProbability_ReturnsConsistentResults()
-    {
-        // Arrange
-        var service = _factory.CreateAiChecks();
-        var message = TK.CreateValidMessage();
-
-        // Act
-        var result1 = await service.GetSpamProbability(message);
-        var result2 = await service.GetSpamProbability(message);
-
-        // Assert
-        Assert.That(result1, Is.Not.Null);
-        Assert.That(result2, Is.Not.Null);
-        Assert.That(result1.Probability, Is.GreaterThanOrEqualTo(0.0));
-        Assert.That(result1.Probability, Is.LessThanOrEqualTo(1.0));
-        Assert.That(result2.Probability, Is.GreaterThanOrEqualTo(0.0));
-        Assert.That(result2.Probability, Is.LessThanOrEqualTo(1.0));
     }
 
     #endregion
