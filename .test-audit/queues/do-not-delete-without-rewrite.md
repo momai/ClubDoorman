@@ -26,14 +26,6 @@ Purpose: files where delete candidates are adjacent to rewrite/quarantine-heavy 
 - Classification: `requires-rewrite-first`.
 - Why: file contains high-value ban behavior and multiple rewrite candidates around auto-ban/channel-ban flows.
 
-## `ClubDoorman.Test/Unit/Handlers/MessageHandlerDeleteMessageLaterTests.cs`
-
-- Delete candidates: `DeleteMessageLater_WithDefaultTimeout_UsesFiveMinutes`, `DeleteMessageLater_WithNegativeTimeout_NoThrow`, `DeleteMessageLater_WithNullMessage_NoThrow`, `DeleteMessageLater_WithZeroTimeout_NoThrow`.
-- Human-review overlap: `DeleteMessageLater_WithNullMessage_NoThrow`.
-- Safe split: no.
-- Classification: `requires-rewrite-first`.
-- Why: delete candidates are in the same local behavior cluster as high-value scheduling/cancellation/delete-failure tests.
-
 ## `ClubDoorman.Test/Unit/Services/AiChecksTests.cs`
 
 - Delete candidates: `Constructor_WithValidDependencies_CreatesInstance`, `MarkUserOkay_DoesNotThrowException`, `MarkUserOkay_MultipleCalls_DoNotInterfere`.
