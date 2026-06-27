@@ -15,6 +15,7 @@ using Telegram.Bot;
 using ClubDoorman.Services.AI;
 using ClubDoorman.Services.UserManagement;
 using ClubDoorman.Services.Messaging;
+using ClubDoorman.Test.TestData;
 
 namespace ClubDoorman.Test.Integration;
 
@@ -119,18 +120,20 @@ public class InfrastructureE2ETests : TestBase
     [Test]
     public async Task E2E_FakeTelegramClient_ShouldSupportMessageDeletion()
     {
-        // Arrange
-        var message = TestData.Messages.Valid();
-        var chatId = message.Chat.Id;
-        var messageId = message.MessageId;
+        // Arrange — use MessageEnvelope with a real non-zero message ID
+        var envelope = MessageEnvelope.CreateTest(messageId: 42, chatId: 999, userId: 111);
+        _fakeBot.RegisterMessageEnvelope(envelope);
 
-        // Act - удаляем сообщение
-        await _fakeBot.DeleteMessageAsync(chatId, messageId);
+        // Act — delete using the envelope's IDs
+        var chatId = new Telegram.Bot.Types.ChatId(envelope.ChatId);
+        await _fakeBot.DeleteMessageAsync(chatId, envelope.MessageId);
 
-        // Assert с FluentAssertions
+        // Assert — non-zero message ID was recorded
+        envelope.MessageId.Should().BePositive("envelope must carry a real message ID");
         _fakeBot.DeletedMessages.Should().HaveCount(1);
-        _fakeBot.DeletedMessages.First().ChatId.Should().Be(chatId);
-        _fakeBot.DeletedMessages.First().MessageId.Should().Be(messageId);
+        _fakeBot.DeletedMessages.First().ChatId.Should().Be(envelope.ChatId);
+        _fakeBot.DeletedMessages.First().MessageId.Should().Be(envelope.MessageId);
+        _fakeBot.WasMessageDeleted(envelope).Should().BeTrue("FakeTelegramClient should track deletions by envelope");
     }
 
     [Test]
