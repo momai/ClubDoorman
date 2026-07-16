@@ -557,7 +557,7 @@ public class UserBanServiceTests
         // Act
         await _userBanService.AutoBanChannelAsync(message, CancellationToken.None);
 
-        // Assert  
+        // Assert
         // Проверяем, что исключение было проброшено
         // (логирование происходит в MessageHandler, а не в UserBanService)
 
