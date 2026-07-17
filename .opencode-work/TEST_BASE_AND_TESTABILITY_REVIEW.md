@@ -51,7 +51,7 @@ Evidence labels used below:
 
 Line references describe the worktree as inspected on 2026-07-16. Existing dirty and untracked files were not reverted or overwritten.
 
-## Current Baseline
+## Historical Review Baseline
 
 Command:
 
@@ -79,6 +79,30 @@ Build warnings observed:
 - `NU1603`: requested `Microsoft.Extensions.Caching.Hybrid 8.0.0` was unavailable; `9.3.0` was resolved.
 - `NU1902`: `SixLabors.ImageSharp 3.1.9` has known moderate-severity vulnerability `GHSA-rxmq-m78w-7wmc`.
 - The test post-build `cp -n` command emitted portability warnings.
+
+## Authoritative Post-Cleanup Baseline
+
+Date: 2026-07-18
+
+- Branch: `test/audit-follow-ups`.
+- Base HEAD: `b5b3164`.
+- Scope: current uncommitted Slice 1-6 worktree based on that HEAD; no commit was created during the slice.
+- Command: `dotnet test ClubDoorman.Test/ClubDoorman.Test.csproj --no-restore --verbosity minimal`.
+- `.runsettings` was not supplied.
+- Result: `0 failed, 493 passed, 0 skipped, 493 total, duration 9 s`.
+- Skip reasons: none because no tests were skipped.
+- Only `CheckCommand.feature` remains enabled and discovered by SpecFlow.
+- The 2026-07-16 `514 passed / 3 skipped` result above is retained as historical review evidence, not the current baseline.
+
+Post-cleanup meaning and remaining risks:
+
+- False-green BDD no longer contributes passing scenarios for moderation, statistics, AI, captcha, permissions, or spam/ham commands.
+- The two local spam/ham examples execute without secret-gated `SimpleE2ETests`; duplicate mimicry coverage was not migrated.
+- `UserCleanupServiceTests` uses isolated temporary approval storage, but this does not isolate every direct storage constructor.
+- `Integration/AiAnalysisTests.cs` still searches for `.env`, mutates process environment, and directly constructs `ApprovedUsersStorage`.
+- `ApprovedUsersStorageTestFactory`, `UserCleanupServiceTestFactory`, and `MessageHandlerTestFactory` still construct real file-backed storage.
+- The run still logged AI-enabled configuration and classifier training/retraining from other test construction paths.
+- Global cache, timer, background-task, runner-relative filesystem, pipeline failure, captcha scheduler, and package-warning risks remain unresolved.
 
 ## Executive Conclusion
 
@@ -405,6 +429,11 @@ Smallest safe direction:
 - Restore the previous environment value and remove the directory in teardown.
 - Prefer constructor path injection later; do not add a general filesystem abstraction.
 
+Slice 5 isolation note (2026-07-18):
+
+- `UserCleanupServiceTests` now uses a unique temporary `DOORMAN_DATA_ROOT` per test and restores the previous value in teardown.
+- This isolates only that focused fixture. Direct `ApprovedUsersStorage` construction in `Integration/AiAnalysisTests.cs`, `ApprovedUsersStorageTestFactory`, `UserCleanupServiceTestFactory`, and `MessageHandlerTestFactory` remains separate follow-up work.
+
 ### F12 — Global `MemoryCache.Default` is a cross-test bus
 
 Severity: P2
@@ -600,6 +629,12 @@ Smallest safe direction:
 - Replace real Telegram construction with wrapper mocks/fakes.
 - Move local classifier tests out of secret-gated setup.
 - Save and restore environment values in any remaining environment contract test.
+
+Post-cleanup status (2026-07-18):
+
+- Deleted captcha and AI BDD bindings no longer construct real Telegram clients or search for `.env`.
+- Deleted `SimpleE2ETests` no longer gates local classifier examples on unrelated secrets.
+- `Integration/AiAnalysisTests.cs` remains non-hermetic and is not resolved by these deletions.
 
 ### F20 — Message ID compensation can attribute effects to the wrong message
 
