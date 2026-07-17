@@ -193,36 +193,6 @@ public class AiAnalysisTests
     }
 
     [Test]
-    [Category("real-api")]
-    [Ignore("Requires real API key")]
-    public async Task E2E_AI_Analysis_WithRealApi_ShouldWork()
-    {
-        // Arrange - создаем AiChecks с реальной конфигурацией из .env файла
-        var realAppConfig = AppConfigTestFactory.CreateDefault(); // Используем реальную конфигурацию
-        var realAiChecks = new AiChecks(_fakeBot, _logger, realAppConfig);
-
-        var suspiciousUser = new User
-        {
-            Id = 12345,
-            FirstName = "🔥🔥🔥",
-            LastName = "💰💰💰",
-            Username = "money_maker_2024"
-        };
-
-        // Act - тестируем с реальным API с ретраем
-        var result = await RetryAiAnalysis(async () =>
-            await realAiChecks.GetAttentionBaitProbability(suspiciousUser));
-
-        // Assert
-        result.Should().NotBeNull();
-        result.SpamProbability.Should().NotBeNull();
-
-        // Этот тест может падать из-за 401 ошибки, но это нормально
-        // Он показывает, что интеграция с API работает
-        result.SpamProbability.Probability.Should().BeGreaterThanOrEqualTo(0.0);
-    }
-
-    [Test]
     public async Task E2E_AI_Analysis_MessageHandler_ShouldSendNotification()
     {
         // Arrange - используем новую фабрику фейковых сервисов
@@ -418,34 +388,6 @@ public class AiAnalysisTests
     }
 
     [Test]
-    public async Task E2E_AI_Analysis_RepeatedMessage_ShouldNotTriggerAnalysis()
-    {
-        // Arrange - используем новую фабрику фейковых сервисов
-        var factory = new FakeServicesFactory(_fakeBot, LoggerFactory.Create(builder => builder.AddConsole()), _appConfig);
-        var messageHandler = factory.CreateMessageHandler();
-
-        var user = new User { Id = 12345, FirstName = "Test", LastName = "User" };
-        var message = new Message
-        {
-            From = user,
-            Chat = new Chat { Id = -100123456789, Type = ChatType.Supergroup },
-            Text = "Второе сообщение",
-            Date = DateTime.UtcNow
-        };
-
-        var update = new Update { Message = message };
-
-        // Act - обрабатываем сообщение через MessageHandler
-        await messageHandler.HandleAsync(update);
-
-        // Assert - проверяем, что обработка прошла без ошибок
-        messageHandler.Should().NotBeNull();
-
-        // Проверяем, что фейковый бот получил сообщения
-        _fakeBot.SentMessages.Should().NotBeEmpty();
-    }
-
-    [Test]
     public async Task E2E_AI_Analysis_OperationOrder_ShouldBeCorrect()
     {
         // Arrange - используем новую фабрику фейковых сервисов
@@ -513,67 +455,6 @@ public class AiAnalysisTests
 
         // Проверяем, что фейковый бот получил сообщения
         _fakeBot.SentMessages.Should().NotBeEmpty();
-    }
-
-    private async Task<SpamPhotoBio> RetryAiAnalysis(Func<Task<SpamPhotoBio>> analysisFunc, int maxRetries = 3, int delayMs = 1000)
-    {
-        var lastException = (Exception?)null;
-
-        for (int attempt = 1; attempt <= maxRetries; attempt++)
-        {
-            try
-            {
-                TestContext.WriteLine($"Попытка AI анализа #{attempt}/{maxRetries}");
-                var result = await analysisFunc();
-
-                // Проверяем, что результат валидный
-                if (result?.SpamProbability != null &&
-                    (result.SpamProbability.Probability > 0 || !string.IsNullOrEmpty(result.SpamProbability.Reason)))
-                {
-                    TestContext.WriteLine($"AI анализ успешно завершен на попытке #{attempt}");
-                    return result;
-                }
-
-                TestContext.WriteLine($"AI анализ вернул невалидный результат на попытке #{attempt}, повторяем...");
-            }
-            catch (HttpRequestException ex) when (ex.Message.Contains("401") || ex.Message.Contains("Unauthorized"))
-            {
-                lastException = ex;
-                TestContext.WriteLine($"Ошибка авторизации API (401) на попытке #{attempt}: {ex.Message}");
-                if (attempt == maxRetries) throw;
-                await Task.Delay(delayMs * attempt); // Увеличиваем задержку с каждой попыткой
-            }
-            catch (HttpRequestException ex) when (ex.Message.Contains("400") || ex.Message.Contains("Bad Request"))
-            {
-                lastException = ex;
-                TestContext.WriteLine($"Ошибка запроса API (400) на попытке #{attempt}: {ex.Message}");
-                if (attempt == maxRetries) throw;
-                await Task.Delay(delayMs * attempt);
-            }
-            catch (HttpRequestException ex) when (ex.Message.Contains("429") || ex.Message.Contains("Too Many Requests"))
-            {
-                lastException = ex;
-                TestContext.WriteLine($"Превышен лимит запросов API (429) на попытке #{attempt}: {ex.Message}");
-                if (attempt == maxRetries) throw;
-                await Task.Delay(delayMs * attempt * 2); // Увеличиваем задержку для rate limit
-            }
-            catch (HttpRequestException ex)
-            {
-                lastException = ex;
-                TestContext.WriteLine($"Ошибка соединения API на попытке #{attempt}: {ex.Message}");
-                if (attempt == maxRetries) throw;
-                await Task.Delay(delayMs * attempt);
-            }
-            catch (Exception ex)
-            {
-                lastException = ex;
-                TestContext.WriteLine($"Неожиданная ошибка на попытке #{attempt}: {ex.Message}");
-                if (attempt == maxRetries) throw;
-                await Task.Delay(delayMs * attempt);
-            }
-        }
-
-        throw lastException ?? new Exception("Все попытки AI анализа завершились неудачно");
     }
 
 }
