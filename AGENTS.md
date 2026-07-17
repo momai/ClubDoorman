@@ -144,6 +144,7 @@ Current test infrastructure has several legacy construction paths. Do not add an
 - `TestInfrastructure/*Factory.cs` files are shared legacy factory contracts. Do not expand them by default; prefer moving one test closer to the production seam.
 - `TestKit.MessageHandlerBuilder` is transitional. Keep it thin; do not add behavior emulation.
 - `FakeServicesFactory` is legacy broad integration setup. Do not add new scenarios there unless the test is explicitly broad integration.
+- A user-approved, small infrastructure change is allowed when it only exposes an already-recorded seam effect (for example, preserving reply parameters in a fake), remains backward-compatible, and does not emulate production behavior or add a general-purpose harness.
 - If changing a `MessageHandler` test, first ask whether the assertion belongs at `MessageHandler`, a pipeline step, `ModerationFacade`, or `UserBanService`.
 
 ### Telegram Message tests
@@ -157,7 +158,7 @@ Current test infrastructure has several legacy construction paths. Do not add an
 
 ### TestInfrastructure / TestKit
 
-Do NOT edit files in `ClubDoorman.Test/TestInfrastructure/` or `ClubDoorman.Test/TestKit/` unless the seam contract itself changes (interface signature, method name, or required dependency). These factories and builders are shared test contracts. If you need a new test helper, add it in your focused test file or create a narrowly-scoped helper — do not modify existing factories.
+Do NOT edit files in `ClubDoorman.Test/TestInfrastructure/` or `ClubDoorman.Test/TestKit/` unless the seam contract itself changes (interface signature, method name, or required dependency). These factories and builders are shared test contracts. If you need a new test helper, add it in your focused test file or create a narrowly-scoped helper — do not modify existing factories. A user-approved, small infrastructure change is allowed when it only exposes an already-recorded seam effect, remains backward-compatible, and does not emulate production behavior or add a general-purpose harness.
 
 ### Test execution order
 
