@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://clubdoorman.local/test-audit/audit.schema.json",
+  "title": "ClubDoorman test audit output",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "id",
+    "declared_area",
+    "actual_seam",
+    "test_intent",
+    "assertion_type",
+    "behavior_value",
+    "maintenance_risk",
+    "bot_owner_value",
+    "decision",
+    "replacement_needed",
+    "replacement_seam",
+    "reason",
+    "confidence",
+    "needs_human_review"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "test-audit-v1"
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "declared_area": {
+      "enum": [
+        "MessageHandler",
+        "MessagePipeline",
+        "PipelineStep",
+        "UserBanService",
+        "ModerationFacade",
+        "CommandRouter",
+        "MessageService",
+        "NotificationService",
+        "FakeTelegramClient",
+        "DI",
+        "Pure",
+        "Integration",
+        "TestInfrastructure",
+        "Unknown"
+      ]
+    },
+    "actual_seam": {
+      "enum": [
+        "MessageHandler",
+        "MessagePipeline",
+        "PipelineStep",
+        "UserBanService",
+        "ModerationFacade",
+        "CommandRouter",
+        "MessageService",
+        "NotificationService",
+        "FakeTelegramClient",
+        "DI",
+        "Pure",
+        "Integration",
+        "TestInfrastructure",
+        "Multiple",
+        "Unknown"
+      ]
+    },
+    "test_intent": {
+      "type": "string",
+      "minLength": 1
+    },
+    "assertion_type": {
+      "enum": [
+        "strong_behavior",
+        "state_assertion",
+        "fake_client_tracking",
+        "envelope_tracking",
+        "mock_choreography",
+        "does_not_throw",
+        "no_meaningful_assertion",
+        "compile_smoke",
+        "snapshot_or_golden",
+        "logs",
+        "unknown"
+      ]
+    },
+    "behavior_value": {
+      "enum": ["high", "medium", "low", "unknown"]
+    },
+    "maintenance_risk": {
+      "enum": ["high", "medium", "low", "unknown"]
+    },
+    "bot_owner_value": {
+      "enum": ["owner_would_thank_us", "owner_would_swear", "unclear"]
+    },
+    "decision": {
+      "enum": ["keep", "rewrite", "delete", "quarantine", "unknown"]
+    },
+    "replacement_needed": {
+      "type": "boolean"
+    },
+    "replacement_seam": {
+      "type": ["string", "null"]
+    },
+    "reason": {
+      "type": "string",
+      "minLength": 1
+    },
+    "confidence": {
+      "enum": ["high", "medium", "low"]
+    },
+    "needs_human_review": {
+      "type": "boolean"
+    }
+  }
+}

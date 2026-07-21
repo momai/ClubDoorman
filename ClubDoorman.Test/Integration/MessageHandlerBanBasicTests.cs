@@ -7,6 +7,7 @@ using ClubDoorman.Services.UserBan;
 using ClubDoorman.Handlers;
 using ClubDoorman.Models;
 using ClubDoorman.TestInfrastructure;
+using ClubDoorman.Test.TestData;
 using ClubDoorman.Test.TestKit;
 using ClubDoorman.Test.TestInfrastructure;
 using Microsoft.Extensions.Logging;
@@ -60,34 +61,25 @@ public class MessageHandlerBanBasicTests
     {
     // This test asserts that a moderation Delete leads to exactly one call to DeleteMessageWithOutcomeAsync.
     // Legacy DeleteMessage path is deprecated in this scenario.
-        // Arrange - используем builders для читаемого создания тестовых данных
-        var user = TestKitBuilders.CreateUser()
-            .WithId(123456789)
-            .WithUsername("testuser")
-            .AsRegularUser()
-            .Build();
-
-        var chat = TestKitBuilders.CreateChat()
-            .WithId(-1001234567890)
-            .WithTitle("Test Group")
-            .AsSupergroup()
-            .Build();
-
-        var message = TestKitBuilders.CreateMessage()
-            .WithText("spam")
-            .FromUser(user)
-            .InChat(chat)
-            .Build();
+        // Arrange - use envelope tracking because Telegram.Bot MessageId remains 0 in tests.
+        var fakeClient = TestKitTelegram.CreateFakeClient();
+        var envelope = MessageEnvelope.CreateTest(
+            messageId: 12345,
+            userId: 123456789,
+            chatId: -1001234567890,
+            text: "spam");
+        var message = TestKitTelegram.CreateMessageFromEnvelope(fakeClient, envelope);
 
         // Настраиваем модерацию через умные моки
         _moderationServiceMock.Setup(x => x.CheckMessageAsync(message))
             .ReturnsAsync(new ModerationResult(ModerationAction.Delete, "ML решил что это спам"));
+        var handler = _factory.CreateMessageHandlerWithFake(fakeClient);
 
         // Act
         var update = new Update { Message = message };
-        await _handler.HandleAsync(update, CancellationToken.None);
+        await handler.HandleAsync(update, CancellationToken.None);
 
         // Assert
-    _botMock.Verify(x => x.DeleteMessageWithOutcomeAsync(new ChatId(chat.Id), message.MessageId, It.IsAny<CancellationToken>()), Times.Once);
+        Assert.That(fakeClient.WasMessageDeleted(envelope), Is.True);
     }
 }

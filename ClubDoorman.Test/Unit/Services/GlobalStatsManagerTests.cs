@@ -89,109 +89,6 @@ public class GlobalStatsManagerTests
     }
 
     [Test]
-    public async Task UpdateAllMembersAsync_ValidChats_UpdatesMemberCounts()
-    {
-        // Arrange
-        var chatId1 = 123456L;
-        var chatId2 = 789012L;
-
-        // Добавляем чаты
-        _factory.WithBotClientSetup(mock =>
-        {
-            mock.Setup(x => x.GetChatMemberCount(It.IsAny<ChatId>(), It.IsAny<CancellationToken>())).ReturnsAsync(100);
-        });
-
-        await _service.EnsureChatAsync(chatId1, "Chat 1", _botClientMock.Object);
-        await _service.EnsureChatAsync(chatId2, "Chat 2", _botClientMock.Object);
-
-        // Act
-        await _service.UpdateAllMembersAsync(_botClientMock.Object);
-
-        // Assert
-        Assert.Pass("Метод выполнился без исключений");
-    }
-
-    [Test]
-    public async Task UpdateZeroMemberChatsAsync_OnlyZeroChats_UpdatesOnlyZeroChats()
-    {
-        // Arrange
-        var zeroChatId = 123456L;
-        var nonZeroChatId = 789012L;
-
-        _factory.WithBotClientSetup(mock =>
-        {
-            mock.Setup(x => x.GetChatMemberCount(It.IsAny<ChatId>(), It.IsAny<CancellationToken>())).ReturnsAsync(0);
-        });
-
-        await _service.EnsureChatAsync(zeroChatId, "Zero Chat", _botClientMock.Object);
-        await _service.EnsureChatAsync(nonZeroChatId, "Non-Zero Chat", _botClientMock.Object);
-
-        // Act
-        await _service.UpdateZeroMemberChatsAsync(_botClientMock.Object);
-
-        // Assert
-        Assert.Pass("Метод выполнился без исключений");
-    }
-
-    [Test]
-    public void IncCaptcha_NewChat_IncrementsCaptchaCount()
-    {
-        // Arrange
-        var chatId = 123456L;
-        var chatTitle = "Test Chat";
-
-        // Act
-        _service.IncCaptcha(chatId, chatTitle);
-
-        // Assert
-        Assert.Pass("Метод выполнился без исключений");
-    }
-
-    [Test]
-    public void IncCaptcha_ExistingChat_IncrementsCaptchaCount()
-    {
-        // Arrange
-        var chatId = 123456L;
-        var chatTitle = "Test Chat";
-
-        // Act - вызываем дважды
-        _service.IncCaptcha(chatId, chatTitle);
-        _service.IncCaptcha(chatId, chatTitle);
-
-        // Assert
-        Assert.Pass("Метод выполнился без исключений");
-    }
-
-    [Test]
-    public void IncBan_NewChat_IncrementsBanCount()
-    {
-        // Arrange
-        var chatId = 123456L;
-        var chatTitle = "Test Chat";
-
-        // Act
-        _service.IncBan(chatId, chatTitle);
-
-        // Assert
-        Assert.Pass("Метод выполнился без исключений");
-    }
-
-    [Test]
-    public void IncBan_ExistingChat_IncrementsBanCount()
-    {
-        // Arrange
-        var chatId = 123456L;
-        var chatTitle = "Test Chat";
-
-        // Act - вызываем дважды
-        _service.IncBan(chatId, chatTitle);
-        _service.IncBan(chatId, chatTitle);
-
-        // Assert
-        Assert.Pass("Метод выполнился без исключений");
-    }
-
-    [Test]
     public void GenerateHtml_ValidData_GeneratesHtmlFile()
     {
         // Arrange
@@ -267,28 +164,6 @@ public class GlobalStatsManagerTests
         // Act & Assert
         Assert.DoesNotThrowAsync(async () =>
             await _service.UpdateAllMembersAsync(_botClientMock.Object));
-    }
-
-    [Test]
-    public async Task UpdateZeroMemberChatsAsync_BotThrowsException_HandlesGracefully()
-    {
-        // Arrange
-        var chatId = 123456L;
-        var chatTitle = "Test Chat";
-
-        _factory.WithBotClientSetup(mock =>
-        {
-            mock.Setup(x => x.GetChatMemberCount(It.IsAny<ChatId>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(0);
-            mock.Setup(x => x.GetChatMemberCount(It.IsAny<ChatId>(), It.IsAny<CancellationToken>()))
-                .ThrowsAsync(new Exception("Bot API error"));
-        });
-
-        await _service.EnsureChatAsync(chatId, chatTitle, _botClientMock.Object);
-
-        // Act & Assert
-        Assert.DoesNotThrowAsync(async () =>
-            await _service.UpdateZeroMemberChatsAsync(_botClientMock.Object));
     }
 
     [TearDown]

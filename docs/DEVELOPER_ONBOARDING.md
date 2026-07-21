@@ -11,7 +11,7 @@
 
 ## 2. Установка .NET 9
 ```bash
-./dotnet-install.sh --channel 9.0 --version latest
+./scripts/dotnet-install.sh --channel 9.0 --version latest
 export PATH="$HOME/.dotnet:$PATH"
 ```
 Проверьте: `dotnet --version` → 9.x
@@ -83,7 +83,7 @@ dotnet format
 ## 11. Troubleshooting
 | Проблема | Решение |
 |----------|---------|
-| NETSDK1045 / не видит .NET 9 | Установить SDK через `dotnet-install.sh` и PATH |
+| NETSDK1045 / не видит .NET 9 | Установить SDK через `scripts/dotnet-install.sh` и PATH |
 | Долгий restore | Первый раз до ~70s — норма |
 | Падают real-api тесты | Исключить фильтром или задать валидные ключи |
 | Форматирование валится в pre-commit | (Если включили PRECOMMIT_FORMAT=1) Запустите `dotnet format`, добавьте изменения |

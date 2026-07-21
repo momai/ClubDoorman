@@ -64,22 +64,6 @@ public class ModerationServiceTests
     }
 
     [Test]
-    public async Task CheckMessageAsync_MimicryMessage_ReturnsAllowAction()
-    {
-        // Arrange
-        var message = TK.CreateValidMessage(); // Заменяем на валидное сообщение, так как мимикрия обрабатывается отдельно
-        _factory.ClassifierMock.Setup(x => x.IsSpam(It.IsAny<string>()))
-            .ReturnsAsync((false, -1.2f)); // Уверенный ham (не спам)
-        // Мимикрия обрабатывается в другом месте, здесь просто проверяем что сообщение проходит
-
-        // Act
-        var result = await _service.CheckMessageAsync(message);
-
-        // Assert
-        Assert.That(result.Action, Is.EqualTo(ModerationAction.Allow));
-    }
-
-    [Test]
     public async Task CheckMessageAsync_BadMessage_ReturnsBanAction()
     {
         // Arrange

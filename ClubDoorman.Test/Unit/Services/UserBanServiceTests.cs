@@ -126,130 +126,73 @@ public class UserBanServiceTests
     }
 
     [Test]
-    [Category("migration-old")]
-    [Obsolete("Replaced by builders version - will be archived")]
-    public async Task BanUserForLongName_PrivateChat_LogsWarningAndReturns_Obsolete()
-    {
-        // Arrange
-        var user = TK.CreateValidUser();
-        var chat = TK.CreatePrivateChat();
-        var message = TK.CreateValidMessage();
-        message.Chat = chat;
-        var reason = "Длинное имя";
-        var banDuration = TimeSpan.FromMinutes(10);
-
-        // Act
-        await _userBanService.BanUserForLongNameAsync(message, user, reason, banDuration, CancellationToken.None);
-
-        // Assert
-        // Логирование происходит в MessageHandler, а не в UserBanService
-
-        _messageServiceMock.Verify(
-            x => x.SendAdminNotificationAsync(
-                AdminNotificationType.PrivateChatBanAttempt,
-                It.IsAny<ErrorNotificationData>(),
-                It.IsAny<CancellationToken>()),
-            Times.Once);
-
-        // Убеждаемся, что бан не был выполнен
-        _botMock.Verify(x => x.BanChatMember(It.IsAny<ChatId>(), It.IsAny<long>(), It.IsAny<DateTime?>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()), Times.Never);
-    }
-
-    [Test]
     [Category("migration-new")]
-    public async Task BanUserForLongName_ValidChat_BansUserAndSendsNotification()
+    public async Task BanUserForLongName_GroupChat_BansDeletesNotifiesLogs()
     {
-        // Arrange - используем builders вместо мутаций
-        var user = TK.CreateValidUser();
-        var chat = TK.CreateGroupChat();
-        var message = TK.BuildMessage()
-            .AsValid()
-            .InChat(chat)
-            .Build();
+        // Arrange — FakeTelegramClient tracks real non-zero message IDs via MessageEnvelope
+        var fakeClient = TestKitTelegram.CreateFakeClient();
+        var messageServiceMock = new Mock<IMessageService>();
+        var userFlowLoggerMock = new Mock<IUserFlowLogger>();
+        var appConfigMock = new Mock<IAppConfig>();
+        var violationTrackerMock = new Mock<IViolationTracker>();
+        var statisticsServiceMock = new Mock<IStatisticsService>();
+        var globalStatsManagerMock = new Mock<GlobalStatsManager>();
+        var userManagerMock = new Mock<IUserManager>();
+
+        var serviceUnderTest = new UserBanService(
+            fakeClient,
+            messageServiceMock.Object,
+            userFlowLoggerMock.Object,
+            new Mock<ILogger<UserBanService>>().Object,
+            violationTrackerMock.Object,
+            appConfigMock.Object,
+            statisticsServiceMock.Object,
+            globalStatsManagerMock.Object,
+            userManagerMock.Object,
+            new Mock<IUserCleanupService>().Object
+        );
+
+        var envelope = TestKitTelegram.CreateEnvelope(
+            userId: 12345,
+            chatId: -1001234567890,
+            text: "Test message",
+            firstName: "LongNameUser",
+            chatTitle: "Test Group"
+        );
+        var message = TestKitTelegram.CreateMessageFromEnvelope(fakeClient, envelope);
+        var user = message.From!;
+        var chat = message.Chat;
         var reason = "Длинное имя";
         var banDuration = TimeSpan.FromMinutes(10);
 
-        _botMock.Setup(x => x.BanChatMember(It.IsAny<ChatId>(), It.IsAny<long>(), It.IsAny<DateTime?>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()))
-            .Returns(Task.CompletedTask);
-        _botMock.Setup(x => x.DeleteMessage(It.IsAny<ChatId>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))
-            .Returns(Task.CompletedTask);
-
         // Act
-        await _userBanService.BanUserForLongNameAsync(message, user, reason, banDuration, CancellationToken.None);
+        await serviceUnderTest.BanUserForLongNameAsync(message, user, reason, banDuration, CancellationToken.None);
 
-        // Assert - идентично оригиналу
-        _botMock.Verify(
-            x => x.BanChatMember(
-                chat.Id,
-                user.Id,
-                It.Is<DateTime?>(d => d.HasValue && d.Value > DateTime.UtcNow),
-                true,
-                It.IsAny<CancellationToken>()),
-            Times.Once);
+        // Assert — ban side effect (tracked by FakeTelegramClient, not a mock verify)
+        Assert.That(fakeClient.WasUserBanned(chat.Id, user.Id), Is.True,
+            "User should be banned in the group chat");
 
-        _botMock.Verify(
-            x => x.DeleteMessage(chat.Id, message.MessageId, It.IsAny<CancellationToken>()),
-            Times.Once);
+        // Assert — delete side effect (envelope.MessageId is non-zero, not message.MessageId == 0)
+        Assert.That(envelope.MessageId, Is.GreaterThan(0),
+            "MessageEnvelope must carry a non-zero message ID");
+        Assert.That(fakeClient.WasMessageDeleted(envelope), Is.True,
+            "Offending message should be deleted using the real message ID from the envelope");
 
-        _messageServiceMock.Verify(
+        // Assert — notification side effect (mock verify)
+        messageServiceMock.Verify(
             x => x.ForwardToLogWithNotificationAsync(
-                message,
+                It.Is<Message>(m => m.MessageId == message.MessageId),
                 LogNotificationType.BanForLongName,
                 It.IsAny<AutoBanNotificationData>(),
                 It.IsAny<CancellationToken>()),
-            Times.Once);
+            Times.Once,
+            "Ban notification should be forwarded to log chat");
 
-        _userFlowLoggerMock.Verify(
+        // Assert — log side effect (mock verify)
+        userFlowLoggerMock.Verify(
             x => x.LogUserBanned(user, chat, reason),
-            Times.Once);
-    }
-
-    [Test]
-    [Category("migration-old")]
-    [Obsolete("Replaced by builders version - will be archived")]
-    public async Task BanUserForLongName_ValidChat_BansUserAndSendsNotification_Obsolete()
-    {
-        // Arrange
-        var user = TK.CreateValidUser();
-        var chat = TK.CreateGroupChat();
-        var message = TK.CreateValidMessage();
-        message.Chat = chat;
-        var reason = "Длинное имя";
-        var banDuration = TimeSpan.FromMinutes(10);
-
-        _botMock.Setup(x => x.BanChatMember(It.IsAny<ChatId>(), It.IsAny<long>(), It.IsAny<DateTime?>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()))
-            .Returns(Task.CompletedTask);
-        _botMock.Setup(x => x.DeleteMessage(It.IsAny<ChatId>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))
-            .Returns(Task.CompletedTask);
-
-        // Act
-        await _userBanService.BanUserForLongNameAsync(message, user, reason, banDuration, CancellationToken.None);
-
-        // Assert
-        _botMock.Verify(
-            x => x.BanChatMember(
-                chat.Id,
-                user.Id,
-                It.Is<DateTime?>(d => d.HasValue && d.Value > DateTime.UtcNow),
-                true,
-                It.IsAny<CancellationToken>()),
-            Times.Once);
-
-        _botMock.Verify(
-            x => x.DeleteMessage(chat.Id, message.MessageId, It.IsAny<CancellationToken>()),
-            Times.Once);
-
-        _messageServiceMock.Verify(
-            x => x.ForwardToLogWithNotificationAsync(
-                message,
-                LogNotificationType.BanForLongName,
-                It.IsAny<AutoBanNotificationData>(),
-                It.IsAny<CancellationToken>()),
-            Times.Once);
-
-        _userFlowLoggerMock.Verify(
-            x => x.LogUserBanned(user, chat, reason),
-            Times.Once);
+            Times.Once,
+            "Ban event should be logged");
     }
 
     [Test]
@@ -280,28 +223,6 @@ public class UserBanServiceTests
             Times.Once);
     }
 
-    [Test]
-    public async Task BanUserForLongName_ExceptionOccurs_LogsWarning()
-    {
-        // Arrange
-        var user = TK.CreateValidUser();
-        var chat = TK.CreateGroupChat();
-        var message = TK.CreateValidMessage();
-        message.Chat = chat;
-        var reason = "Длинное имя";
-        var banDuration = TimeSpan.FromMinutes(10);
-
-        _botMock.Setup(x => x.BanChatMember(It.IsAny<ChatId>(), It.IsAny<long>(), It.IsAny<DateTime?>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()))
-            .ThrowsAsync(new Exception("Test exception"));
-
-        // Act
-        await _userBanService.BanUserForLongNameAsync(message, user, reason, banDuration, CancellationToken.None);
-
-        // Assert
-        // Проверяем, что исключение было пробброшено
-        // (логирование происходит в MessageHandler, а не в UserBanService)
-    }
-
     #endregion
 
     #region BanBlacklistedUser Tests
@@ -324,39 +245,71 @@ public class UserBanServiceTests
     }
 
     [Test]
-    public async Task BanBlacklistedUser_ValidChat_BansUserFor4Hours()
+    [Category("migration-new")]
+    public async Task BanBlacklistedUser_GroupChat_Bans4HoursDeletesLogs()
     {
-        // Arrange
-        var user = TK.CreateValidUser();
-        var chat = TK.CreateGroupChat();
-        var message = TK.CreateValidMessage();
-        message.Chat = chat;
+        var fakeClient = TestKitTelegram.CreateFakeClient();
+        var messageServiceMock = new Mock<IMessageService>();
+        var userFlowLoggerMock = new Mock<IUserFlowLogger>();
+        var appConfigMock = new Mock<IAppConfig>();
+        var violationTrackerMock = new Mock<IViolationTracker>();
+        var statisticsServiceMock = new Mock<IStatisticsService>();
+        var globalStatsManagerMock = new Mock<GlobalStatsManager>();
+        var userManagerMock = new Mock<IUserManager>();
+        var userCleanupServiceMock = new Mock<IUserCleanupService>();
 
-        _botMock.Setup(x => x.BanChatMember(It.IsAny<ChatId>(), It.IsAny<long>(), It.IsAny<DateTime?>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()))
-            .Returns(Task.CompletedTask);
-        _botMock.Setup(x => x.DeleteMessage(It.IsAny<ChatId>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))
-            .Returns(Task.CompletedTask);
+        var serviceUnderTest = new UserBanService(
+            fakeClient,
+            messageServiceMock.Object,
+            userFlowLoggerMock.Object,
+            new Mock<ILogger<UserBanService>>().Object,
+            violationTrackerMock.Object,
+            appConfigMock.Object,
+            statisticsServiceMock.Object,
+            globalStatsManagerMock.Object,
+            userManagerMock.Object,
+            userCleanupServiceMock.Object
+        );
 
-        // Act
-        await _userBanService.BanBlacklistedUserAsync(message, user, CancellationToken.None);
+        var envelope = TestKitTelegram.CreateEnvelope(
+            userId: 54321,
+            chatId: -1009876543210,
+            text: "Blacklisted user join",
+            firstName: "Blacklisted",
+            chatTitle: "Test Group"
+        );
+        var message = TestKitTelegram.CreateMessageFromEnvelope(fakeClient, envelope);
+        var user = message.From!;
+        var chat = message.Chat;
 
-        // Assert
-        _botMock.Verify(
-            x => x.BanChatMember(
-                chat.Id,
-                user.Id,
-                It.Is<DateTime?>(d => d.HasValue && d.Value > DateTime.UtcNow && d.Value <= DateTime.UtcNow.AddHours(4)),
-                true,
-                It.IsAny<CancellationToken>()),
-            Times.Once);
+        await serviceUnderTest.BanBlacklistedUserAsync(message, user, CancellationToken.None);
 
-        _botMock.Verify(
-            x => x.DeleteMessage(chat.Id, message.MessageId, It.IsAny<CancellationToken>()),
-            Times.Once);
+        Assert.That(fakeClient.WasUserBanned(chat.Id, user.Id), Is.True,
+            "User should be banned in the group chat");
 
-        _userFlowLoggerMock.Verify(
+        var banRecord = fakeClient.BannedUsers.FirstOrDefault(b => b.ChatId == chat.Id && b.UserId == user.Id);
+        Assert.That(banRecord, Is.Not.Null, "Ban record should exist");
+        Assert.That(banRecord!.UntilDate, Is.Not.Null, "Ban should have an until date (4-hour ban)");
+        var banDuration = banRecord!.UntilDate!.Value - DateTime.UtcNow;
+        Assert.That(banDuration.TotalHours, Is.GreaterThanOrEqualTo(3.9).And.LessThanOrEqualTo(4.1),
+            "Ban duration should be approximately 4 hours (240 minutes)");
+        Assert.That(banRecord.RevokeMessages, Is.True,
+            "Ban should revoke messages");
+
+        Assert.That(envelope.MessageId, Is.GreaterThan(0),
+            "MessageEnvelope must carry a non-zero message ID");
+        Assert.That(fakeClient.WasMessageDeleted(envelope), Is.True,
+            "Offending message should be deleted using the real message ID from the envelope");
+
+        userFlowLoggerMock.Verify(
             x => x.LogUserBanned(user, chat, "Пользователь в блэклисте"),
-            Times.Once);
+            Times.Once,
+            "Ban event should be logged");
+
+        statisticsServiceMock.Verify(
+            x => x.IncrementBlacklistBan(chat.Id),
+            Times.Once,
+            "Blacklist ban statistics should be incremented");
     }
 
     [Test]
@@ -495,68 +448,97 @@ public class UserBanServiceTests
     }
 
     [Test]
-    public async Task AutoBan_ValidChat_BansUserAndForwardsMessage()
+    [Category("migration-new")]
+    public async Task AutoBan_GroupChat_BansDeletesNotifiesCleansUp()
     {
-        // Arrange
-        var user = TK.CreateValidUser();
-        var chat = TK.CreateGroupChat();
-        var message = TK.CreateValidMessage();
-        message.Chat = chat;
-        message.Text = "Test message";
+        // Arrange — FakeTelegramClient tracks real non-zero message IDs via MessageEnvelope
+        var fakeClient = TestKitTelegram.CreateFakeClient();
+        var messageServiceMock = new Mock<IMessageService>();
+        var userFlowLoggerMock = new Mock<IUserFlowLogger>();
+        var appConfigMock = new Mock<IAppConfig>();
+        var violationTrackerMock = new Mock<IViolationTracker>();
+        var statisticsServiceMock = new Mock<IStatisticsService>();
+        var globalStatsManagerMock = new Mock<GlobalStatsManager>();
+        var userManagerMock = new Mock<IUserManager>();
+        var userCleanupServiceMock = new Mock<IUserCleanupService>();
+
+        var serviceUnderTest = new UserBanService(
+            fakeClient,
+            messageServiceMock.Object,
+            userFlowLoggerMock.Object,
+            new Mock<ILogger<UserBanService>>().Object,
+            violationTrackerMock.Object,
+            appConfigMock.Object,
+            statisticsServiceMock.Object,
+            globalStatsManagerMock.Object,
+            userManagerMock.Object,
+            userCleanupServiceMock.Object
+        );
+
+        var envelope = TestKitTelegram.CreateEnvelope(
+            userId: 12345,
+            chatId: -1001234567890,
+            text: "Spam message",
+            firstName: "Spammer",
+            chatTitle: "Test Group"
+        );
+        var message = TestKitTelegram.CreateMessageFromEnvelope(fakeClient, envelope);
+        var user = message.From!;
+        var chat = message.Chat;
         var reason = "Автобан";
 
         // Act
-        await _userBanService.AutoBanAsync(message, reason, CancellationToken.None);
+        await serviceUnderTest.AutoBanAsync(message, reason, CancellationToken.None);
 
-        // Assert
-        _messageServiceMock.Verify(
-            x => x.SendLogNotificationAsync(
-                LogNotificationType.AutoBanBlacklist,
-                It.IsAny<AutoBanNotificationData>(),
-                It.IsAny<CancellationToken>()),
-            Times.Once);
+        // Assert — ban side effect (tracked by FakeTelegramClient, not a mock verify)
+        Assert.That(fakeClient.WasUserBanned(chat.Id, user.Id), Is.True,
+            "User should be banned permanently in the group chat");
+
+        // Assert — delete side effect (envelope.MessageId is non-zero, not message.MessageId == 0)
+        Assert.That(envelope.MessageId, Is.GreaterThan(0),
+            "MessageEnvelope must carry a non-zero message ID");
+        Assert.That(fakeClient.WasMessageDeleted(envelope), Is.True,
+            "Offending message should be deleted using the real message ID from the envelope");
+
+        // Assert — notification side effect (mock verify)
+        // AutoBanAsync calls SendNotificationAsync with message=null, so it routes to
+        // SendLogNotificationAsync or SendAdminNotificationAsync depending on config.
+        // We verify that exactly one notification method was called.
+        var logNotificationCalls = messageServiceMock.Invocations
+            .Count(i => i.Method.Name == nameof(IMessageService.SendLogNotificationAsync));
+        var adminNotificationCalls = messageServiceMock.Invocations
+            .Count(i => i.Method.Name == nameof(IMessageService.SendAdminNotificationAsync));
+        Assert.That(logNotificationCalls + adminNotificationCalls, Is.EqualTo(1),
+            "Exactly one notification should be sent (either log or admin)");
+
+        // Assert — cleanup side effect: user removed from group approval
+        userCleanupServiceMock.Verify(
+            x => x.RemoveUserFromGroupApproval(user.Id, chat.Id, "Очистка при бане"),
+            Times.Once,
+            "User should be removed from group approval");
+
+        // Assert — cleanup side effect: violation counters reset
+        violationTrackerMock.Verify(
+            x => x.ResetViolations(user.Id, chat.Id, ViolationType.MlSpam),
+            Times.Once,
+            "ML spam violations should be reset");
+        violationTrackerMock.Verify(
+            x => x.ResetViolations(user.Id, chat.Id, ViolationType.StopWords),
+            Times.Once,
+            "Stop words violations should be reset");
+        violationTrackerMock.Verify(
+            x => x.ResetViolations(user.Id, chat.Id, ViolationType.TooManyEmojis),
+            Times.Once,
+            "Too many emojis violations should be reset");
+        violationTrackerMock.Verify(
+            x => x.ResetViolations(user.Id, chat.Id, ViolationType.LookalikeSymbols),
+            Times.Once,
+            "Lookalike symbols violations should be reset");
     }
 
     #endregion
 
     #region AutoBanChannel Tests
-
-    [Test]
-    public async Task AutoBanChannel_ValidMessage_BansChannelAndSendsNotification()
-    {
-        // Arrange
-        var senderChat = new Chat { Id = 789, Type = ChatType.Channel, Title = "Test Channel" };
-        var chat = TK.CreateGroupChat();
-        var message = TK.CreateValidMessage();
-        message.Chat = chat;
-        message.SenderChat = senderChat;
-        message.Text = "Test message";
-
-        _botMock.Setup(x => x.DeleteMessage(It.IsAny<ChatId>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))
-            .Returns(Task.CompletedTask);
-        _botMock.Setup(x => x.BanChatSenderChat(It.IsAny<ChatId>(), It.IsAny<long>(), It.IsAny<CancellationToken>()))
-            .Returns(Task.CompletedTask);
-
-        // Act
-        await _userBanService.AutoBanChannelAsync(message, CancellationToken.None);
-
-        // Assert
-        _botMock.Verify(
-            x => x.DeleteMessage(chat.Id, message.MessageId, It.IsAny<CancellationToken>()),
-            Times.Once);
-
-        _botMock.Verify(
-            x => x.BanChatSenderChat(chat.Id, senderChat.Id, It.IsAny<CancellationToken>()),
-            Times.Once);
-
-        _messageServiceMock.Verify(
-            x => x.ForwardToAdminWithNotificationAsync(
-                message,
-                AdminNotificationType.ChannelMessage,
-                It.IsAny<ChannelMessageNotificationData>(),
-                It.IsAny<CancellationToken>()),
-            Times.Once);
-    }
 
     [Test]
     public async Task AutoBanChannel_ExceptionOccurs_LogsWarningAndSendsErrorNotification()
@@ -575,7 +557,7 @@ public class UserBanServiceTests
         // Act
         await _userBanService.AutoBanChannelAsync(message, CancellationToken.None);
 
-        // Assert  
+        // Assert
         // Проверяем, что исключение было проброшено
         // (логирование происходит в MessageHandler, а не в UserBanService)
 
@@ -587,34 +569,137 @@ public class UserBanServiceTests
             Times.Once);
     }
 
+    [Test]
+    [Category("migration-new")]
+    public async Task AutoBanChannel_DeletesBansSenderNotifiesAdmin()
+    {
+        var fakeClient = TestKitTelegram.CreateFakeClient();
+        var messageServiceMock = new Mock<IMessageService>();
+        var userFlowLoggerMock = new Mock<IUserFlowLogger>();
+        var appConfigMock = new Mock<IAppConfig>();
+        var violationTrackerMock = new Mock<IViolationTracker>();
+        var statisticsServiceMock = new Mock<IStatisticsService>();
+        var globalStatsManagerMock = new Mock<GlobalStatsManager>();
+        var userManagerMock = new Mock<IUserManager>();
+        var userCleanupServiceMock = new Mock<IUserCleanupService>();
+
+        var serviceUnderTest = new UserBanService(
+            fakeClient,
+            messageServiceMock.Object,
+            userFlowLoggerMock.Object,
+            new Mock<ILogger<UserBanService>>().Object,
+            violationTrackerMock.Object,
+            appConfigMock.Object,
+            statisticsServiceMock.Object,
+            globalStatsManagerMock.Object,
+            userManagerMock.Object,
+            userCleanupServiceMock.Object
+        );
+
+        var groupChatId = -1001112223334L;
+        var senderChatId = 9998887776L;
+
+        var envelope = TestKitTelegram.CreateEnvelope(
+            userId: 0,
+            chatId: groupChatId,
+            text: "Channel forwarded message",
+            firstName: "ChannelUser",
+            chatTitle: "Target Group"
+        );
+        var message = TestKitTelegram.CreateMessageFromEnvelope(fakeClient, envelope);
+        message.SenderChat = new Chat { Id = senderChatId, Type = ChatType.Channel, Title = "Spam Channel" };
+
+        await serviceUnderTest.AutoBanChannelAsync(message, CancellationToken.None);
+
+        Assert.That(envelope.MessageId, Is.GreaterThan(0),
+            "MessageEnvelope must carry a non-zero message ID");
+        Assert.That(fakeClient.WasMessageDeleted(envelope), Is.True,
+            "Offending message should be deleted using the real message ID from the envelope");
+
+        Assert.That(fakeClient.WasSenderChatBanned(groupChatId, senderChatId), Is.True,
+            "Sender chat (channel) should be banned in the target group");
+
+        messageServiceMock.Verify(
+            x => x.ForwardToAdminWithNotificationAsync(
+                It.Is<Message>(m => m.Chat.Id == groupChatId),
+                AdminNotificationType.ChannelMessage,
+                It.IsAny<ChannelMessageNotificationData>(),
+                It.IsAny<CancellationToken>()),
+            Times.Once,
+            "Message should be forwarded to admin with channel message notification");
+    }
+
     #endregion
 
     #region HandleBlacklistBan Tests
 
     [Test]
-    public async Task HandleBlacklistBan_ValidUser_BansUserAndDeletesMessage()
+    [Category("migration-new")]
+    public async Task HandleBlacklistBan_DeletesMessageLogsBan()
     {
-        // Arrange
-        var user = TK.CreateValidUser();
-        var chat = TK.CreateGroupChat();
-        var message = TK.CreateValidMessage();
-        message.Chat = chat;
-        message.Text = "Test message";
+        var fakeClient = TestKitTelegram.CreateFakeClient();
+        var messageServiceMock = new Mock<IMessageService>();
+        var userFlowLoggerMock = new Mock<IUserFlowLogger>();
+        var appConfigMock = new Mock<IAppConfig>();
+        appConfigMock.Setup(x => x.LogAdminChatId).Returns(999999999L);
+        var violationTrackerMock = new Mock<IViolationTracker>();
+        var statisticsServiceMock = new Mock<IStatisticsService>();
+        var globalStatsManagerMock = new Mock<GlobalStatsManager>();
+        var userManagerMock = new Mock<IUserManager>();
+        var userCleanupServiceMock = new Mock<IUserCleanupService>();
 
-        _botMock.Setup(x => x.DeleteMessage(It.IsAny<ChatId>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))
-            .Returns(Task.CompletedTask);
+        var serviceUnderTest = new UserBanService(
+            fakeClient,
+            messageServiceMock.Object,
+            userFlowLoggerMock.Object,
+            new Mock<ILogger<UserBanService>>().Object,
+            violationTrackerMock.Object,
+            appConfigMock.Object,
+            statisticsServiceMock.Object,
+            globalStatsManagerMock.Object,
+            userManagerMock.Object,
+            userCleanupServiceMock.Object
+        );
 
-        // Act
-        await _userBanService.HandleBlacklistBanAsync(message, user, chat, CancellationToken.None);
+        var envelope = TestKitTelegram.CreateEnvelope(
+            userId: 111222333,
+            chatId: -1004445556667L,
+            text: "Blacklisted user message",
+            firstName: "BlacklistedUser",
+            chatTitle: "Test Group"
+        );
+        var message = TestKitTelegram.CreateMessageFromEnvelope(fakeClient, envelope);
+        var user = message.From!;
+        var chat = message.Chat;
 
-        // Assert
-        _botMock.Verify(
-            x => x.DeleteMessage(chat.Id, message.MessageId, It.IsAny<CancellationToken>()),
-            Times.Once);
+        await serviceUnderTest.HandleBlacklistBanAsync(message, user, chat, CancellationToken.None);
 
-        _userFlowLoggerMock.Verify(
+        Assert.That(envelope.MessageId, Is.GreaterThan(0),
+            "MessageEnvelope must carry a non-zero message ID");
+        Assert.That(fakeClient.WasMessageDeleted(envelope), Is.True,
+            "Offending message should be deleted using the real message ID from the envelope");
+
+        Assert.That(fakeClient.WasUserBanned(chat.Id, user.Id), Is.True,
+            "User should be banned in the group chat");
+
+        var banRecord = fakeClient.BannedUsers.FirstOrDefault(b => b.ChatId == chat.Id && b.UserId == user.Id);
+        Assert.That(banRecord, Is.Not.Null, "Ban record should exist");
+        Assert.That(banRecord!.UntilDate, Is.Not.Null, "Ban should have an until date (4-hour ban)");
+        var banDuration = banRecord!.UntilDate!.Value - DateTime.UtcNow;
+        Assert.That(banDuration.TotalHours, Is.GreaterThanOrEqualTo(3.9).And.LessThanOrEqualTo(4.1),
+            "Ban duration should be approximately 4 hours (240 minutes)");
+        Assert.That(banRecord.RevokeMessages, Is.True,
+            "Ban should revoke messages");
+
+        userFlowLoggerMock.Verify(
             x => x.LogUserBanned(user, chat, "Пользователь в блэклисте lols.bot"),
-            Times.Once);
+            Times.Once,
+            "Ban attempt should be logged");
+
+        statisticsServiceMock.Verify(
+            x => x.IncrementBlacklistBan(chat.Id),
+            Times.Once,
+            "Blacklist ban statistics should be incremented");
     }
 
     #endregion

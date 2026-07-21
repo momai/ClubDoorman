@@ -15,7 +15,6 @@ export DOORMAN_OPENROUTER_API="test-api-key-for-tests-only"
 export DOORMAN_AI_ENABLED_CHATS=""
 export DOORMAN_DISABLE_MEDIA_FILTERING="false"
 export DOORMAN_GROUP_APPROVAL_MODE="false"
-export DOORMAN_USE_NEW_APPROVAL_SYSTEM="false"
 
 echo "🔧 Setting up test environment..."
 echo "   DOORMAN_BOT_API: $DOORMAN_BOT_API"
@@ -34,4 +33,4 @@ else
 fi
 
 echo ""
-echo "✅ Tests completed!" 
+echo "✅ Tests completed!"

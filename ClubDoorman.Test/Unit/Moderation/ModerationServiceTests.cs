@@ -28,17 +28,6 @@ public class ModerationServiceTests
     }
 
     [Test]
-    public void CreateModerationService_WithFactory_ReturnsWorkingService()
-    {
-        // Arrange & Act
-        var service = _factory.CreateModerationService();
-
-        // Assert
-        Assert.That(service, Is.Not.Null);
-        Assert.That(service, Is.InstanceOf<IModerationService>());
-    }
-
-    [Test]
     public async Task CheckMessageAsync_ValidMessage_ReturnsAllow()
     {
         // Arrange
@@ -162,31 +151,4 @@ public class ModerationServiceTests
         Assert.That(exception.Message, Is.EqualTo("Classifier error"));
     }
 
-    [Test]
-    public void ModerationTestFactory_CreatesFreshInstanceEachTime()
-    {
-        // Arrange & Act
-        var service1 = _factory.CreateModerationService();
-        var service2 = _factory.CreateModerationService();
-
-        // Assert
-        Assert.That(service1, Is.Not.SameAs(service2));
-    }
-
-    [Test]
-    public void ModerationTestFactory_ConfiguresAllDependencies()
-    {
-        // Arrange & Act
-        var service = _factory.CreateModerationService();
-
-        // Assert - проверяем что все моки настроены
-        Assert.That(_factory.ClassifierMock, Is.Not.Null);
-        Assert.That(_factory.MimicryClassifierMock, Is.Not.Null);
-        Assert.That(_factory.BadMessageManagerMock, Is.Not.Null);
-        Assert.That(_factory.UserManagerMock, Is.Not.Null);
-        Assert.That(_factory.AiChecksMock, Is.Not.Null);
-        Assert.That(_factory.SuspiciousUsersStorageMock, Is.Not.Null);
-        Assert.That(_factory.BotClientMock, Is.Not.Null);
-        Assert.That(_factory.LoggerMock, Is.Not.Null);
-    }
 }

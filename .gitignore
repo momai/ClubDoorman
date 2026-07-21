@@ -40,11 +40,20 @@ ClubDoorman/logs/
 
 # Golden transient semantics (never commit)
 *.sem.json
+ClubDoorman.Baseline/Golden/
+
+# Local orchestration notes
+docs/project-state-sync-plan.md
 
 # Temporary test files
 *.tmp
 *.temp
-test-*.jsonscripts/test_factory_generator/__pycache__/
+test-*.json
+scripts/test_factory_generator/__pycache__/
+*.backup
+
+# Windows alternate data stream metadata copied to Linux
+*Zone.Identifier
 
 # Security - never commit real tokens
 test_bot.sh
@@ -74,7 +83,27 @@ scripts/testkit-sql-indexer/testkit_index_*.txt
 
 venv/
 .venv/
-archive/
-archived/
+/archive/
+/archived/
 /html/
 /latex/
+.opencode/
+
+# Local AI/code graph build state
+.refactor-mcp/
+graphify-out/
+**/.understand-anything/
+**/graphify-out/cache/
+**/graphify-out/.graphify_*
+**/graphify-out/manifest.json
+**/graphify-out/cost.json
+
+**/.understand-anything/.understandignore
+**/.understand-anything/config.json
+**/.understand-anything/meta.json
+**/.understand-anything/fingerprints.json
+**/.understand-anything/session-context.md
+**/.understand-anything/intermediate/
+**/.understand-anything/tmp/
+**/.understand-anything/.trash-*/
+.test-audit/

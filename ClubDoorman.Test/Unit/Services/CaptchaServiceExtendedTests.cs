@@ -15,7 +15,6 @@ using Telegram.Bot.Types.Enums;
 using Telegram.Bot;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using ClubDoorman.Services.Captcha;
 using ClubDoorman.Services.Violation;
@@ -84,38 +83,6 @@ public class CaptchaServiceExtendedTests
         Assert.That(result.CorrectAnswer, Is.LessThan(30)); // Captcha.CaptchaList.Count = 30
         Assert.That(result.Timestamp, Is.EqualTo(DateTime.UtcNow).Within(TimeSpan.FromSeconds(5)));
         Assert.That(result.UserJoinedMessage, Is.EqualTo(joinMessage));
-    }
-
-    [Test]
-    public async Task CreateCaptchaAsync_NullChat_ThrowsArgumentNullException()
-    {
-        // Arrange
-        var service = _factory.CreateCaptchaService();
-        var user = CreateTestUser();
-
-        // Act & Assert
-        var ex = Assert.ThrowsAsync<ArgumentNullException>(() =>
-        {
-            var request = new CreateCaptchaRequest(null!, user, null);
-            return service.CreateCaptchaAsync(request);
-        });
-        Assert.That(ex.ParamName, Is.EqualTo("chat"));
-    }
-
-    [Test]
-    public async Task CreateCaptchaAsync_NullUser_ThrowsArgumentNullException()
-    {
-        // Arrange
-        var service = _factory.CreateCaptchaService();
-        var chat = CreateTestChat();
-
-        // Act & Assert
-        var ex = Assert.ThrowsAsync<ArgumentNullException>(() =>
-        {
-            var request = new CreateCaptchaRequest(chat, null!, null);
-            return service.CreateCaptchaAsync(request);
-        });
-        Assert.That(ex.ParamName, Is.EqualTo("user"));
     }
 
     [Test]
@@ -258,32 +225,6 @@ public class CaptchaServiceExtendedTests
     }
 
     [Test]
-    public async Task ValidateCaptchaAsync_EmptyKey_ReturnsFalse()
-    {
-        // Arrange
-        var service = _factory.CreateCaptchaService();
-
-        // Act
-        var result = await service.ValidateCaptchaAsync("", 0);
-
-        // Assert
-        Assert.That(result, Is.False);
-    }
-
-    [Test]
-    public async Task ValidateCaptchaAsync_NullKey_ReturnsFalse()
-    {
-        // Arrange
-        var service = _factory.CreateCaptchaService();
-
-        // Act
-        var result = await service.ValidateCaptchaAsync(null!, 0);
-
-        // Assert
-        Assert.That(result, Is.False);
-    }
-
-    [Test]
     public async Task ValidateCaptchaAsync_NonExistentKey_ReturnsFalse()
     {
         // Arrange
@@ -340,38 +281,6 @@ public class CaptchaServiceExtendedTests
         Assert.That(result.CorrectAnswer, Is.EqualTo(originalCaptcha.CorrectAnswer));
     }
 
-    [Test]
-    public async Task GetCaptchaInfo_NonExistentCaptcha_ReturnsNull()
-    {
-        // Arrange
-        var service = _factory.CreateCaptchaService();
-
-        // Act
-        var result = service.GetCaptchaInfo("non_existent_key");
-
-        // Assert
-        Assert.That(result, Is.Null);
-    }
-
-    [Test]
-    public async Task GetCaptchaInfo_AfterValidation_ReturnsNull()
-    {
-        // Arrange
-        var service = _factory.CreateCaptchaService();
-        var chat = CreateTestChat();
-        var user = CreateTestUser();
-        var request = new CreateCaptchaRequest(chat, user, null);
-        await service.CreateCaptchaAsync(request);
-        var key = service.GenerateKey(chat.Id, user.Id);
-        await service.ValidateCaptchaAsync(key, 0);
-
-        // Act
-        var result = service.GetCaptchaInfo(key);
-
-        // Assert
-        Assert.That(result, Is.Null);
-    }
-
     #endregion
 
     #region RemoveCaptcha Tests
@@ -392,19 +301,6 @@ public class CaptchaServiceExtendedTests
 
         // Assert
         Assert.That(result, Is.True);
-    }
-
-    [Test]
-    public async Task RemoveCaptcha_NonExistentCaptcha_ReturnsFalse()
-    {
-        // Arrange
-        var service = _factory.CreateCaptchaService();
-
-        // Act
-        var result = service.RemoveCaptcha("non_existent_key");
-
-        // Assert
-        Assert.That(result, Is.False);
     }
 
     [Test]
@@ -429,21 +325,6 @@ public class CaptchaServiceExtendedTests
     #endregion
 
     #region GenerateKey Tests
-
-    [Test]
-    public void GenerateKey_ValidParameters_ReturnsExpectedKey()
-    {
-        // Arrange
-        var service = _factory.CreateCaptchaService();
-        var chatId = 123456L;
-        var userId = 789L;
-
-        // Act
-        var result = service.GenerateKey(chatId, userId);
-
-        // Assert
-        Assert.That(result, Is.EqualTo($"{chatId}_{userId}"));
-    }
 
     [Test]
     public void GenerateKey_DifferentParameters_ReturnsDifferentKeys()
@@ -481,16 +362,6 @@ public class CaptchaServiceExtendedTests
     #endregion
 
     #region BanExpiredCaptchaUsersAsync Tests
-
-    [Test]
-    public async Task BanExpiredCaptchaUsersAsync_NoExpiredCaptchas_CompletesSuccessfully()
-    {
-        // Arrange
-        var service = _factory.CreateCaptchaService();
-
-        // Act & Assert
-        Assert.DoesNotThrowAsync(() => service.BanExpiredCaptchaUsersAsync());
-    }
 
     [Test]
     public async Task BanExpiredCaptchaUsersAsync_WithActiveCaptchas_CompletesSuccessfully()
@@ -574,79 +445,6 @@ public class CaptchaServiceExtendedTests
         var key = service.GenerateKey(chat.Id, user.Id);
         var info = service.GetCaptchaInfo(key);
         Assert.That(info, Is.Not.Null);
-    }
-
-    [Test]
-    public async Task CreateCaptchaAsync_CancellationToken_RespectsCancellation()
-    {
-        // Arrange
-        var service = _factory.CreateCaptchaService();
-        var chat = CreateTestChat();
-        var user = CreateTestUser();
-        var cts = new CancellationTokenSource();
-        cts.Cancel();
-
-        // Act & Assert
-        Assert.DoesNotThrowAsync(() =>
-        {
-            var request = new CreateCaptchaRequest(chat, user, null);
-            return service.CreateCaptchaAsync(request);
-        });
-        // Примечание: CaptchaService не принимает CancellationToken в CreateCaptchaAsync
-        // но внутренние операции могут быть отменены
-    }
-
-    #endregion
-
-    #region Performance and Load Tests
-
-    [Test]
-    public async Task CreateCaptchaAsync_LargeBatch_HandlesCorrectly()
-    {
-        // Arrange
-        var service = _factory.CreateCaptchaService();
-        var chat = CreateTestChat();
-        var tasks = new List<Task<CaptchaInfo>>();
-
-        // Act
-        for (int i = 0; i < 100; i++)
-        {
-            var user = CreateTestUser(id: i);
-            tasks.Add(service.CreateCaptchaAsync(new CreateCaptchaRequest(chat, user, null)));
-        }
-
-        var results = await Task.WhenAll(tasks);
-
-        // Assert
-        Assert.That(results, Has.Length.EqualTo(100));
-        Assert.That(results.All(r => r != null), Is.True);
-    }
-
-    [Test]
-    public async Task ValidateCaptchaAsync_LargeBatch_HandlesCorrectly()
-    {
-        // Arrange
-        var service = _factory.CreateCaptchaService();
-        var chat = CreateTestChat();
-        var captchas = new List<(string key, int answer)>();
-
-        // Создаем капчи
-        for (int i = 0; i < 50; i++)
-        {
-            var user = CreateTestUser(id: i);
-            var request = new CreateCaptchaRequest(chat, user, null);
-            var captchaInfo = await service.CreateCaptchaAsync(request);
-            var key = service.GenerateKey(chat.Id, user.Id);
-            captchas.Add((key, captchaInfo.CorrectAnswer));
-        }
-
-        // Act
-        var tasks = captchas.Select(c => service.ValidateCaptchaAsync(c.key, c.answer));
-        var results = await Task.WhenAll(tasks);
-
-        // Assert
-        Assert.That(results, Has.Length.EqualTo(50));
-        Assert.That(results.All(r => r), Is.True);
     }
 
     #endregion

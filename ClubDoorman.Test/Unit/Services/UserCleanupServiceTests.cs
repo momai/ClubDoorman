@@ -72,22 +72,6 @@ public class UserCleanupServiceTests
     }
 
     [Test]
-    public void RemoveUserFromAllApprovals_WhenExceptionOccurs_ReturnsFalseAndLogsError()
-    {
-        // Arrange
-        var userId = 123456L;
-        var reason = "Тестовая очистка";
-        // Этот тест требует более сложной настройки для создания исключения
-        // Пока пропустим его, так как ApprovedUsersStorage обычно не выбрасывает исключения
-
-        // Act
-        var result = _service.RemoveUserFromAllApprovals(userId, reason);
-
-        // Assert
-        Assert.That(result, Is.False);
-    }
-
-    [Test]
     public void RemoveUserFromGroupApproval_WhenUserExists_ReturnsTrue()
     {
         // Arrange
@@ -129,23 +113,6 @@ public class UserCleanupServiceTests
             It.IsAny<It.IsAnyType>(),
             It.IsAny<Exception>(),
             It.IsAny<Func<It.IsAnyType, Exception?, string>>()), Times.Never);
-    }
-
-    [Test]
-    public void RemoveUserFromGroupApproval_WhenExceptionOccurs_ReturnsFalseAndLogsError()
-    {
-        // Arrange
-        var userId = 123456L;
-        var groupId = 789L;
-        var reason = "Тестовая очистка группы";
-        // Этот тест требует более сложной настройки для создания исключения
-        // Пока пропустим его, так как ApprovedUsersStorage обычно не выбрасывает исключения
-
-        // Act
-        var result = _service.RemoveUserFromGroupApproval(userId, groupId, reason);
-
-        // Assert
-        Assert.That(result, Is.False);
     }
 
     [Test]

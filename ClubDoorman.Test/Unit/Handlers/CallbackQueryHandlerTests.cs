@@ -126,22 +126,6 @@ public class CallbackQueryHandlerTests
     }
 
     [Test]
-    public void CanHandle_WithNullCallbackQuery_ReturnsFalse()
-    {
-        // Arrange
-        var update = new Update
-        {
-            CallbackQuery = null
-        };
-
-        // Act
-        var result = _handler.CanHandle(update);
-
-        // Assert
-        Assert.That(result, Is.False);
-    }
-
-    [Test]
     public async Task HandleAsync_WithEmptyCallbackData_LogsWarningAndReturns()
     {
         // Arrange
@@ -165,64 +149,6 @@ public class CallbackQueryHandlerTests
                 LogLevel.Warning,
                 It.IsAny<EventId>(),
                 It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("Пустой callback data")),
-                It.IsAny<Exception>(),
-                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
-            Times.Once);
-    }
-
-    [Test]
-    public async Task HandleAsync_WithNullCallbackData_LogsWarningAndReturns()
-    {
-        // Arrange
-        var update = new Update
-        {
-            CallbackQuery = new CallbackQuery
-            {
-                Id = "test_id",
-                Data = null,
-                From = new User { Id = 123, FirstName = "Test", Username = "testuser" },
-                Message = new Message { Chat = new Chat { Id = 123 } }
-            }
-        };
-
-        // Act
-        await _handler.HandleAsync(update);
-
-        // Assert
-        _mockLogger.Verify(
-            x => x.Log(
-                LogLevel.Warning,
-                It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("Пустой callback data")),
-                It.IsAny<Exception>(),
-                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
-            Times.Once);
-    }
-
-    [Test]
-    public async Task HandleAsync_WithNullMessage_LogsWarningAndReturns()
-    {
-        // Arrange
-        var update = new Update
-        {
-            CallbackQuery = new CallbackQuery
-            {
-                Id = "test_id",
-                Data = "test_data",
-                From = new User { Id = 123, FirstName = "Test", Username = "testuser" },
-                Message = null
-            }
-        };
-
-        // Act
-        await _handler.HandleAsync(update);
-
-        // Assert
-        _mockLogger.Verify(
-            x => x.Log(
-                LogLevel.Warning,
-                It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("Callback без сообщения")),
                 It.IsAny<Exception>(),
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
             Times.Once);

@@ -2,6 +2,7 @@ using ClubDoorman.Services.UserBan;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using ClubDoorman.Test.TestData;
 using ClubDoorman.Test.TestInfrastructure;
 using ClubDoorman.Test.TestKit;
 using Microsoft.Extensions.Logging;
@@ -30,56 +31,17 @@ public class MessageHandlerDeleteMessageLaterTests
     }
 
     [Test]
-    public void DeleteMessageLater_WithCustomTimeout_SchedulesMessageDeletion()
-    {
-        var (_, _, message) = TK.Specialized.Messages.TextOnlyScenario();
-        var custom = TimeSpan.FromMilliseconds(80);
-        _messageHandler.DeleteMessageLater(message, custom, CancellationToken.None);
-        Assert.Pass();
-    }
-
-    [Test]
-    public void DeleteMessageLater_WithDefaultTimeout_UsesFiveMinutes()
-    {
-        var (_, _, message) = TK.Specialized.Messages.TextOnlyScenario();
-        _messageHandler.DeleteMessageLater(message, default, CancellationToken.None);
-        Assert.Pass();
-    }
-
-    [Test]
-    public void DeleteMessageLater_WithNullMessage_NoThrow()
-    {
-        Assert.DoesNotThrow(() => _messageHandler.DeleteMessageLater(null!, TimeSpan.FromMilliseconds(10), CancellationToken.None));
-    }
-
-    [Test]
-    public void DeleteMessageLater_WithZeroTimeout_NoThrow()
-    {
-        var (_, _, message) = TK.Specialized.Messages.TextOnlyScenario();
-        _messageHandler.DeleteMessageLater(message, TimeSpan.Zero, CancellationToken.None);
-        Assert.Pass();
-    }
-
-    [Test]
-    public void DeleteMessageLater_WithNegativeTimeout_NoThrow()
-    {
-        var (_, _, message) = TK.Specialized.Messages.TextOnlyScenario();
-        _messageHandler.DeleteMessageLater(message, TimeSpan.FromMilliseconds(-10), CancellationToken.None);
-        Assert.Pass();
-    }
-
-    [Test]
     public async Task DeleteMessageLater_WithShortTimeout_InvokesDelete()
     {
-        var (_, chat, message) = TK.Specialized.Messages.TextOnlyScenario();
-        _factory.WithBotSetup(mock =>
-        {
-            mock.Setup(x => x.DeleteMessageWithOutcomeAsync(It.IsAny<ChatId>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync((ChatId c, int m, CancellationToken ct) => new DeleteMessageResult((long)c.Identifier!, m, DeleteMessageOutcome.Success, 3, null, null));
-        });
-        _messageHandler.DeleteMessageLater(message, TimeSpan.FromMilliseconds(40), CancellationToken.None);
+        var fakeClient = TestKitTelegram.CreateFakeClient();
+        var envelope = MessageEnvelope.CreateTest(messageId: 12345, chatId: 67890);
+        var message = TestKitTelegram.CreateMessageFromEnvelope(fakeClient, envelope);
+        var messageHandler = _factory.CreateMessageHandlerWithFake(fakeClient);
+
+        messageHandler.DeleteMessageLater(message, TimeSpan.FromMilliseconds(40), CancellationToken.None);
+
         await Task.Delay(120);
-        _factory.BotMock.Verify(x => x.DeleteMessageWithOutcomeAsync(It.Is<ChatId>(c => (long)c.Identifier! == chat.Id), message.MessageId, It.IsAny<CancellationToken>()), Times.Once);
+        Assert.That(fakeClient.WasMessageDeleted(envelope), Is.True);
     }
 
     [Test]

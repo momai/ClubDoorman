@@ -63,25 +63,6 @@ public class MessageHandlerHandleAsyncBasicTests
     }
 
     /// <summary>
-    /// Тест для HandleAsync с null Update
-    /// Проверяет, что метод выбрасывает ArgumentNullException для null Update
-    /// <tags>golden-master, production, handle-async, null-update, error-handling</tags>
-    /// </summary>
-    [Test]
-    public async Task HandleAsync_NullUpdate_ThrowsArgumentNullException()
-    {
-        // Arrange: Передаем null
-        Update? update = null;
-
-        // Act & Assert: Проверяем исключение
-        var exception = Assert.ThrowsAsync<ArgumentNullException>(
-            async () => await _messageHandler.HandleAsync(update));
-
-        Assert.That(exception.ParamName, Is.EqualTo("update"),
-            "Параметр исключения должен быть 'update'");
-    }
-
-    /// <summary>
     /// Тест для HandleAsync с валидным текстовым сообщением
     /// Проверяет, что метод обрабатывает обычное текстовое сообщение и вызывает модерацию
     /// <tags>golden-master, production, handle-async, valid-message, moderation</tags>

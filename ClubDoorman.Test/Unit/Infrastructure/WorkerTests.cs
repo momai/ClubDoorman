@@ -128,17 +128,4 @@ public class WorkerTests
         Assert.That(result, Is.EqualTo("John"));
     }
 
-    [Test]
-    public void Worker_StaticMethods_AreAccessible()
-    {
-        // Arrange
-        var fullNameMethod = typeof(Worker).GetMethod("FullName", BindingFlags.NonPublic | BindingFlags.Static);
-        var userToKeyMethod = typeof(Worker).GetMethod("UserToKey", BindingFlags.NonPublic | BindingFlags.Static);
-        var adminDisplayNameMethod = typeof(Worker).GetMethod("AdminDisplayName", BindingFlags.NonPublic | BindingFlags.Static);
-
-        // Assert
-        Assert.That(fullNameMethod, Is.Not.Null, "FullName method should be accessible");
-        Assert.That(userToKeyMethod, Is.Not.Null, "UserToKey method should be accessible");
-        Assert.That(adminDisplayNameMethod, Is.Not.Null, "AdminDisplayName method should be accessible");
-    }
-}
+ }

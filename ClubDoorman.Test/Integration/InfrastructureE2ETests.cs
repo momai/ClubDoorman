@@ -1,6 +1,5 @@
 using ClubDoorman.Services.SuspiciousUsers;
 using ClubDoorman.Services.BadMessage;
-using ClubDoorman.Services.UserBan;
 using ClubDoorman.Services;
 using ClubDoorman.Services.Moderation;
 using ClubDoorman.TestInfrastructure;
@@ -9,7 +8,6 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
 using NUnit.Framework;
-using System.Reflection;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using ClubDoorman.Models;
@@ -17,6 +15,7 @@ using Telegram.Bot;
 using ClubDoorman.Services.AI;
 using ClubDoorman.Services.UserManagement;
 using ClubDoorman.Services.Messaging;
+using ClubDoorman.Test.TestData;
 
 namespace ClubDoorman.Test.Integration;
 
@@ -102,36 +101,6 @@ public class InfrastructureE2ETests : TestBase
     }
 
     [Test]
-    public async Task E2E_FakeTelegramClient_ShouldTrackSentMessages()
-    {
-        // Arrange
-        var message = TestData.Messages.Valid();
-        var chatId = message.Chat.Id;
-
-        // Act - отправляем сообщение через FakeTelegramClient
-        await _fakeBot.SendMessageAsync(chatId, "Test message");
-
-        // Assert с FluentAssertions
-        _fakeBot.SentMessages.Should().HaveCount(1);
-        _fakeBot.SentMessages.First().Text.Should().Be("Test message");
-        _fakeBot.SentMessages.First().ChatId.Should().Be(chatId);
-    }
-
-    [Test]
-    public async Task E2E_FakeTelegramClient_ShouldTrackCallbackQueries()
-    {
-        // Arrange
-        var callbackQuery = TestData.CallbackQueries.Valid();
-
-        // Act - добавляем callback query вручную (метод не существует)
-        _fakeBot.CallbackQueries.Add(callbackQuery);
-
-        // Assert с FluentAssertions
-        _fakeBot.CallbackQueries.Should().HaveCount(1);
-        _fakeBot.CallbackQueries.First().Should().Be(callbackQuery);
-    }
-
-    [Test]
     public async Task E2E_ModerationService_ShouldHandleSpamMessage()
     {
         // Arrange - создаем явный спам сообщение
@@ -149,80 +118,22 @@ public class InfrastructureE2ETests : TestBase
     }
 
     [Test]
-    public async Task E2E_TestDataFactory_ShouldGenerateValidData()
-    {
-        // Arrange & Act
-        var user = TestData.Users.Valid();
-        var message = TestData.Messages.Valid();
-        var chat = TestData.Chats.Group();
-
-        // Assert с FluentAssertions
-        user.Should().NotBeNull();
-        user.Id.Should().BeGreaterThan(0);
-        user.FirstName.Should().NotBeNullOrEmpty();
-
-        message.Should().NotBeNull();
-        message.Text.Should().NotBeNullOrEmpty();
-        message.From.Should().NotBeNull();
-
-        chat.Should().NotBeNull();
-        chat.Id.Should().BeLessThan(0); // Группы имеют отрицательные ID
-        chat.Type.Should().Be(ChatType.Group);
-    }
-
-    [Test]
-    public async Task E2E_ModerationResult_ShouldHaveCorrectProperties()
-    {
-        // Arrange & Act
-        var allowResult = TestData.ModerationResults.Allow();
-        var deleteResult = TestData.ModerationResults.Delete();
-        var banResult = TestData.ModerationResults.Ban();
-
-        // Assert с FluentAssertions
-        allowResult.Should().NotBeNull();
-        allowResult.Action.Should().Be(ModerationAction.Allow);
-        allowResult.Reason.Should().NotBeNullOrEmpty();
-
-        deleteResult.Should().NotBeNull();
-        deleteResult.Action.Should().Be(ModerationAction.Delete);
-        deleteResult.Reason.Should().NotBeNullOrEmpty();
-
-        banResult.Should().NotBeNull();
-        banResult.Action.Should().Be(ModerationAction.Ban);
-        banResult.Reason.Should().NotBeNullOrEmpty();
-    }
-
-    [Test]
     public async Task E2E_FakeTelegramClient_ShouldSupportMessageDeletion()
     {
-        // Arrange
-        var message = TestData.Messages.Valid();
-        var chatId = message.Chat.Id;
-        var messageId = message.MessageId;
+        // Arrange — use MessageEnvelope with a real non-zero message ID
+        var envelope = MessageEnvelope.CreateTest(messageId: 42, chatId: 999, userId: 111);
+        _fakeBot.RegisterMessageEnvelope(envelope);
 
-        // Act - удаляем сообщение
-        await _fakeBot.DeleteMessageAsync(chatId, messageId);
+        // Act — delete using the envelope's IDs
+        var chatId = new Telegram.Bot.Types.ChatId(envelope.ChatId);
+        await _fakeBot.DeleteMessageAsync(chatId, envelope.MessageId);
 
-        // Assert с FluentAssertions
+        // Assert — non-zero message ID was recorded
+        envelope.MessageId.Should().BePositive("envelope must carry a real message ID");
         _fakeBot.DeletedMessages.Should().HaveCount(1);
-        _fakeBot.DeletedMessages.First().ChatId.Should().Be(chatId);
-        _fakeBot.DeletedMessages.First().MessageId.Should().Be(messageId);
-    }
-
-    [Test]
-    public async Task E2E_FakeTelegramClient_ShouldSupportUserBanning()
-    {
-        // Arrange
-        var user = TestData.Users.Valid();
-        var chatId = -1001234567890L; // Тестовый ID группы
-
-        // Act - баним пользователя
-        await _fakeBot.BanChatMemberAsync(chatId, user.Id);
-
-        // Assert с FluentAssertions
-        _fakeBot.BannedUsers.Should().HaveCount(1);
-        _fakeBot.BannedUsers.First().UserId.Should().Be(user.Id);
-        _fakeBot.BannedUsers.First().ChatId.Should().Be(chatId);
+        _fakeBot.DeletedMessages.First().ChatId.Should().Be(envelope.ChatId);
+        _fakeBot.DeletedMessages.First().MessageId.Should().Be(envelope.MessageId);
+        _fakeBot.WasMessageDeleted(envelope).Should().BeTrue("FakeTelegramClient should track deletions by envelope");
     }
 
     [Test]
@@ -239,26 +150,5 @@ public class InfrastructureE2ETests : TestBase
         result.Should().NotBeNull();
         // Мимикрия обрабатывается отдельно, но сообщение должно пройти проверку
         result.Action.Should().Be(ModerationAction.Allow);
-    }
-
-    [Test]
-    public async Task E2E_Infrastructure_ShouldSupportAsyncOperations()
-    {
-        // Arrange
-        var tasks = new List<Task>();
-
-        // Act - выполняем несколько операций параллельно
-        for (int i = 0; i < 5; i++)
-        {
-            var message = TestData.Messages.Valid();
-            message.Text = $"Test message {i}";
-            tasks.Add(_moderationService.CheckMessageAsync(message));
-        }
-
-        await Task.WhenAll(tasks);
-
-        // Assert с FluentAssertions
-        tasks.Should().HaveCount(5);
-        tasks.All(t => t.IsCompletedSuccessfully).Should().BeTrue();
     }
 }

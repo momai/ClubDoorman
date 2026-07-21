@@ -5,7 +5,6 @@ using ClubDoorman.Models.Notifications;
 using ClubDoorman.Services;
 using ClubDoorman.Test.TestKit;
 using NUnit.Framework;
-using System.Reflection;
 using Telegram.Bot.Types;
 using Moq;
 using ClubDoorman.Services.Messaging;
@@ -31,27 +30,6 @@ public class MessageHandlerStatsCommandTests
     {
         // Используем AutoFixture для автоматического создания всех зависимостей
         _messageHandler = TestKitAutoFixture.CreateMessageHandler();
-    }
-
-    /// <summary>
-    /// Тест проверяет, что MessageHandler корректно вызывает CommandRouter для команд
-    /// <tags>command-router, basic-test</tags>
-    /// </summary>
-    [Test]
-    public async Task HandleCommandAsync_WithStatsCommand_ExecutesWithoutExceptions()
-    {
-        // Arrange
-        var message = TK.CreateStatsCommandMessage();
-        var factory = new MessageHandlerTestFactory();
-
-        factory.CommandRouterMock.Setup(x => x.HandleCommandAsync(It.IsAny<Message>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(true);
-
-        var handler = factory.CreateMessageHandler();
-
-        // Act & Assert
-        Assert.DoesNotThrowAsync(async () =>
-            await handler.HandleCommandAsync(message, CancellationToken.None));
     }
 
     /// <summary>
@@ -83,37 +61,6 @@ public class MessageHandlerStatsCommandTests
                 It.IsAny<CancellationToken>()),
             Times.Once,
             "CommandRouter должен вызываться для /stats");
-    }
-
-    /// <summary>
-    /// Тест для MessageHandler.HandleCommandAsync с командой /stats - проверка интеграции при пустых данных
-    /// <tags>integration, command-routing, empty-stats, edge-case</tags>
-    /// </summary>
-    [Test]
-    public async Task HandleCommandAsync_WithEmptyStats_RoutesThroughCommandRouter()
-    {
-        // Arrange
-        var message = TK.CreateStatsCommandMessage();
-        var factory = new MessageHandlerTestFactory();
-
-        // Настройка CommandRouter для возврата true (команда обработана)
-        factory.CommandRouterMock.Setup(x => x.HandleCommandAsync(
-            It.IsAny<Message>(),
-            It.IsAny<CancellationToken>()))
-            .ReturnsAsync(true);
-
-        var handler = factory.CreateMessageHandler();
-
-        // Act
-        await handler.HandleCommandAsync(message, CancellationToken.None);
-
-        // Assert - проверяем, что CommandRouter был вызван
-        factory.CommandRouterMock.Verify(
-            x => x.HandleCommandAsync(
-                It.IsAny<Message>(),
-                It.IsAny<CancellationToken>()),
-            Times.Once,
-            "CommandRouter должен вызываться для /stats (пустые данные тоже обрабатываются)");
     }
 
     /// <summary>
@@ -174,36 +121,5 @@ public class MessageHandlerStatsCommandTests
                 It.IsAny<CancellationToken>()),
             Times.Once,
             "CommandRouter должен вызываться – /stats идёт через общий механизм маршрутизации");
-    }
-
-    /// <summary>
-    /// Тест для MessageHandler.HandleCommandAsync - проверка логирования обработки команд
-    /// <tags>integration, command-routing, logging</tags>
-    /// </summary>
-    [Test]
-    public async Task HandleCommandAsync_WithStatsCommand_InvokesCommandRouter_LogsHandledSafely()
-    {
-        // Arrange
-        var message = TK.CreateStatsCommandMessage();
-        var factory = new MessageHandlerTestFactory();
-
-        // Настройка CommandRouter для возврата true (команда обработана)
-        factory.CommandRouterMock.Setup(x => x.HandleCommandAsync(
-            It.IsAny<Message>(),
-            It.IsAny<CancellationToken>()))
-            .ReturnsAsync(true);
-
-        var handler = factory.CreateMessageHandler();
-
-        // Act
-        await handler.HandleCommandAsync(message, CancellationToken.None);
-
-        // Assert - router вызывается
-        factory.CommandRouterMock.Verify(
-            x => x.HandleCommandAsync(
-                It.IsAny<Message>(),
-                It.IsAny<CancellationToken>()),
-            Times.Once,
-            "CommandRouter должен вызываться – логирование фиксирует успешную обработку");
     }
 }

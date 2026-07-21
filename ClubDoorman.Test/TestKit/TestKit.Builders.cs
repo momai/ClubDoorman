@@ -100,6 +100,7 @@ public class MessageBuilder
     /// Устанавливает ID сообщения (только для чтения, не изменяет)
     /// <tags>builders, message, id, fluent-api</tags>
     /// </summary>
+    [Obsolete("Message.MessageId remains 0. Use MessageEnvelope with FakeTelegramClient for id-sensitive scenarios.", false)]
     public MessageBuilder WithMessageId(int messageId)
     {
         // MessageId readonly, нельзя изменить после создания

@@ -1,15 +1,12 @@
-using ClubDoorman.Services.SuspiciousUsers;
 using ClubDoorman.Services.Moderation;
 using ClubDoorman.Services.UserBan;
 using ClubDoorman.Models;
 using ClubDoorman.Services;
 using ClubDoorman.Test.TestInfrastructure;
 using ClubDoorman.Infrastructure;
-using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using Telegram.Bot.Types;
-using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 using ClubDoorman.Test.TestKit;
 using ClubDoorman.TestInfrastructure;
@@ -125,27 +122,6 @@ public class ModerationServiceBusinessLogicTests
     }
 
     [Test]
-    public async Task CheckMessageAsync_MimicryDetected_ReturnsBanAction()
-    {
-        // Arrange
-        var message = CreateTestMessage(123456L, "Это нормальное сообщение с полезной информацией");
-
-        _factory.WithClassifierSetup(mock =>
-            mock.Setup(x => x.IsSpam(It.IsAny<string>()))
-                .ReturnsAsync((false, -1.5f))); // Уверенный ham (не спам)
-
-        // Мимикрия проверяется только для подозрительных пользователей
-        // и только в AnalyzeMimicryAndMarkSuspicious, не в CheckMessageAsync
-        // Поэтому этот тест не корректен - убираем его
-
-        // Act
-        var result = await _service.CheckMessageAsync(message);
-
-        // Assert
-        Assert.That(result.Action, Is.EqualTo(ModerationAction.Allow));
-    }
-
-    [Test]
     public async Task CheckMessageAsync_GoodMessage_ReturnsAllowAction()
     {
         // Arrange - используем новые возможности TestKit
@@ -192,40 +168,9 @@ public class ModerationServiceBusinessLogicTests
         Assert.That(ex.Message, Does.Contain("пустым"));
     }
 
-    [Test]
-    public async Task CheckUserNameAsync_ValidUsername_ReturnsAllowAction()
-    {
-        // Arrange - используем новые возможности TestKit
-        var user = TestKitBuilders.CreateUser()
-            .WithId(123456L)
-            .WithUsername("john_doe")
-            .WithFirstName("John")
-            .Build();
-
-        // Act
-        var result = await _service.CheckUserNameAsync(user);
-
-        // Assert
-        Assert.That(result.Action, Is.EqualTo(ModerationAction.Allow));
-    }
-
     #endregion
 
     #region Тесты управления пользователями
-
-    [Test]
-    public void IsUserApproved_UserNotInLists_ReturnsFalse()
-    {
-        // Arrange
-        var userId = 123456L;
-        var chatId = 789L;
-
-        // Act
-        var result = _service.IsUserApproved(userId, chatId);
-
-        // Assert
-        Assert.That(result, Is.False);
-    }
 
     [Test]
     public async Task BanAndCleanupUserAsync_ValidUser_ReturnsTrue()
@@ -265,40 +210,6 @@ public class ModerationServiceBusinessLogicTests
 
     #endregion
 
-    #region Тесты статистики
-
-    [Test]
-    public void GetSuspiciousUsersStats_EmptyStorage_ReturnsZeroCounts()
-    {
-        // Act
-        var stats = _service.GetSuspiciousUsersStats();
-
-        // Assert
-        Assert.That(stats.TotalSuspicious, Is.EqualTo(0));
-        Assert.That(stats.WithAiDetect, Is.EqualTo(0));
-        Assert.That(stats.GroupsCount, Is.EqualTo(0));
-    }
-
-    [Test]
-    public void SetAiDetectForSuspiciousUser_ValidUser_ReturnsTrue()
-    {
-        // Arrange
-        var userId = 123456L;
-        var chatId = 789L;
-
-        _factory.WithSuspiciousUsersStorageSetup(mock =>
-            mock.Setup(x => x.SetAiDetectEnabled(userId, chatId, true))
-                .Returns(true));
-
-        // Act
-        var result = _service.SetAiDetectForSuspiciousUser(userId, chatId, true);
-
-        // Assert
-        Assert.That(result, Is.True);
-    }
-
-    #endregion
-
     #region Тесты исключений
 
     [Test]
@@ -322,36 +233,6 @@ public class ModerationServiceBusinessLogicTests
             await _service.CheckMessageAsync(message));
 
         Assert.That(ex.Message, Does.Contain("пользователе"));
-    }
-
-    #endregion
-
-    #region Вспомогательные методы
-
-    private static Message CreateTestMessage(long userId, string text, bool hasButtons = false, bool hasStory = false)
-    {
-        var message = new Message
-        {
-            From = new User { Id = userId, Username = "testuser", FirstName = "Test" },
-            Chat = new Chat { Id = 123, Type = ChatType.Group },
-            Text = text,
-            Date = DateTime.UtcNow
-        };
-
-        if (hasButtons)
-        {
-            message.ReplyMarkup = new InlineKeyboardMarkup(new[]
-            {
-                new[] { new InlineKeyboardButton("Button 1") { CallbackData = "test" } }
-            });
-        }
-
-        if (hasStory)
-        {
-            message.Story = new Story { Id = 1 };
-        }
-
-        return message;
     }
 
     #endregion

@@ -31,6 +31,7 @@ public class FakeTelegramClient : ITelegramBotClientWrapper
     public List<EditedMessage> EditedMessages { get; } = new();
     public List<SentPhoto> SentPhotos { get; } = new();
     public List<RestrictedUser> RestrictedUsers { get; } = new();
+    public List<BannedSenderChat> BannedSenderChats { get; } = new();
 
     // Для проверки порядка операций
     public List<string> OperationLog { get; } = new();
@@ -244,6 +245,13 @@ public class FakeTelegramClient : ITelegramBotClientWrapper
         if (ShouldThrowException)
             throw ExceptionToThrow ?? new Exception("Fake exception");
 
+        BannedUsers.Add(new BannedUser(
+            chatId.Identifier ?? 0,
+            userId,
+            untilDate,
+            revokeMessages
+        ));
+
         return Task.CompletedTask;
     }
 
@@ -251,6 +259,11 @@ public class FakeTelegramClient : ITelegramBotClientWrapper
     {
         if (ShouldThrowException)
             throw ExceptionToThrow ?? new Exception("Fake exception");
+
+        BannedSenderChats.Add(new BannedSenderChat(
+            chatId.Identifier ?? 0,
+            senderChatId
+        ));
 
         return Task.CompletedTask;
     }
@@ -628,6 +641,7 @@ public class FakeTelegramClient : ITelegramBotClientWrapper
         EditedMessages.Clear();
         SentPhotos.Clear();
         RestrictedUsers.Clear();
+        BannedSenderChats.Clear();
         OperationLog.Clear();
         ShouldThrowException = false;
         ExceptionToThrow = null;
@@ -643,6 +657,11 @@ public class FakeTelegramClient : ITelegramBotClientWrapper
     public bool WasUserBanned(long chatId, long userId)
     {
         return BannedUsers.Any(b => b.ChatId == chatId && b.UserId == userId);
+    }
+
+    public bool WasSenderChatBanned(long chatId, long senderChatId)
+    {
+        return BannedSenderChats.Any(b => b.ChatId == chatId && b.SenderChatId == senderChatId);
     }
 
     public bool WasMessageDeleted(long chatId, int messageId)
@@ -795,4 +814,9 @@ public record RestrictedUser(
     long UserId,
     ChatPermissions Permissions,
     DateTime? UntilDate
+);
+
+public record BannedSenderChat(
+    long ChatId,
+    long SenderChatId
 );

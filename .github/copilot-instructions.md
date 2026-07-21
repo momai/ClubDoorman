@@ -27,8 +27,8 @@
 
 ```bash
 # Install .NET 9.0 using the provided script
-chmod +x dotnet-install.sh
-./dotnet-install.sh --version latest --channel 9.0
+chmod +x scripts/dotnet-install.sh
+./scripts/dotnet-install.sh --version latest --channel 9.0
 export PATH="/home/runner/.dotnet:$PATH"
 
 # Verify installation
@@ -177,7 +177,7 @@ public class SomeService(ILogger<SomeService> logger, IDependency dep)
 
 ### Common Build Issues
 1. **"NETSDK1045: .NET SDK does not support targeting .NET 9.0"**
-   - Solution: Install .NET 9.0 SDK using `./dotnet-install.sh`
+   - Solution: Install .NET 9.0 SDK using `./scripts/dotnet-install.sh`
 
 2. **NuGet restore timeouts**
    - Solution: Increase timeout, check network connectivity
@@ -209,7 +209,7 @@ public class SomeService(ILogger<SomeService> logger, IDependency dep)
 - `scripts/run_tests.sh`: Standard test execution
 - `scripts/run_e2e_tests.sh`: End-to-end testing
 - `scripts/coverage.sh`: Test coverage analysis
-- `check_diff.sh`: Development utility for comparing changes
+- `scripts/check_diff.sh`: Development utility for comparing changes
 
 ### Data Files
 - `ClubDoorman/data/stop-words.txt`: Spam keyword dictionary

@@ -10,7 +10,7 @@ using ClubDoorman.Services.UserManagement;
 namespace ClubDoorman.TestInfrastructure;
 
 /// <summary>
-/// TestFactory для ApprovedUsersStorageV2
+/// TestFactory для ApprovedUsersStorage
 /// Автоматически сгенерировано
 /// </summary>
 [TestFixture]

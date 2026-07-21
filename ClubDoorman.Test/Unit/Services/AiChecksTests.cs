@@ -1,7 +1,5 @@
-using ClubDoorman.Services.UserBan;
 using NUnit.Framework;
 using ClubDoorman.Services;
-using ClubDoorman.Services.UserBan;
 using ClubDoorman.TestInfrastructure;
 using ClubDoorman.Test.TestInfrastructure;
 using Telegram.Bot.Types;
@@ -30,24 +28,6 @@ public class AiChecksTests
 
         // Создаем реальный AiChecks с моками
         _aiChecks = new AiChecks(_mockBot.Object, _mockLogger.Object, AppConfigTestFactory.CreateDefault());
-    }
-
-    [Test]
-    public void Constructor_WithValidDependencies_CreatesInstance()
-    {
-        // Assert
-        Assert.That(_aiChecks, Is.Not.Null);
-        Assert.That(_aiChecks, Is.InstanceOf<IAiChecks>());
-    }
-
-    [Test]
-    public void MarkUserOkay_DoesNotThrowException()
-    {
-        // Arrange
-        var userId = 123L;
-
-        // Act & Assert
-        Assert.DoesNotThrow(() => _aiChecks.MarkUserOkay(userId));
     }
 
     [Test]
@@ -207,19 +187,6 @@ public class AiChecksTests
         Assert.That(result, Is.Not.Null);
         Assert.That(result.Probability, Is.GreaterThanOrEqualTo(0.0));
         Assert.That(result.Probability, Is.LessThanOrEqualTo(1.0));
-    }
-
-    [Test]
-    public void MarkUserOkay_MultipleCalls_DoNotInterfere()
-    {
-        // Arrange
-        var userId1 = 123L;
-        var userId2 = 456L;
-
-        // Act & Assert
-        Assert.DoesNotThrow(() => _aiChecks.MarkUserOkay(userId1));
-        Assert.DoesNotThrow(() => _aiChecks.MarkUserOkay(userId2));
-        Assert.DoesNotThrow(() => _aiChecks.MarkUserOkay(userId1)); // Повторный вызов
     }
 
     [Test]

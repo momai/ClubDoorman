@@ -2,6 +2,7 @@ using ClubDoorman.Services.Moderation;
 using ClubDoorman.Services.UserBan;
 using ClubDoorman.Handlers;
 using ClubDoorman.Features.Moderation;
+using ClubDoorman.Test.TestData;
 using ClubDoorman.Test.TestKit;
 using ClubDoorman.Models;
 using ClubDoorman.Models.Notifications;
@@ -117,7 +118,9 @@ public class MessageHandlerHandleUserMessageTests
     public async Task HandleUserMessageAsync_WithUserInCaptcha_DeletesMessageAndReturns()
     {
         // Arrange
-        var message = TK.CreateMessage();
+        var fakeClient = TestKitTelegram.CreateFakeClient();
+        var envelope = MessageEnvelope.CreateTest(messageId: 12345, userId: 12345, chatId: 67890);
+        var message = TestKitTelegram.CreateMessageFromEnvelope(fakeClient, envelope);
         var user = message.From!;
         var chat = message.Chat;
         var captchaKey = "test_captcha_key";
@@ -127,16 +130,15 @@ public class MessageHandlerHandleUserMessageTests
             .Returns(captchaKey);
         _factory.CaptchaServiceMock.Setup(x => x.GetCaptchaInfo(captchaKey))
             .Returns(new CaptchaInfo(chat.Id, chat.Title, DateTime.UtcNow, user, 0, new CancellationTokenSource(), null));
-
-        // Настраиваем мок Bot для удаления сообщения
         _factory.BotMock.Setup(x => x.DeleteMessage(It.IsAny<ChatId>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))
-            .Returns(Task.CompletedTask);
+            .Returns((ChatId chatId, int messageId, CancellationToken cancellationToken) =>
+                fakeClient.DeleteMessage(chatId, messageId, cancellationToken));
 
         // Act
         await _messageHandler.HandleUserMessageAsync(message, false, CancellationToken.None);
 
         // Assert
-        _factory.BotMock.Verify(x => x.DeleteMessage(chat.Id, message.MessageId, It.IsAny<CancellationToken>()), Times.Once);
+        Assert.That(fakeClient.WasMessageDeleted(envelope), Is.True);
     }
 
     /// <summary>

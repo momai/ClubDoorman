@@ -9,7 +9,6 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
-using Telegram.Bot.Types.ReplyMarkups;
 using System.Threading.Tasks;
 using ClubDoorman.Services.Handlers;
 
@@ -33,153 +32,7 @@ public class MessageHandlerIntegrationTests
         _loggerMock = _factory.LoggerMock;
     }
 
-    #region Command Processing Tests
-
-    [Test]
-    public async Task HandleCommandAsync_StartCommand_ProcessesSuccessfully()
-    {
-        // Arrange
-        var message = CreateMessage("/start", ChatType.Private);
-        var update = CreateUpdate(message);
-
-        // Act
-        await _handler.HandleAsync(update);
-
-        // Assert
-        // Verify that the command was processed (no exceptions thrown)
-        Assert.Pass("Start command processed successfully");
-    }
-
-    [Test]
-    public async Task HandleCommandAsync_StatsCommand_AdminUser_ProcessesSuccessfully()
-    {
-        // Arrange
-        var message = CreateMessage("/stats", ChatType.Group);
-        var update = CreateUpdate(message);
-
-        // Mock admin user
-        _factory.UserManagerMock.Setup(x => x.Approved(It.IsAny<long>(), null))
-            .Returns(true);
-
-        // Act
-        await _handler.HandleAsync(update);
-
-        // Assert
-        // Verify that the command was processed
-        Assert.Pass("Stats command processed successfully for admin user");
-    }
-
-    [Test]
-    public async Task HandleCommandAsync_StatsCommand_NonAdminUser_HandlesGracefully()
-    {
-        // Arrange
-        var message = CreateMessage("/stats", ChatType.Group);
-        var update = CreateUpdate(message);
-
-        // Mock non-admin user
-        _factory.UserManagerMock.Setup(x => x.Approved(It.IsAny<long>(), null))
-            .Returns(false);
-
-        // Act
-        await _handler.HandleAsync(update);
-
-        // Assert
-        // Verify that the command was handled gracefully
-        Assert.Pass("Stats command handled gracefully for non-admin user");
-    }
-
-    [Test]
-    [Category("disabled")]
-    public async Task HandleCommandAsync_SayCommand_AdminUser_ProcessesSuccessfully()
-    {
-        // Arrange
-        var message = CreateMessage("/say Hello, this is a test message", ChatType.Group);
-        var update = CreateUpdate(message);
-
-        // Mock admin user
-        _factory.UserManagerMock.Setup(x => x.Approved(It.IsAny<long>(), null))
-            .Returns(true);
-
-        // Act
-        await _handler.HandleAsync(update);
-
-        // Assert
-        // Verify that the command was processed
-        Assert.Pass("Say command processed successfully for admin user");
-    }
-
-    [Test]
-    [Category("disabled")]
-    public async Task HandleCommandAsync_SayCommand_EmptyText_HandlesGracefully()
-    {
-        // Arrange
-        var message = CreateMessage("/say", ChatType.Group);
-        var update = CreateUpdate(message);
-
-        // Mock admin user
-        _factory.UserManagerMock.Setup(x => x.Approved(It.IsAny<long>(), null))
-            .Returns(true);
-
-        // Act
-        await _handler.HandleAsync(update);
-
-        // Assert
-        // Verify that the command was handled gracefully
-        Assert.Pass("Say command with empty text handled gracefully");
-    }
-
-    [Test]
-    public async Task HandleCommandAsync_SuspiciousCommand_AdminUser_ProcessesSuccessfully()
-    {
-        // Arrange
-        var message = CreateMessage("/suspicious", ChatType.Group);
-        var update = CreateUpdate(message);
-
-        // Mock admin user
-        _factory.UserManagerMock.Setup(x => x.Approved(It.IsAny<long>(), null))
-            .Returns(true);
-
-        // Act
-        await _handler.HandleAsync(update);
-
-        // Assert
-        // Verify that the command was processed
-        Assert.Pass("Suspicious command processed successfully for admin user");
-    }
-
-    #endregion
-
     #region Message Processing Tests
-
-    [Test]
-    public async Task HandleMessageAsync_ValidMessage_ProcessesSuccessfully()
-    {
-        // Arrange
-        var message = CreateMessage("Hello, this is a test message", ChatType.Group);
-        var update = CreateUpdate(message);
-
-        // Act
-        await _handler.HandleAsync(update);
-
-        // Assert
-        // Verify that the message was processed
-        Assert.Pass("Valid message processed successfully");
-    }
-
-    [Test]
-    public async Task HandleMessageAsync_EmptyMessage_HandlesGracefully()
-    {
-        // Arrange
-        var message = CreateMessage("", ChatType.Group);
-        var update = CreateUpdate(message);
-
-        // Act
-        await _handler.HandleAsync(update);
-
-        // Assert
-        // Verify that the empty message was handled gracefully
-        Assert.Pass("Empty message handled gracefully");
-    }
 
     [Test]
     public async Task HandleMessageAsync_NullMessage_HandlesGracefully()
@@ -195,38 +48,6 @@ public class MessageHandlerIntegrationTests
         // Act & Assert
         Assert.ThrowsAsync<ArgumentNullException>(async () => await _handler.HandleAsync(update),
             "Should throw ArgumentNullException when both Message and EditedMessage are null");
-    }
-
-    [Test]
-    public async Task HandleMessageAsync_LongMessage_ProcessesSuccessfully()
-    {
-        // Arrange
-        var longMessage = new string('a', 1000); // 1000 character message
-        var message = CreateMessage(longMessage, ChatType.Group);
-        var update = CreateUpdate(message);
-
-        // Act
-        await _handler.HandleAsync(update);
-
-        // Assert
-        // Verify that the long message was processed
-        Assert.Pass("Long message processed successfully");
-    }
-
-    [Test]
-    public async Task HandleMessageAsync_MessageWithSpecialCharacters_ProcessesSuccessfully()
-    {
-        // Arrange
-        var specialMessage = "Message with special chars: @#$%^&*()_+-=[]{}|;':\",./<>?";
-        var message = CreateMessage(specialMessage, ChatType.Group);
-        var update = CreateUpdate(message);
-
-        // Act
-        await _handler.HandleAsync(update);
-
-        // Assert
-        // Verify that the message with special characters was processed
-        Assert.Pass("Message with special characters processed successfully");
     }
 
     #endregion

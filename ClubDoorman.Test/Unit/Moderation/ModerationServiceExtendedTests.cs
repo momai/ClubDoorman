@@ -138,22 +138,6 @@ public class ModerationServiceExtendedTests
         Assert.That(exception.ParamName, Is.EqualTo("messageText"));
     }
 
-    [Test]
-    public async Task IncrementGoodMessageCountAsync_ValidParameters_IncrementsCount()
-    {
-        // Arrange
-        var service = _factory.CreateModerationService();
-        var user = TK.CreateValidUser();
-        var chat = TK.CreateGroupChat();
-        var messageText = "test message";
-
-        // Act
-        await service.IncrementGoodMessageCountAsync(user, chat, messageText);
-
-        // Assert - проверяем что метод выполнился без исключений
-        Assert.Pass("Method executed successfully");
-    }
-
     #endregion
 
     #region BanAndCleanupUserAsync Tests
@@ -214,111 +198,6 @@ public class ModerationServiceExtendedTests
 
         // Assert
         Assert.That(result, Is.False);
-    }
-
-    #endregion
-
-    #region IsUserApproved Tests
-
-    [Test]
-    public void IsUserApproved_ValidUserId_ReturnsFalse()
-    {
-        // Arrange
-        var service = _factory.CreateModerationService();
-        var userId = 12345L;
-
-        // Act
-        var result = service.IsUserApproved(userId);
-
-        // Assert
-        Assert.That(result, Is.False);
-    }
-
-    [Test]
-    public void IsUserApproved_WithChatId_ReturnsFalse()
-    {
-        // Arrange
-        var service = _factory.CreateModerationService();
-        var userId = 12345L;
-        var chatId = 67890L;
-
-        // Act
-        var result = service.IsUserApproved(userId, chatId);
-
-        // Assert
-        Assert.That(result, Is.False);
-    }
-
-    #endregion
-
-    #region SetAiDetectForSuspiciousUser Tests
-
-    [Test]
-    public void SetAiDetectForSuspiciousUser_ValidParameters_ReturnsFalse()
-    {
-        // Arrange
-        var service = _factory.CreateModerationService();
-        var userId = 12345L;
-        var chatId = 67890L;
-        var enabled = true;
-
-        // Act
-        var result = service.SetAiDetectForSuspiciousUser(userId, chatId, enabled);
-
-        // Assert
-        Assert.That(result, Is.False);
-    }
-
-    [Test]
-    public void SetAiDetectForSuspiciousUser_DisableAiDetect_ReturnsFalse()
-    {
-        // Arrange
-        var service = _factory.CreateModerationService();
-        var userId = 12345L;
-        var chatId = 67890L;
-        var enabled = false;
-
-        // Act
-        var result = service.SetAiDetectForSuspiciousUser(userId, chatId, enabled);
-
-        // Assert
-        Assert.That(result, Is.False);
-    }
-
-    #endregion
-
-    #region GetSuspiciousUsersStats Tests
-
-    [Test]
-    public void GetSuspiciousUsersStats_ReturnsDefaultStats()
-    {
-        // Arrange
-        var service = _factory.CreateModerationService();
-
-        // Act
-        var (totalSuspicious, withAiDetect, groupsCount) = service.GetSuspiciousUsersStats();
-
-        // Assert
-        Assert.That(totalSuspicious, Is.EqualTo(0));
-        Assert.That(withAiDetect, Is.EqualTo(0));
-        Assert.That(groupsCount, Is.EqualTo(0));
-    }
-
-    #endregion
-
-    #region GetAiDetectUsers Tests
-
-    [Test]
-    public void GetAiDetectUsers_ReturnsNull()
-    {
-        // Arrange
-        var service = _factory.CreateModerationService();
-
-        // Act
-        var result = service.GetAiDetectUsers();
-
-        // Assert
-        Assert.That(result, Is.Null);
     }
 
     #endregion

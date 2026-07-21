@@ -49,6 +49,9 @@ public class MessageHandlerSemanticsTests
     private static MessageHandler CreateHandler(IOptions<LoggingFlagsOptions> flags,
         Mock<ITelegramBotClientWrapper>? botMock = null,
         Mock<IUserManager>? userManagerMock = null,
+        Mock<ICaptchaService>? captchaServiceMock = null,
+        Mock<IModerationFacade>? moderationFacadeMock = null,
+        Mock<IAiCascadeService>? aiCascadeMock = null,
         Action<Mock<IUserManager>>? configureUserManager = null,
         Action<Mock<ICommandRouter>>? configureCommandRouter = null)
     {
@@ -58,7 +61,7 @@ public class MessageHandlerSemanticsTests
         var appConfig = new Mock<IAppConfig>();
         appConfig.Setup(x => x.AdminChatId).Returns(123456789L);
         appConfig.Setup(x => x.LogAdminChatId).Returns(123456789L);
-    appConfig.Setup(x => x.DisabledChats).Returns(new HashSet<long>());
+        appConfig.Setup(x => x.DisabledChats).Returns(new HashSet<long>());
         appConfig.Setup(x => x.IsChatAllowed(It.IsAny<long>())).Returns(true);
         var userBanService = new Mock<IUserBanService>();
         userBanService.Setup(x => x.HandleBlacklistBanAsync(It.IsAny<Message>(), It.IsAny<User>(), It.IsAny<Chat>(), It.IsAny<CancellationToken>()))
@@ -67,25 +70,34 @@ public class MessageHandlerSemanticsTests
         var commandRouter = new Mock<ICommandRouter>();
         configureCommandRouter?.Invoke(commandRouter);
         var userJoinFacade = new Mock<IUserJoinFacade>();
-        var moderationFacade = new Mock<IModerationFacade>();
-        moderationFacade.Setup(x => x.IsUserApproved(It.IsAny<long>(), It.IsAny<long>())).Returns(false);
-        moderationFacade.Setup(x => x.CheckMessageAsync(It.IsAny<Message>())).ReturnsAsync(new ModerationResult(ModerationAction.Allow, "allow", 0));
+        var moderationFacade = moderationFacadeMock ?? new Mock<IModerationFacade>();
+        if (moderationFacadeMock is null)
+        {
+            moderationFacade.Setup(x => x.IsUserApproved(It.IsAny<long>(), It.IsAny<long>())).Returns(false);
+            moderationFacade.Setup(x => x.CheckMessageAsync(It.IsAny<Message>())).ReturnsAsync(new ModerationResult(ModerationAction.Allow, "allow", 0));
+        }
         var botPermissions = new Mock<IBotPermissionsService>();
         botPermissions.Setup(x => x.IsSilentModeAsync(It.IsAny<long>(), It.IsAny<CancellationToken>())).ReturnsAsync(false);
-        var captchaService = new Mock<ICaptchaService>();
-        captchaService.Setup(x => x.GenerateKey(It.IsAny<long>(), It.IsAny<long>())).Returns("k");
-    captchaService.Setup(x => x.GetCaptchaInfo(It.IsAny<string>())).Returns((CaptchaInfo?)null);
+        var captchaService = captchaServiceMock ?? new Mock<ICaptchaService>();
+        if (captchaServiceMock is null)
+        {
+            captchaService.Setup(x => x.GenerateKey(It.IsAny<long>(), It.IsAny<long>())).Returns("k");
+            captchaService.Setup(x => x.GetCaptchaInfo(It.IsAny<string>())).Returns((CaptchaInfo?)null);
+        }
         var userFlowLogger = new Mock<IUserFlowLogger>();
         var forwarding = new Mock<IForwardingService>();
         forwarding.Setup(x => x.IsChannelDiscussion(It.IsAny<Chat>(), It.IsAny<Message>())).ReturnsAsync(false);
-        var aiCascade = new Mock<IAiCascadeService>();
-        aiCascade.Setup(x => x.PerformAiProfileAnalysisAsync(It.IsAny<Message>(), It.IsAny<User>(), It.IsAny<Chat>(), It.IsAny<CancellationToken>())).ReturnsAsync(false);
-    var recorder = new GoldenMasterRecorder(flags, new NullLogger<GoldenMasterRecorder>());
-    var eventsPublisher = new GoldenMasterModerationEventPublisher(recorder, new NullLogger<GoldenMasterModerationEventPublisher>());
+        var aiCascade = aiCascadeMock ?? new Mock<IAiCascadeService>();
+        if (aiCascadeMock is null)
+        {
+            aiCascade.Setup(x => x.PerformAiProfileAnalysisAsync(It.IsAny<Message>(), It.IsAny<User>(), It.IsAny<Chat>(), It.IsAny<CancellationToken>())).ReturnsAsync(false);
+        }
+        var recorder = new GoldenMasterRecorder(flags, new NullLogger<GoldenMasterRecorder>());
+        var eventsPublisher = new GoldenMasterModerationEventPublisher(recorder, new NullLogger<GoldenMasterModerationEventPublisher>());
 
         // Build real pipeline with migrated steps (10-220) so semantics for moderation + AI analysis are emitted via pipeline (legacy path removed).
-    var loggerFactory = LoggerFactory.Create(b => { });
-    var gmEvents = new GoldenMasterModerationEventPublisher(recorder, new NullLogger<GoldenMasterModerationEventPublisher>());
+        var loggerFactory = LoggerFactory.Create(b => { });
+        var gmEvents = new GoldenMasterModerationEventPublisher(recorder, new NullLogger<GoldenMasterModerationEventPublisher>());
         var steps = new List<ClubDoorman.Services.Handlers.Pipeline.IMessageStep>
         {
             new ClubDoorman.Services.Handlers.Pipeline.Steps.CommandStep(commandRouter.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.CommandStep>()),
@@ -357,66 +369,8 @@ public class MessageHandlerSemanticsTests
         var flags = Flags(basePath);
         var captchaService = new Mock<ICaptchaService>();
         captchaService.Setup(x => x.GenerateKey(It.IsAny<long>(), It.IsAny<long>())).Returns("k");
-    captchaService.Setup(x => x.GetCaptchaInfo("k")).Returns(TestDataFactory.CreateValidCaptchaInfo());
-        var handler = CreateHandler(flags, configureUserManager: _ => { });
-        // Need to inject captcha mock -> simplest: rebuild handler manually here
-        // Rebuild all required mocks similar to factory but override captcha
-        var bot = new Mock<ITelegramBotClientWrapper>();
-        var userManager = new Mock<IUserManager>();
-        var appConfig = new Mock<IAppConfig>();
-        appConfig.Setup(x => x.AdminChatId).Returns(123456789L);
-        appConfig.Setup(x => x.LogAdminChatId).Returns(123456789L);
-        appConfig.Setup(x => x.DisabledChats).Returns(new HashSet<long>());
-        appConfig.Setup(x => x.IsChatAllowed(It.IsAny<long>())).Returns(true);
-        var userBanService = new Mock<IUserBanService>();
-        userBanService.Setup(x => x.HandleBlacklistBanAsync(It.IsAny<Message>(), It.IsAny<User>(), It.IsAny<Chat>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
-        var channelModeration = new Mock<IChannelModerationService>();
-        var commandRouter = new Mock<ICommandRouter>();
-        var userJoinFacade = new Mock<IUserJoinFacade>();
-        var moderationFacade = new Mock<IModerationFacade>();
-        moderationFacade.Setup(x => x.IsUserApproved(It.IsAny<long>(), It.IsAny<long>())).Returns(false);
-        moderationFacade.Setup(x => x.CheckMessageAsync(It.IsAny<Message>())).ReturnsAsync(new ModerationResult(ModerationAction.Allow, "allow", 0));
-        var botPermissions = new Mock<IBotPermissionsService>();
-        botPermissions.Setup(x => x.IsSilentModeAsync(It.IsAny<long>(), It.IsAny<CancellationToken>())).ReturnsAsync(false);
-        var userFlowLogger = new Mock<IUserFlowLogger>();
-        var forwarding = new Mock<IForwardingService>();
-        forwarding.Setup(x => x.IsChannelDiscussion(It.IsAny<Chat>(), It.IsAny<Message>())).ReturnsAsync(false);
-        var aiCascade = new Mock<IAiCascadeService>();
-        aiCascade.Setup(x => x.PerformAiProfileAnalysisAsync(It.IsAny<Message>(), It.IsAny<User>(), It.IsAny<Chat>(), It.IsAny<CancellationToken>())).ReturnsAsync(false);
-    var recorder = new GoldenMasterRecorder(flags, new NullLogger<GoldenMasterRecorder>());
-    var eventsPub = new GoldenMasterModerationEventPublisher(recorder, new NullLogger<GoldenMasterModerationEventPublisher>());
-        // Build full pipeline (10-220) for this manually constructed handler
-        var loggerFactory = LoggerFactory.Create(b => { });
-        var gmEvents = new GoldenMasterModerationEventPublisher(recorder, new NullLogger<GoldenMasterModerationEventPublisher>());
-        var steps = new List<ClubDoorman.Services.Handlers.Pipeline.IMessageStep>
-        {
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.CommandStep(commandRouter.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.CommandStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.SystemOrBotMessageStep(gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.SystemOrBotMessageStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.NewMembersStep(userJoinFacade.Object, appConfig.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.NewMembersStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.LeftMemberCleanupStep(bot.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.LeftMemberCleanupStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.ChannelMessageStep(channelModeration.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.ChannelMessageStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.PrivateSkipStep(gmEvents, appConfig.Object, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.PrivateSkipStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.CaptchaPendingStep(captchaService.Object, bot.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.CaptchaPendingStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.BanlistCheckStep(userManager.Object, userBanService.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.BanlistCheckStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.AlreadyApprovedStep(moderationFacade.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.AlreadyApprovedStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.FirstMessageLogStep(userFlowLogger.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.FirstMessageLogStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.ClubMemberSkipStep(userManager.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.ClubMemberSkipStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.BaseModerationStep(moderationFacade.Object, userFlowLogger.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.BaseModerationStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.AiProfileAnalysisStep(aiCascade.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.AiProfileAnalysisStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.FinalModerationActionStep(moderationFacade.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.FinalModerationActionStep>())
-        };
-        var pipeline = new ClubDoorman.Services.Handlers.Pipeline.MessagePipeline(steps, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.MessagePipeline>());
-        var rebuild = new MessageHandler(
-            bot.Object,
-            appConfig.Object,
-            channelModeration.Object,
-            commandRouter.Object,
-            new NullLogger<MessageHandler>(),
-            botPermissions.Object,
-            recorder,
-            eventsPub,
-            flags,
-            pipeline);
+        captchaService.Setup(x => x.GetCaptchaInfo("k")).Returns(TestDataFactory.CreateValidCaptchaInfo());
+        var handler = CreateHandler(flags, captchaServiceMock: captchaService);
         var update = new Update
         {
             Id = 9,
@@ -427,7 +381,7 @@ public class MessageHandlerSemanticsTests
                 Text = "hi"
             }
         };
-        await rebuild.HandleAsync(update, CancellationToken.None);
+        await handler.HandleAsync(update, CancellationToken.None);
         using var doc = LoadSemanticsJson(basePath);
         var root = doc.RootElement;
         Assert.That(root.GetProperty("ruleCode").GetString(), Is.EqualTo("CaptchaPending"));
@@ -442,62 +396,7 @@ public class MessageHandlerSemanticsTests
         var moderationFacadeApproved = new Mock<IModerationFacade>();
         moderationFacadeApproved.Setup(x => x.IsUserApproved(It.IsAny<long>(), It.IsAny<long>())).Returns(true);
         moderationFacadeApproved.Setup(x => x.CheckMessageAsync(It.IsAny<Message>())).ReturnsAsync(new ModerationResult(ModerationAction.Allow, "allow", 0));
-        // Build handler manually to inject custom moderationFacade
-        var bot = new Mock<ITelegramBotClientWrapper>();
-        var userManager = new Mock<IUserManager>();
-        var appConfig = new Mock<IAppConfig>();
-        appConfig.Setup(x => x.AdminChatId).Returns(123456789L);
-        appConfig.Setup(x => x.LogAdminChatId).Returns(123456789L);
-        appConfig.Setup(x => x.DisabledChats).Returns(new HashSet<long>());
-        appConfig.Setup(x => x.IsChatAllowed(It.IsAny<long>())).Returns(true);
-        var userBanService = new Mock<IUserBanService>();
-        userBanService.Setup(x => x.HandleBlacklistBanAsync(It.IsAny<Message>(), It.IsAny<User>(), It.IsAny<Chat>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
-        var channelModeration = new Mock<IChannelModerationService>();
-        var commandRouter = new Mock<ICommandRouter>();
-        var userJoinFacade = new Mock<IUserJoinFacade>();
-        var botPermissions = new Mock<IBotPermissionsService>();
-        botPermissions.Setup(x => x.IsSilentModeAsync(It.IsAny<long>(), It.IsAny<CancellationToken>())).ReturnsAsync(false);
-        var captchaService = new Mock<ICaptchaService>();
-        captchaService.Setup(x => x.GenerateKey(It.IsAny<long>(), It.IsAny<long>())).Returns("k");
-        captchaService.Setup(x => x.GetCaptchaInfo("k")).Returns((CaptchaInfo?)null);
-        var userFlowLogger = new Mock<IUserFlowLogger>();
-        var forwarding = new Mock<IForwardingService>();
-        forwarding.Setup(x => x.IsChannelDiscussion(It.IsAny<Chat>(), It.IsAny<Message>())).ReturnsAsync(false);
-        var aiCascade = new Mock<IAiCascadeService>();
-        aiCascade.Setup(x => x.PerformAiProfileAnalysisAsync(It.IsAny<Message>(), It.IsAny<User>(), It.IsAny<Chat>(), It.IsAny<CancellationToken>())).ReturnsAsync(false);
-    var recorder = new GoldenMasterRecorder(flags, new NullLogger<GoldenMasterRecorder>());
-    var eventsPub = new GoldenMasterModerationEventPublisher(recorder, new NullLogger<GoldenMasterModerationEventPublisher>());
-        var loggerFactory = LoggerFactory.Create(b => { });
-        var gmEvents = new GoldenMasterModerationEventPublisher(recorder, new NullLogger<GoldenMasterModerationEventPublisher>());
-        var steps = new List<ClubDoorman.Services.Handlers.Pipeline.IMessageStep>
-        {
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.CommandStep(commandRouter.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.CommandStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.SystemOrBotMessageStep(gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.SystemOrBotMessageStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.NewMembersStep(userJoinFacade.Object, appConfig.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.NewMembersStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.LeftMemberCleanupStep(bot.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.LeftMemberCleanupStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.ChannelMessageStep(channelModeration.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.ChannelMessageStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.PrivateSkipStep(gmEvents, appConfig.Object, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.PrivateSkipStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.CaptchaPendingStep(captchaService.Object, bot.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.CaptchaPendingStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.BanlistCheckStep(userManager.Object, userBanService.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.BanlistCheckStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.AlreadyApprovedStep(moderationFacadeApproved.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.AlreadyApprovedStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.FirstMessageLogStep(userFlowLogger.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.FirstMessageLogStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.ClubMemberSkipStep(userManager.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.ClubMemberSkipStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.BaseModerationStep(moderationFacadeApproved.Object, userFlowLogger.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.BaseModerationStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.AiProfileAnalysisStep(aiCascade.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.AiProfileAnalysisStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.FinalModerationActionStep(moderationFacadeApproved.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.FinalModerationActionStep>())
-        };
-        var pipeline = new ClubDoorman.Services.Handlers.Pipeline.MessagePipeline(steps, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.MessagePipeline>());
-        var handler = new MessageHandler(
-            bot.Object,
-            appConfig.Object,
-            channelModeration.Object,
-            commandRouter.Object,
-            new NullLogger<MessageHandler>(),
-            botPermissions.Object,
-            recorder,
-            eventsPub,
-            flags,
-            pipeline);
+        var handler = CreateHandler(flags, moderationFacadeMock: moderationFacadeApproved);
         var update = new Update
         {
             Id = 10,
@@ -548,64 +447,9 @@ public class MessageHandlerSemanticsTests
         var flags = Flags(basePath);
         var aiCascade = new Mock<IAiCascadeService>();
         aiCascade.Setup(x => x.PerformAiProfileAnalysisAsync(It.IsAny<Message>(), It.IsAny<User>(), It.IsAny<Chat>(), It.IsAny<CancellationToken>())).ReturnsAsync(true);
-        // Build handler manually to inject aiCascade
-        var bot = new Mock<ITelegramBotClientWrapper>();
         var userManager = new Mock<IUserManager>();
         userManager.Setup(x => x.InBanlist(It.IsAny<long>())).ReturnsAsync(false);
-        var appConfig = new Mock<IAppConfig>();
-        appConfig.Setup(x => x.AdminChatId).Returns(123456789L);
-        appConfig.Setup(x => x.LogAdminChatId).Returns(123456789L);
-        appConfig.Setup(x => x.DisabledChats).Returns(new HashSet<long>());
-        appConfig.Setup(x => x.IsChatAllowed(It.IsAny<long>())).Returns(true);
-        var userBanService = new Mock<IUserBanService>();
-        userBanService.Setup(x => x.HandleBlacklistBanAsync(It.IsAny<Message>(), It.IsAny<User>(), It.IsAny<Chat>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
-        var channelModeration = new Mock<IChannelModerationService>();
-        var commandRouter = new Mock<ICommandRouter>();
-        var userJoinFacade = new Mock<IUserJoinFacade>();
-        var moderationFacade = new Mock<IModerationFacade>();
-        moderationFacade.Setup(x => x.IsUserApproved(It.IsAny<long>(), It.IsAny<long>())).Returns(false);
-        moderationFacade.Setup(x => x.CheckMessageAsync(It.IsAny<Message>())).ReturnsAsync(new ModerationResult(ModerationAction.Allow, "allow", 0));
-        var botPermissions = new Mock<IBotPermissionsService>();
-        botPermissions.Setup(x => x.IsSilentModeAsync(It.IsAny<long>(), It.IsAny<CancellationToken>())).ReturnsAsync(false);
-        var captchaService = new Mock<ICaptchaService>();
-        captchaService.Setup(x => x.GenerateKey(It.IsAny<long>(), It.IsAny<long>())).Returns("k");
-        captchaService.Setup(x => x.GetCaptchaInfo("k")).Returns((CaptchaInfo?)null);
-        var userFlowLogger = new Mock<IUserFlowLogger>();
-        var forwarding = new Mock<IForwardingService>();
-        forwarding.Setup(x => x.IsChannelDiscussion(It.IsAny<Chat>(), It.IsAny<Message>())).ReturnsAsync(false);
-    var recorder = new GoldenMasterRecorder(flags, new NullLogger<GoldenMasterRecorder>());
-    var eventsPub = new GoldenMasterModerationEventPublisher(recorder, new NullLogger<GoldenMasterModerationEventPublisher>());
-        var loggerFactory = LoggerFactory.Create(b => { });
-        var gmEvents = new GoldenMasterModerationEventPublisher(recorder, new NullLogger<GoldenMasterModerationEventPublisher>());
-        var steps = new List<ClubDoorman.Services.Handlers.Pipeline.IMessageStep>
-        {
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.CommandStep(commandRouter.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.CommandStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.SystemOrBotMessageStep(gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.SystemOrBotMessageStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.NewMembersStep(userJoinFacade.Object, appConfig.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.NewMembersStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.LeftMemberCleanupStep(bot.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.LeftMemberCleanupStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.ChannelMessageStep(channelModeration.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.ChannelMessageStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.PrivateSkipStep(gmEvents, appConfig.Object, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.PrivateSkipStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.CaptchaPendingStep(captchaService.Object, bot.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.CaptchaPendingStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.BanlistCheckStep(userManager.Object, userBanService.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.BanlistCheckStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.AlreadyApprovedStep(moderationFacade.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.AlreadyApprovedStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.FirstMessageLogStep(userFlowLogger.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.FirstMessageLogStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.ClubMemberSkipStep(userManager.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.ClubMemberSkipStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.BaseModerationStep(moderationFacade.Object, userFlowLogger.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.BaseModerationStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.AiProfileAnalysisStep(aiCascade.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.AiProfileAnalysisStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.FinalModerationActionStep(moderationFacade.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.FinalModerationActionStep>())
-        };
-        var pipeline = new ClubDoorman.Services.Handlers.Pipeline.MessagePipeline(steps, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.MessagePipeline>());
-        var handler = new MessageHandler(
-            bot.Object,
-            appConfig.Object,
-            channelModeration.Object,
-            commandRouter.Object,
-            new NullLogger<MessageHandler>(),
-            botPermissions.Object,
-            recorder,
-            eventsPub,
-            flags,
-            pipeline);
+        var handler = CreateHandler(flags, userManagerMock: userManager, aiCascadeMock: aiCascade);
         var update = new Update
         {
             Id = 12,
@@ -631,62 +475,9 @@ public class MessageHandlerSemanticsTests
         var moderationFacade = new Mock<IModerationFacade>();
         moderationFacade.Setup(x => x.IsUserApproved(It.IsAny<long>(), It.IsAny<long>())).Returns(false);
         moderationFacade.Setup(x => x.CheckMessageAsync(It.IsAny<Message>())).ReturnsAsync(new ModerationResult(ModerationAction.Allow, "прошло все проверки", 0));
-        var bot = new Mock<ITelegramBotClientWrapper>();
         var userManager = new Mock<IUserManager>();
         userManager.Setup(x => x.InBanlist(It.IsAny<long>())).ReturnsAsync(false);
-        var appConfig = new Mock<IAppConfig>();
-        appConfig.Setup(x => x.AdminChatId).Returns(123456789L);
-        appConfig.Setup(x => x.LogAdminChatId).Returns(123456789L);
-        appConfig.Setup(x => x.DisabledChats).Returns(new HashSet<long>());
-        appConfig.Setup(x => x.IsChatAllowed(It.IsAny<long>())).Returns(true);
-        var userBanService = new Mock<IUserBanService>();
-        userBanService.Setup(x => x.HandleBlacklistBanAsync(It.IsAny<Message>(), It.IsAny<User>(), It.IsAny<Chat>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
-        var channelModeration = new Mock<IChannelModerationService>();
-        var commandRouter = new Mock<ICommandRouter>();
-        var userJoinFacade = new Mock<IUserJoinFacade>();
-        var botPermissions = new Mock<IBotPermissionsService>();
-        botPermissions.Setup(x => x.IsSilentModeAsync(It.IsAny<long>(), It.IsAny<CancellationToken>())).ReturnsAsync(false);
-        var captchaService = new Mock<ICaptchaService>();
-        captchaService.Setup(x => x.GenerateKey(It.IsAny<long>(), It.IsAny<long>())).Returns("k");
-        captchaService.Setup(x => x.GetCaptchaInfo("k")).Returns((CaptchaInfo?)null);
-        var userFlowLogger = new Mock<IUserFlowLogger>();
-        var forwarding = new Mock<IForwardingService>();
-        forwarding.Setup(x => x.IsChannelDiscussion(It.IsAny<Chat>(), It.IsAny<Message>())).ReturnsAsync(false);
-        var aiCascade = new Mock<IAiCascadeService>();
-        aiCascade.Setup(x => x.PerformAiProfileAnalysisAsync(It.IsAny<Message>(), It.IsAny<User>(), It.IsAny<Chat>(), It.IsAny<CancellationToken>())).ReturnsAsync(false);
-    var recorder = new GoldenMasterRecorder(flags, new NullLogger<GoldenMasterRecorder>());
-    var eventsPub = new GoldenMasterModerationEventPublisher(recorder, new NullLogger<GoldenMasterModerationEventPublisher>());
-        var loggerFactory = LoggerFactory.Create(b => { });
-        var gmEvents = new GoldenMasterModerationEventPublisher(recorder, new NullLogger<GoldenMasterModerationEventPublisher>());
-        var steps = new List<ClubDoorman.Services.Handlers.Pipeline.IMessageStep>
-        {
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.CommandStep(commandRouter.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.CommandStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.SystemOrBotMessageStep(gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.SystemOrBotMessageStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.NewMembersStep(userJoinFacade.Object, appConfig.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.NewMembersStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.LeftMemberCleanupStep(bot.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.LeftMemberCleanupStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.ChannelMessageStep(channelModeration.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.ChannelMessageStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.PrivateSkipStep(gmEvents, appConfig.Object, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.PrivateSkipStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.CaptchaPendingStep(captchaService.Object, bot.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.CaptchaPendingStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.BanlistCheckStep(userManager.Object, userBanService.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.BanlistCheckStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.AlreadyApprovedStep(moderationFacade.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.AlreadyApprovedStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.FirstMessageLogStep(userFlowLogger.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.FirstMessageLogStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.ClubMemberSkipStep(userManager.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.ClubMemberSkipStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.BaseModerationStep(moderationFacade.Object, userFlowLogger.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.BaseModerationStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.AiProfileAnalysisStep(aiCascade.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.AiProfileAnalysisStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.FinalModerationActionStep(moderationFacade.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.FinalModerationActionStep>())
-        };
-        var pipeline = new ClubDoorman.Services.Handlers.Pipeline.MessagePipeline(steps, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.MessagePipeline>());
-        var handler = new MessageHandler(
-            bot.Object,
-            appConfig.Object,
-            channelModeration.Object,
-            commandRouter.Object,
-            new NullLogger<MessageHandler>(),
-            botPermissions.Object,
-            recorder,
-            eventsPub,
-            flags,
-            pipeline);
+        var handler = CreateHandler(flags, userManagerMock: userManager, moderationFacadeMock: moderationFacade);
         var update = new Update
         {
             Id = 13,
@@ -713,62 +504,9 @@ public class MessageHandlerSemanticsTests
         var moderationFacade = new Mock<IModerationFacade>();
         moderationFacade.Setup(x => x.IsUserApproved(It.IsAny<long>(), It.IsAny<long>())).Returns(false);
         moderationFacade.Setup(x => x.CheckMessageAsync(It.IsAny<Message>())).ReturnsAsync(new ModerationResult(ModerationAction.Delete, "удалено по подозрению на спам", 0.9));
-        var bot = new Mock<ITelegramBotClientWrapper>();
         var userManager = new Mock<IUserManager>();
         userManager.Setup(x => x.InBanlist(It.IsAny<long>())).ReturnsAsync(false);
-        var appConfig = new Mock<IAppConfig>();
-        appConfig.Setup(x => x.AdminChatId).Returns(123456789L);
-        appConfig.Setup(x => x.LogAdminChatId).Returns(123456789L);
-        appConfig.Setup(x => x.DisabledChats).Returns(new HashSet<long>());
-        appConfig.Setup(x => x.IsChatAllowed(It.IsAny<long>())).Returns(true);
-        var userBanService = new Mock<IUserBanService>();
-        userBanService.Setup(x => x.HandleBlacklistBanAsync(It.IsAny<Message>(), It.IsAny<User>(), It.IsAny<Chat>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
-        var channelModeration = new Mock<IChannelModerationService>();
-        var commandRouter = new Mock<ICommandRouter>();
-        var userJoinFacade = new Mock<IUserJoinFacade>();
-        var botPermissions = new Mock<IBotPermissionsService>();
-        botPermissions.Setup(x => x.IsSilentModeAsync(It.IsAny<long>(), It.IsAny<CancellationToken>())).ReturnsAsync(false);
-        var captchaService = new Mock<ICaptchaService>();
-        captchaService.Setup(x => x.GenerateKey(It.IsAny<long>(), It.IsAny<long>())).Returns("k");
-        captchaService.Setup(x => x.GetCaptchaInfo("k")).Returns((CaptchaInfo?)null);
-        var userFlowLogger = new Mock<IUserFlowLogger>();
-        var forwarding = new Mock<IForwardingService>();
-        forwarding.Setup(x => x.IsChannelDiscussion(It.IsAny<Chat>(), It.IsAny<Message>())).ReturnsAsync(false);
-        var aiCascade = new Mock<IAiCascadeService>();
-        aiCascade.Setup(x => x.PerformAiProfileAnalysisAsync(It.IsAny<Message>(), It.IsAny<User>(), It.IsAny<Chat>(), It.IsAny<CancellationToken>())).ReturnsAsync(false);
-    var recorder = new GoldenMasterRecorder(flags, new NullLogger<GoldenMasterRecorder>());
-    var eventsPub = new GoldenMasterModerationEventPublisher(recorder, new NullLogger<GoldenMasterModerationEventPublisher>());
-        var loggerFactory = LoggerFactory.Create(b => { });
-        var gmEvents = new GoldenMasterModerationEventPublisher(recorder, new NullLogger<GoldenMasterModerationEventPublisher>());
-        var steps = new List<ClubDoorman.Services.Handlers.Pipeline.IMessageStep>
-        {
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.CommandStep(commandRouter.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.CommandStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.SystemOrBotMessageStep(gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.SystemOrBotMessageStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.NewMembersStep(userJoinFacade.Object, appConfig.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.NewMembersStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.LeftMemberCleanupStep(bot.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.LeftMemberCleanupStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.ChannelMessageStep(channelModeration.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.ChannelMessageStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.PrivateSkipStep(gmEvents, appConfig.Object, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.PrivateSkipStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.CaptchaPendingStep(captchaService.Object, bot.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.CaptchaPendingStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.BanlistCheckStep(userManager.Object, userBanService.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.BanlistCheckStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.AlreadyApprovedStep(moderationFacade.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.AlreadyApprovedStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.FirstMessageLogStep(userFlowLogger.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.FirstMessageLogStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.ClubMemberSkipStep(userManager.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.ClubMemberSkipStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.BaseModerationStep(moderationFacade.Object, userFlowLogger.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.BaseModerationStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.AiProfileAnalysisStep(aiCascade.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.AiProfileAnalysisStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.FinalModerationActionStep(moderationFacade.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.FinalModerationActionStep>())
-        };
-        var pipeline = new ClubDoorman.Services.Handlers.Pipeline.MessagePipeline(steps, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.MessagePipeline>());
-        var handler = new MessageHandler(
-            bot.Object,
-            appConfig.Object,
-            channelModeration.Object,
-            commandRouter.Object,
-            new NullLogger<MessageHandler>(),
-            botPermissions.Object,
-            recorder,
-            eventsPub,
-            flags,
-            pipeline);
+        var handler = CreateHandler(flags, userManagerMock: userManager, moderationFacadeMock: moderationFacade);
         var update = new Update
         {
             Id = 14,
@@ -795,62 +533,9 @@ public class MessageHandlerSemanticsTests
         var moderationFacade = new Mock<IModerationFacade>();
         moderationFacade.Setup(x => x.IsUserApproved(It.IsAny<long>(), It.IsAny<long>())).Returns(false);
         moderationFacade.Setup(x => x.CheckMessageAsync(It.IsAny<Message>())).ReturnsAsync(new ModerationResult(ModerationAction.Ban, "забан за спам ссылки", 0.95));
-        var bot = new Mock<ITelegramBotClientWrapper>();
         var userManager = new Mock<IUserManager>();
         userManager.Setup(x => x.InBanlist(It.IsAny<long>())).ReturnsAsync(false);
-        var appConfig = new Mock<IAppConfig>();
-        appConfig.Setup(x => x.AdminChatId).Returns(123456789L);
-        appConfig.Setup(x => x.LogAdminChatId).Returns(123456789L);
-        appConfig.Setup(x => x.DisabledChats).Returns(new HashSet<long>());
-        appConfig.Setup(x => x.IsChatAllowed(It.IsAny<long>())).Returns(true);
-        var userBanService = new Mock<IUserBanService>();
-        userBanService.Setup(x => x.HandleBlacklistBanAsync(It.IsAny<Message>(), It.IsAny<User>(), It.IsAny<Chat>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
-        var channelModeration = new Mock<IChannelModerationService>();
-        var commandRouter = new Mock<ICommandRouter>();
-        var userJoinFacade = new Mock<IUserJoinFacade>();
-        var botPermissions = new Mock<IBotPermissionsService>();
-        botPermissions.Setup(x => x.IsSilentModeAsync(It.IsAny<long>(), It.IsAny<CancellationToken>())).ReturnsAsync(false);
-        var captchaService = new Mock<ICaptchaService>();
-        captchaService.Setup(x => x.GenerateKey(It.IsAny<long>(), It.IsAny<long>())).Returns("k");
-        captchaService.Setup(x => x.GetCaptchaInfo("k")).Returns((CaptchaInfo?)null);
-        var userFlowLogger = new Mock<IUserFlowLogger>();
-        var forwarding = new Mock<IForwardingService>();
-        forwarding.Setup(x => x.IsChannelDiscussion(It.IsAny<Chat>(), It.IsAny<Message>())).ReturnsAsync(false);
-        var aiCascade = new Mock<IAiCascadeService>();
-        aiCascade.Setup(x => x.PerformAiProfileAnalysisAsync(It.IsAny<Message>(), It.IsAny<User>(), It.IsAny<Chat>(), It.IsAny<CancellationToken>())).ReturnsAsync(false);
-    var recorder = new GoldenMasterRecorder(flags, new NullLogger<GoldenMasterRecorder>());
-    var eventsPub = new GoldenMasterModerationEventPublisher(recorder, new NullLogger<GoldenMasterModerationEventPublisher>());
-        var loggerFactory = LoggerFactory.Create(b => { });
-        var gmEvents = new GoldenMasterModerationEventPublisher(recorder, new NullLogger<GoldenMasterModerationEventPublisher>());
-        var steps = new List<ClubDoorman.Services.Handlers.Pipeline.IMessageStep>
-        {
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.CommandStep(commandRouter.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.CommandStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.SystemOrBotMessageStep(gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.SystemOrBotMessageStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.NewMembersStep(userJoinFacade.Object, appConfig.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.NewMembersStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.LeftMemberCleanupStep(bot.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.LeftMemberCleanupStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.ChannelMessageStep(channelModeration.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.ChannelMessageStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.PrivateSkipStep(gmEvents, appConfig.Object, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.PrivateSkipStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.CaptchaPendingStep(captchaService.Object, bot.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.CaptchaPendingStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.BanlistCheckStep(userManager.Object, userBanService.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.BanlistCheckStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.AlreadyApprovedStep(moderationFacade.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.AlreadyApprovedStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.FirstMessageLogStep(userFlowLogger.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.FirstMessageLogStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.ClubMemberSkipStep(userManager.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.ClubMemberSkipStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.BaseModerationStep(moderationFacade.Object, userFlowLogger.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.BaseModerationStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.AiProfileAnalysisStep(aiCascade.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.AiProfileAnalysisStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.FinalModerationActionStep(moderationFacade.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.FinalModerationActionStep>())
-        };
-        var pipeline = new ClubDoorman.Services.Handlers.Pipeline.MessagePipeline(steps, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.MessagePipeline>());
-        var handler = new MessageHandler(
-            bot.Object,
-            appConfig.Object,
-            channelModeration.Object,
-            commandRouter.Object,
-            new NullLogger<MessageHandler>(),
-            botPermissions.Object,
-            recorder,
-            eventsPub,
-            flags,
-            pipeline);
+        var handler = CreateHandler(flags, userManagerMock: userManager, moderationFacadeMock: moderationFacade);
         var update = new Update
         {
             Id = 15,
@@ -877,62 +562,9 @@ public class MessageHandlerSemanticsTests
         var moderationFacade = new Mock<IModerationFacade>();
         moderationFacade.Setup(x => x.IsUserApproved(It.IsAny<long>(), It.IsAny<long>())).Returns(false);
         moderationFacade.Setup(x => x.CheckMessageAsync(It.IsAny<Message>())).ReturnsAsync(new ModerationResult(ModerationAction.Report, "репорт подозрение", 0.6));
-        var bot = new Mock<ITelegramBotClientWrapper>();
         var userManager = new Mock<IUserManager>();
         userManager.Setup(x => x.InBanlist(It.IsAny<long>())).ReturnsAsync(false);
-        var appConfig = new Mock<IAppConfig>();
-        appConfig.Setup(x => x.AdminChatId).Returns(123456789L);
-        appConfig.Setup(x => x.LogAdminChatId).Returns(123456789L);
-        appConfig.Setup(x => x.DisabledChats).Returns(new HashSet<long>());
-        appConfig.Setup(x => x.IsChatAllowed(It.IsAny<long>())).Returns(true);
-        var userBanService = new Mock<IUserBanService>();
-        userBanService.Setup(x => x.HandleBlacklistBanAsync(It.IsAny<Message>(), It.IsAny<User>(), It.IsAny<Chat>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
-        var channelModeration = new Mock<IChannelModerationService>();
-        var commandRouter = new Mock<ICommandRouter>();
-        var userJoinFacade = new Mock<IUserJoinFacade>();
-        var botPermissions = new Mock<IBotPermissionsService>();
-        botPermissions.Setup(x => x.IsSilentModeAsync(It.IsAny<long>(), It.IsAny<CancellationToken>())).ReturnsAsync(false);
-        var captchaService = new Mock<ICaptchaService>();
-        captchaService.Setup(x => x.GenerateKey(It.IsAny<long>(), It.IsAny<long>())).Returns("k");
-        captchaService.Setup(x => x.GetCaptchaInfo("k")).Returns((CaptchaInfo?)null);
-        var userFlowLogger = new Mock<IUserFlowLogger>();
-        var forwarding = new Mock<IForwardingService>();
-        forwarding.Setup(x => x.IsChannelDiscussion(It.IsAny<Chat>(), It.IsAny<Message>())).ReturnsAsync(false);
-        var aiCascade = new Mock<IAiCascadeService>();
-        aiCascade.Setup(x => x.PerformAiProfileAnalysisAsync(It.IsAny<Message>(), It.IsAny<User>(), It.IsAny<Chat>(), It.IsAny<CancellationToken>())).ReturnsAsync(false);
-    var recorder = new GoldenMasterRecorder(flags, new NullLogger<GoldenMasterRecorder>());
-    var eventsPub = new GoldenMasterModerationEventPublisher(recorder, new NullLogger<GoldenMasterModerationEventPublisher>());
-        var loggerFactory = LoggerFactory.Create(b => { });
-        var gmEvents = new GoldenMasterModerationEventPublisher(recorder, new NullLogger<GoldenMasterModerationEventPublisher>());
-        var steps = new List<ClubDoorman.Services.Handlers.Pipeline.IMessageStep>
-        {
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.CommandStep(commandRouter.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.CommandStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.SystemOrBotMessageStep(gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.SystemOrBotMessageStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.NewMembersStep(userJoinFacade.Object, appConfig.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.NewMembersStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.LeftMemberCleanupStep(bot.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.LeftMemberCleanupStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.ChannelMessageStep(channelModeration.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.ChannelMessageStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.PrivateSkipStep(gmEvents, appConfig.Object, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.PrivateSkipStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.CaptchaPendingStep(captchaService.Object, bot.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.CaptchaPendingStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.BanlistCheckStep(userManager.Object, userBanService.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.BanlistCheckStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.AlreadyApprovedStep(moderationFacade.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.AlreadyApprovedStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.FirstMessageLogStep(userFlowLogger.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.FirstMessageLogStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.ClubMemberSkipStep(userManager.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.ClubMemberSkipStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.BaseModerationStep(moderationFacade.Object, userFlowLogger.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.BaseModerationStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.AiProfileAnalysisStep(aiCascade.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.AiProfileAnalysisStep>()),
-            new ClubDoorman.Services.Handlers.Pipeline.Steps.FinalModerationActionStep(moderationFacade.Object, gmEvents, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.Steps.FinalModerationActionStep>())
-        };
-        var pipeline = new ClubDoorman.Services.Handlers.Pipeline.MessagePipeline(steps, loggerFactory.CreateLogger<ClubDoorman.Services.Handlers.Pipeline.MessagePipeline>());
-        var handler = new MessageHandler(
-            bot.Object,
-            appConfig.Object,
-            channelModeration.Object,
-            commandRouter.Object,
-            new NullLogger<MessageHandler>(),
-            botPermissions.Object,
-            recorder,
-            eventsPub,
-            flags,
-            pipeline);
+        var handler = CreateHandler(flags, userManagerMock: userManager, moderationFacadeMock: moderationFacade);
         var update = new Update
         {
             Id = 16,

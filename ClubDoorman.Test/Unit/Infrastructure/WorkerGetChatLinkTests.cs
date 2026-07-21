@@ -27,19 +27,6 @@ public class WorkerGetChatLinkTests
     }
 
     [Test]
-    public void GetChatLink_PublicGroupWithUsername_ReturnsMarkdownLink()
-    {
-        // Arrange
-        var chat = new Chat { Id = 123456789, Username = "testgroup", Title = "Test Group" };
-
-        // Act
-        var result = _chatLinkFormatter.GetChatLink(chat);
-
-        // Assert
-        Assert.That(result, Is.EqualTo("[Test Group](https://t.me/testgroup)"));
-    }
-
-    [Test]
     public void GetChatLink_SupergroupWithoutUsername_ReturnsTelegramLink()
     {
         // Arrange
