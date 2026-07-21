@@ -5,6 +5,7 @@ WORKDIR /src
 COPY ClubDoorman.sln ./
 COPY ClubDoorman/*.csproj ./ClubDoorman/
 COPY ClubDoorman.Test/*.csproj ./ClubDoorman.Test/
+COPY ClubDoorman.Baseline/*.csproj ./ClubDoorman.Baseline/
 
 # Восстанавливаем зависимости
 RUN dotnet restore
