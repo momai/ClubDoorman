@@ -13,8 +13,8 @@ This slice set makes the test count more honest before any production architectu
 
 ## Slice 1: Lock BDD Disposition
 
-Mode: HITL  
-Depends on: none  
+Mode: HITL
+Depends on: none
 Risk: low
 
 ### Goal
@@ -58,8 +58,8 @@ Record explicit keep/delete decisions before removing executable scenarios.
 
 ## Slice 2: Remove Obvious False-Green BDD
 
-Mode: HITL  
-Depends on: Slice 1  
+Mode: HITL
+Depends on: Slice 1
 Risk: medium
 
 ### Goal
@@ -118,8 +118,8 @@ Remove four executable feature groups whose bindings are empty, tautological, or
 
 ## Slice 3: Remove Simulated AI Captcha Permissions BDD
 
-Mode: HITL  
-Depends on: Slice 2  
+Mode: HITL
+Depends on: Slice 2
 Risk: medium
 
 ### Goal
@@ -177,8 +177,8 @@ Remove the remaining three false-green feature groups that synthesize AI, captch
 
 ## Slice 4: Move Secret-Free Classifier Checks
 
-Mode: HITL  
-Depends on: Slice 3  
+Mode: HITL
+Depends on: Slice 3
 Risk: medium
 
 ### Goal
@@ -227,8 +227,8 @@ Run the two local spam/ham model checks without `.env`, Telegram credentials, Op
 
 ## Slice 5: Isolate User Cleanup Storage
 
-Mode: AFK  
-Depends on: Slice 3  
+Mode: AFK
+Depends on: Slice 3
 Risk: low
 
 ### Goal
@@ -274,8 +274,8 @@ Prevent `UserCleanupServiceTests` from reading or mutating runner-relative appro
 
 ## Slice 6: Record Authoritative Baseline
 
-Mode: AFK  
-Depends on: Slice 4, Slice 5  
+Mode: AFK
+Depends on: Slice 4, Slice 5
 Risk: low
 
 ### Goal
