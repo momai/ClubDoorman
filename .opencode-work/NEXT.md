@@ -10,9 +10,9 @@ Choose one production seam before implementation: pipeline failure observability
 
 ## Why
 
-- The authoritative 2026-07-18 worktree baseline is `493 passed / 0 skipped / 0 failed / 493 total` in `9 s`.
+- The authoritative 2026-07-23 branch baseline is `493 passed / 0 skipped / 0 failed / 493 total` in `10 s`.
 - Command: `dotnet test ClubDoorman.Test/ClubDoorman.Test.csproj --no-restore --verbosity minimal`; no `.runsettings` was supplied.
-- Branch: `test/audit-follow-ups`; base HEAD: `b5b3164`; the measured Slice 1-6 changes are uncommitted.
+- Branch: `test/audit-follow-ups`; synchronized with upstream `next-dev` at `71bcaa9` and contains the committed test-trust recovery changes.
 - False-green BDD was removed, local classifier checks no longer require secrets, and `UserCleanupServiceTests` storage is isolated.
 - Pipeline failure and captcha expiry remain separate production behavior changes requiring focused characterization and approval.
 - A shared harness still risks adding another construction path rather than fixing an owning seam.

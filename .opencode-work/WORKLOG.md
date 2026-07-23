@@ -38,14 +38,14 @@ Test Cleanup: reduce test maintenance tax by deleting, quarantining, or rewritin
 
 ## Authoritative Post-Cleanup Baseline
 
-Date: 2026-07-18
+Date: 2026-07-23
 
 - Branch: `test/audit-follow-ups`.
-- Base HEAD: `b5b3164`.
-- Scope: current uncommitted Slice 1-6 worktree based on that HEAD. No commit was created as part of the slice.
+- Base upstream: `momai/ClubDoorman:next-dev` at `71bcaa9`.
+- Scope: committed test-trust recovery changes on `test/audit-follow-ups`, synchronized with upstream after PR #148.
 - Command: `dotnet test ClubDoorman.Test/ClubDoorman.Test.csproj --no-restore --verbosity minimal`.
 - `.runsettings`: not supplied.
-- Result: `493 passed / 0 skipped / 0 failed / 493 total`, duration `9 s`.
+- Result: `493 passed / 0 skipped / 0 failed / 493 total`, duration `10 s`.
 - Skip reasons: none; the run had no skipped tests.
 - SpecFlow discovery: only `Features/CheckCommand.feature` was generated and executed.
 - The earlier `942 / 12`, `900 / 12`, and review `514 / 3` baselines are historical and do not describe the current worktree.
