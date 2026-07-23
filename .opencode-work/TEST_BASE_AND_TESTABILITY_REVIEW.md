@@ -80,13 +80,13 @@ Build warnings observed:
 - `NU1902`: `SixLabors.ImageSharp 3.1.9` has known moderate-severity vulnerability `GHSA-rxmq-m78w-7wmc`.
 - The test post-build `cp -n` command emitted portability warnings.
 
-## Authoritative Post-Cleanup Baseline
+## Historical Slice Baseline
 
 Date: 2026-07-18
 
 - Branch: `test/audit-follow-ups`.
 - Base HEAD: `b5b3164`.
-- Scope: current uncommitted Slice 1-6 worktree based on that HEAD; no commit was created during the slice.
+- Scope: historical uncommitted Slice 1-6 worktree based on that HEAD; no commit was created during the slice.
 - Command: `dotnet test ClubDoorman.Test/ClubDoorman.Test.csproj --no-restore --verbosity minimal`.
 - `.runsettings` was not supplied.
 - Result: `0 failed, 493 passed, 0 skipped, 493 total, duration 9 s`.

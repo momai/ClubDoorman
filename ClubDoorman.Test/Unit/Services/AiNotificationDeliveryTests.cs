@@ -6,6 +6,7 @@ using ClubDoorman.Services.Telegram;
 using ClubDoorman.Test.TestKit;
 using ClubDoorman.TestInfrastructure;
 using System.Globalization;
+using System.Runtime.Caching;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using NUnit.Framework;
@@ -18,6 +19,15 @@ namespace ClubDoorman.Test.Unit.Services;
 [TestFixture]
 public class AiNotificationDeliveryTests
 {
+    private const long TestChatId = 678901;
+    private const long TestUserId = 123451;
+
+    [TearDown]
+    public void RemoveCachedAiProfileAnalysis()
+    {
+        MemoryCache.Default.Remove($"banprofile_{TestChatId}_{TestUserId}");
+    }
+
     [Test]
     public async Task MessageService_SendAiProfileAnalysis_RoutesToAdminDispatcher()
     {
@@ -51,12 +61,12 @@ public class AiNotificationDeliveryTests
         Assert.That(sent.Text, Does.Contain("AI анализ профиля"));
         Assert.That(sent.Text, Does.Contain("Test &lt;reason&gt;"));
         Assert.That(sent.Text, Does.Contain(string.Format(CultureInfo.CurrentCulture, "{0:F1}%", 95.0)));
-        Assert.That(ContainsCallback(sent.ReplyMarkup!, "banprofile_67890_12345"), Is.True);
+        Assert.That(ContainsCallback(sent.ReplyMarkup!, $"banprofile_{TestChatId}_{TestUserId}"), Is.True);
         Assert.That(bot.SentPhotos, Is.Empty);
     }
 
     [Test]
-    public async Task ServiceChatDispatcher_AiProfileAnalysisWithPhoto_SendsPhotoAndRepliesWithAnalysis()
+    public async Task ServiceChatDispatcher_AiProfileAnalysisWithPhoto_SendsPhotoAndSetsReplyParameters()
     {
         var bot = TestKitTelegram.CreateFakeClient();
         var config = CreateConfig();
@@ -80,8 +90,8 @@ public class AiNotificationDeliveryTests
         long? messageId = null,
         byte[]? photoBytes = null) =>
         new(
-            new User { Id = 12345, FirstName = "Test", LastName = "User" },
-            new Chat { Id = 67890, Type = ChatType.Group, Title = "Test Chat" },
+            new User { Id = TestUserId, FirstName = "Test", LastName = "User" },
+            new Chat { Id = TestChatId, Type = ChatType.Group, Title = "Test Chat" },
             0.95,
             "Test <reason>",
             "Test name bio",
