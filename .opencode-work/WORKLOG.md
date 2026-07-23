@@ -22,7 +22,7 @@ Test Cleanup: reduce test maintenance tax by deleting, quarantining, or rewritin
 - Use `MessageEnvelope` + `FakeTelegramClient.RegisterMessageEnvelope` + `WasMessageDeleted` for id-sensitive scenarios.
 - Never revert user/unrelated changes.
 
-## Baseline
+## Historical Baseline
 
 - Branch: `next`.
 - Baseline command: `dotnet test`.
@@ -35,6 +35,27 @@ Test Cleanup: reduce test maintenance tax by deleting, quarantining, or rewritin
   - `docs/architecture-seams.md`
   - `docs/test-infra-strategy.md`
   - `docs/test-layer-map.md`
+
+## Authoritative Post-Cleanup Baseline
+
+Date: 2026-07-23
+
+- Branch: `test/audit-follow-ups`.
+- Base upstream: `momai/ClubDoorman:next-dev` at `71bcaa9`.
+- Scope: committed test-trust recovery changes on `test/audit-follow-ups`, synchronized with upstream after PR #148.
+- Command: `dotnet test ClubDoorman.Test/ClubDoorman.Test.csproj --no-restore --verbosity minimal`.
+- `.runsettings`: not supplied.
+- Result: `493 passed / 0 skipped / 0 failed / 493 total`, duration `10 s`.
+- Skip reasons: none; the run had no skipped tests.
+- SpecFlow discovery: only `Features/CheckCommand.feature` was generated and executed.
+- The earlier `942 / 12`, `900 / 12`, and review `514 / 3` baselines are historical and do not describe the current worktree.
+
+Remaining known non-hermetic paths:
+
+- `ClubDoorman.Test/Integration/AiAnalysisTests.cs` still searches for `.env`, mutates process environment, and directly constructs `ApprovedUsersStorage`.
+- `ApprovedUsersStorageTestFactory`, `UserCleanupServiceTestFactory`, and `MessageHandlerTestFactory` still directly construct file-backed approval storage without fixture-local isolation.
+- The full run still logged AI-enabled configuration and classifier training/retraining from tests outside the migrated classifier fixture.
+- Existing global cache, timer, background-task, and runner-relative filesystem risks remain unresolved unless a completed slice changed the owning code.
 
 ## Completed
 

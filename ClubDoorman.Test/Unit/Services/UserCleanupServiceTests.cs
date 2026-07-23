@@ -13,20 +13,57 @@ namespace ClubDoorman.Test.Unit.Services;
 /// </summary>
 [TestFixture]
 [Category("business-logic")]
+[NonParallelizable]
 public class UserCleanupServiceTests
 {
     private UserCleanupServiceTestFactory _factory = null!;
     private UserCleanupService _service = null!;
     private ApprovedUsersStorage _approvedUsersStorage = null!;
     private Mock<ILogger<UserCleanupService>> _loggerMock = null!;
+    private string? _previousDataRoot;
+    private string _temporaryDataRoot = null!;
 
     [SetUp]
     public void Setup()
     {
-        _factory = new UserCleanupServiceTestFactory();
-        _approvedUsersStorage = new ApprovedUsersStorage(_factory.ApprovedUsersStorageLoggerMock.Object);
-        _service = new UserCleanupService(_approvedUsersStorage, _factory.LoggerMock.Object);
-        _loggerMock = _factory.LoggerMock;
+        _previousDataRoot = Environment.GetEnvironmentVariable("DOORMAN_DATA_ROOT");
+        _temporaryDataRoot = Path.Combine(Path.GetTempPath(), "clubdoorman-user-cleanup-" + Path.GetRandomFileName());
+        Directory.CreateDirectory(_temporaryDataRoot);
+        Environment.SetEnvironmentVariable("DOORMAN_DATA_ROOT", _temporaryDataRoot);
+
+        try
+        {
+            _factory = new UserCleanupServiceTestFactory();
+            _approvedUsersStorage = new ApprovedUsersStorage(_factory.ApprovedUsersStorageLoggerMock.Object);
+            _service = new UserCleanupService(_approvedUsersStorage, _factory.LoggerMock.Object);
+            _loggerMock = _factory.LoggerMock;
+        }
+        catch
+        {
+            CleanupTemporaryDataRoot();
+            throw;
+        }
+    }
+
+    [TearDown]
+    public void TearDown()
+    {
+        CleanupTemporaryDataRoot();
+    }
+
+    private void CleanupTemporaryDataRoot()
+    {
+        try
+        {
+            Environment.SetEnvironmentVariable("DOORMAN_DATA_ROOT", _previousDataRoot);
+        }
+        finally
+        {
+            if (Directory.Exists(_temporaryDataRoot))
+            {
+                Directory.Delete(_temporaryDataRoot, true);
+            }
+        }
     }
 
     [Test]

@@ -42,7 +42,12 @@ public class AiChecksTests
         };
 
         // Act
-        var result = await _aiChecks.GetSpamProbability(message);
+        var isolatedAiChecks = new AiChecks(
+            _mockBot.Object,
+            _mockLogger.Object,
+            AppConfigTestFactory.CreateWithoutAi());
+
+        var result = await isolatedAiChecks.GetSpamProbability(message);
 
         // Assert
         Assert.That(result, Is.Not.Null);

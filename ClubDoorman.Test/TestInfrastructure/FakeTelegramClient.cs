@@ -75,7 +75,8 @@ public class FakeTelegramClient : ITelegramBotClientWrapper
             text,
             parseMode,
             replyMarkup,
-            message
+            message,
+            replyParameters
         ));
 
         Console.WriteLine($"DEBUG: FakeTelegramClient.SendMessageAsync added message, SentMessages count: {SentMessages.Count}");
@@ -315,7 +316,8 @@ public class FakeTelegramClient : ITelegramBotClientWrapper
             caption,
             parseMode,
             replyMarkup,
-            message
+            message,
+            replyParameters
         ));
 
         OperationLog.Add($"SendPhoto: chatId={chatId.Identifier}, caption={caption}");
@@ -764,7 +766,8 @@ public record SentMessage(
     string Text,
     ParseMode? ParseMode,
     ReplyMarkup? ReplyMarkup,
-    Message Message
+    Message Message,
+    ReplyParameters? ReplyParameters = null
 );
 
 public record DeletedMessage(
@@ -806,7 +809,8 @@ public record SentPhoto(
     string? Caption,
     ParseMode? ParseMode,
     ReplyMarkup? ReplyMarkup,
-    Message Message
+    Message Message,
+    ReplyParameters? ReplyParameters = null
 );
 
 public record RestrictedUser(

@@ -2,52 +2,48 @@
 
 ## Question
 
-What is the next cleanup target after deleting weak MessageHandler-named ban/demo files?
+Which demonstrated production testability risk should be planned after test-trust recovery?
 
 ## Current Answer
 
-Continue value-based deletion/rewrite audit. Do not add shared harness yet.
+Choose one production seam before implementation: pipeline failure observability or captcha scheduler ownership. Do not combine them and do not add a shared test harness.
 
 ## Why
 
-- The current owner pain is test maintenance cost, not missing test helpers.
-- Deleted `MessageHandlerGoldenMasterTests.cs`, `MessageHandlerBanExceptionTests.cs`, `MessageHandlerMutationCoverageTests.cs`, and `MessageHandlerBanAdvancedTests.cs` after audit.
-- Focused seam tests passed after each deletion.
-- Current full suite: `900 passed / 12 skipped / 0 failed`.
-- The suite can shrink safely when brittle broad tests duplicate seam tests.
-- A shared harness now still risks creating another construction path instead of reducing test tax.
+- The authoritative 2026-07-23 branch baseline is `493 passed / 0 skipped / 0 failed / 493 total` in `10 s`.
+- Command: `dotnet test ClubDoorman.Test/ClubDoorman.Test.csproj --no-restore --verbosity minimal`; no `.runsettings` was supplied.
+- Branch: `test/audit-follow-ups`; synchronized with upstream `next-dev` at `71bcaa9` and contains the committed test-trust recovery changes.
+- False-green BDD was removed, local classifier checks no longer require secrets, and `UserCleanupServiceTests` storage is isolated.
+- Pipeline failure and captcha expiry remain separate production behavior changes requiring focused characterization and approval.
+- A shared harness still risks adding another construction path rather than fixing an owning seam.
 
 ## Candidate Next Slice
 
-Title: Continue `MessageHandlerBanTests.cs` audit by grouped behavior.
+Title: Select and characterize one production testability seam.
 
-Mode: read first, classify, then delete only obvious low-value cases.
+Mode: HITL before production behavior changes.
 
-Goal: keep only cases that protect real MessageHandler/pipeline routing behavior; delete mock-choreography cases with seam coverage elsewhere.
+Goal: produce a bounded plan for either observable pipeline failure or single-owner captcha expiry, not both.
 
 Allowed:
 
-- Read the file and nearby seam tests before editing.
-- Classify tests as keep/rewrite/delete/quarantine.
-- Delete a small batch only when coverage is clearly duplicated or low-value.
-- Prefer no replacement unless the behavior protects a real regression.
-- If a candidate file is dirty from someone else, inspect first and ask before overwriting unclear changes.
+- Inspect the owning production seam and nearest focused tests.
+- Characterize current returned results and side effects before proposing changes.
+- Keep one behavior group per implementation slice.
+- Preserve current persisted formats and external bot behavior unless explicitly approved otherwise.
 
 Not allowed:
 
-- Add shared harness.
-- Edit `TestInfrastructure` or `TestKit`.
-- Change production code.
-- Make `WithMessageId` obsolete-true.
-- Preserve mutation-only tests by default.
-- Touch unrelated dirty files without explicit approval.
+- Combine pipeline and captcha work.
+- Add shared test infrastructure.
+- Begin broad moderation architecture changes.
+- Treat remaining AI, storage, cache, timer, or package risks as resolved without corresponding code changes.
 
 Suggested verification:
 
-- Focused target file/class if still present.
-- Relevant seam tests for replacements.
-- Full suite after deletion/rewrite batch.
+- Exact focused seam test selected by the approved plan.
+- Full suite after any production behavior change, per repository rules.
 
 ## Alternative Later Slice
 
-Add shared harness only if another concrete migration shows the same setup pain repeats and the API can be tiny.
+Continue isolating direct `ApprovedUsersStorage` constructions, starting with `Integration/AiAnalysisTests.cs`, as a separate test-only plan.
