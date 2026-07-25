@@ -43,8 +43,9 @@ public class DependencyRulesTests
     public void PipelineSteps_DirectTelegramTypeRefs_StayWithinBaseline()
     {
         // NetArchTest HaveDependencyOn("Telegram.Bot") is transitive and true for every step
-        // that touches MessageContext. We freeze *direct* Telegram.* type refs per FullName so
-        // new SDK surface on an existing step fails the gate.
+        // that touches MessageContext. We freeze the *exact current* set of direct Telegram.*
+        // type refs per step FullName (including nested async state machines) so both expansion
+        // and shrink require an intentional baseline update.
         var actual = PipelineStepDependencyInspector.GetDirectTelegramTypeRefs();
         var baseline = PipelineStepDependencyInspector.AllowedTelegramTypeBaseline;
         var failures = new List<string>();
@@ -73,7 +74,14 @@ public class DependencyRulesTests
                     $"{fullName}: new Telegram type refs beyond baseline: {string.Join(", ", extras)}. "
                     + "Update AllowedTelegramTypeBaseline deliberately if this is intended.");
             }
-            // Baseline shrink (removed usage) is allowed; only expansions fail the gate.
+
+            var stale = allowedSet.Where(a => !refs.Contains(a)).ToList();
+            if (stale.Count > 0)
+            {
+                failures.Add(
+                    $"{fullName}: baseline still allows unused Telegram type refs: {string.Join(", ", stale)}. "
+                    + "Shrink AllowedTelegramTypeBaseline deliberately.");
+            }
         }
 
         // Baseline entries must still exist as step types (typos / renames break the gate).
@@ -84,7 +92,7 @@ public class DependencyRulesTests
         }
 
         Assert.That(failures, Is.Empty,
-            "Pipeline steps Telegram surface must stay within the frozen baseline.\n"
+            "Pipeline steps Telegram surface must match the frozen current baseline.\n"
             + string.Join("\n", failures));
     }
 

@@ -6,45 +6,14 @@ namespace ClubDoorman.Test.Architecture;
 
 /// <summary>
 /// Locates pipeline step types and inspects their direct Telegram type references.
-/// Uses Mono.Cecil so base-class implementors of <see cref="IMessageStep"/> are not missed.
+/// Nested types (async state machines) are folded into the outer step's ref set.
 /// </summary>
 internal static class PipelineStepDependencyInspector
 {
     public const string StepsNamespace = "ClubDoorman.Services.Handlers.Pipeline.Steps";
 
-    /// <summary>
-    /// Frozen direct Telegram.* type refs per step FullName.
-    /// Steps absent from this map must not introduce any Telegram type references.
-    /// Expand deliberately when a legacy step needs more Types access; never wholesale-exempt a type.
-    /// </summary>
-    public static readonly IReadOnlyDictionary<string, string[]> AllowedTelegramTypeBaseline =
-        new Dictionary<string, string[]>(StringComparer.Ordinal)
-        {
-            ["ClubDoorman.Services.Handlers.Pipeline.Steps.AlreadyApprovedStep"] =
-            [
-                "Telegram.Bot.Types.Chat",
-                "Telegram.Bot.Types.Message",
-                "Telegram.Bot.Types.User"
-            ],
-            ["ClubDoorman.Services.Handlers.Pipeline.Steps.FirstMessageLogStep"] =
-            [
-                "Telegram.Bot.Types.Chat",
-                "Telegram.Bot.Types.Message",
-                "Telegram.Bot.Types.User"
-            ],
-            ["ClubDoorman.Services.Handlers.Pipeline.Steps.PrivateSkipStep"] =
-            [
-                "Telegram.Bot.Types.Chat",
-                "Telegram.Bot.Types.Enums.ChatType",
-                "Telegram.Bot.Types.Message"
-            ],
-            ["ClubDoorman.Services.Handlers.Pipeline.Steps.SystemOrBotMessageStep"] =
-            [
-                "Telegram.Bot.Types.Chat",
-                "Telegram.Bot.Types.Message",
-                "Telegram.Bot.Types.User"
-            ]
-        };
+    public static IReadOnlyDictionary<string, string[]> AllowedTelegramTypeBaseline =>
+        PipelineStepTelegramBaseline.Allowed;
 
     public static IReadOnlyList<Type> GetPipelineStepTypes()
     {
@@ -54,7 +23,7 @@ internal static class PipelineStepDependencyInspector
                 t is { IsClass: true, IsAbstract: false, IsNested: false } &&
                 t.Namespace is not null &&
                 t.Namespace.StartsWith(StepsNamespace, StringComparison.Ordinal) &&
-                !t.Name.Contains('<', StringComparison.Ordinal)) // skip async state machines
+                !t.Name.Contains('<', StringComparison.Ordinal))
             .OrderBy(t => t.FullName, StringComparer.Ordinal)
             .ToList();
     }
@@ -80,7 +49,8 @@ internal static class PipelineStepDependencyInspector
 
     public static IEnumerable<string> GetForbiddenConstructorParameters(Type stepType)
     {
-        foreach (var ctor in stepType.GetConstructors(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
+        // DI collaborators come through public constructors.
+        foreach (var ctor in stepType.GetConstructors(BindingFlags.Instance | BindingFlags.Public))
         {
             foreach (var parameter in ctor.GetParameters())
             {
@@ -100,7 +70,6 @@ internal static class PipelineStepDependencyInspector
         if (type.IsInterface || type.IsAbstract)
             return true;
 
-        // Framework / BCL value plumbing only — no ClubDoorman concrete infra.
         if (type.IsPrimitive || type.IsEnum || type == typeof(string) || type == typeof(decimal))
             return true;
 
@@ -115,7 +84,12 @@ internal static class PipelineStepDependencyInspector
     private static SortedSet<string> CollectTelegramRefs(TypeDefinition type)
     {
         var set = new SortedSet<string>(StringComparer.Ordinal);
+        CollectTelegramRefs(type, set);
+        return set;
+    }
 
+    private static void CollectTelegramRefs(TypeDefinition type, SortedSet<string> set)
+    {
         void Add(TypeReference? tr)
         {
             if (tr is null)
@@ -177,6 +151,8 @@ internal static class PipelineStepDependencyInspector
             }
         }
 
-        return set;
+        // Async ExecuteAsync bodies live in nested state machines (<ExecuteAsync>d__*).
+        foreach (var nestedType in type.NestedTypes)
+            CollectTelegramRefs(nestedType, set);
     }
 }
