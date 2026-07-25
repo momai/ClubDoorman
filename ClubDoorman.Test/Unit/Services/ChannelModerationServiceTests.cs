@@ -114,6 +114,27 @@ public class ChannelModerationServiceTests
     }
 
     [Test]
+    public void HandleChannelMessageAsync_DiscussionLookupCancelled_DoesNotDispatch()
+    {
+        var message = CreateMessage();
+        _bot
+            .Setup(x => x.GetChatFullInfo(message.Chat.Id, It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new OperationCanceledException());
+
+        Assert.ThrowsAsync<OperationCanceledException>(() =>
+            _service.HandleChannelMessageAsync(message, false));
+        _contentPolicy.Verify(
+            x => x.CheckContentAsync(It.IsAny<ContentModerationInput>(), It.IsAny<CancellationToken>()),
+            Times.Never);
+        _dispatcher.Verify(
+            x => x.DispatchAsync(
+                It.IsAny<ChannelModerationContext>(),
+                It.IsAny<ModerationResult>(),
+                It.IsAny<CancellationToken>()),
+            Times.Never);
+    }
+
+    [Test]
     public async Task HandleChannelMessageAsync_ChannelAutoBan_DispatchesBanWithoutContentCheck()
     {
         var message = CreateMessage();

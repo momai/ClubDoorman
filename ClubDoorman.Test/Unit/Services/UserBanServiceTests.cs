@@ -558,8 +558,10 @@ public class UserBanServiceTests
         await _userBanService.AutoBanChannelAsync(message, CancellationToken.None);
 
         // Assert
-        // Проверяем, что исключение было проброшено
-        // (логирование происходит в MessageHandler, а не в UserBanService)
+        _botMock.Verify(
+            x => x.BanChatSenderChat(chat.Id, senderChat.Id, CancellationToken.None),
+            Times.Once,
+            "Delete failure must not prevent banning the sender chat identity");
 
         _messageServiceMock.Verify(
             x => x.SendAdminNotificationAsync(

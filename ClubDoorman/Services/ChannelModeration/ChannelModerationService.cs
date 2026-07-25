@@ -90,32 +90,20 @@ public sealed class ChannelModerationService : IChannelModerationService
         Message message,
         CancellationToken cancellationToken = default)
     {
+        var chat = message.Chat;
+        var senderChat = message.SenderChat!;
+
+        if (chat.Type == ChatType.Supergroup && message.IsAutomaticForward)
+            return true;
+
         try
         {
-            var chat = message.Chat;
-            var senderChat = message.SenderChat!;
-
-            if (chat.Type == ChatType.Supergroup && message.IsAutomaticForward)
-                return true;
-
-            try
-            {
-                var chatFullInfo = await _bot.GetChatFullInfo(chat.Id, cancellationToken);
-                return chatFullInfo.LinkedChatId == senderChat.Id;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogDebug(ex, "Не удалось получить ChatFullInfo для чата {ChatId}", chat.Id);
-                return false;
-            }
+            var chatFullInfo = await _bot.GetChatFullInfo(chat.Id, cancellationToken);
+            return chatFullInfo.LinkedChatId == senderChat.Id;
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not OperationCanceledException)
         {
-            _logger.LogWarning(
-                ex,
-                "Не удалось проверить связь чата {ChatId} с channel identity {SenderChatId}",
-                message.Chat.Id,
-                message.SenderChat?.Id);
+            _logger.LogDebug(ex, "Не удалось получить ChatFullInfo для чата {ChatId}", chat.Id);
             return false;
         }
     }
