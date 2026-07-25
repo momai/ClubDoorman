@@ -2,7 +2,12 @@ using System.Linq;
 using ClubDoorman.Effects.Moderation;
 using ClubDoorman.Features.Moderation;
 using ClubDoorman.Infrastructure;
+using ClubDoorman.Services.AI;
+using ClubDoorman.Services.Messaging;
+using ClubDoorman.Services.UserBan;
+using ClubDoorman.Services.UserFlow;
 using Microsoft.Extensions.DependencyInjection;
+using Moq;
 using NUnit.Framework;
 
 namespace ClubDoorman.Test.Unit.Services.Moderation;
@@ -70,6 +75,34 @@ public class ModerationRegistrationTests
             Assert.That(descriptors, Has.Count.EqualTo(1));
             Assert.That(descriptors[0].ImplementationType, Is.EqualTo(typeof(ModerationActionDispatcher)));
             Assert.That(descriptors[0].Lifetime, Is.EqualTo(ServiceLifetime.Singleton));
+        });
+    }
+
+    [Test]
+    public void AddClubDoorman_ShouldResolveValidatedModerationActionGraph()
+    {
+        var services = new ServiceCollection();
+        services.AddLogging();
+        services.AddClubDoorman();
+        services.AddSingleton(Mock.Of<IModerationPolicy>());
+        services.AddSingleton(Mock.Of<INotificationService>());
+        services.AddSingleton(Mock.Of<IUserBanService>());
+        services.AddSingleton(Mock.Of<IUserFlowLogger>());
+        services.AddSingleton(Mock.Of<IAiCascadeService>());
+
+        using var provider = services.BuildServiceProvider(new ServiceProviderOptions
+        {
+            ValidateOnBuild = true,
+            ValidateScopes = true
+        });
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(provider.GetRequiredService<IModerationActionDispatcher>(),
+                Is.TypeOf<ModerationActionDispatcher>());
+            Assert.That(provider.GetRequiredService<IModerationFacade>(),
+                Is.TypeOf<ModerationFacade>());
+            Assert.That(provider.GetServices<IModerationActionHandler>(), Has.Exactly(6).Items);
         });
     }
 }

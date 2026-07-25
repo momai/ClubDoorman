@@ -118,17 +118,18 @@ public class ModerationActionHandlersTests
     }
 
     [Test]
-    public async Task Report_PassesFacadeUserAndSilentMode()
+    public async Task Report_PassesFacadeUserSilentModeAndCancellation()
     {
+        using var cancellation = new CancellationTokenSource();
         var notifications = new Mock<INotificationService>();
         var handler = new ReportActionHandler(
             notifications.Object,
             NullLogger<ReportActionHandler>.Instance);
 
-        await handler.ExecuteAsync(CreateContext(ModerationAction.Report, isSilentMode: true), CancellationToken.None);
+        await handler.ExecuteAsync(CreateContext(ModerationAction.Report, isSilentMode: true), cancellation.Token);
 
         notifications.Verify(
-            service => service.DontDeleteButReportMessage(_message, _user, true, CancellationToken.None),
+            service => service.DontDeleteButReportMessage(_message, _user, true, cancellation.Token),
             Times.Once);
     }
 
@@ -231,6 +232,29 @@ public class ModerationActionHandlersTests
                 _user,
                 0,
                 true,
+                CancellationToken.None),
+            Times.Once);
+    }
+
+    [Test]
+    public async Task AiAnalysis_WhenConfidenceIsPresent_PassesScoreUnchanged()
+    {
+        const double confidence = 0.73;
+        var aiCascade = new Mock<IAiCascadeService>();
+        var handler = new AiAnalysisActionHandler(
+            aiCascade.Object,
+            NullLogger<AiAnalysisActionHandler>.Instance);
+
+        await handler.ExecuteAsync(
+            CreateContext(ModerationAction.RequireAiAnalysis, confidence: confidence),
+            CancellationToken.None);
+
+        aiCascade.Verify(
+            service => service.HandleAiCascadeAnalysisAsync(
+                _message,
+                _user,
+                confidence,
+                false,
                 CancellationToken.None),
             Times.Once);
     }
