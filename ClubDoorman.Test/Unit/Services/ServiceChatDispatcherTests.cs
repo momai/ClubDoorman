@@ -49,6 +49,30 @@ public class ServiceChatDispatcherTests
     }
 
     [Test]
+    [Category("admin-chat")]
+    public async Task SendToAdminChatAsync_ChannelReport_IncludesEscapedTextAndReason()
+    {
+        var notification = new ChannelMessageNotificationData(
+            new Chat { Id = -2, Type = ChatType.Channel, Title = "<sender>" },
+            new Chat { Id = -1, Type = ChatType.Supergroup, Title = "<group>" },
+            "<b>message</b>",
+            "score < 0.6");
+
+        await _dispatcher.SendToAdminChatAsync(notification);
+
+        _factory.BotClientMock.Verify(x => x.SendMessageAsync(
+            It.IsAny<ChatId>(),
+            It.Is<string>(text =>
+                text.Contains("&lt;sender&gt;") &&
+                text.Contains("&lt;b&gt;message&lt;/b&gt;") &&
+                text.Contains("score &lt; 0.6")),
+            ParseMode.Html,
+            It.IsAny<ReplyParameters>(),
+            It.IsAny<ReplyMarkup>(),
+            It.IsAny<CancellationToken>()), Times.Once);
+    }
+
+    [Test]
     [Category("log-chat")]
     public async Task SendToLogChatAsync_ValidNotification_SendsMessage()
     {

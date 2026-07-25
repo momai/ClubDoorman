@@ -44,7 +44,11 @@ public class MessageTemplates
             "⚠️ Пользователь {UserFullName} удален из списка одобренных после автобана по блэклисту",
 
         [AdminNotificationType.ChannelMessage] =
-            "Сообщение от канала {ChannelTitle} в чате {ChatTitle} - репорт в админ-чат",
+            "{SilentModePrefix}📢 <b>Сообщение от канала</b>\n\n" +
+            "📺 Канал: {ChannelTitle}\n" +
+            "💬 Чат: {ChatTitle}\n" +
+            "📝 Сообщение: {MessageText}\n" +
+            "🔍 Причина: {Reason}",
 
         [AdminNotificationType.SuspiciousUser] =
             "🔍 <b>Подозрительный пользователь обнаружен</b>\n\n" +
@@ -254,6 +258,24 @@ public class MessageTemplates
     /// </summary>
     public string FormatNotificationTemplate(string template, NotificationData data)
     {
+        if (data is ChannelMessageNotificationData channelData)
+        {
+            return template
+                .Replace(
+                    "{SilentModePrefix}",
+                    channelData.IsSilentMode ? "🔇 <b>Тихий режим</b>\n\n" : "")
+                .Replace(
+                    "{ChannelTitle}",
+                    System.Net.WebUtility.HtmlEncode(
+                        channelData.SenderChat.Title ?? channelData.SenderChat.Id.ToString()))
+                .Replace(
+                    "{ChatTitle}",
+                    System.Net.WebUtility.HtmlEncode(
+                        channelData.Chat.Title ?? channelData.Chat.Id.ToString()))
+                .Replace("{MessageText}", System.Net.WebUtility.HtmlEncode(channelData.MessageText))
+                .Replace("{Reason}", System.Net.WebUtility.HtmlEncode(channelData.Reason ?? ""));
+        }
+
         var result = template;
 
         // Базовые поля
@@ -284,11 +306,6 @@ public class MessageTemplates
         {
             result = result.Replace("{Context}", errorData.Context);
             result = result.Replace("{ErrorMessage}", errorData.Exception.Message);
-        }
-        else if (data is ChannelMessageNotificationData channelData)
-        {
-            result = result.Replace("{ChannelTitle}", channelData.SenderChat.Title ?? channelData.SenderChat.Id.ToString());
-            result = result.Replace("{MessageText}", channelData.MessageText);
         }
         else if (data is SuspiciousMessageNotificationData suspiciousMsgData)
         {

@@ -184,11 +184,24 @@ public class ChannelMessageNotificationData : NotificationData
     /// </summary>
     public string MessageText { get; set; }
 
-    public ChannelMessageNotificationData(Chat senderChat, Chat targetChat, string messageText)
-        : base(new User { Id = senderChat.Id, FirstName = senderChat.Title ?? "Канал" }, targetChat)
+    public bool IsSilentMode { get; set; }
+
+    public ChannelMessageNotificationData(
+        Chat senderChat,
+        Chat targetChat,
+        string messageText,
+        string? reason = null,
+        long? messageId = null,
+        bool isSilentMode = false)
+        : base(
+            new User { Id = senderChat.Id, FirstName = senderChat.Title ?? "Канал" },
+            targetChat,
+            reason,
+            messageId)
     {
         SenderChat = senderChat;
         MessageText = messageText;
+        IsSilentMode = isSilentMode;
     }
 }
 

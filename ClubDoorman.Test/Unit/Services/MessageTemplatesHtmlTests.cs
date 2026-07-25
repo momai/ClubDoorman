@@ -81,5 +81,29 @@ namespace ClubDoorman.Test.Unit.Services
             Assert.That(result, Contains.Substring("<code>Test message 1</code>"));
             Assert.That(result, Does.Not.Contain("`Test message 1`"));
         }
+
+        [Test]
+        public void ChannelMessageTemplate_ShouldIncludeEscapedContentReasonAndSilentMode()
+        {
+            var data = new ChannelMessageNotificationData(
+                new Chat { Id = -2, Title = "<sender>" },
+                new Chat { Id = -1, Title = "<group>" },
+                "<b>message</b>",
+                "score < 0.6",
+                42,
+                isSilentMode: true);
+
+            var template = _templates.GetAdminTemplate(AdminNotificationType.ChannelMessage);
+            var result = _templates.FormatNotificationTemplate(template, data);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(result, Does.Contain("🔇 <b>Тихий режим</b>"));
+                Assert.That(result, Does.Contain("&lt;sender&gt;"));
+                Assert.That(result, Does.Contain("&lt;group&gt;"));
+                Assert.That(result, Does.Contain("&lt;b&gt;message&lt;/b&gt;"));
+                Assert.That(result, Does.Contain("score &lt; 0.6"));
+            });
+        }
     }
 }

@@ -219,6 +219,12 @@ public class MessageHandler : IUpdateHandler
                 return;
             }
 
+            if (pipelineCtx.OwnChannelPostHandled)
+            {
+                _logger.LogDebug("HandleAsync: Own channel post ignored by pipeline, returning");
+                return;
+            }
+
             // Moderation pre-chain now partially migrated to pipeline (captcha, banlist, approved, first log, club skip)
             if (pipelineCtx.UserResultHandled)
             {
@@ -273,7 +279,7 @@ public class MessageHandler : IUpdateHandler
             message.MessageId, message.SenderChat?.Id, message.Chat.Id);
         _logger.LogDebug("🔍 MessageHandler: Делегируем обработку канала к ChannelModerationService. MessageId: {MessageId}, SenderChatId: {SenderChatId}, ChatId: {ChatId}",
             message.MessageId, message.SenderChat?.Id, message.Chat.Id);
-        await _channelModerationService.HandleChannelMessageAsync(message, cancellationToken);
+        await _channelModerationService.HandleChannelMessageAsync(message, false, cancellationToken);
         _logger.LogDebug("HandleChannelMessageAsync: Channel message processed. MessageId: {MessageId}", message.MessageId);
     }
 

@@ -366,10 +366,19 @@ public class ServiceChatDispatcher : IServiceChatDispatcher
 
     private string FormatChannelMessage(ChannelMessageNotificationData notification)
     {
-        return $"📢 <b>Сообщение от канала</b>\n\n" +
-               $"📺 Канал: {notification.SenderChat.Title}\n" +
-               $"💬 Чат: {FormatChat(notification.Chat)}\n" +
-               $"📝 Сообщение: {notification.MessageText}";
+        var senderTitle = System.Net.WebUtility.HtmlEncode(notification.SenderChat.Title ?? notification.SenderChat.Id.ToString());
+        var chat = System.Net.WebUtility.HtmlEncode(FormatChat(notification.Chat));
+        var messageText = System.Net.WebUtility.HtmlEncode(notification.MessageText);
+        var reason = string.IsNullOrWhiteSpace(notification.Reason)
+            ? ""
+            : $"\n📝 Причина: {System.Net.WebUtility.HtmlEncode(notification.Reason)}";
+        var silentModePrefix = notification.IsSilentMode
+            ? "🔇 <b>Тихий режим</b>\n\n"
+            : "";
+        return silentModePrefix + $"📢 <b>Сообщение от канала</b>\n\n" +
+               $"📺 Канал: {senderTitle}\n" +
+               $"💬 Чат: {chat}\n" +
+               $"📝 Сообщение: {messageText}{reason}";
     }
 
     private string FormatUserRestricted(UserRestrictedNotificationData notification)

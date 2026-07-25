@@ -44,7 +44,8 @@ internal static class PipelineStepTelegramBaseline
             ["ClubDoorman.Services.Handlers.Pipeline.Steps.ChannelMessageStep"] =
             [
                 "Telegram.Bot.Types.Chat",
-                "Telegram.Bot.Types.Message"
+                "Telegram.Bot.Types.Message",
+                "Telegram.Bot.Types.Enums.ChatType"
             ],
             ["ClubDoorman.Services.Handlers.Pipeline.Steps.ClubMemberSkipStep"] =
             [

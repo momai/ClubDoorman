@@ -17,6 +17,7 @@ public class MessageContext
     public bool NewMembersHandled { get; set; } // set by NewMembersStep when it stops pipeline
     public bool LeftMemberCleanupHandled { get; set; }
     public bool ChannelMessageHandled { get; set; }
+    public bool OwnChannelPostHandled { get; set; }
     public bool PrivateSkipHandled { get; set; }
     // Moderation pre-chain steps (100..140)
     public bool CaptchaPendingHandled { get; set; }
