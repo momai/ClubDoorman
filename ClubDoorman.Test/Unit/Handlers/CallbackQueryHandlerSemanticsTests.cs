@@ -24,6 +24,7 @@ using Moq;
 using NUnit.Framework;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
+using ClubDoorman.Features.AdminOps;
 
 namespace ClubDoorman.Test.Unit.Handlers;
 
@@ -68,16 +69,11 @@ public class CallbackQueryHandlerSemanticsTests
         return new CallbackQueryHandler(
             bot.Object,
             captcha.Object,
-            userManager.Object,
-            badMsg.Object,
             stats.Object,
-            ai.Object,
-            moderation.Object,
             msgService.Object,
             violationTracker,
             userBan.Object,
-            logChat.Object,
-            new Mock<IAdminActionStore>().Object,
+            new Mock<IAdminCallbackDispatcher>().Object,
             new NullLogger<CallbackQueryHandler>(),
             recorder,
             eventsPub,

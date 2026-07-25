@@ -31,6 +31,15 @@ public static class AdminOpsFeature
         // Регистрируем CommandRouter
         services.AddSingleton<ICommandRouter, CommandRouter>();
 
+        services.AddSingleton<IAdminCallbackHandler, ApproveUserCallbackHandler>();
+        services.AddSingleton<IAdminCallbackHandler, BanUserCallbackHandler>();
+        services.AddSingleton<IAdminCallbackHandler, LogBanCallbackHandler>();
+        services.AddSingleton<IAdminCallbackHandler, BanProfileCallbackHandler>();
+        services.AddSingleton<IAdminCallbackHandler, AiOkCallbackHandler>();
+        services.AddSingleton<IAdminCallbackHandler, SuspiciousUserCallbackHandler>();
+        services.AddSingleton<IAdminCallbackHandler, NoopCallbackHandler>();
+        services.AddSingleton<IAdminCallbackDispatcher, AdminCallbackDispatcher>();
+
         // Регистрируем CommandProcessingService для обратной совместимости
         services.AddSingleton<ICommandProcessingService, CommandProcessingService>();
 

@@ -20,6 +20,7 @@ using ClubDoorman.Services.UserManagement;
 using ClubDoorman.Services.Messaging;
 using ClubDoorman.Services.Captcha;
 using ClubDoorman.Services.Handlers;
+using ClubDoorman.Features.AdminOps;
 
 namespace ClubDoorman.Test.Unit.Handlers;
 
@@ -46,6 +47,7 @@ public class CallbackQueryHandlerTests
     private Mock<IAdminActionStore> _mockAdminActionStore = null!;
     private Mock<ClubDoorman.Services.Logging.IGoldenMasterRecorder> _mockRecorder = null!;
     private Mock<IModerationEventPublisher> _mockEvents = null!;
+    private Mock<IAdminCallbackDispatcher> _mockAdminCallbackDispatcher = null!;
 
     [SetUp]
     public void Setup()
@@ -66,6 +68,10 @@ public class CallbackQueryHandlerTests
         _mockAdminActionStore = new Mock<IAdminActionStore>();
     _mockRecorder = new Mock<ClubDoorman.Services.Logging.IGoldenMasterRecorder>();
         _mockEvents = new Mock<IModerationEventPublisher>();
+        _mockAdminCallbackDispatcher = new Mock<IAdminCallbackDispatcher>();
+        _mockAdminCallbackDispatcher
+            .Setup(x => x.DispatchAsync(It.IsAny<CallbackQuery>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(AdminCallbackResult.NotHandled());
 
     // Default config values for tests
     const long adminChatId = 555555; // test admin chat id distinct from other test chats
@@ -75,16 +81,11 @@ public class CallbackQueryHandlerTests
         _handler = new CallbackQueryHandler(
             _mockBot.Object,
             _mockCaptchaService.Object,
-            _mockUserManager.Object,
-            _mockBadMessageManager.Object,
             _mockStatisticsService.Object,
-            _mockAiChecks.Object,
-            _mockModerationService.Object,
             _mockMessageService.Object,
             new ViolationTracker(_mockViolationTrackerLogger.Object, _mockAppConfig.Object),
             _mockUserBanService.Object,
-            _mockLogChatService.Object,
-            _mockAdminActionStore.Object,
+            _mockAdminCallbackDispatcher.Object,
             _mockLogger.Object,
             _mockRecorder.Object,
             _mockEvents.Object,
@@ -269,26 +270,18 @@ public class CallbackQueryHandlerTests
     }
 
     [Test]
-    public async Task HandleAsync_ProfileReviewTokenMissing_ShowsAlertWithoutBanning()
+    public async Task HandleAsync_UnknownAdminPrefix_AnswersCallbackOnce()
     {
-        var update = new Update
-        {
-            CallbackQuery = new CallbackQuery
-            {
-                Id = "callback-id",
-                Data = "banprofile_missing-token",
-                From = new User { Id = 123, FirstName = "Admin" },
-                Message = new Message { Chat = new Chat { Id = _mockAppConfig.Object.AdminChatId } }
-            }
-        };
+        _mockAdminCallbackDispatcher
+            .Setup(x => x.DispatchAsync(It.IsAny<CallbackQuery>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(AdminCallbackResult.NotHandled());
+        var update = CreateAdminUpdate("unknown_42");
 
         await _handler.HandleAsync(update);
 
-        _mockAdminActionStore.Verify(x => x.TakeProfileReview("missing-token"), Times.Once);
-        _mockUserBanService.VerifyNoOtherCalls();
         _mockBot.Verify(x => x.AnswerCallbackQuery(
             "callback-id",
-            "Действие устарело или уже выполнено",
+            "Неизвестное действие",
             true,
             It.IsAny<string>(),
             It.IsAny<int?>(),
@@ -296,34 +289,55 @@ public class CallbackQueryHandlerTests
     }
 
     [Test]
-    public async Task HandleAsync_ProfileReviewTokenFound_BansUserFromStoredReview()
+    public async Task HandleAsync_MalformedAdminCallback_AnswersCallbackOnce()
     {
-        var review = new ProfileReviewActionState(-654, 987, null);
-        _mockAdminActionStore.Setup(x => x.TakeProfileReview("opaque-token")).Returns(review);
-        var update = new Update
+        _mockAdminCallbackDispatcher
+            .Setup(x => x.DispatchAsync(It.IsAny<CallbackQuery>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(AdminCallbackResult.Invalid());
+        var update = CreateAdminUpdate("approve_not-a-user");
+
+        await _handler.HandleAsync(update);
+
+        _mockBot.Verify(x => x.AnswerCallbackQuery(
+            "callback-id",
+            "Некорректное действие",
+            true,
+            It.IsAny<string>(),
+            It.IsAny<int?>(),
+            It.IsAny<CancellationToken>()), Times.Once);
+    }
+
+    [Test]
+    public void HandleAsync_AdminCancellation_PropagatesWithoutAnsweringCallback()
+    {
+        _mockAdminCallbackDispatcher
+            .Setup(x => x.DispatchAsync(It.IsAny<CallbackQuery>(), It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new OperationCanceledException());
+        var update = CreateAdminUpdate("approve_42");
+
+        Assert.ThrowsAsync<OperationCanceledException>(() => _handler.HandleAsync(update));
+
+        _mockBot.Verify(x => x.AnswerCallbackQuery(
+            It.IsAny<string>(),
+            It.IsAny<string>(),
+            It.IsAny<bool?>(),
+            It.IsAny<string>(),
+            It.IsAny<int?>(),
+            It.IsAny<CancellationToken>()), Times.Never);
+    }
+
+    private Update CreateAdminUpdate(string data)
+    {
+        return new Update
         {
             CallbackQuery = new CallbackQuery
             {
                 Id = "callback-id",
-                Data = "banprofile_opaque-token",
+                Data = data,
                 From = new User { Id = 123, FirstName = "Admin" },
-                Message = new Message
-                {
-                    Text = "Profile review",
-                    Chat = new Chat { Id = _mockAppConfig.Object.AdminChatId }
-                }
+                Message = new Message { Chat = new Chat { Id = _mockAppConfig.Object.AdminChatId } }
             }
         };
-
-        await _handler.HandleAsync(update);
-
-        _mockUserBanService.Verify(x => x.BanUserAsync(
-            It.Is<Chat>(chat => chat.Id == -654),
-            It.Is<User>(user => user.Id == 987),
-            BanTypeEnum.ProfileBan,
-            "Бан по профилю",
-            (long?)null,
-            -654,
-            It.IsAny<CancellationToken>()), Times.Once);
     }
+
 }
