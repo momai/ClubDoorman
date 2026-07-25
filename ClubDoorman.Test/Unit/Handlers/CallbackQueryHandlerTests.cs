@@ -310,12 +310,14 @@ public class CallbackQueryHandlerTests
     [Test]
     public void HandleAsync_AdminCancellation_PropagatesWithoutAnsweringCallback()
     {
+        using var cancellation = new CancellationTokenSource();
+        cancellation.Cancel();
         _mockAdminCallbackDispatcher
             .Setup(x => x.DispatchAsync(It.IsAny<CallbackQuery>(), It.IsAny<CancellationToken>()))
-            .ThrowsAsync(new OperationCanceledException());
+            .ThrowsAsync(new OperationCanceledException(cancellation.Token));
         var update = CreateAdminUpdate("approve_42");
 
-        Assert.ThrowsAsync<OperationCanceledException>(() => _handler.HandleAsync(update));
+        Assert.ThrowsAsync<OperationCanceledException>(() => _handler.HandleAsync(update, cancellation.Token));
 
         _mockBot.Verify(x => x.AnswerCallbackQuery(
             It.IsAny<string>(),
@@ -324,6 +326,25 @@ public class CallbackQueryHandlerTests
             It.IsAny<string>(),
             It.IsAny<int?>(),
             It.IsAny<CancellationToken>()), Times.Never);
+    }
+
+    [Test]
+    public async Task HandleAsync_UnrelatedOperationCanceledException_AnswersControlledErrorOnce()
+    {
+        _mockAdminCallbackDispatcher
+            .Setup(x => x.DispatchAsync(It.IsAny<CallbackQuery>(), It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new OperationCanceledException());
+        var update = CreateAdminUpdate("approve_42");
+
+        await _handler.HandleAsync(update, CancellationToken.None);
+
+        _mockBot.Verify(x => x.AnswerCallbackQuery(
+            "callback-id",
+            "Ошибка при выполнении действия",
+            true,
+            It.IsAny<string>(),
+            It.IsAny<int?>(),
+            It.IsAny<CancellationToken>()), Times.Once);
     }
 
     private Update CreateAdminUpdate(string data)

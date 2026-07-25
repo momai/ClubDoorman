@@ -55,7 +55,7 @@ public sealed class LogBanCallbackHandler : IAdminCallbackHandler
                 userId,
                 context.AdminDisplayName);
         }
-        catch (OperationCanceledException)
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
         {
             throw;
         }

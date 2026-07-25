@@ -111,7 +111,7 @@ public class CallbackQueryHandler : IUpdateHandler
             _logger.LogDebug("🎯 Обрабатываем капча callback: {Data}", cbData);
             await HandleCaptchaCallback(callbackQuery, gmCorrelation, cancellationToken);
         }
-        catch (OperationCanceledException)
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
         {
             throw;
         }
@@ -269,7 +269,7 @@ public class CallbackQueryHandler : IUpdateHandler
         {
             result = await _adminCallbackDispatcher.DispatchAsync(callbackQuery, cancellationToken);
         }
-        catch (OperationCanceledException)
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
         {
             throw;
         }

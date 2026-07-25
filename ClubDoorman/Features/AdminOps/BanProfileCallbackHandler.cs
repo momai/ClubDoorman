@@ -72,7 +72,7 @@ public sealed class BanProfileCallbackHandler : IAdminCallbackHandler
                         "При ручном бане переслано сообщение пользователя {UserId}",
                         userId);
                 }
-                catch (OperationCanceledException)
+                catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
                 {
                     throw;
                 }
@@ -103,7 +103,7 @@ public sealed class BanProfileCallbackHandler : IAdminCallbackHandler
                 userId,
                 context.AdminDisplayName);
         }
-        catch (OperationCanceledException)
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
         {
             throw;
         }

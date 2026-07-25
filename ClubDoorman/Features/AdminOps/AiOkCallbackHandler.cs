@@ -88,7 +88,7 @@ public sealed class AiOkCallbackHandler : IAdminCallbackHandler
                     chatId.Value,
                     context.AdminDisplayName);
             }
-            catch (OperationCanceledException)
+            catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
             {
                 throw;
             }
@@ -113,7 +113,7 @@ public sealed class AiOkCallbackHandler : IAdminCallbackHandler
                 parseMode: ParseMode.Html,
                 cancellationToken: cancellationToken);
         }
-        catch (OperationCanceledException)
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
         {
             throw;
         }

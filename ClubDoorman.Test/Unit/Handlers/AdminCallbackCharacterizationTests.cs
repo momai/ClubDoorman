@@ -240,15 +240,17 @@ public class AdminCallbackCharacterizationTests
     [Test]
     public void CancellationFromTypedHandler_PropagatesWithoutCallbackAnswer()
     {
+        using var cancellation = new CancellationTokenSource();
+        cancellation.Cancel();
         _bot.Setup(x => x.RestrictChatMember(
                 -2008,
                 52,
                 It.IsAny<ChatPermissions>(),
                 It.IsAny<DateTime?>(),
                 It.IsAny<CancellationToken>()))
-            .ThrowsAsync(new OperationCanceledException());
+            .ThrowsAsync(new OperationCanceledException(cancellation.Token));
 
-        Assert.ThrowsAsync<OperationCanceledException>(() => HandleAsync("aiOk_-2008_52"));
+        Assert.ThrowsAsync<OperationCanceledException>(() => HandleAsync("aiOk_-2008_52", cancellation.Token));
 
         _bot.Verify(x => x.AnswerCallbackQuery(
             It.IsAny<string>(),
@@ -260,6 +262,23 @@ public class AdminCallbackCharacterizationTests
     }
 
     [Test]
+    public async Task UnrelatedOperationCanceledExceptionFromTypedHandler_IsControlledAndAnsweredOnce()
+    {
+        _bot.Setup(x => x.RestrictChatMember(
+                -2009,
+                53,
+                It.IsAny<ChatPermissions>(),
+                It.IsAny<DateTime?>(),
+                It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new OperationCanceledException());
+
+        await HandleAsync("aiOk_-2009_53", CancellationToken.None);
+
+        VerifyEditedMessageContains("не удалось снять ограничения");
+        VerifyAnsweredOnce();
+    }
+
+    [Test]
     public async Task Noop_RemovesButtons()
     {
         await HandleAsync("noop");
@@ -268,7 +287,7 @@ public class AdminCallbackCharacterizationTests
         VerifyAnsweredOnce();
     }
 
-    private Task HandleAsync(string data)
+    private Task HandleAsync(string data, CancellationToken cancellationToken = default)
     {
         return _handler.HandleAsync(new Update
         {
@@ -283,7 +302,7 @@ public class AdminCallbackCharacterizationTests
                     Chat = new Chat { Id = AdminChatId }
                 }
             }
-        });
+        }, cancellationToken);
     }
 
     private void VerifyEditedMessageContains(string expected)

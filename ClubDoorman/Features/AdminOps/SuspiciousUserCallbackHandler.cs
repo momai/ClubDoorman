@@ -78,7 +78,7 @@ public sealed class SuspiciousUserCallbackHandler : IAdminCallbackHandler
                 context.AdminDisplayName);
             return AdminCallbackResult.Handled();
         }
-        catch (OperationCanceledException)
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
         {
             throw;
         }
@@ -108,7 +108,7 @@ public sealed class SuspiciousUserCallbackHandler : IAdminCallbackHandler
                         context.Message.ReplyToMessage.MessageId,
                         cancellationToken);
                 }
-                catch (OperationCanceledException)
+                catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
                 {
                     throw;
                 }
@@ -124,7 +124,7 @@ public sealed class SuspiciousUserCallbackHandler : IAdminCallbackHandler
                 {
                     await _bot.DeleteMessage(chatId, (int)messageId.Value, cancellationToken);
                 }
-                catch (OperationCanceledException)
+                catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
                 {
                     throw;
                 }
@@ -149,7 +149,7 @@ public sealed class SuspiciousUserCallbackHandler : IAdminCallbackHandler
                 context.AdminDisplayName);
             return AdminCallbackResult.Handled();
         }
-        catch (OperationCanceledException)
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
         {
             throw;
         }
@@ -187,7 +187,7 @@ public sealed class SuspiciousUserCallbackHandler : IAdminCallbackHandler
                 context.AdminDisplayName);
             return AdminCallbackResult.Handled();
         }
-        catch (OperationCanceledException)
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
         {
             throw;
         }

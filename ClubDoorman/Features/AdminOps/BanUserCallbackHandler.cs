@@ -68,7 +68,7 @@ public sealed class BanUserCallbackHandler : IAdminCallbackHandler
                 userId,
                 context.AdminDisplayName);
         }
-        catch (OperationCanceledException)
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
         {
             throw;
         }
