@@ -42,6 +42,7 @@ public class CallbackQueryHandlerTestFactory
     public Mock<IMessageService> MessageServiceMock { get; } = new();
     public Mock<IViolationTracker> ViolationTrackerMock { get; } = new();
     public Mock<IUserBanService> UserBanServiceMock { get; } = new();
+    public Mock<IAdminActionStore> AdminActionStoreMock { get; } = new();
     public Mock<IServiceProvider> ServiceProviderMock { get; } = new();
     public Mock<ILogger<CallbackQueryHandler>> LoggerMock { get; } = new();
     public Mock<IAppConfig> AppConfigMock { get; } = new();
@@ -60,6 +61,7 @@ public class CallbackQueryHandlerTestFactory
             ViolationTrackerMock.Object,
             UserBanServiceMock.Object,
             new Mock<ILogChatService>().Object,
+            AdminActionStoreMock.Object,
             LoggerMock.Object,
             NullGoldenMasterRecorder.Instance,
             new Mock<IModerationEventPublisher>().Object,

@@ -6,7 +6,6 @@ using ClubDoorman.Services.Telegram;
 using ClubDoorman.Test.TestKit;
 using ClubDoorman.TestInfrastructure;
 using System.Globalization;
-using System.Runtime.Caching;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using NUnit.Framework;
@@ -21,12 +20,6 @@ public class AiNotificationDeliveryTests
 {
     private const long TestChatId = 678901;
     private const long TestUserId = 123451;
-
-    [TearDown]
-    public void RemoveCachedAiProfileAnalysis()
-    {
-        MemoryCache.Default.Remove($"banprofile_{TestChatId}_{TestUserId}");
-    }
 
     [Test]
     public async Task MessageService_SendAiProfileAnalysis_RoutesToAdminDispatcher()
@@ -48,10 +41,14 @@ public class AiNotificationDeliveryTests
     {
         var bot = TestKitTelegram.CreateFakeClient();
         var config = CreateConfig();
+        var actionStore = new Mock<IAdminActionStore>();
+        actionStore.Setup(x => x.PutProfileReview(It.IsAny<AiProfileAnalysisData>(), It.IsAny<TimeSpan>()))
+            .Returns("opaque-token");
         var dispatcher = new ServiceChatDispatcher(
             bot,
             NullLogger<ServiceChatDispatcher>.Instance,
-            config.Object);
+            config.Object,
+            actionStore.Object);
         var data = CreateData(messageId: 123);
 
         await dispatcher.SendToAdminChatAsync(data);
@@ -61,7 +58,8 @@ public class AiNotificationDeliveryTests
         Assert.That(sent.Text, Does.Contain("AI анализ профиля"));
         Assert.That(sent.Text, Does.Contain("Test &lt;reason&gt;"));
         Assert.That(sent.Text, Does.Contain(string.Format(CultureInfo.CurrentCulture, "{0:F1}%", 95.0)));
-        Assert.That(ContainsCallback(sent.ReplyMarkup!, $"banprofile_{TestChatId}_{TestUserId}"), Is.True);
+        Assert.That(ContainsCallback(sent.ReplyMarkup!, "banprofile_opaque-token"), Is.True);
+        actionStore.Verify(x => x.PutProfileReview(data, TimeSpan.FromHours(12)), Times.Once);
         Assert.That(bot.SentPhotos, Is.Empty);
     }
 
@@ -70,10 +68,14 @@ public class AiNotificationDeliveryTests
     {
         var bot = TestKitTelegram.CreateFakeClient();
         var config = CreateConfig();
+        var actionStore = new Mock<IAdminActionStore>();
+        actionStore.Setup(x => x.PutProfileReview(It.IsAny<AiProfileAnalysisData>(), It.IsAny<TimeSpan>()))
+            .Returns("opaque-token");
         var dispatcher = new ServiceChatDispatcher(
             bot,
             NullLogger<ServiceChatDispatcher>.Instance,
-            config.Object);
+            config.Object,
+            actionStore.Object);
         var data = CreateData(messageId: 123, photoBytes: new byte[] { 1, 2, 3 });
 
         await dispatcher.SendToAdminChatAsync(data);

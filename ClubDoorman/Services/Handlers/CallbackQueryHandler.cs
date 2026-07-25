@@ -40,6 +40,7 @@ public class CallbackQueryHandler : IUpdateHandler
     private readonly IViolationTracker _violationTracker;
     private readonly IUserBanService _userBanService;
     private readonly ILogChatService _logChatService;
+    private readonly IAdminActionStore _adminActionStore;
     private readonly ILogger<CallbackQueryHandler> _logger;
     private readonly IGoldenMasterRecorder _recorder; // input capture
     private readonly IModerationEventPublisher _events; // semantics publisher
@@ -57,6 +58,7 @@ public class CallbackQueryHandler : IUpdateHandler
         IViolationTracker violationTracker,
         IUserBanService userBanService,
         ILogChatService logChatService,
+        IAdminActionStore adminActionStore,
     ILogger<CallbackQueryHandler> logger,
     IGoldenMasterRecorder recorder,
     IModerationEventPublisher eventsPublisher,
@@ -73,6 +75,7 @@ public class CallbackQueryHandler : IUpdateHandler
         _violationTracker = violationTracker;
         _userBanService = userBanService;
         _logChatService = logChatService;
+        _adminActionStore = adminActionStore ?? throw new ArgumentNullException(nameof(adminActionStore));
     _logger = logger;
     _recorder = recorder;
     _events = eventsPublisher ?? throw new ArgumentNullException(nameof(eventsPublisher));
@@ -301,9 +304,11 @@ public class CallbackQueryHandler : IUpdateHandler
             {
                 await HandleLogBanUser(callbackQuery, logChatId, logUserId, cancellationToken);
             }
-            else if (split.Count > 2 && split[0] == "banprofile" && long.TryParse(split[1], out var profileChatId) && long.TryParse(split[2], out var profileUserId))
+            else if (cbData.StartsWith("banprofile_", StringComparison.Ordinal))
             {
-                await HandleBanUserByProfile(callbackQuery, profileChatId, profileUserId, cancellationToken);
+                var token = cbData["banprofile_".Length..];
+                if (!await HandleBanUserByProfile(callbackQuery, token, cancellationToken))
+                    return;
             }
             else if (split.Count > 2 && split[0] == "suspicious")
             {
@@ -446,10 +451,21 @@ public class CallbackQueryHandler : IUpdateHandler
         }
     }
 
-    private async Task HandleBanUserByProfile(CallbackQuery callbackQuery, long chatId, long userId, CancellationToken cancellationToken)
+    private async Task<bool> HandleBanUserByProfile(CallbackQuery callbackQuery, string token, CancellationToken cancellationToken)
     {
-        var callbackDataBan = $"banprofile_{chatId}_{userId}";
-        var aiProfileData = MemoryCache.Default.Remove(callbackDataBan) as AiProfileAnalysisData;
+        var aiProfileData = _adminActionStore.TakeProfileReview(token);
+        if (aiProfileData == null)
+        {
+            await _bot.AnswerCallbackQuery(
+                callbackQuery.Id,
+                "Действие устарело или уже выполнено",
+                showAlert: true,
+                cancellationToken: cancellationToken);
+            return false;
+        }
+
+        var chatId = aiProfileData.Chat.Id;
+        var userId = aiProfileData.User.Id;
         var adminName = GetAdminDisplayName(callbackQuery.From);
 
         // При бане по профилю НЕ добавляем сообщение в автобан - проблема в профиле, а не в сообщении
@@ -467,14 +483,14 @@ public class CallbackQueryHandler : IUpdateHandler
                 user,
                 BanTypeEnum.ProfileBan,
                 "Бан по профилю",
-                aiProfileData?.MessageId,
-                aiProfileData?.Chat.Id,
+                aiProfileData.MessageId,
+                aiProfileData.Chat.Id,
                 cancellationToken
             );
 
             // ФИКС: ВСЕГДА пытаемся переслать сообщение при ручном бане
             // Проверка на удаление происходит в try-catch - если удалено, получим ошибку
-            if (aiProfileData?.MessageId != null)
+            if (aiProfileData.MessageId != null)
             {
                 try
                 {
@@ -522,6 +538,8 @@ public class CallbackQueryHandler : IUpdateHandler
                 cancellationToken: cancellationToken
             );
         }
+
+        return true;
     }
 
     private async Task HandleAiOkUser(CallbackQuery callbackQuery, long? chatId, long userId, CancellationToken cancellationToken)

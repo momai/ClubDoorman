@@ -77,6 +77,7 @@ public class CallbackQueryHandlerSemanticsTests
             violationTracker,
             userBan.Object,
             logChat.Object,
+            new Mock<IAdminActionStore>().Object,
             new NullLogger<CallbackQueryHandler>(),
             recorder,
             eventsPub,

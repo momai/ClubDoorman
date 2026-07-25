@@ -227,7 +227,7 @@ public class ServiceChatDispatcherTests
     {
         // Act & Assert
         var exception = Assert.Throws<ArgumentNullException>(() =>
-            new ServiceChatDispatcher(null!, _factory.LoggerMock.Object, _factory.AppConfigMock.Object));
+            new ServiceChatDispatcher(null!, _factory.LoggerMock.Object, _factory.AppConfigMock.Object, _factory.AdminActionStoreMock.Object));
 
         Assert.That(exception.ParamName, Is.EqualTo("bot"));
     }
@@ -238,7 +238,7 @@ public class ServiceChatDispatcherTests
     {
         // Act & Assert
         var exception = Assert.Throws<ArgumentNullException>(() =>
-            new ServiceChatDispatcher(_factory.BotClientMock.Object, null!, _factory.AppConfigMock.Object));
+            new ServiceChatDispatcher(_factory.BotClientMock.Object, null!, _factory.AppConfigMock.Object, _factory.AdminActionStoreMock.Object));
 
         Assert.That(exception.ParamName, Is.EqualTo("logger"));
     }
