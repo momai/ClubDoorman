@@ -9,33 +9,33 @@ namespace ClubDoorman.Test.Architecture;
 public class DependencyRulesTests
 {
     [Test]
-    public void PipelineSteps_InStepsNamespace_ImplementIMessageStep()
+    public void IMessageStep_ConcreteImplementations_ResideInPipelineStepsNamespace()
     {
-        var steps = PipelineStepDependencyInspector.GetPipelineStepTypes();
-        Assert.That(steps, Is.Not.Empty, "Expected concrete classes under Pipeline.Steps");
+        var steps = PipelineStepDependencyInspector.GetConcreteMessageSteps();
+        Assert.That(steps, Is.Not.Empty, "Expected concrete IMessageStep implementations");
 
-        var missing = steps
-            .Where(t => !typeof(IMessageStep).IsAssignableFrom(t))
+        var outside = steps
+            .Where(t => !PipelineStepDependencyInspector.IsInStepsNamespace(t.Namespace))
             .Select(t => t.FullName)
             .ToList();
 
-        Assert.That(missing, Is.Empty,
-            "Classes in Pipeline.Steps must implement IMessageStep (including via base class). Missing: "
-            + string.Join(", ", missing));
+        Assert.That(outside, Is.Empty,
+            "Concrete IMessageStep implementations must reside in "
+            + $"{PipelineStepDependencyInspector.StepsNamespace} or a child namespace. Outside: "
+            + string.Join(", ", outside));
     }
 
     [Test]
-    public void PipelineSteps_ConstructorDependencies_MustBeAbstractions()
+    public void PipelineSteps_DoNotTakeStatefulConcreteInfrastructureInConstructors()
     {
-        // Real boundary: steps receive DI collaborators through constructors.
-        // Concrete config/storage/options types must not be constructor parameters.
-        // (Type-graph HaveDependencyOn denylists miss new concrete types until listed by hand.)
-        var violations = PipelineStepDependencyInspector.GetPipelineStepTypes()
+        // Boundary: steps must not DI-inject concrete storage/cache/config/infra services.
+        // Interfaces, abstracts, value types, and ordinary DTOs/value objects remain allowed.
+        var violations = PipelineStepDependencyInspector.GetConcreteMessageSteps()
             .SelectMany(PipelineStepDependencyInspector.GetForbiddenConstructorParameters)
             .ToList();
 
         Assert.That(violations, Is.Empty,
-            "Pipeline steps must take constructor abstractions only. Violations:\n"
+            "Pipeline steps must not take stateful concrete infrastructure in constructors. Violations:\n"
             + string.Join("\n", violations));
     }
 

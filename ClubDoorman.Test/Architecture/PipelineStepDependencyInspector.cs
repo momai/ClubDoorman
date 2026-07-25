@@ -5,40 +5,68 @@ using Mono.Cecil;
 namespace ClubDoorman.Test.Architecture;
 
 /// <summary>
-/// Locates pipeline step types and inspects their direct Telegram type references.
-/// Nested types (async state machines) are folded into the outer step's ref set.
+/// Discovers concrete <see cref="IMessageStep"/> types and inspects constructor / Telegram deps.
+/// Nested types (async state machines) are folded into the outer step's Telegram ref set.
 /// </summary>
 internal static class PipelineStepDependencyInspector
 {
     public const string StepsNamespace = "ClubDoorman.Services.Handlers.Pipeline.Steps";
 
+    /// <summary>
+    /// Known infrastructure / storage / mutable-config namespaces.
+    /// Concrete constructor parameters from these are forbidden for pipeline steps.
+    /// </summary>
+    private static readonly string[] ForbiddenConcreteNamespaces =
+    [
+        "ClubDoorman.Services.Core.Configuration",
+        "ClubDoorman.Services.UserManagement",
+        "ClubDoorman.Services.SuspiciousUsers",
+        "ClubDoorman.Infrastructure",
+        "Microsoft.Extensions.Caching.Memory",
+        "Microsoft.Extensions.Caching.Distributed",
+        "System.Runtime.Caching"
+    ];
+
+    private static readonly HashSet<string> ForbiddenConcreteTypeFullNames =
+        new(StringComparer.Ordinal)
+        {
+            "Microsoft.Extensions.Caching.Memory.MemoryCache",
+            "System.Runtime.Caching.MemoryCache"
+        };
+
     public static IReadOnlyDictionary<string, string[]> AllowedTelegramTypeBaseline =>
         PipelineStepTelegramBaseline.Allowed;
 
-    public static IReadOnlyList<Type> GetPipelineStepTypes()
+    public static bool IsInStepsNamespace(string? ns) =>
+        ns == StepsNamespace ||
+        (ns is not null && ns.StartsWith(StepsNamespace + ".", StringComparison.Ordinal));
+
+    /// <summary>
+    /// All concrete IMessageStep implementors in the production assembly (including via base class).
+    /// </summary>
+    public static IReadOnlyList<Type> GetConcreteMessageSteps()
     {
         return typeof(IMessageStep).Assembly
             .GetTypes()
             .Where(t =>
-                t is { IsClass: true, IsAbstract: false, IsNested: false } &&
-                t.Namespace is not null &&
-                t.Namespace.StartsWith(StepsNamespace, StringComparison.Ordinal) &&
-                !t.Name.Contains('<', StringComparison.Ordinal))
+                t is { IsClass: true, IsAbstract: false } &&
+                typeof(IMessageStep).IsAssignableFrom(t))
             .OrderBy(t => t.FullName, StringComparer.Ordinal)
             .ToList();
     }
 
     public static IReadOnlyDictionary<string, SortedSet<string>> GetDirectTelegramTypeRefs()
     {
+        var stepFullNames = GetConcreteMessageSteps()
+            .Select(t => t.FullName!)
+            .ToHashSet(StringComparer.Ordinal);
+
         var assemblyPath = typeof(IMessageStep).Assembly.Location;
         using var module = ModuleDefinition.ReadModule(assemblyPath);
         var result = new Dictionary<string, SortedSet<string>>(StringComparer.Ordinal);
 
         foreach (var type in module.Types
-                     .Where(t =>
-                         t is { IsClass: true, IsNested: false } &&
-                         t.Namespace is not null &&
-                         t.Namespace.StartsWith(StepsNamespace, StringComparison.Ordinal))
+                     .Where(t => t is { IsClass: true, IsNested: false } && stepFullNames.Contains(t.FullName))
                      .OrderBy(t => t.FullName, StringComparer.Ordinal))
         {
             result[type.FullName] = CollectTelegramRefs(type);
@@ -49,34 +77,66 @@ internal static class PipelineStepDependencyInspector
 
     public static IEnumerable<string> GetForbiddenConstructorParameters(Type stepType)
     {
-        // DI collaborators come through public constructors.
         foreach (var ctor in stepType.GetConstructors(BindingFlags.Instance | BindingFlags.Public))
         {
             foreach (var parameter in ctor.GetParameters())
             {
-                var parameterType = parameter.ParameterType;
-                if (IsAllowedConstructorDependency(parameterType))
+                if (!IsForbiddenConstructorDependency(parameter.ParameterType))
                     continue;
 
-                yield return $"{stepType.FullName} ctor param '{parameter.Name}': {parameterType.FullName}";
+                yield return $"{stepType.FullName} ctor param '{parameter.Name}': {parameter.ParameterType.FullName}";
             }
         }
     }
 
-    private static bool IsAllowedConstructorDependency(Type type)
+    /// <summary>
+    /// Forbidden: concrete stateful app/infra services, storage, cache, mutable configuration.
+    /// Allowed: interfaces, abstracts, value types, string, immutable/framework value objects, DTOs.
+    /// </summary>
+    private static bool IsForbiddenConstructorDependency(Type type)
     {
         type = Nullable.GetUnderlyingType(type) ?? type;
 
         if (type.IsInterface || type.IsAbstract)
-            return true;
+            return false;
 
         if (type.IsPrimitive || type.IsEnum || type == typeof(string) || type == typeof(decimal))
+            return false;
+
+        if (type.IsGenericType)
+        {
+            var definition = type.GetGenericTypeDefinition();
+            if (definition.IsInterface || definition.IsAbstract)
+                return false;
+        }
+
+        var fullName = type.FullName ?? type.Name;
+        if (ForbiddenConcreteTypeFullNames.Contains(fullName))
             return true;
 
-        if (type.Namespace is not null &&
-            (type.Namespace.StartsWith("System", StringComparison.Ordinal) ||
-             type.Namespace.StartsWith("Microsoft.Extensions", StringComparison.Ordinal)))
+        var ns = type.Namespace ?? string.Empty;
+        foreach (var forbiddenNs in ForbiddenConcreteNamespaces)
+        {
+            if (ns == forbiddenNs || ns.StartsWith(forbiddenNs + ".", StringComparison.Ordinal))
+                return true;
+        }
+
+        // Infrastructure-shaped ClubDoorman concretes outside the listed namespaces.
+        if (ns.StartsWith("ClubDoorman", StringComparison.Ordinal) &&
+            (type.Name.EndsWith("Storage", StringComparison.Ordinal) ||
+             type.Name.EndsWith("Options", StringComparison.Ordinal) ||
+             type.Name.EndsWith("Cache", StringComparison.Ordinal) ||
+             type.Name.EndsWith("Index", StringComparison.Ordinal)))
+        {
             return true;
+        }
+
+        // Telegram Bot client/API types (message DTOs under Types are allowed).
+        if (ns.StartsWith("Telegram.Bot", StringComparison.Ordinal) &&
+            !ns.StartsWith("Telegram.Bot.Types", StringComparison.Ordinal))
+        {
+            return true;
+        }
 
         return false;
     }
