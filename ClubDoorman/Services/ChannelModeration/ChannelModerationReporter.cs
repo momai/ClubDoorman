@@ -15,6 +15,7 @@ public interface IChannelModerationReporter
 
 public sealed class ChannelModerationReporter : IChannelModerationReporter
 {
+    private const int MaxMessageExcerptLength = 1000;
     private readonly IMessageService _messageService;
     private readonly ILogger<ChannelModerationReporter> _logger;
 
@@ -32,7 +33,7 @@ public sealed class ChannelModerationReporter : IChannelModerationReporter
         CancellationToken cancellationToken)
     {
         var message = context.Content.Message;
-        var messageText = message.Text ?? message.Caption ?? "[медиа]";
+        var messageText = CreateExcerpt(message.Text ?? message.Caption ?? "[медиа]");
         var data = new ChannelMessageNotificationData(
             context.SenderChat,
             context.Content.DestinationChat,
@@ -60,4 +61,9 @@ public sealed class ChannelModerationReporter : IChannelModerationReporter
                 cancellationToken);
         }
     }
+
+    private static string CreateExcerpt(string text) =>
+        text.Length <= MaxMessageExcerptLength
+            ? text
+            : text[..(MaxMessageExcerptLength - 3)] + "...";
 }

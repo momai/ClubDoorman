@@ -154,9 +154,6 @@ public class UserBanService : IUserBanService
 
             await _bot.DeleteMessage(chat, message.MessageId, cancellationToken);
             await _bot.BanChatSenderChat(chat, senderChat.Id, cancellationToken);
-
-            var channelData = new ChannelMessageNotificationData(senderChat, chat, message.Text ?? "[медиа]");
-            await _messageService.ForwardToAdminWithNotificationAsync(message, AdminNotificationType.ChannelMessage, channelData, cancellationToken);
         }
         catch (Exception e)
         {

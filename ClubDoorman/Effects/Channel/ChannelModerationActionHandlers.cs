@@ -58,13 +58,16 @@ public sealed class ChannelDeleteActionHandler : IChannelModerationActionHandler
 public sealed class ChannelBanActionHandler : IChannelModerationActionHandler
 {
     private readonly IUserBanService _userBanService;
+    private readonly IChannelModerationReporter _reporter;
     private readonly ILogger<ChannelBanActionHandler> _logger;
 
     public ChannelBanActionHandler(
         IUserBanService userBanService,
+        IChannelModerationReporter reporter,
         ILogger<ChannelBanActionHandler> logger)
     {
         _userBanService = userBanService;
+        _reporter = reporter;
         _logger = logger;
     }
 
@@ -79,6 +82,19 @@ public sealed class ChannelBanActionHandler : IChannelModerationActionHandler
             "Баним channel identity {SenderChatId}: {Reason}",
             context.SenderChat.Id,
             result.Reason);
+
+        try
+        {
+            await _reporter.ReportAsync(context, result, cancellationToken);
+        }
+        catch (Exception ex) when (ex is not OperationCanceledException)
+        {
+            _logger.LogWarning(
+                ex,
+                "Не удалось сохранить evidence перед баном channel identity {SenderChatId}",
+                context.SenderChat.Id);
+        }
+
         await _userBanService.AutoBanChannelAsync(context.Content.Message, cancellationToken);
     }
 }

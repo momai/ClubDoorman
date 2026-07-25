@@ -2,7 +2,6 @@ using ClubDoorman.Models.Logging;
 using ClubDoorman.Services.Logging;
 using ClubDoorman.Services.ChannelModeration;
 using Microsoft.Extensions.Logging;
-using Telegram.Bot.Types.Enums;
 
 namespace ClubDoorman.Services.Handlers.Pipeline.Steps;
 
@@ -30,12 +29,6 @@ public class ChannelMessageStep : IMessageStep
     {
         var msg = context.Message;
         if (msg.SenderChat == null) return StepResult.Continue();
-
-        if (msg.Chat.Type == ChatType.Channel && msg.SenderChat.Id == msg.Chat.Id)
-        {
-            context.OwnChannelPostHandled = true;
-            return StepResult.StopOk("own-channel-post");
-        }
 
         _logger.LogDebug("[Pipeline] ChannelMessageStep handling channel message {MessageId} senderChatId={SenderChatId}", msg.MessageId, msg.SenderChat.Id);
         try

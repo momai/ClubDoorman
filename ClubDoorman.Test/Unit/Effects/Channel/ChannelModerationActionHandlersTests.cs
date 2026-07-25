@@ -31,11 +31,48 @@ public class ChannelModerationActionHandlersTests
     }
 
     [Test]
-    public async Task Ban_BansSenderChatIdentity()
+    public async Task Ban_ReportsEvidenceBeforeBanningSenderChatIdentity()
     {
         var banService = new Mock<IUserBanService>();
+        var reporter = new Mock<IChannelModerationReporter>();
+        var sequence = new MockSequence();
+        var context = CreateContext();
+        var result = Result(ModerationAction.Ban);
+        reporter
+            .InSequence(sequence)
+            .Setup(x => x.ReportAsync(context, result, CancellationToken.None))
+            .Returns(Task.CompletedTask);
+        banService
+            .InSequence(sequence)
+            .Setup(x => x.AutoBanChannelAsync(context.Content.Message, CancellationToken.None))
+            .Returns(Task.CompletedTask);
         var handler = new ChannelBanActionHandler(
             banService.Object,
+            reporter.Object,
+            NullLogger<ChannelBanActionHandler>.Instance);
+
+        await handler.ExecuteAsync(context, result, CancellationToken.None);
+
+        reporter.Verify(x => x.ReportAsync(context, result, CancellationToken.None), Times.Once);
+        banService.Verify(
+            x => x.AutoBanChannelAsync(context.Content.Message, CancellationToken.None),
+            Times.Once);
+    }
+
+    [Test]
+    public async Task Ban_WhenEvidenceReportFails_StillBansSenderChatIdentity()
+    {
+        var banService = new Mock<IUserBanService>();
+        var reporter = new Mock<IChannelModerationReporter>();
+        reporter
+            .Setup(x => x.ReportAsync(
+                It.IsAny<ChannelModerationContext>(),
+                It.IsAny<ModerationResult>(),
+                It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new InvalidOperationException("report failed"));
+        var handler = new ChannelBanActionHandler(
+            banService.Object,
+            reporter.Object,
             NullLogger<ChannelBanActionHandler>.Instance);
         var context = CreateContext();
 
@@ -126,6 +163,42 @@ public class ChannelModerationActionHandlersTests
                     data.SenderChat.Id == -2 &&
                     data.Reason == ModerationAction.Report.ToString() &&
                     data.IsSilentMode),
+                CancellationToken.None),
+            Times.Once);
+    }
+
+    [Test]
+    public async Task Reporter_LongMessage_UsesBoundedExcerptForPrimaryAndFallback()
+    {
+        var messages = new Mock<IMessageService>();
+        messages
+            .Setup(x => x.ForwardToAdminWithNotificationAsync(
+                It.IsAny<Message>(),
+                AdminNotificationType.ChannelMessage,
+                It.IsAny<ChannelMessageNotificationData>(),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync((Message?)null);
+        var reporter = new ChannelModerationReporter(
+            messages.Object,
+            NullLogger<ChannelModerationReporter>.Instance);
+        var context = CreateContext();
+        context.Content.Message.Text = new string('x', 4096);
+
+        await reporter.ReportAsync(context, Result(ModerationAction.Report), CancellationToken.None);
+
+        messages.Verify(
+            x => x.ForwardToAdminWithNotificationAsync(
+                context.Content.Message,
+                AdminNotificationType.ChannelMessage,
+                It.Is<ChannelMessageNotificationData>(data =>
+                    data.MessageText.Length == 1000 && data.MessageText.EndsWith("...")),
+                CancellationToken.None),
+            Times.Once);
+        messages.Verify(
+            x => x.SendAdminNotificationAsync(
+                AdminNotificationType.ChannelMessage,
+                It.Is<ChannelMessageNotificationData>(data =>
+                    data.MessageText.Length == 1000 && data.MessageText.EndsWith("...")),
                 CancellationToken.None),
             Times.Once);
     }

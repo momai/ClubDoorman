@@ -40,9 +40,6 @@ public sealed class ChannelModerationService : IChannelModerationService
         var senderChat = message.SenderChat ??
                          throw new ArgumentException("Channel message must have SenderChat", nameof(message));
 
-        if (chat.Type == ChatType.Channel && senderChat.Id == chat.Id)
-            return;
-
         var isAnonymousGroupAdmin =
             chat.Type == ChatType.Supergroup && senderChat.Id == chat.Id;
         if (isAnonymousGroupAdmin)

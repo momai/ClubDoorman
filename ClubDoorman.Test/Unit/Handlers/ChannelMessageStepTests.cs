@@ -14,34 +14,6 @@ namespace ClubDoorman.Test.Unit.Handlers;
 public class ChannelMessageStepTests
 {
     [Test]
-    public async Task ExecuteAsync_OwnChannelPost_StopsWithoutModeration()
-    {
-        var moderation = new Mock<IChannelModerationService>();
-        var step = new ChannelMessageStep(
-            moderation.Object,
-            Mock.Of<IModerationEventPublisher>(),
-            NullLogger<ChannelMessageStep>.Instance);
-        var chat = new Chat { Id = -1001, Type = ChatType.Channel, Title = "Channel" };
-        var message = new Message { Chat = chat, SenderChat = chat, Text = "post" };
-        var context = CreateContext(message);
-
-        var result = await step.ExecuteAsync(context, CancellationToken.None);
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(result.Stop, Is.True);
-            Assert.That(result.Reason, Is.EqualTo("own-channel-post"));
-            Assert.That(context.OwnChannelPostHandled, Is.True);
-        });
-        moderation.Verify(
-            x => x.HandleChannelMessageAsync(
-                It.IsAny<Message>(),
-                It.IsAny<bool>(),
-                It.IsAny<CancellationToken>()),
-            Times.Never);
-    }
-
-    [Test]
     public async Task ExecuteAsync_ExternalChannelIdentity_UsesChannelModeration()
     {
         var moderation = new Mock<IChannelModerationService>();

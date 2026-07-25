@@ -219,12 +219,6 @@ public class MessageHandler : IUpdateHandler
                 return;
             }
 
-            if (pipelineCtx.OwnChannelPostHandled)
-            {
-                _logger.LogDebug("HandleAsync: Own channel post ignored by pipeline, returning");
-                return;
-            }
-
             // Moderation pre-chain now partially migrated to pipeline (captcha, banlist, approved, first log, club skip)
             if (pipelineCtx.UserResultHandled)
             {
