@@ -94,7 +94,7 @@ Every seam below describes an existing interface or boundary with its concrete f
 | **Actions** | `Allow`, `Delete`, `Ban`, `Report`, `RequireManualReview`, `RequireAiAnalysis` |
 | **Forbidden deps** | Decision code must not call the real Telegram API, AI endpoints, DB, or cache directly. Telegram side effects belong in facade/effects/ban/messaging seams, not in pure decision tests. |
 | **Action handler rules** | Handlers are stateless singletons with typed constructor dependencies. Per-message state is passed only through `ModerationActionContext`; handlers must not resolve services through `IServiceProvider`. |
-| **Test strategy** | Test policy decisions separately from action handlers. Handler tests mock side-effect services and assert calls, ordering, cancellation, silent mode, and confidence propagation. Dispatcher tests require exactly one handler for every action. |
+| **Test strategy** | Test policy decisions separately from action handlers. Handler tests mock side-effect services and assert calls, ordering, silent mode, confidence, and cancellation propagation where downstream contracts accept a token. Dispatcher tests require exactly one handler for every action. |
 
 ---
 

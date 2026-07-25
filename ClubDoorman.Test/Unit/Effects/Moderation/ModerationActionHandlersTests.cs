@@ -5,6 +5,7 @@ using ClubDoorman.Services.AI;
 using ClubDoorman.Services.Messaging;
 using ClubDoorman.Services.UserBan;
 using ClubDoorman.Services.UserFlow;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using NUnit.Framework;
@@ -68,15 +69,16 @@ public class ModerationActionHandlersTests
     public async Task Delete_GenericReason_PassesSilentModeThenTracksViolation()
     {
         const string reason = "Спам сообщение";
+        using var cancellation = new CancellationTokenSource();
         var calls = new List<string>();
         var notifications = new Mock<INotificationService>();
         var userBan = new Mock<IUserBanService>();
         notifications
-            .Setup(service => service.DeleteAndReportMessage(_message, reason, true, It.IsAny<CancellationToken>()))
+            .Setup(service => service.DeleteAndReportMessage(_message, reason, true, cancellation.Token))
             .Callback(() => calls.Add("delete"))
             .Returns(Task.CompletedTask);
         userBan
-            .Setup(service => service.TrackViolationAndBanIfNeededAsync(_message, _user, reason, It.IsAny<CancellationToken>()))
+            .Setup(service => service.TrackViolationAndBanIfNeededAsync(_message, _user, reason, cancellation.Token))
             .Callback(() => calls.Add("track"))
             .Returns(Task.CompletedTask);
         var handler = new DeleteActionHandler(
@@ -84,7 +86,7 @@ public class ModerationActionHandlersTests
             userBan.Object,
             NullLogger<DeleteActionHandler>.Instance);
 
-        await handler.ExecuteAsync(CreateContext(ModerationAction.Delete, reason, isSilentMode: true), CancellationToken.None);
+        await handler.ExecuteAsync(CreateContext(ModerationAction.Delete, reason, isSilentMode: true), cancellation.Token);
 
         Assert.That(calls, Is.EqualTo(new[] { "delete", "track" }));
     }
@@ -136,6 +138,7 @@ public class ModerationActionHandlersTests
     [Test]
     public async Task Ban_LogsFlowBeforeAutoBan()
     {
+        using var cancellation = new CancellationTokenSource();
         var calls = new List<string>();
         var userBan = new Mock<IUserBanService>();
         var userFlow = new Mock<IUserFlowLogger>();
@@ -143,7 +146,7 @@ public class ModerationActionHandlersTests
             .Setup(logger => logger.LogUserBanned(_user, _chat, "reason"))
             .Callback(() => calls.Add("flow"));
         userBan
-            .Setup(service => service.AutoBanAsync(_message, "reason", It.IsAny<CancellationToken>()))
+            .Setup(service => service.AutoBanAsync(_message, "reason", cancellation.Token))
             .Callback(() => calls.Add("ban"))
             .Returns(Task.CompletedTask);
         var handler = new BanActionHandler(
@@ -151,7 +154,7 @@ public class ModerationActionHandlersTests
             userFlow.Object,
             NullLogger<BanActionHandler>.Instance);
 
-        await handler.ExecuteAsync(CreateContext(ModerationAction.Ban), CancellationToken.None);
+        await handler.ExecuteAsync(CreateContext(ModerationAction.Ban), cancellation.Token);
 
         Assert.That(calls, Is.EqualTo(new[] { "flow", "ban" }));
     }
@@ -198,33 +201,40 @@ public class ModerationActionHandlersTests
     }
 
     [Test]
-    public async Task ManualReview_PassesSilentMode()
+    public async Task ManualReview_PassesReasonSilentModeAndCancellation()
     {
+        const string reason = "manual review reason";
+        using var cancellation = new CancellationTokenSource();
         var notifications = new Mock<INotificationService>();
+        var logger = new Mock<ILogger<ManualReviewActionHandler>>();
         var handler = new ManualReviewActionHandler(
             notifications.Object,
-            NullLogger<ManualReviewActionHandler>.Instance);
+            logger.Object);
 
         await handler.ExecuteAsync(
-            CreateContext(ModerationAction.RequireManualReview, isSilentMode: true),
-            CancellationToken.None);
+            CreateContext(ModerationAction.RequireManualReview, reason, isSilentMode: true),
+            cancellation.Token);
 
         notifications.Verify(
-            service => service.DontDeleteButReportMessage(_message, _user, true, CancellationToken.None),
+            service => service.DontDeleteButReportMessage(_message, _user, true, cancellation.Token),
             Times.Once);
+        VerifyLogContains(logger, reason);
     }
 
     [Test]
     public async Task AiAnalysis_WhenConfidenceIsMissing_PassesZeroAndSilentMode()
     {
+        const string reason = "AI analysis reason";
+        using var cancellation = new CancellationTokenSource();
         var aiCascade = new Mock<IAiCascadeService>();
+        var logger = new Mock<ILogger<AiAnalysisActionHandler>>();
         var handler = new AiAnalysisActionHandler(
             aiCascade.Object,
-            NullLogger<AiAnalysisActionHandler>.Instance);
+            logger.Object);
 
         await handler.ExecuteAsync(
-            CreateContext(ModerationAction.RequireAiAnalysis, confidence: null, isSilentMode: true),
-            CancellationToken.None);
+            CreateContext(ModerationAction.RequireAiAnalysis, reason, confidence: null, isSilentMode: true),
+            cancellation.Token);
 
         aiCascade.Verify(
             service => service.HandleAiCascadeAnalysisAsync(
@@ -232,8 +242,9 @@ public class ModerationActionHandlersTests
                 _user,
                 0,
                 true,
-                CancellationToken.None),
+                cancellation.Token),
             Times.Once);
+        VerifyLogContains(logger, reason);
     }
 
     [Test]
@@ -271,5 +282,17 @@ public class ModerationActionHandlersTests
             _chat,
             new ModerationResult(action, reason, confidence),
             isSilentMode);
+    }
+
+    private static void VerifyLogContains<T>(Mock<ILogger<T>> logger, string expectedText)
+    {
+        logger.Verify(
+            instance => instance.Log(
+                It.IsAny<LogLevel>(),
+                It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((value, _) => value.ToString()!.Contains(expectedText)),
+                It.IsAny<Exception>(),
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+            Times.Once);
     }
 }
