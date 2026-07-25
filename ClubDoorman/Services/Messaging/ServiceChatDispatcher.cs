@@ -261,8 +261,6 @@ public class ServiceChatDispatcher : IServiceChatDispatcher
     {
         _logger.LogDebug("🤖 SendAiProfileAnalysisWithPhoto: начало обработки для пользователя {UserId}", data.User.Id);
 
-        var profileReviewToken = _adminActionStore.PutProfileReview(data, ProfileReviewTtl);
-
         ReplyParameters? replyParams = null;
 
         // 1. Если есть фото - отправляем его отдельно с краткой подписью
@@ -348,15 +346,26 @@ public class ServiceChatDispatcher : IServiceChatDispatcher
 
         // 3. Основное сообщение с анализом
         var message = FormatAiProfileAnalysis(data);
+        var profileReviewToken = _adminActionStore.PutProfileReview(
+            new ProfileReviewActionState(data.Chat.Id, data.User.Id, data.MessageId),
+            ProfileReviewTtl);
 
-        var mainMessage = await _bot.SendMessageAsync(
-            _appConfig.AdminChatId,
-            message,
-            parseMode: global::Telegram.Bot.Types.Enums.ParseMode.Html,
-            replyMarkup: GetAiProfileReplyMarkup(data, profileReviewToken),
-            replyParameters: replyParams,
-            cancellationToken: cancellationToken
-        );
+        try
+        {
+            var mainMessage = await _bot.SendMessageAsync(
+                _appConfig.AdminChatId,
+                message,
+                parseMode: global::Telegram.Bot.Types.Enums.ParseMode.Html,
+                replyMarkup: GetAiProfileReplyMarkup(data, profileReviewToken),
+                replyParameters: replyParams,
+                cancellationToken: cancellationToken
+            );
+        }
+        catch
+        {
+            _adminActionStore.DiscardProfileReview(profileReviewToken);
+            throw;
+        }
 
 
     }

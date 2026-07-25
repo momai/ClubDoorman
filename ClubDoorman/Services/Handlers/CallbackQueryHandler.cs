@@ -453,8 +453,8 @@ public class CallbackQueryHandler : IUpdateHandler
 
     private async Task<bool> HandleBanUserByProfile(CallbackQuery callbackQuery, string token, CancellationToken cancellationToken)
     {
-        var aiProfileData = _adminActionStore.TakeProfileReview(token);
-        if (aiProfileData == null)
+        var reviewState = _adminActionStore.TakeProfileReview(token);
+        if (reviewState == null)
         {
             await _bot.AnswerCallbackQuery(
                 callbackQuery.Id,
@@ -464,8 +464,8 @@ public class CallbackQueryHandler : IUpdateHandler
             return false;
         }
 
-        var chatId = aiProfileData.Chat.Id;
-        var userId = aiProfileData.User.Id;
+        var chatId = reviewState.ChatId;
+        var userId = reviewState.UserId;
         var adminName = GetAdminDisplayName(callbackQuery.From);
 
         // При бане по профилю НЕ добавляем сообщение в автобан - проблема в профиле, а не в сообщении
@@ -483,21 +483,21 @@ public class CallbackQueryHandler : IUpdateHandler
                 user,
                 BanTypeEnum.ProfileBan,
                 "Бан по профилю",
-                aiProfileData.MessageId,
-                aiProfileData.Chat.Id,
+                reviewState.MessageId,
+                reviewState.ChatId,
                 cancellationToken
             );
 
             // ФИКС: ВСЕГДА пытаемся переслать сообщение при ручном бане
             // Проверка на удаление происходит в try-catch - если удалено, получим ошибку
-            if (aiProfileData.MessageId != null)
+            if (reviewState.MessageId != null)
             {
                 try
                 {
                     await _bot.ForwardMessage(
                         chatId: _appConfig.AdminChatId,
-                        fromChatId: aiProfileData.Chat.Id,
-                        messageId: (int)aiProfileData.MessageId.Value,
+                        fromChatId: reviewState.ChatId,
+                        messageId: (int)reviewState.MessageId.Value,
                         cancellationToken: cancellationToken
                     );
                     _logger.LogDebug("🤖 При ручном бане переслано сообщение пользователя {UserId}", userId);

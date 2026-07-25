@@ -298,13 +298,7 @@ public class CallbackQueryHandlerTests
     [Test]
     public async Task HandleAsync_ProfileReviewTokenFound_BansUserFromStoredReview()
     {
-        var review = new Models.Notifications.AiProfileAnalysisData(
-            new User { Id = 987, FirstName = "Reviewed" },
-            new Chat { Id = -654, Title = "Source chat" },
-            0.9,
-            "reason",
-            "bio",
-            "message");
+        var review = new ProfileReviewActionState(-654, 987, null);
         _mockAdminActionStore.Setup(x => x.TakeProfileReview("opaque-token")).Returns(review);
         var update = new Update
         {
