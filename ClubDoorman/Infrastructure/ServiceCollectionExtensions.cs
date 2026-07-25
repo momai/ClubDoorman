@@ -22,6 +22,7 @@ using ClubDoorman.Services.UserManagement;
 using ClubDoorman.Services.Violation;
 using ClubDoorman.Models.Logging;
 using ClubDoorman.Effects;
+using ClubDoorman.Effects.Moderation;
 using ClubDoorman.Infrastructure;
 using ClubDoorman.Services.ChannelModeration;
 using ClubDoorman.Services.Logging;
@@ -72,8 +73,13 @@ public static class ServiceCollectionExtensions
             LogComparison = true // Включено сравнение логов
         });
         services.AddSingleton<IEffectBus, EffectBus>();
-        services.AddSingleton<ModerationEffectsBuilder>();
-        services.AddSingleton<IModerationEffectsBuilder, ModerationEffectsBuilder>();
+        services.AddSingleton<IModerationActionHandler, AllowActionHandler>();
+        services.AddSingleton<IModerationActionHandler, DeleteActionHandler>();
+        services.AddSingleton<IModerationActionHandler, BanActionHandler>();
+        services.AddSingleton<IModerationActionHandler, ReportActionHandler>();
+        services.AddSingleton<IModerationActionHandler, ManualReviewActionHandler>();
+        services.AddSingleton<IModerationActionHandler, AiAnalysisActionHandler>();
+        services.AddSingleton<IModerationActionDispatcher, ModerationActionDispatcher>();
         services.AddSingleton<IChannelModerationEffectsBuilder>(sp =>
         {
             var logger = sp.GetRequiredService<ILogger<ChannelModerationEffectsBuilder>>();
