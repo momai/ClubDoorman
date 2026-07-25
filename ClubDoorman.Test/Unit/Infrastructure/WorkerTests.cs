@@ -22,6 +22,7 @@ using ClubDoorman.Services.Messaging;
 using ClubDoorman.Services.Statistics;
 using ClubDoorman.Services.Telegram;
 using ClubDoorman.Services.UserManagement;
+using ClubDoorman.Infrastructure;
 
 namespace ClubDoorman.Test.Unit;
 
@@ -144,6 +145,7 @@ public class WorkerTests
     public void Worker_UsesRegisteredGlobalStatsManager_SharingStateWithOtherConsumers()
     {
         var services = new ServiceCollection();
+        services.AddClubDoorman();
         services.AddSingleton<ILogger<Worker>>(NullLogger<Worker>.Instance);
         services.AddSingleton(Mock.Of<IUpdateDispatcher>());
         services.AddSingleton(Mock.Of<ICaptchaService>());
@@ -156,27 +158,20 @@ public class WorkerTests
         services.AddSingleton(Mock.Of<IMessageService>());
         services.AddSingleton(Mock.Of<IAppConfig>());
         services.AddSingleton(Mock.Of<IUserBanService>());
-        services.AddStatisticsServices();
         services.AddSingleton(Mock.Of<IStatisticsService>());
-        services.AddSingleton<Worker>();
 
         using var provider = services.BuildServiceProvider();
-        var worker = provider.GetRequiredService<Worker>();
+        var worker = provider.GetServices<IHostedService>().OfType<Worker>().Single();
         var registeredStatsManager = provider.GetRequiredService<GlobalStatsManager>();
         var workerStatsManager = (GlobalStatsManager)typeof(Worker)
             .GetField("_globalStatsManager", BindingFlags.NonPublic | BindingFlags.Instance)!
             .GetValue(worker)!;
+        var workerRegistration = services.Single(d => d.ServiceType == typeof(IHostedService));
 
         Assert.That(services.Count(d => d.ServiceType == typeof(GlobalStatsManager)), Is.EqualTo(1));
+        Assert.That(workerRegistration.ImplementationFactory, Is.Null);
+        Assert.That(workerRegistration.ImplementationType, Is.EqualTo(typeof(Worker)));
         Assert.That(workerStatsManager, Is.SameAs(registeredStatsManager));
-
-        var chatId = DateTime.UtcNow.Ticks;
-        registeredStatsManager.IncCaptcha(chatId, "DI test chat");
-        var stats = (StatsRoot)typeof(GlobalStatsManager)
-            .GetField("_stats", BindingFlags.NonPublic | BindingFlags.Instance)!
-            .GetValue(workerStatsManager)!;
-
-        Assert.That(stats.Chats[chatId].CaptchaShown, Is.EqualTo(1));
     }
 
-  }
+}
