@@ -9,7 +9,19 @@ using Telegram.Bot.Types.Enums;
 using Moq;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging.Abstractions;
 using System.Reflection;
+using ClubDoorman.Services.AI;
+using ClubDoorman.Services.BadMessage;
+using ClubDoorman.Services.Captcha;
+using ClubDoorman.Services.Core.Configuration;
+using ClubDoorman.Services.Dispatcher;
+using ClubDoorman.Services.LinkFormatting;
+using ClubDoorman.Services.Messaging;
+using ClubDoorman.Services.Statistics;
+using ClubDoorman.Services.Telegram;
+using ClubDoorman.Services.UserManagement;
 
 namespace ClubDoorman.Test.Unit;
 
@@ -128,4 +140,43 @@ public class WorkerTests
         Assert.That(result, Is.EqualTo("John"));
     }
 
- }
+    [Test]
+    public void Worker_UsesRegisteredGlobalStatsManager_SharingStateWithOtherConsumers()
+    {
+        var services = new ServiceCollection();
+        services.AddSingleton<ILogger<Worker>>(NullLogger<Worker>.Instance);
+        services.AddSingleton(Mock.Of<IUpdateDispatcher>());
+        services.AddSingleton(Mock.Of<ICaptchaService>());
+        services.AddSingleton(Mock.Of<ISpamHamClassifier>());
+        services.AddSingleton(Mock.Of<IUserManager>());
+        services.AddSingleton(Mock.Of<IBadMessageManager>());
+        services.AddSingleton(Mock.Of<IAiChecks>());
+        services.AddSingleton(Mock.Of<IChatLinkFormatter>());
+        services.AddSingleton(Mock.Of<ITelegramBotClientWrapper>());
+        services.AddSingleton(Mock.Of<IMessageService>());
+        services.AddSingleton(Mock.Of<IAppConfig>());
+        services.AddSingleton(Mock.Of<IUserBanService>());
+        services.AddStatisticsServices();
+        services.AddSingleton(Mock.Of<IStatisticsService>());
+        services.AddSingleton<Worker>();
+
+        using var provider = services.BuildServiceProvider();
+        var worker = provider.GetRequiredService<Worker>();
+        var registeredStatsManager = provider.GetRequiredService<GlobalStatsManager>();
+        var workerStatsManager = (GlobalStatsManager)typeof(Worker)
+            .GetField("_globalStatsManager", BindingFlags.NonPublic | BindingFlags.Instance)!
+            .GetValue(worker)!;
+
+        Assert.That(services.Count(d => d.ServiceType == typeof(GlobalStatsManager)), Is.EqualTo(1));
+        Assert.That(workerStatsManager, Is.SameAs(registeredStatsManager));
+
+        var chatId = DateTime.UtcNow.Ticks;
+        registeredStatsManager.IncCaptcha(chatId, "DI test chat");
+        var stats = (StatsRoot)typeof(GlobalStatsManager)
+            .GetField("_stats", BindingFlags.NonPublic | BindingFlags.Instance)!
+            .GetValue(workerStatsManager)!;
+
+        Assert.That(stats.Chats[chatId].CaptchaShown, Is.EqualTo(1));
+    }
+
+  }

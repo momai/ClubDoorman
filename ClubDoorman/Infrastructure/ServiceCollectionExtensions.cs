@@ -181,7 +181,8 @@ public static class ServiceCollectionExtensions
                 provider.GetRequiredService<ITelegramBotClientWrapper>(),
                 provider.GetRequiredService<IMessageService>(),
                 provider.GetRequiredService<IAppConfig>(),
-                provider.GetRequiredService<IUserBanService>()
+                provider.GetRequiredService<IUserBanService>(),
+                provider.GetRequiredService<GlobalStatsManager>()
             );
         });
 
