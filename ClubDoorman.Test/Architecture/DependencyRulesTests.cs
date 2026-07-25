@@ -1,7 +1,10 @@
 using ClubDoorman.Features.Moderation;
+using ClubDoorman.Effects.Moderation;
+using ClubDoorman.Models;
 using ClubDoorman.Services.Handlers.Pipeline;
 using NetArchTest.Rules;
 using NUnit.Framework;
+using Telegram.Bot.Types;
 
 namespace ClubDoorman.Test.Architecture;
 
@@ -107,6 +110,50 @@ public class DependencyRulesTests
             .GetResult();
 
         AssertRulePasses(result, "The moderation feature must not depend on handlers");
+    }
+
+    [Test]
+    public void ModerationEffects_DoNotUseServiceProvider()
+    {
+        var violations = typeof(IModerationActionHandler).Assembly
+            .GetTypes()
+            .Where(type => type.Namespace == typeof(IModerationActionHandler).Namespace)
+            .SelectMany(type => type.GetConstructors())
+            .SelectMany(constructor => constructor.GetParameters()
+                .Where(parameter => typeof(IServiceProvider).IsAssignableFrom(parameter.ParameterType))
+                .Select(parameter => $"{constructor.DeclaringType!.FullName}.{constructor.Name}({parameter.Name})"))
+            .ToList();
+
+        Assert.That(violations, Is.Empty,
+            "Moderation effects must declare typed dependencies instead of resolving them at runtime. Violations:\n"
+            + string.Join("\n", violations));
+    }
+
+    [Test]
+    public void ModerationActionHandlers_DoNotStoreRuntimeContext()
+    {
+        var runtimeTypes = new HashSet<Type>
+        {
+            typeof(Message),
+            typeof(User),
+            typeof(Chat),
+            typeof(ModerationResult),
+            typeof(ModerationActionContext)
+        };
+        var violations = typeof(IModerationActionHandler).Assembly
+            .GetTypes()
+            .Where(type => !type.IsAbstract && typeof(IModerationActionHandler).IsAssignableFrom(type))
+            .SelectMany(type => type.GetFields(
+                System.Reflection.BindingFlags.Instance
+                | System.Reflection.BindingFlags.Public
+                | System.Reflection.BindingFlags.NonPublic))
+            .Where(field => runtimeTypes.Contains(field.FieldType))
+            .Select(field => $"{field.DeclaringType!.FullName}.{field.Name}: {field.FieldType.Name}")
+            .ToList();
+
+        Assert.That(violations, Is.Empty,
+            "Singleton moderation action handlers must receive per-message state through ModerationActionContext. Violations:\n"
+            + string.Join("\n", violations));
     }
 
     private static void AssertRulePasses(TestResult result, string rule)
