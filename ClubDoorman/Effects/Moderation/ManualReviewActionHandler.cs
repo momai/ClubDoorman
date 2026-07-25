@@ -21,7 +21,7 @@ public sealed class ManualReviewActionHandler : IModerationActionHandler
 
     public Task ExecuteAsync(ModerationActionContext context, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Требует ручной проверки: {Reason}", "RequireManualReview");
+        _logger.LogInformation("Требует ручной проверки: {Reason}", context.Result.Reason);
         return _notificationService.DontDeleteButReportMessage(
             context.Message,
             context.User,

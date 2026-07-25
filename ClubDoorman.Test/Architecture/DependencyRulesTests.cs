@@ -115,14 +115,26 @@ public class DependencyRulesTests
     [Test]
     public void ModerationEffects_DoNotUseServiceProvider()
     {
-        var violations = typeof(IModerationActionHandler).Assembly
+        var effectsNamespace = typeof(IModerationActionHandler).Namespace!;
+        var effectTypes = typeof(IModerationActionHandler).Assembly
             .GetTypes()
-            .Where(type => type.Namespace == typeof(IModerationActionHandler).Namespace)
+            .Where(type => type.Namespace == effectsNamespace
+                || type.Namespace?.StartsWith(effectsNamespace + ".", StringComparison.Ordinal) == true)
+            .ToList();
+        var constructorViolations = effectTypes
             .SelectMany(type => type.GetConstructors())
             .SelectMany(constructor => constructor.GetParameters()
                 .Where(parameter => typeof(IServiceProvider).IsAssignableFrom(parameter.ParameterType))
-                .Select(parameter => $"{constructor.DeclaringType!.FullName}.{constructor.Name}({parameter.Name})"))
-            .ToList();
+                .Select(parameter => $"{constructor.DeclaringType!.FullName}.{constructor.Name}({parameter.Name})"));
+        var fieldViolations = effectTypes
+            .SelectMany(type => type.GetFields(
+                System.Reflection.BindingFlags.Instance
+                | System.Reflection.BindingFlags.Static
+                | System.Reflection.BindingFlags.Public
+                | System.Reflection.BindingFlags.NonPublic))
+            .Where(field => typeof(IServiceProvider).IsAssignableFrom(field.FieldType))
+            .Select(field => $"{field.DeclaringType!.FullName}.{field.Name}");
+        var violations = constructorViolations.Concat(fieldViolations).ToList();
 
         Assert.That(violations, Is.Empty,
             "Moderation effects must declare typed dependencies instead of resolving them at runtime. Violations:\n"

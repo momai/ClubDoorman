@@ -21,7 +21,7 @@ public sealed class AiAnalysisActionHandler : IModerationActionHandler
 
     public Task ExecuteAsync(ModerationActionContext context, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("ML не уверен, запускаем AI анализ: {Reason}", "RequireAiAnalysis");
+        _logger.LogInformation("ML не уверен, запускаем AI анализ: {Reason}", context.Result.Reason);
         return _aiCascadeService.HandleAiCascadeAnalysisAsync(
             context.Message,
             context.User,
