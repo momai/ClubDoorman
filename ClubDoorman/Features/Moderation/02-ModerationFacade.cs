@@ -1,13 +1,7 @@
-using ClubDoorman.Services.Moderation;
-using ClubDoorman.Services.UserBan;
-using ClubDoorman.Services.UserFlow;
-using ClubDoorman.Services.AI;
-using ClubDoorman.Services.Messaging;
-using ClubDoorman.Services.Core.Configuration;
 using Microsoft.Extensions.Logging;
 using Telegram.Bot.Types;
 using ClubDoorman.Models;
-using ClubDoorman.Effects;
+using ClubDoorman.Effects.Moderation;
 
 namespace ClubDoorman.Features.Moderation;
 
@@ -19,20 +13,17 @@ public class ModerationFacade : IModerationFacade
 {
     private readonly IModerationPolicy _moderationPolicy;
     private readonly ILogger<ModerationFacade> _logger;
-    private readonly IModerationEffectsBuilder _moderationEffectsBuilder;
-    private readonly IEffectBus _effectBus;
+    private readonly IModerationActionDispatcher _moderationActionDispatcher;
 
 
     public ModerationFacade(
         IModerationPolicy moderationPolicy,
         ILogger<ModerationFacade> logger,
-        IModerationEffectsBuilder moderationEffectsBuilder,
-        IEffectBus effectBus)
+        IModerationActionDispatcher moderationActionDispatcher)
     {
         _moderationPolicy = moderationPolicy;
         _logger = logger;
-        _moderationEffectsBuilder = moderationEffectsBuilder;
-        _effectBus = effectBus;
+        _moderationActionDispatcher = moderationActionDispatcher;
     }
 
     public Task<ModerationResult> CheckMessageAsync(Message message)
@@ -105,7 +96,7 @@ public class ModerationFacade : IModerationFacade
     /// <param name="moderationResult">Результат модерации</param>
     /// <param name="isSilentMode">Тихий режим</param>
     /// <param name="cancellationToken">Токен отмены</param>
-    public async Task HandleUserMessageAsync(
+    public Task HandleUserMessageAsync(
         Message message,
         User user,
         Chat chat,
@@ -113,9 +104,13 @@ public class ModerationFacade : IModerationFacade
         bool isSilentMode,
         CancellationToken cancellationToken)
     {
-        var effects = _moderationEffectsBuilder.BuildEffects(message, moderationResult, isSilentMode);
-        await _effectBus.ExecuteAsync(effects, cancellationToken);
+        var context = new ModerationActionContext(
+            message,
+            user,
+            chat,
+            moderationResult,
+            isSilentMode);
+
+        return _moderationActionDispatcher.DispatchAsync(context, cancellationToken);
     }
-
-
 }

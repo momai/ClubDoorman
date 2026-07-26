@@ -85,14 +85,16 @@ Every seam below describes an existing interface or boundary with its concrete f
 | **Core interface** | `ClubDoorman/Features/Moderation/05-Contracts.cs` → `IModerationPolicy` |
 | **Implementation** | `ClubDoorman/Features/Moderation/03-Policies.cs` → `ModerationPolicy` |
 | **Facade** | `ClubDoorman/Features/Moderation/02-ModerationFacade.cs` → `ModerationFacade` |
+| **Action execution** | `ClubDoorman/Effects/Moderation/ModerationActionDispatcher.cs` routes `ModerationActionContext` to one DI-registered `IModerationActionHandler` per action |
 | **Adapter** | `ClubDoorman/Features/Moderation/04-Services.cs` → `ModerationServiceAdapter` (implements `IModerationService`) |
 | **Services wrapper** | `ClubDoorman/Services/Moderation/IModerationService.cs` (legacy consumers) |
-| **DI registration** | `ClubDoorman/Features/Moderation/01-ModerationFeature.cs` registers `IModerationPolicy`; `ClubDoorman/Services/Moderation/ModerationModule.cs` registers `IModerationService` via factory |
+| **DI registration** | `ClubDoorman/Features/Moderation/01-ModerationFeature.cs` registers policy/facade; `ServiceCollectionExtensions.AddClubDoorman` registers all action handlers and the dispatcher; `ClubDoorman/Services/Moderation/ModerationModule.cs` registers the legacy service adapter |
 | **Input** | `Message`, `User` |
 | **Output** | `ModerationResult` (record: `Action`, `Reason`, `Confidence?`) |
 | **Actions** | `Allow`, `Delete`, `Ban`, `Report`, `RequireManualReview`, `RequireAiAnalysis` |
 | **Forbidden deps** | Decision code must not call the real Telegram API, AI endpoints, DB, or cache directly. Telegram side effects belong in facade/effects/ban/messaging seams, not in pure decision tests. |
-| **Test strategy** | Instantiate `ModerationPolicy` with mocked dependencies; feed `Message` objects; assert `ModerationResult.Action` and `Reason`. No Telegram API calls needed. |
+| **Action handler rules** | Handlers are stateless singletons with typed constructor dependencies. Per-message state is passed only through `ModerationActionContext`; handlers must not resolve services through `IServiceProvider`. |
+| **Test strategy** | Test policy decisions separately from action handlers. Handler tests mock side-effect services and assert calls, ordering, silent mode, confidence, and cancellation propagation where downstream contracts accept a token. Dispatcher tests require exactly one handler for every action. |
 
 ---
 

@@ -65,6 +65,9 @@ Classification of existing tests by layer — not a rewrite plan. Every entry no
 | `ChannelModerationEffectsBuilderTests` | Effects builder for channel moderation | Mocks | §3 Update Handlers | **Honest** |
 | `BotPermissionsServiceTests` | Bot permission checks | Mocks | §3 Update Handlers | **Honest** |
 | `ModerationServiceBusinessLogicTests` | Business logic in moderation service | Mocks | §5 Moderation Decision | **Honest** |
+| `ModerationActionDispatcherTests` | Action routing, missing/duplicate registration failures | In-memory recording handlers | §5 Moderation Decision | **Honest** — real dispatcher with no external dependencies. |
+| `ModerationActionHandlersTests` | Side-effect calls, ordering, silent mode, confidence propagation | Mocks for handler dependencies | §5 Moderation Decision | **Honest** — real stateless action handlers. |
+| `ModerationFacadeTests` | Facade-to-dispatcher runtime context propagation | Mock policy and dispatcher | §5 Moderation Decision | **Honest** — real facade. |
 | `SuspiciousUsersStorageTests` | `SuspiciousUsersStorage` behavior | `NullLogger` | §6 AI Verdict Provider | **Honest** |
 | `UserCleanupServiceTests` | User cleanup logic | Mocks | §8 Ban / Mute / Delete | **Honest** |
 | `UpdateDispatcherTests` | `UpdateDispatcher` routing to handlers | Mock `IUpdateHandler` | §2 Update Dispatcher | **Honest** |
@@ -207,12 +210,6 @@ Classification of existing tests by layer — not a rewrite plan. Every entry no
 - **Mocks / fakes**: `FakeTelegramClient` (in-memory fake), `TestData` factories, some mocks.
 - **Seam**: §1 Telegram Adapter, §5 Moderation Decision, §8 Ban / Mute / Delete.
 - **Layer honest?**: **Honest integration** — exercises several app components together with a fake Telegram client. No real external calls.
-
-### `ClubDoorman.Test.Integration.Effects.EffectsConfigurationIntegrationTest.cs`
-- **What it checks**: DI configuration for effects system — `EffectsConfiguration`, `EffectBus`, `IModerationEffectsBuilder`.
-- **Mocks / fakes**: Real `ServiceCollection` + `AddClubDoorman()` DI registration.
-- **Seam**: §5 Moderation Decision (effects layer).
-- **Layer honest?**: **Honest integration** — tests DI wiring of several components.
 
 ### `ClubDoorman.Test.Integration.SimpleE2ETests.cs`
 - **What it checks**: Real spam detection, mimicry detection, complete AI analysis with photo.
