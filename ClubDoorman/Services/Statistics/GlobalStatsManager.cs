@@ -62,7 +62,11 @@ public class GlobalStatsManager
     // Обновляет количество участников для всех чатов
     public async Task UpdateAllMembersAsync(ITelegramBotClientWrapper bot)
     {
-        var chatIds = _stats.Chats.Keys.ToList();
+        List<long> chatIds;
+        lock (_lock)
+        {
+            chatIds = _stats.Chats.Keys.ToList();
+        }
         foreach (var chatId in chatIds)
         {
             try
@@ -82,7 +86,11 @@ public class GlobalStatsManager
     // Обновляет количество участников только в чатах, где сейчас 0 участников
     public async Task UpdateZeroMemberChatsAsync(ITelegramBotClientWrapper bot)
     {
-        var zeroChats = _stats.Chats.Where(x => x.Value.Members == 0).Select(x => x.Key).ToList();
+        List<long> zeroChats;
+        lock (_lock)
+        {
+            zeroChats = _stats.Chats.Where(x => x.Value.Members == 0).Select(x => x.Key).ToList();
+        }
         foreach (var chatId in zeroChats)
         {
             try

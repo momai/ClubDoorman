@@ -38,7 +38,8 @@ internal sealed class Worker(
     ITelegramBotClientWrapper bot,
     IMessageService messageService,
     IAppConfig appConfig,
-    IUserBanService userBanService
+    IUserBanService userBanService,
+    GlobalStatsManager globalStatsManager
 ) : BackgroundService
 {
     // Классы CaptchaInfo и Stats перенесены в Models
@@ -59,7 +60,7 @@ internal sealed class Worker(
     private readonly IMessageService _messageService = messageService;
     private readonly IAppConfig _appConfig = appConfig;
     private readonly IUserBanService _userBanService = userBanService;
-    private readonly GlobalStatsManager _globalStatsManager = new();
+    private readonly GlobalStatsManager _globalStatsManager = globalStatsManager;
     private User _me = default!;
 
     // Используем значения из IAppConfig (стандартизировано)

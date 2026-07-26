@@ -163,27 +163,7 @@ public static class ServiceCollectionExtensions
     services.AddSingleton<Services.Handlers.Pipeline.IMessageStep, ClubDoorman.Services.Handlers.Pipeline.Steps.AiProfileAnalysisStep>(); // 210
     services.AddSingleton<Services.Handlers.Pipeline.IMessageStep, ClubDoorman.Services.Handlers.Pipeline.Steps.FinalModerationActionStep>(); // 220
 
-        // Регистрация Worker как HostedService
-        services.AddHostedService<Worker>(provider =>
-        {
-            var logger = provider.GetRequiredService<ILogger<Worker>>();
-            logger.LogDebug("[DI] Worker factory called");
-            return new Worker(
-                provider.GetRequiredService<ILogger<Worker>>(),
-                provider.GetRequiredService<IUpdateDispatcher>(),
-                provider.GetRequiredService<ICaptchaService>(),
-                provider.GetRequiredService<IStatisticsService>(),
-                provider.GetRequiredService<ISpamHamClassifier>(),
-                provider.GetRequiredService<IUserManager>(),
-                provider.GetRequiredService<IBadMessageManager>(),
-                provider.GetRequiredService<IAiChecks>(),
-                provider.GetRequiredService<IChatLinkFormatter>(),
-                provider.GetRequiredService<ITelegramBotClientWrapper>(),
-                provider.GetRequiredService<IMessageService>(),
-                provider.GetRequiredService<IAppConfig>(),
-                provider.GetRequiredService<IUserBanService>()
-            );
-        });
+        services.AddHostedService<Worker>();
 
         // Конфигурация логирования (централизованная система сообщений перенесена в MessagingModule)
         services.Configure<LoggingConfiguration>(options => { });
