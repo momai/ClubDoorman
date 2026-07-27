@@ -19,6 +19,7 @@ public static class MessagingModule
         // Централизованная система сообщений
         services.AddSingleton<MessageTemplates>();
         services.AddSingleton<ILoggingConfigurationService, LoggingConfigurationService>();
+        services.AddSingleton<IAdminActionStore, AdminActionStore>();
         services.AddSingleton<IServiceChatDispatcher, ServiceChatDispatcher>();
         services.AddSingleton<IMessageService, MessageService>();
         services.AddSingleton<IChatLinkFormatter, ChatLinkFormatter>();

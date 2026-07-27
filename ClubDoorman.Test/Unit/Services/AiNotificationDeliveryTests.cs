@@ -6,7 +6,6 @@ using ClubDoorman.Services.Telegram;
 using ClubDoorman.Test.TestKit;
 using ClubDoorman.TestInfrastructure;
 using System.Globalization;
-using System.Runtime.Caching;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using NUnit.Framework;
@@ -21,12 +20,6 @@ public class AiNotificationDeliveryTests
 {
     private const long TestChatId = 678901;
     private const long TestUserId = 123451;
-
-    [TearDown]
-    public void RemoveCachedAiProfileAnalysis()
-    {
-        MemoryCache.Default.Remove($"banprofile_{TestChatId}_{TestUserId}");
-    }
 
     [Test]
     public async Task MessageService_SendAiProfileAnalysis_RoutesToAdminDispatcher()
@@ -48,10 +41,14 @@ public class AiNotificationDeliveryTests
     {
         var bot = TestKitTelegram.CreateFakeClient();
         var config = CreateConfig();
+        var actionStore = new Mock<IAdminActionStore>();
+        actionStore.Setup(x => x.PutProfileReview(It.IsAny<ProfileReviewActionState>(), It.IsAny<TimeSpan>()))
+            .Returns("opaque-token");
         var dispatcher = new ServiceChatDispatcher(
             bot,
             NullLogger<ServiceChatDispatcher>.Instance,
-            config.Object);
+            config.Object,
+            actionStore.Object);
         var data = CreateData(messageId: 123);
 
         await dispatcher.SendToAdminChatAsync(data);
@@ -61,7 +58,13 @@ public class AiNotificationDeliveryTests
         Assert.That(sent.Text, Does.Contain("AI анализ профиля"));
         Assert.That(sent.Text, Does.Contain("Test &lt;reason&gt;"));
         Assert.That(sent.Text, Does.Contain(string.Format(CultureInfo.CurrentCulture, "{0:F1}%", 95.0)));
-        Assert.That(ContainsCallback(sent.ReplyMarkup!, $"banprofile_{TestChatId}_{TestUserId}"), Is.True);
+        Assert.That(ContainsCallback(sent.ReplyMarkup!, "banprofile_opaque-token"), Is.True);
+        actionStore.Verify(x => x.PutProfileReview(
+            It.Is<ProfileReviewActionState>(state =>
+                state.ChatId == TestChatId &&
+                state.UserId == TestUserId &&
+                state.MessageId == 123),
+            TimeSpan.FromHours(12)), Times.Once);
         Assert.That(bot.SentPhotos, Is.Empty);
     }
 
@@ -70,10 +73,14 @@ public class AiNotificationDeliveryTests
     {
         var bot = TestKitTelegram.CreateFakeClient();
         var config = CreateConfig();
+        var actionStore = new Mock<IAdminActionStore>();
+        actionStore.Setup(x => x.PutProfileReview(It.IsAny<ProfileReviewActionState>(), It.IsAny<TimeSpan>()))
+            .Returns("opaque-token");
         var dispatcher = new ServiceChatDispatcher(
             bot,
             NullLogger<ServiceChatDispatcher>.Instance,
-            config.Object);
+            config.Object,
+            actionStore.Object);
         var data = CreateData(messageId: 123, photoBytes: new byte[] { 1, 2, 3 });
 
         await dispatcher.SendToAdminChatAsync(data);
@@ -84,6 +91,50 @@ public class AiNotificationDeliveryTests
         var sent = HasSingleSentMessage(bot);
         Assert.That(sent.Text, Does.Contain("AI анализ профиля"));
         Assert.That(sent.ReplyParameters, Is.Not.Null);
+    }
+
+    [Test]
+    public void ServiceChatDispatcher_MainMessageFails_DiscardsProfileReviewState()
+    {
+        var bot = new Mock<ITelegramBotClientWrapper>();
+        bot.Setup(x => x.ForwardMessage(
+                It.IsAny<ChatId>(),
+                It.IsAny<ChatId>(),
+                It.IsAny<int>(),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new Message());
+        bot.Setup(x => x.SendMessageAsync(
+                It.IsAny<ChatId>(),
+                It.IsAny<string>(),
+                It.IsAny<ParseMode?>(),
+                It.IsAny<ReplyParameters?>(),
+                It.IsAny<ReplyMarkup?>(),
+                It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new InvalidOperationException("Telegram unavailable"));
+
+        using var store = new AdminActionStore();
+        string? token = null;
+        var actionStore = new Mock<IAdminActionStore>();
+        actionStore.Setup(x => x.PutProfileReview(It.IsAny<ProfileReviewActionState>(), It.IsAny<TimeSpan>()))
+            .Returns((ProfileReviewActionState state, TimeSpan ttl) =>
+            {
+                token = store.PutProfileReview(state, ttl);
+                return token;
+            });
+        actionStore.Setup(x => x.DiscardProfileReview(It.IsAny<string>()))
+            .Callback((string value) => store.DiscardProfileReview(value));
+        var dispatcher = new ServiceChatDispatcher(
+            bot.Object,
+            NullLogger<ServiceChatDispatcher>.Instance,
+            CreateConfig().Object,
+            actionStore.Object);
+
+        Assert.ThrowsAsync<InvalidOperationException>(async () =>
+            await dispatcher.SendToAdminChatAsync(CreateData(messageId: 123)));
+
+        Assert.That(token, Is.Not.Null);
+        actionStore.Verify(x => x.DiscardProfileReview(token!), Times.Once);
+        Assert.That(store.TakeProfileReview(token!), Is.Null);
     }
 
     private static AiProfileAnalysisData CreateData(

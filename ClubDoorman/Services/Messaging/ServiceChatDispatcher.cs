@@ -1,7 +1,6 @@
 using ClubDoorman.Infrastructure;
 using ClubDoorman.Services.Core.Configuration;
 using ClubDoorman.Models.Notifications;
-using System.Runtime.Caching;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
 using ClubDoorman.Services.Telegram;
@@ -13,9 +12,11 @@ namespace ClubDoorman.Services.Messaging;
 /// </summary>
 public class ServiceChatDispatcher : IServiceChatDispatcher
 {
+    private static readonly TimeSpan ProfileReviewTtl = TimeSpan.FromHours(12);
     private readonly ITelegramBotClientWrapper _bot;
     private readonly ILogger<ServiceChatDispatcher> _logger;
     private readonly IAppConfig _appConfig;
+    private readonly IAdminActionStore _adminActionStore;
 
     /// <summary>
     /// Создает экземпляр диспетчера сервис-чатов
@@ -25,11 +26,13 @@ public class ServiceChatDispatcher : IServiceChatDispatcher
     public ServiceChatDispatcher(
         ITelegramBotClientWrapper bot,
         ILogger<ServiceChatDispatcher> logger,
-        IAppConfig appConfig)
+        IAppConfig appConfig,
+        IAdminActionStore adminActionStore)
     {
         _bot = bot ?? throw new ArgumentNullException(nameof(bot));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _appConfig = appConfig ?? throw new ArgumentNullException(nameof(appConfig));
+        _adminActionStore = adminActionStore ?? throw new ArgumentNullException(nameof(adminActionStore));
     }
 
     /// <summary>
@@ -176,13 +179,17 @@ public class ServiceChatDispatcher : IServiceChatDispatcher
                 new[] { InlineKeyboardButton.WithCallbackData("✅ OK", "approve_ai_detect") },
                 new[] { InlineKeyboardButton.WithCallbackData("❌ Спам", "spam_ai_detect") }
             }),
-            AiProfileAnalysisData aiProfile => new InlineKeyboardMarkup(new[]
-            {
-                new[] { InlineKeyboardButton.WithCallbackData("❌❌❌ ban", $"banprofile_{aiProfile.Chat.Id}_{aiProfile.User.Id}") },
-                new[] { InlineKeyboardButton.WithCallbackData("✅✅✅ ok", $"aiOk_{aiProfile.Chat.Id}_{aiProfile.User.Id}") }
-            }),
             _ => null
         };
+    }
+
+    private static InlineKeyboardMarkup GetAiProfileReplyMarkup(AiProfileAnalysisData data, string token)
+    {
+        return new InlineKeyboardMarkup(new[]
+        {
+            new[] { InlineKeyboardButton.WithCallbackData("❌❌❌ ban", $"banprofile_{token}") },
+            new[] { InlineKeyboardButton.WithCallbackData("✅✅✅ ok", $"aiOk_{data.Chat.Id}_{data.User.Id}") }
+        });
     }
 
     // Методы форматирования для админ-чата
@@ -253,10 +260,6 @@ public class ServiceChatDispatcher : IServiceChatDispatcher
     private async Task SendAiProfileAnalysisWithPhoto(AiProfileAnalysisData data, CancellationToken cancellationToken)
     {
         _logger.LogDebug("🤖 SendAiProfileAnalysisWithPhoto: начало обработки для пользователя {UserId}", data.User.Id);
-
-        // Кэшируем данные для кнопок
-        var callbackDataBan = $"banprofile_{data.Chat.Id}_{data.User.Id}";
-        MemoryCache.Default.Add(callbackDataBan, data, new CacheItemPolicy { AbsoluteExpiration = DateTimeOffset.UtcNow.AddHours(12) });
 
         ReplyParameters? replyParams = null;
 
@@ -343,15 +346,26 @@ public class ServiceChatDispatcher : IServiceChatDispatcher
 
         // 3. Основное сообщение с анализом
         var message = FormatAiProfileAnalysis(data);
+        var profileReviewToken = _adminActionStore.PutProfileReview(
+            new ProfileReviewActionState(data.Chat.Id, data.User.Id, data.MessageId),
+            ProfileReviewTtl);
 
-        var mainMessage = await _bot.SendMessageAsync(
-            _appConfig.AdminChatId,
-            message,
-            parseMode: global::Telegram.Bot.Types.Enums.ParseMode.Html,
-            replyMarkup: GetAdminChatReplyMarkup(data),
-            replyParameters: replyParams,
-            cancellationToken: cancellationToken
-        );
+        try
+        {
+            var mainMessage = await _bot.SendMessageAsync(
+                _appConfig.AdminChatId,
+                message,
+                parseMode: global::Telegram.Bot.Types.Enums.ParseMode.Html,
+                replyMarkup: GetAiProfileReplyMarkup(data, profileReviewToken),
+                replyParameters: replyParams,
+                cancellationToken: cancellationToken
+            );
+        }
+        catch
+        {
+            _adminActionStore.DiscardProfileReview(profileReviewToken);
+            throw;
+        }
 
 
     }
@@ -366,10 +380,19 @@ public class ServiceChatDispatcher : IServiceChatDispatcher
 
     private string FormatChannelMessage(ChannelMessageNotificationData notification)
     {
-        return $"📢 <b>Сообщение от канала</b>\n\n" +
-               $"📺 Канал: {notification.SenderChat.Title}\n" +
-               $"💬 Чат: {FormatChat(notification.Chat)}\n" +
-               $"📝 Сообщение: {notification.MessageText}";
+        var senderTitle = System.Net.WebUtility.HtmlEncode(notification.SenderChat.Title ?? notification.SenderChat.Id.ToString());
+        var chat = System.Net.WebUtility.HtmlEncode(FormatChat(notification.Chat));
+        var messageText = System.Net.WebUtility.HtmlEncode(notification.MessageText);
+        var reason = string.IsNullOrWhiteSpace(notification.Reason)
+            ? ""
+            : $"\n📝 Причина: {System.Net.WebUtility.HtmlEncode(notification.Reason)}";
+        var silentModePrefix = notification.IsSilentMode
+            ? "🔇 <b>Тихий режим</b>\n\n"
+            : "";
+        return silentModePrefix + $"📢 <b>Сообщение от канала</b>\n\n" +
+               $"📺 Канал: {senderTitle}\n" +
+               $"💬 Чат: {chat}\n" +
+               $"📝 Сообщение: {messageText}{reason}";
     }
 
     private string FormatUserRestricted(UserRestrictedNotificationData notification)

@@ -3,6 +3,18 @@ using ClubDoorman.Models;
 
 namespace ClubDoorman.Features.Moderation;
 
+public sealed record ContentModerationInput(
+    Message Message,
+    Chat DestinationChat,
+    string? Text);
+
+public interface IContentModerationPolicy
+{
+    Task<ModerationResult> CheckContentAsync(
+        ContentModerationInput input,
+        CancellationToken cancellationToken);
+}
+
 /// <summary>
 /// Интерфейс фасада для функциональности модерации
 /// <tags>moderation, facade, interface, coordination</tags>

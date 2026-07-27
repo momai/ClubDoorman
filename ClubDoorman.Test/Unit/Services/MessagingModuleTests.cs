@@ -88,6 +88,18 @@ public class MessagingModuleTests
         Assert.That(serviceChatDispatcher, Is.Not.Null);
     }
 
+    [Test]
+    public void AddMessagingServices_ShouldRegisterAdminActionStoreAsSingleton()
+    {
+        _services.AddMessagingServices();
+
+        var serviceProvider = _services.BuildServiceProvider();
+        var first = serviceProvider.GetRequiredService<IAdminActionStore>();
+        var second = serviceProvider.GetRequiredService<IAdminActionStore>();
+
+        Assert.That(first, Is.SameAs(second));
+    }
+
     /// <summary>
     /// POC: Проверка регистрации IMessageService
     /// <tags>poc, message-service, di-registration</tags>

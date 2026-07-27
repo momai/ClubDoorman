@@ -273,7 +273,7 @@ public class MessageHandler : IUpdateHandler
             message.MessageId, message.SenderChat?.Id, message.Chat.Id);
         _logger.LogDebug("🔍 MessageHandler: Делегируем обработку канала к ChannelModerationService. MessageId: {MessageId}, SenderChatId: {SenderChatId}, ChatId: {ChatId}",
             message.MessageId, message.SenderChat?.Id, message.Chat.Id);
-        await _channelModerationService.HandleChannelMessageAsync(message, cancellationToken);
+        await _channelModerationService.HandleChannelMessageAsync(message, false, cancellationToken);
         _logger.LogDebug("HandleChannelMessageAsync: Channel message processed. MessageId: {MessageId}", message.MessageId);
     }
 

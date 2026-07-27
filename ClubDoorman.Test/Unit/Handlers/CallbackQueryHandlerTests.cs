@@ -43,6 +43,7 @@ public class CallbackQueryHandlerTests
     private Mock<IAppConfig> _mockAppConfig = null!;
     private Mock<IUserBanService> _mockUserBanService = null!;
     private Mock<ILogChatService> _mockLogChatService = null!;
+    private Mock<IAdminActionStore> _mockAdminActionStore = null!;
     private Mock<ClubDoorman.Services.Logging.IGoldenMasterRecorder> _mockRecorder = null!;
     private Mock<IModerationEventPublisher> _mockEvents = null!;
 
@@ -62,6 +63,7 @@ public class CallbackQueryHandlerTests
         _mockAppConfig = new Mock<IAppConfig>();
         _mockUserBanService = new Mock<IUserBanService>();
         _mockLogChatService = new Mock<ILogChatService>();
+        _mockAdminActionStore = new Mock<IAdminActionStore>();
     _mockRecorder = new Mock<ClubDoorman.Services.Logging.IGoldenMasterRecorder>();
         _mockEvents = new Mock<IModerationEventPublisher>();
 
@@ -82,6 +84,7 @@ public class CallbackQueryHandlerTests
             new ViolationTracker(_mockViolationTrackerLogger.Object, _mockAppConfig.Object),
             _mockUserBanService.Object,
             _mockLogChatService.Object,
+            _mockAdminActionStore.Object,
             _mockLogger.Object,
             _mockRecorder.Object,
             _mockEvents.Object,
@@ -263,5 +266,64 @@ public class CallbackQueryHandlerTests
                 It.IsAny<Exception>(),
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
             Times.Once);
+    }
+
+    [Test]
+    public async Task HandleAsync_ProfileReviewTokenMissing_ShowsAlertWithoutBanning()
+    {
+        var update = new Update
+        {
+            CallbackQuery = new CallbackQuery
+            {
+                Id = "callback-id",
+                Data = "banprofile_missing-token",
+                From = new User { Id = 123, FirstName = "Admin" },
+                Message = new Message { Chat = new Chat { Id = _mockAppConfig.Object.AdminChatId } }
+            }
+        };
+
+        await _handler.HandleAsync(update);
+
+        _mockAdminActionStore.Verify(x => x.TakeProfileReview("missing-token"), Times.Once);
+        _mockUserBanService.VerifyNoOtherCalls();
+        _mockBot.Verify(x => x.AnswerCallbackQuery(
+            "callback-id",
+            "Действие устарело или уже выполнено",
+            true,
+            It.IsAny<string>(),
+            It.IsAny<int?>(),
+            It.IsAny<CancellationToken>()), Times.Once);
+    }
+
+    [Test]
+    public async Task HandleAsync_ProfileReviewTokenFound_BansUserFromStoredReview()
+    {
+        var review = new ProfileReviewActionState(-654, 987, null);
+        _mockAdminActionStore.Setup(x => x.TakeProfileReview("opaque-token")).Returns(review);
+        var update = new Update
+        {
+            CallbackQuery = new CallbackQuery
+            {
+                Id = "callback-id",
+                Data = "banprofile_opaque-token",
+                From = new User { Id = 123, FirstName = "Admin" },
+                Message = new Message
+                {
+                    Text = "Profile review",
+                    Chat = new Chat { Id = _mockAppConfig.Object.AdminChatId }
+                }
+            }
+        };
+
+        await _handler.HandleAsync(update);
+
+        _mockUserBanService.Verify(x => x.BanUserAsync(
+            It.Is<Chat>(chat => chat.Id == -654),
+            It.Is<User>(user => user.Id == 987),
+            BanTypeEnum.ProfileBan,
+            "Бан по профилю",
+            (long?)null,
+            -654,
+            It.IsAny<CancellationToken>()), Times.Once);
     }
 }

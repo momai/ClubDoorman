@@ -20,6 +20,7 @@ public class ServiceChatDispatcherTestFactory
     public Mock<ITelegramBotClientWrapper> BotClientMock { get; }
     public Mock<ILogger<ServiceChatDispatcher>> LoggerMock { get; }
     public Mock<IAppConfig> AppConfigMock { get; } = new();
+    public Mock<IAdminActionStore> AdminActionStoreMock { get; } = new();
 
     public ServiceChatDispatcherTestFactory()
     {
@@ -48,7 +49,7 @@ public class ServiceChatDispatcherTestFactory
     // Provide default safe values for chat ids
     AppConfigMock.SetupGet(x => x.AdminChatId).Returns(-1000);
     AppConfigMock.SetupGet(x => x.LogAdminChatId).Returns(-1000);
-    return new ServiceChatDispatcher(BotClientMock.Object, LoggerMock.Object, AppConfigMock.Object);
+    return new ServiceChatDispatcher(BotClientMock.Object, LoggerMock.Object, AppConfigMock.Object, AdminActionStoreMock.Object);
     }
 
     /// <summary>
