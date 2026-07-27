@@ -21,7 +21,6 @@ using ClubDoorman.Services.UserJoin;
 using ClubDoorman.Services.UserManagement;
 using ClubDoorman.Services.Violation;
 using ClubDoorman.Models.Logging;
-using ClubDoorman.Effects;
 using ClubDoorman.Effects.Moderation;
 using ClubDoorman.Infrastructure;
 using ClubDoorman.Services.ChannelModeration;
@@ -72,7 +71,6 @@ public static class ServiceCollectionExtensions
             LegacyFallback = true, // Включаем fallback для безопасности
             LogComparison = true // Включено сравнение логов
         });
-        services.AddSingleton<IEffectBus, EffectBus>();
         services.AddSingleton<IModerationActionHandler, AllowActionHandler>();
         services.AddSingleton<IModerationActionHandler, DeleteActionHandler>();
         services.AddSingleton<IModerationActionHandler, BanActionHandler>();
@@ -80,16 +78,6 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IModerationActionHandler, ManualReviewActionHandler>();
         services.AddSingleton<IModerationActionHandler, AiAnalysisActionHandler>();
         services.AddSingleton<IModerationActionDispatcher, ModerationActionDispatcher>();
-        services.AddSingleton<IChannelModerationEffectsBuilder>(sp =>
-        {
-            var logger = sp.GetRequiredService<ILogger<ChannelModerationEffectsBuilder>>();
-            return new ChannelModerationEffectsBuilder(
-                logger,
-                sp.GetRequiredService<ITelegramBotClientWrapper>(),
-                sp.GetRequiredService<IUserBanService>(),
-                sp.GetRequiredService<IModerationService>());
-        });
-
         // Регистрация основных сервисов в том же порядке, что и в Program.cs
         services.AddLinkFormattingServices();
         services.AddDispatcherServices();

@@ -1,11 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using ClubDoorman.Services.Telegram;
-using ClubDoorman.Services.Moderation;
-using ClubDoorman.Services.UserBan;
 using ClubDoorman.Effects.Channel;
-using ClubDoorman.Effects;
-using ClubDoorman.Services.Core.Configuration;
 
 namespace ClubDoorman.Services.ChannelModeration;
 
@@ -13,25 +8,15 @@ public static class ChannelModerationModule
 {
     public static IServiceCollection AddChannelModerationServices(this IServiceCollection services)
     {
-        // Регистрация IChannelModerationService с фабрикой как в Program.cs
-        services.AddSingleton<IChannelModerationService>(provider =>
-        {
-            var logger = provider.GetRequiredService<ILogger<ChannelModerationService>>();
-            logger.LogDebug("[DI] IChannelModerationService factory called");
-            // Пытаемся получить эффекты (могут отсутствовать если не зарегистрированы на раннем этапе)
-            var channelEffectsBuilder = provider.GetService<IChannelModerationEffectsBuilder>();
-            var effectBus = provider.GetService<IEffectBus>();
-            // Требуется передать IAppConfig (ранее не передавали => NullReference / ArgumentNullException на старте)
-            var appConfig = provider.GetRequiredService<IAppConfig>();
-            return new ChannelModerationService(
-                provider.GetRequiredService<ITelegramBotClientWrapper>(),
-                provider.GetRequiredService<IModerationService>(),
-                provider.GetRequiredService<IUserBanService>(),
-                provider.GetRequiredService<ILogger<ChannelModerationService>>(),
-                channelEffectsBuilder,
-                effectBus,
-                appConfig);
-        });
+        services.AddSingleton<IChannelModerationReporter, ChannelModerationReporter>();
+        services.AddSingleton<IChannelModerationActionHandler, ChannelAllowActionHandler>();
+        services.AddSingleton<IChannelModerationActionHandler, ChannelDeleteActionHandler>();
+        services.AddSingleton<IChannelModerationActionHandler, ChannelBanActionHandler>();
+        services.AddSingleton<IChannelModerationActionHandler, ChannelReportActionHandler>();
+        services.AddSingleton<IChannelModerationActionHandler, ChannelManualReviewActionHandler>();
+        services.AddSingleton<IChannelModerationActionHandler, ChannelAiAnalysisActionHandler>();
+        services.AddSingleton<IChannelModerationActionDispatcher, ChannelModerationActionDispatcher>();
+        services.AddSingleton<IChannelModerationService, ChannelModerationService>();
 
         return services;
     }

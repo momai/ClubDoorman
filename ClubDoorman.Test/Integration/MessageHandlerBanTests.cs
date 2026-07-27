@@ -150,6 +150,7 @@ public class MessageHandlerBanTests
         factory.ChannelModerationServiceMock.Verify(
             x => x.HandleChannelMessageAsync(
                 It.IsAny<Message>(),
+                It.IsAny<bool>(),
                 It.IsAny<CancellationToken>()),
             Times.Once);
     }

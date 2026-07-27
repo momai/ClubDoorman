@@ -33,7 +33,7 @@ public class ChannelMessageStep : IMessageStep
         _logger.LogDebug("[Pipeline] ChannelMessageStep handling channel message {MessageId} senderChatId={SenderChatId}", msg.MessageId, msg.SenderChat.Id);
         try
         {
-            await _channelModerationService.HandleChannelMessageAsync(msg, cancellationToken);
+            await _channelModerationService.HandleChannelMessageAsync(msg, context.IsSilentMode, cancellationToken);
         }
         catch (Exception ex)
         {

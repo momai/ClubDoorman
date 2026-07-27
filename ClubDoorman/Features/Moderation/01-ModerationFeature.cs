@@ -15,6 +15,7 @@ public static class ModerationFeature
     /// <param name="services">Коллекция сервисов</param>
     public static IServiceCollection AddModerationFeature(this IServiceCollection services)
     {
+        services.AddSingleton<IContentModerationPolicy, ContentModerationPolicy>();
         services.AddSingleton<IModerationPolicy, ModerationPolicy>();
         services.AddSingleton<IModerationFacade, ModerationFacade>();
         return services;

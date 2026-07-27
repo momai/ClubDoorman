@@ -558,8 +558,10 @@ public class UserBanServiceTests
         await _userBanService.AutoBanChannelAsync(message, CancellationToken.None);
 
         // Assert
-        // Проверяем, что исключение было проброшено
-        // (логирование происходит в MessageHandler, а не в UserBanService)
+        _botMock.Verify(
+            x => x.BanChatSenderChat(chat.Id, senderChat.Id, CancellationToken.None),
+            Times.Once,
+            "Delete failure must not prevent banning the sender chat identity");
 
         _messageServiceMock.Verify(
             x => x.SendAdminNotificationAsync(
@@ -571,7 +573,7 @@ public class UserBanServiceTests
 
     [Test]
     [Category("migration-new")]
-    public async Task AutoBanChannel_DeletesBansSenderNotifiesAdmin()
+    public async Task AutoBanChannel_DeletesAndBansSenderWithoutDuplicatingEvidenceReport()
     {
         var fakeClient = TestKitTelegram.CreateFakeClient();
         var messageServiceMock = new Mock<IMessageService>();
@@ -621,12 +623,12 @@ public class UserBanServiceTests
 
         messageServiceMock.Verify(
             x => x.ForwardToAdminWithNotificationAsync(
-                It.Is<Message>(m => m.Chat.Id == groupChatId),
-                AdminNotificationType.ChannelMessage,
-                It.IsAny<ChannelMessageNotificationData>(),
+                It.IsAny<Message>(),
+                It.IsAny<AdminNotificationType>(),
+                It.IsAny<NotificationData>(),
                 It.IsAny<CancellationToken>()),
-            Times.Once,
-            "Message should be forwarded to admin with channel message notification");
+            Times.Never,
+            "Channel action handler owns evidence reporting before enforcement");
     }
 
     #endregion
