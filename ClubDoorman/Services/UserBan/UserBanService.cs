@@ -147,26 +147,37 @@ public class UserBanService : IUserBanService
 
     public async Task AutoBanChannelAsync(Message message, CancellationToken cancellationToken)
     {
+        var chat = message.Chat;
+        var senderChat = message.SenderChat!;
+        var failures = new List<string>();
+
         try
         {
-            var chat = message.Chat;
-            var senderChat = message.SenderChat!;
-
             await _bot.DeleteMessage(chat, message.MessageId, cancellationToken);
-            await _bot.BanChatSenderChat(chat, senderChat.Id, cancellationToken);
-
-            var channelData = new ChannelMessageNotificationData(senderChat, chat, message.Text ?? "[медиа]");
-            await _messageService.ForwardToAdminWithNotificationAsync(message, AdminNotificationType.ChannelMessage, channelData, cancellationToken);
         }
-        catch (Exception e)
+        catch (Exception ex) when (ex is not OperationCanceledException)
         {
-            _logger.LogWarning(e, "Не удалось забанить канал");
+            _logger.LogWarning(ex, "Не удалось удалить сообщение перед баном channel identity {SenderChatId}", senderChat.Id);
+            failures.Add("не удалось удалить сообщение");
+        }
+
+        try
+        {
+            await _bot.BanChatSenderChat(chat, senderChat.Id, cancellationToken);
+        }
+        catch (Exception ex) when (ex is not OperationCanceledException)
+        {
+            _logger.LogWarning(ex, "Не удалось забанить channel identity {SenderChatId}", senderChat.Id);
+            failures.Add("не удалось забанить channel identity");
+        }
+
+        if (failures.Count > 0)
+        {
             var errorData = new ErrorNotificationData(
-                new InvalidOperationException("Не удалось забанить канал"),
-                "Не хватает могущества",
+                new InvalidOperationException(string.Join("; ", failures)),
+                "Ошибка enforcement для channel identity",
                 null,
-                message.Chat
-            );
+                chat);
             await _messageService.SendAdminNotificationAsync(AdminNotificationType.ChannelError, errorData, cancellationToken);
         }
     }

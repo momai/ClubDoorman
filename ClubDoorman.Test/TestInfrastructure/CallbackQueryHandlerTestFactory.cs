@@ -21,6 +21,7 @@ using ClubDoorman.Services.Captcha;
 using ClubDoorman.Services.Handlers;
 using ClubDoorman.Services.Logging;
 using ClubDoorman.Services.Core.Configuration;
+using ClubDoorman.Features.AdminOps;
 
 namespace ClubDoorman.TestInfrastructure;
 
@@ -42,24 +43,25 @@ public class CallbackQueryHandlerTestFactory
     public Mock<IMessageService> MessageServiceMock { get; } = new();
     public Mock<IViolationTracker> ViolationTrackerMock { get; } = new();
     public Mock<IUserBanService> UserBanServiceMock { get; } = new();
+    public Mock<IAdminActionStore> AdminActionStoreMock { get; } = new();
     public Mock<IServiceProvider> ServiceProviderMock { get; } = new();
     public Mock<ILogger<CallbackQueryHandler>> LoggerMock { get; } = new();
     public Mock<IAppConfig> AppConfigMock { get; } = new();
-
+    public Mock<IAdminCallbackDispatcher> AdminCallbackDispatcherMock { get; } = new();
     public CallbackQueryHandler CreateCallbackQueryHandler()
     {
+        AdminCallbackDispatcherMock
+            .Setup(x => x.DispatchAsync(It.IsAny<Telegram.Bot.Types.CallbackQuery>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(AdminCallbackResult.NotHandled());
+
         return new CallbackQueryHandler(
             BotMock.Object,
             CaptchaServiceMock.Object,
-            UserManagerMock.Object,
-            BadMessageManagerMock.Object,
             StatisticsServiceMock.Object,
-            AiChecksMock.Object,
-            ModerationServiceMock.Object,
             MessageServiceMock.Object,
             ViolationTrackerMock.Object,
             UserBanServiceMock.Object,
-            new Mock<ILogChatService>().Object,
+            AdminCallbackDispatcherMock.Object,
             LoggerMock.Object,
             NullGoldenMasterRecorder.Instance,
             new Mock<IModerationEventPublisher>().Object,

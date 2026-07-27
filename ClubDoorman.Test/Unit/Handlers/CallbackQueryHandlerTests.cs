@@ -20,6 +20,7 @@ using ClubDoorman.Services.UserManagement;
 using ClubDoorman.Services.Messaging;
 using ClubDoorman.Services.Captcha;
 using ClubDoorman.Services.Handlers;
+using ClubDoorman.Features.AdminOps;
 
 namespace ClubDoorman.Test.Unit.Handlers;
 
@@ -43,8 +44,10 @@ public class CallbackQueryHandlerTests
     private Mock<IAppConfig> _mockAppConfig = null!;
     private Mock<IUserBanService> _mockUserBanService = null!;
     private Mock<ILogChatService> _mockLogChatService = null!;
+    private Mock<IAdminActionStore> _mockAdminActionStore = null!;
     private Mock<ClubDoorman.Services.Logging.IGoldenMasterRecorder> _mockRecorder = null!;
     private Mock<IModerationEventPublisher> _mockEvents = null!;
+    private Mock<IAdminCallbackDispatcher> _mockAdminCallbackDispatcher = null!;
 
     [SetUp]
     public void Setup()
@@ -62,8 +65,13 @@ public class CallbackQueryHandlerTests
         _mockAppConfig = new Mock<IAppConfig>();
         _mockUserBanService = new Mock<IUserBanService>();
         _mockLogChatService = new Mock<ILogChatService>();
+        _mockAdminActionStore = new Mock<IAdminActionStore>();
     _mockRecorder = new Mock<ClubDoorman.Services.Logging.IGoldenMasterRecorder>();
         _mockEvents = new Mock<IModerationEventPublisher>();
+        _mockAdminCallbackDispatcher = new Mock<IAdminCallbackDispatcher>();
+        _mockAdminCallbackDispatcher
+            .Setup(x => x.DispatchAsync(It.IsAny<CallbackQuery>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(AdminCallbackResult.NotHandled());
 
     // Default config values for tests
     const long adminChatId = 555555; // test admin chat id distinct from other test chats
@@ -73,15 +81,11 @@ public class CallbackQueryHandlerTests
         _handler = new CallbackQueryHandler(
             _mockBot.Object,
             _mockCaptchaService.Object,
-            _mockUserManager.Object,
-            _mockBadMessageManager.Object,
             _mockStatisticsService.Object,
-            _mockAiChecks.Object,
-            _mockModerationService.Object,
             _mockMessageService.Object,
             new ViolationTracker(_mockViolationTrackerLogger.Object, _mockAppConfig.Object),
             _mockUserBanService.Object,
-            _mockLogChatService.Object,
+            _mockAdminCallbackDispatcher.Object,
             _mockLogger.Object,
             _mockRecorder.Object,
             _mockEvents.Object,
@@ -264,4 +268,97 @@ public class CallbackQueryHandlerTests
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
             Times.Once);
     }
+
+    [Test]
+    public async Task HandleAsync_UnknownAdminPrefix_AnswersCallbackOnce()
+    {
+        _mockAdminCallbackDispatcher
+            .Setup(x => x.DispatchAsync(It.IsAny<CallbackQuery>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(AdminCallbackResult.NotHandled());
+        var update = CreateAdminUpdate("unknown_42");
+
+        await _handler.HandleAsync(update);
+
+        _mockBot.Verify(x => x.AnswerCallbackQuery(
+            "callback-id",
+            "Неизвестное действие",
+            true,
+            It.IsAny<string>(),
+            It.IsAny<int?>(),
+            It.IsAny<CancellationToken>()), Times.Once);
+    }
+
+    [Test]
+    public async Task HandleAsync_MalformedAdminCallback_AnswersCallbackOnce()
+    {
+        _mockAdminCallbackDispatcher
+            .Setup(x => x.DispatchAsync(It.IsAny<CallbackQuery>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(AdminCallbackResult.Invalid());
+        var update = CreateAdminUpdate("approve_not-a-user");
+
+        await _handler.HandleAsync(update);
+
+        _mockBot.Verify(x => x.AnswerCallbackQuery(
+            "callback-id",
+            "Некорректное действие",
+            true,
+            It.IsAny<string>(),
+            It.IsAny<int?>(),
+            It.IsAny<CancellationToken>()), Times.Once);
+    }
+
+    [Test]
+    public void HandleAsync_AdminCancellation_PropagatesWithoutAnsweringCallback()
+    {
+        using var cancellation = new CancellationTokenSource();
+        cancellation.Cancel();
+        _mockAdminCallbackDispatcher
+            .Setup(x => x.DispatchAsync(It.IsAny<CallbackQuery>(), It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new OperationCanceledException(cancellation.Token));
+        var update = CreateAdminUpdate("approve_42");
+
+        Assert.ThrowsAsync<OperationCanceledException>(() => _handler.HandleAsync(update, cancellation.Token));
+
+        _mockBot.Verify(x => x.AnswerCallbackQuery(
+            It.IsAny<string>(),
+            It.IsAny<string>(),
+            It.IsAny<bool?>(),
+            It.IsAny<string>(),
+            It.IsAny<int?>(),
+            It.IsAny<CancellationToken>()), Times.Never);
+    }
+
+    [Test]
+    public async Task HandleAsync_UnrelatedOperationCanceledException_AnswersControlledErrorOnce()
+    {
+        _mockAdminCallbackDispatcher
+            .Setup(x => x.DispatchAsync(It.IsAny<CallbackQuery>(), It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new OperationCanceledException());
+        var update = CreateAdminUpdate("approve_42");
+
+        await _handler.HandleAsync(update, CancellationToken.None);
+
+        _mockBot.Verify(x => x.AnswerCallbackQuery(
+            "callback-id",
+            "Ошибка при выполнении действия",
+            true,
+            It.IsAny<string>(),
+            It.IsAny<int?>(),
+            It.IsAny<CancellationToken>()), Times.Once);
+    }
+
+    private Update CreateAdminUpdate(string data)
+    {
+        return new Update
+        {
+            CallbackQuery = new CallbackQuery
+            {
+                Id = "callback-id",
+                Data = data,
+                From = new User { Id = 123, FirstName = "Admin" },
+                Message = new Message { Chat = new Chat { Id = _mockAppConfig.Object.AdminChatId } }
+            }
+        };
+    }
+
 }
